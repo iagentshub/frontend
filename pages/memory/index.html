@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+    <script>var t = localStorage.getItem("ga-theme"); if (t) document.documentElement.setAttribute("data-theme", t);</script>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>iAgents Hub · Memoria</title>
+    <!-- CSS globales -->
+    <link rel="stylesheet" href="/assets/css/variables.css" />
+    <link rel="stylesheet" href="/assets/css/base.css" />
+    <link rel="stylesheet" href="/assets/css/components.css" />
+    <link rel="stylesheet" href="/assets/css/layout.css" />
+    <link rel="stylesheet" href="/assets/css/modals.css" />
+    <link rel="stylesheet" href="/assets/css/animations.css" />
+    <!-- Componentes -->
+    <link rel="stylesheet" href="/assets/components/main_nav/main_nav.css" />
+    <link rel="stylesheet" href="/assets/components/filter_memory/filter_memory.css" />
+    <!-- Página -->
+    <link rel="stylesheet" href="/memory/memory.css" />
+</head>
+
+<body>
+    <div class="app-shell">
+        <div id="nav-root"></div>
+
+        <main class="page-content">
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">Memoria</h1>
+                    <p class="page-subtitle">Archivos de contexto persistente para tus agentes</p>
+                </div>
+                <div class="page-actions">
+                    <button class="btn btn-primary" id="btn-new-memory">
+                        <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                            <path d="M6.5 1v11M1 6.5h11" stroke="currentColor" stroke-width="1.8"
+                                stroke-linecap="round" />
+                        </svg>
+                        Nueva memoria
+                    </button>
+                </div>
+            </div>
+
+            <div id="filter-memory-root"></div>
+            <div id="memory-grid" class="memory-grid"></div>
+        </main>
+    </div>
+
+    <!-- MODAL: editor de memoria -->
+    <div id="memory-modal" class="modal-bg" style="display:none">
+        <div class="modal-box mem-modal-box">
+            <div class="modal-header">
+                <span class="modal-title" id="memory-modal-title">Nueva memoria</span>
+                <button class="modal-close" id="memory-modal-close" type="button">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M2 2l12 12M14 2L2 14" stroke="currentColor" stroke-width="1.8"
+                            stroke-linecap="round" />
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="field-filename" class="field">
+                    <label>Nombre del archivo</label>
+                    <div class="mem-filename-wrap">
+                        <input id="mem-filename" class="input" placeholder="mi-agente" autocomplete="off" />
+                        <span class="mem-filename-ext">.md</span>
+                    </div>
+                    <span class="input-hint">Solo letras, números y guiones. Se guardará como
+                        <code>{nombre}.md</code></span>
+                </div>
+                <div class="field">
+                    <label>Contenido (Markdown)</label>
+                    <textarea id="mem-content" class="textarea mem-textarea"
+                        placeholder="# Contexto del agente&#10;&#10;Escribe aquí el contexto..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-ghost" id="mem-cancel">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="mem-save-btn">Guardar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JS globales -->
+    <script src="/assets/js/config.js"></script>
+    <script src="/assets/js/theme.js"></script>
+    <script src="/assets/js/toast.js"></script>
+    <script src="/assets/js/auth.js"></script>
+    <script src="/assets/js/api.js"></script>
+    <script src="/assets/js/utils.js"></script>
+    <!-- Componentes -->
+    <script src="/assets/components/main_nav/main_nav.js"></script>
+    <script src="/assets/components/filter_memory/filter_memory.js"></script>
+    <!-- Página -->
+    <script src="/memory/memory-render.js"></script>
+    <script src="/memory/memory-modal.js"></script>
+    <script src="/memory/memory.js"></script>
+</body>
+
+</html>

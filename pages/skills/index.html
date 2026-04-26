@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+    <script>var t = localStorage.getItem("ga-theme"); if (t) document.documentElement.setAttribute("data-theme", t);</script>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>iAgents Hub · Skills</title>
+    <!-- CSS globales -->
+    <link rel="stylesheet" href="/assets/css/variables.css" />
+    <link rel="stylesheet" href="/assets/css/base.css" />
+    <link rel="stylesheet" href="/assets/css/components.css" />
+    <link rel="stylesheet" href="/assets/css/layout.css" />
+    <link rel="stylesheet" href="/assets/css/modals.css" />
+    <link rel="stylesheet" href="/assets/css/animations.css" />
+    <!-- Componentes -->
+    <link rel="stylesheet" href="/assets/components/main_nav/main_nav.css" />
+    <link rel="stylesheet" href="/assets/components/skill-card/skill-card.css" />
+    <link rel="stylesheet" href="/assets/components/filter_skills/filter_skills.css" />
+    <link rel="stylesheet" href="/assets/components/dialog_skill/dialog_skill.css" />
+    <!-- Página -->
+    <link rel="stylesheet" href="/skills/skills.css" />
+</head>
+
+<body>
+    <div class="app-shell">
+        <div id="nav-root"></div>
+        <main class="page-content" id="page-main">
+            <div class="page-header">
+                <h1 class="page-title">Skills</h1>
+                <div class="page-actions">
+                    <button class="btn btn-primary" id="btn-new-skill">+ Nueva skill privada</button>
+                </div>
+            </div>
+            <div id="filter-skills-root"></div>
+            <div id="skills-grid" class="skills-grid"></div>
+        </main>
+    </div>
+
+    <!-- Modal ver skill -->
+    <div id="skill-view-modal" class="modal-bg" style="display:none">
+        <div class="modal-box" style="width:600px">
+            <div class="modal-header">
+                <span class="modal-title" id="skill-view-title"></span>
+                <button class="modal-close" id="skill-view-close" type="button">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M2 2l12 12M14 2L2 14" stroke="currentColor" stroke-width="1.8"
+                            stroke-linecap="round" />
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <pre id="skill-view-content" class="skill-content-pre"></pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- JS globales -->
+    <script src="/assets/js/config.js"></script>
+    <script src="/assets/js/theme.js"></script>
+    <script src="/assets/js/toast.js"></script>
+    <script src="/assets/js/auth.js"></script>
+    <script src="/assets/js/api.js"></script>
+    <script src="/assets/js/utils.js"></script>
+    <!-- Componentes -->
+    <script src="/assets/components/main_nav/main_nav.js"></script>
+    <script src="/assets/components/skill-card/skill-card.js"></script>
+    <script src="/assets/components/filter_skills/filter_skills.js"></script>
+    <script src="/assets/components/dialog_skill/dialog_skill.js"></script>
+    <!-- Página -->
+    <script src="/skills/skills.js"></script>
+</body>
+
+</html>

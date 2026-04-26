@@ -1,0 +1,334 @@
+/* ── Topbar user button ── */
+.topbar-user {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 4px 10px 4px 4px;
+    border-radius: 20px;
+    background: none;
+    border: 1px solid transparent;
+    color: var(--ink-2);
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: var(--font);
+    transition: background 0.13s, border-color 0.13s;
+}
+
+.topbar-user:hover {
+    background: var(--surface-2);
+    border-color: var(--line-strong);
+    color: var(--ink);
+}
+
+.topbar-avatar {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: var(--accent-dim);
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+/* ── Page intro ── */
+.page-intro {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.page-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+}
+
+.page-subtitle {
+    font-size: 13px;
+    color: var(--ink-3);
+}
+
+/* ── Form 2-col row ── */
+.form-row-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+/* ── Panel shared ── */
+.panel-divider {
+    height: 1px;
+    background: var(--line);
+    margin: 8px 0;
+}
+
+.panel-subtitle {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--ink-2);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+/* ── Export options ── */
+.export-options {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 8px;
+}
+
+.export-opt {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 14px;
+    border-radius: var(--radius);
+    border: 1px solid var(--line);
+    background: var(--surface);
+    cursor: pointer;
+    transition: border-color 0.13s, background 0.13s;
+}
+
+.export-opt:hover {
+    border-color: var(--accent);
+    background: var(--accent-dim);
+}
+
+.export-opt-icon {
+    font-size: 18px;
+}
+
+.export-opt-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink);
+}
+
+.export-opt-sub {
+    font-size: 11px;
+    color: var(--ink-3);
+}
+
+/* ── Skill picker por categorías ──────────────────────────────── */
+.skill-picker {
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius);
+    background: var(--surface);
+    overflow: hidden;
+}
+
+/* Chips seleccionadas */
+.skill-picker-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--line);
+}
+
+.skill-picker-chips:empty { display: none; }
+
+.skill-chip-selected {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    padding: 3px 6px 3px 9px;
+    border-radius: 20px;
+    background: var(--accent-dim);
+    color: var(--accent);
+    border: 1px solid rgba(204,32,32,.25);
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.skill-chip-remove {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: inherit;
+    opacity: .5;
+    padding: 0 1px;
+    font-size: 14px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+}
+
+.skill-chip-remove:hover { opacity: 1; }
+
+/* Tabs de categoría */
+.skill-cat-tabs {
+    display: flex;
+    gap: 4px;
+    padding: 8px 8px;
+    overflow-x: auto;
+    border-bottom: 1px solid var(--line);
+    scrollbar-width: none;
+}
+
+.skill-cat-tabs::-webkit-scrollbar { display: none; }
+
+.skill-cat-tab {
+    flex-shrink: 0;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    padding: 6px 10px;
+    border-radius: var(--radius);
+    border: 1px solid var(--line);
+    background: var(--surface-2);
+    color: var(--ink-3);
+    font-size: 11px;
+    font-weight: 500;
+    font-family: var(--font);
+    cursor: pointer;
+    transition: background .12s, border-color .12s, color .12s;
+    min-width: 52px;
+}
+
+.skill-cat-tab:hover {
+    background: var(--surface-3);
+    color: var(--ink-2);
+    border-color: var(--line-strong);
+}
+
+.skill-cat-tab.active {
+    background: var(--accent-dim);
+    border-color: rgba(204,32,32,.3);
+    color: var(--accent);
+    font-weight: 600;
+}
+
+.sct-icon { font-size: 16px; line-height: 1; }
+.sct-label { font-size: 10px; font-weight: 600; white-space: nowrap; }
+.sct-count {
+    font-size: 9px;
+    background: var(--surface-3);
+    border-radius: 8px;
+    padding: 1px 5px;
+    color: var(--ink-3);
+    font-weight: 700;
+}
+
+.skill-cat-tab.active .sct-count {
+    background: rgba(204,32,32,.15);
+    color: var(--accent);
+}
+
+/* Grid de skills */
+.skill-picker-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    padding: 10px;
+    max-height: 160px;
+    overflow-y: auto;
+}
+
+.skill-grid-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 10px;
+    border-radius: 20px;
+    border: 1px solid var(--line-strong);
+    background: var(--surface-2);
+    color: var(--ink-2);
+    font-size: 12px;
+    font-weight: 500;
+    font-family: var(--font);
+    cursor: pointer;
+    transition: border-color .12s, background .12s, color .12s;
+}
+
+.skill-grid-chip:hover {
+    border-color: var(--accent);
+    color: var(--ink);
+    background: var(--surface-3);
+}
+
+.skill-grid-chip.selected {
+    background: var(--accent-dim);
+    border-color: rgba(204,32,32,.35);
+    color: var(--accent);
+    font-weight: 600;
+}
+
+.sgc-icon { font-size: 13px; line-height: 1; }
+.sgc-name { flex: 1; }
+.sgc-check { font-size: 11px; opacity: .7; }
+
+.skill-grid-empty {
+    width: 100%;
+    padding: 16px;
+    font-size: 12px;
+    color: var(--ink-3);
+    text-align: center;
+}
+
+/* ── Memoria toggle ─────────────────────────────────────────── */
+.field-memory {
+    margin-top: 4px;
+}
+
+.memory-toggle-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.toggle-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ink);
+    user-select: none;
+}
+
+.toggle-checkbox {
+    display: none;
+}
+
+.toggle-track {
+    position: relative;
+    width: 34px;
+    height: 19px;
+    background: var(--surface-3);
+    border-radius: 20px;
+    border: 1px solid var(--line-strong);
+    transition: background .18s, border-color .18s;
+    flex-shrink: 0;
+}
+
+.toggle-track::after {
+    content: '';
+    position: absolute;
+    left: 2px;
+    top: 2px;
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, .2);
+    transition: left .18s;
+}
+
+.toggle-checkbox:checked+.toggle-track {
+    background: var(--accent);
+    border-color: var(--accent);
+}
+
+.toggle-checkbox:checked+.toggle-track::after {
+    left: 17px;
+}
