@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+    <script>var t = localStorage.getItem("ga-theme"); if (t) document.documentElement.setAttribute("data-theme", t);</script>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>iAgents Hub · Conexiones</title>
+    <!-- CSS globales -->
+    <link rel="stylesheet" href="/assets/css/variables.css" />
+    <link rel="stylesheet" href="/assets/css/base.css" />
+    <link rel="stylesheet" href="/assets/css/components.css" />
+    <link rel="stylesheet" href="/assets/css/layout.css" />
+    <link rel="stylesheet" href="/assets/css/modals.css" />
+    <link rel="stylesheet" href="/assets/css/animations.css" />
+    <!-- Componentes -->
+    <link rel="stylesheet" href="/assets/components/main_nav/main_nav.css" />
+    <link rel="stylesheet" href="/assets/components/filter_connections/filter_connections.css" />
+    <!-- Página -->
+    <link rel="stylesheet" href="/connections/connections.css" />
+</head>
+
+<body>
+    <div class="app-shell">
+        <div id="nav-root"></div>
+        <main class="page-content">
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">Conexiones</h1>
+                    <p class="page-subtitle">Proveedores de IA configurados</p>
+                </div>
+                <div class="page-actions">
+                    <button class="btn btn-ghost" id="btn-test-all">
+                        <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
+                            <path d="M4 2.5l9 5.5-9 5.5V2.5z" stroke="currentColor" stroke-width="1.5"
+                                stroke-linejoin="round" />
+                        </svg>
+                        Testear todo
+                    </button>
+                    <button class="btn btn-primary" id="btn-new-conn">
+                        <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                            <path d="M6.5 1v11M1 6.5h11" stroke="currentColor" stroke-width="1.8"
+                                stroke-linecap="round" />
+                        </svg>
+                        Nueva conexión
+                    </button>
+                </div>
+            </div>
+            <div id="filter-connections-root"></div>
+            <div id="connections-root"></div>
+        </main>
+    </div>
+
+    <!-- Modal crear/editar -->
+    <div id="conn-modal" class="modal-bg" style="display:none">
+        <div class="modal-box">
+            <div class="modal-header">
+                <span class="modal-title" id="conn-modal-title">Nueva conexión</span>
+                <button class="modal-close" id="conn-modal-close" type="button">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M2 2l12 12M14 2L2 14" stroke="currentColor" stroke-width="1.8"
+                            stroke-linecap="round" />
+                    </svg>
+                </button>
+            </div>
+            <form id="conn-form" novalidate>
+                <div class="modal-body">
+                    <input type="hidden" id="conn-id" />
+                    <div class="field">
+                        <label>Nombre *</label>
+                        <input id="conn-name" class="input" placeholder="Mi OpenAI" required />
+                    </div>
+                    <div class="field">
+                        <label>Proveedor</label>
+                        <select id="conn-type" class="select">
+                            <!-- poblado dinámicamente por connections-modal.js vía Providers -->
+                        </select>
+                    </div>
+                    <div class="field" id="field-api-key">
+                        <label>API Key</label>
+                        <input id="conn-apikey" class="input" type="password" placeholder="sk-…" autocomplete="off" />
+                        <span class="input-hint">Déjalo vacío para no cambiar.</span>
+                    </div>
+                    <div class="field" id="field-host" style="display:none">
+                        <label>Host Ollama</label>
+                        <input id="conn-host" class="input" placeholder="http://localhost:11434" />
+                    </div>
+                    <div class="field">
+                        <label>Modelo por defecto</label>
+                        <input id="conn-model" class="input" placeholder="gpt-4o / claude-sonnet-4-5 / llama3.2" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-ghost" id="conn-cancel">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- JS globales -->
+    <script src="/assets/js/config.js"></script>
+    <script src="/assets/js/theme.js"></script>
+    <script src="/assets/js/toast.js"></script>
+    <script src="/assets/js/auth.js"></script>
+    <script src="/assets/js/api.js"></script>
+    <script src="/assets/js/utils.js"></script>
+    <script src="/assets/js/providers.js"></script>
+    <!-- Componentes -->
+    <script src="/assets/components/main_nav/main_nav.js"></script>
+    <script src="/assets/components/filter_connections/filter_connections.js"></script>
+    <!-- Página -->
+    <script src="/connections/connections-state.js"></script>
+    <script src="/connections/connections-modal.js"></script>
+    <script src="/connections/connections.js"></script>
+</body>
+
+</html>

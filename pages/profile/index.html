@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+    <script>var t = localStorage.getItem("ga-theme"); if (t) document.documentElement.setAttribute("data-theme", t);</script>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>iAgents Hub · Perfil</title>
+    <!-- CSS globales -->
+    <link rel="stylesheet" href="/assets/css/variables.css" />
+    <link rel="stylesheet" href="/assets/css/base.css" />
+    <link rel="stylesheet" href="/assets/css/components.css" />
+    <link rel="stylesheet" href="/assets/css/layout.css" />
+    <link rel="stylesheet" href="/assets/css/modals.css" />
+    <link rel="stylesheet" href="/assets/css/animations.css" />
+    <!-- Componentes -->
+    <link rel="stylesheet" href="/assets/components/main_nav/main_nav.css" />
+    <!-- Página -->
+    <link rel="stylesheet" href="/profile/profile.css" />
+</head>
+
+<body>
+    <div class="app-shell">
+        <div id="nav-root"></div>
+
+        <main class="page-content">
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">Perfil</h1>
+                    <p class="page-subtitle">Configuracion de tu cuenta</p>
+                </div>
+            </div>
+
+            <div class="profile-card">
+                <div class="profile-avatar-row">
+                    <div class="profile-avatar" id="profile-avatar">A</div>
+                    <div>
+                        <div class="profile-username" id="profile-username">admin</div>
+                        <div class="profile-role">Administrador</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-card">
+                <div class="profile-card-title">Cambiar contrasena</div>
+                <form id="password-form" novalidate>
+                    <div class="field">
+                        <label>Contrasena actual</label>
+                        <input id="pw-current" class="input" type="password" autocomplete="current-password"
+                            placeholder="••••••••" />
+                    </div>
+                    <div class="field">
+                        <label>Nueva contrasena</label>
+                        <input id="pw-new" class="input" type="password" autocomplete="new-password"
+                            placeholder="••••••••" />
+                    </div>
+                    <div class="field">
+                        <label>Confirmar nueva contrasena</label>
+                        <input id="pw-confirm" class="input" type="password" autocomplete="new-password"
+                            placeholder="••••••••" />
+                    </div>
+                    <div class="profile-form-footer">
+                        <button type="submit" class="btn btn-primary" id="pw-save-btn">Guardar cambios</button>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+
+    <!-- JS globales -->
+    <script src="/assets/js/config.js"></script>
+    <script src="/assets/js/theme.js"></script>
+    <script src="/assets/js/toast.js"></script>
+    <script src="/assets/js/auth.js"></script>
+    <script src="/assets/js/api.js"></script>
+    <script src="/assets/js/utils.js"></script>
+    <!-- Componentes -->
+    <script src="/assets/components/main_nav/main_nav.js"></script>
+    <!-- Página -->
+    <script src="/profile/profile.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,82 @@
+// main_nav.js — Barra de navegación lateral
+'use strict';
+
+var NAV_ICONS = {
+    agents: '<svg width="15" height="15" viewBox="0 0 16 16" fill="none"><rect x="2" y="7" width="12" height="8" rx="2" stroke="currentColor" stroke-width="1.4"/><path d="M5 7V5a3 3 0 0 1 6 0v2" stroke="currentColor" stroke-width="1.4"/><circle cx="8" cy="11" r="1.2" fill="currentColor"/></svg>',
+    skills: '<svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M8 1.5l1.5 3 3.3.5-2.4 2.3.6 3.3L8 9l-3 1.6.6-3.3L3.2 5l3.3-.5z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>',
+    connections: '<svg width="15" height="15" viewBox="0 0 16 16" fill="none"><circle cx="4" cy="4" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="12" cy="4" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="8" cy="13" r="2" stroke="currentColor" stroke-width="1.4"/><path d="M4 6v2a4 4 0 0 0 4 4m0 0V6m0 6a4 4 0 0 0 4-4V6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>',
+    memory: '<svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M4 2h6l3 3v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M10 2v3h3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M5.5 8h5M5.5 10.5h5M5.5 13h3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>',
+    profile: '<svg width="15" height="15" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5.5" r="2.5" stroke="currentColor" stroke-width="1.4"/><path d="M2.5 14v-.5A5.5 5.5 0 0 1 8 8a5.5 5.5 0 0 1 5.5 5.5V14" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>',
+    admin: '<svg width="15" height="15" viewBox="0 0 16 16" fill="none"><circle cx="6" cy="5" r="2.5" stroke="currentColor" stroke-width="1.4"/><path d="M1.5 13v-.5A4.5 4.5 0 0 1 6 8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><circle cx="11.5" cy="10.5" r="3" stroke="currentColor" stroke-width="1.4"/><path d="M11.5 9.2v1.3l.8.8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>',
+};
+
+function renderNav(mountId, activePage) {
+    var mount = document.getElementById(mountId);
+    if (!mount) return;
+
+    var links = [
+        { href: '/agents', label: 'Agentes', page: 'agents' },
+        { href: '/skills', label: 'Skills', page: 'skills' },
+        { href: '/connections', label: 'Conexiones', page: 'connections' },
+        { href: '/memory', label: 'Memoria', page: 'memory' },
+        { href: '/profile', label: 'Perfil', page: 'profile' },
+    ];
+
+    mount.innerHTML =
+        '<nav class="main-nav">' +
+        '<a class="nav-brand" href="/agents">' +
+        '<div class="nav-logo-mark">' +
+        '<span class="nav-logo-iagents">iAgents</span><span class="nav-logo-hub">Hub</span>' +
+        '</div>' +
+        '</a>' +
+        '<div class="nav-section">' +
+        links.map(function (l) {
+            var active = activePage === l.page ? ' active' : '';
+            return '<a href="' + l.href + '" class="nav-link' + active + '">' +
+                '<span class="nav-link-icon">' + NAV_ICONS[l.page] + '</span>' +
+                l.label +
+                '</a>';
+        }).join('') +
+        '</div>' +
+        '<div class="nav-spacer"></div>' +
+        '<div class="nav-footer">' +
+        '<button class="nav-theme-btn" data-theme-toggle aria-label="Cambiar tema" onclick="toggleTheme()">' +
+        (window.getTheme && window.getTheme() === 'dark' ? window._themeIcons.sun() : window._themeIcons.moon()) +
+        '<span>Tema</span>' +
+        '</button>' +
+        '<button class="nav-user" id="nav-logout-btn" title="Cerrar sesion">' +
+        '<div class="nav-user-avatar" id="nav-avatar">?</div>' +
+        '<span id="nav-username">\u2026</span>' +
+        '<svg class="nav-logout-icon" width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M6 3H3a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h3M10 11l3-3-3-3M13 8H6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+        '</button>' +
+        '</div>' +
+        '</nav>';
+
+    fetch('/api/auth/me').then(function (r) { return r.json(); }).then(function (d) {
+        var u = d.username || '';
+        var el = document.getElementById('nav-username');
+        var av = document.getElementById('nav-avatar');
+        if (el) el.textContent = u;
+        if (av) av.textContent = u.charAt(0).toUpperCase();
+
+        if (d.role === 'admin') {
+            var adminSection = document.createElement('div');
+            adminSection.className = 'nav-section nav-admin-section';
+            adminSection.innerHTML =
+                '<div class="nav-section-label">Admin</div>' +
+                '<a href="/admin/" class="nav-link' + (activePage === 'admin-users' ? ' active' : '') + '">' +
+                '<span class="nav-link-icon">' + NAV_ICONS.admin + '</span>' +
+                'Usuarios' +
+                '</a>';
+            var spacer = mount.querySelector('.nav-spacer');
+            if (spacer) spacer.before(adminSection);
+        }
+    }).catch(function () { });
+
+    document.getElementById('nav-logout-btn').addEventListener('click', async function () {
+        await fetch('/api/auth/logout', { method: 'POST' });
+        window.location.replace('/login');
+    });
+}
+
+window.renderNav = renderNav;
