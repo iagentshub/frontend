@@ -2,12 +2,13 @@
 <html lang="es">
 
 <head>
-    <script>var t = localStorage.getItem("ga-theme"); if (t) document.documentElement.setAttribute("data-theme", t);</script>
+    <script>document.documentElement.setAttribute("data-theme", localStorage.getItem("ga-theme") || "noir");</script>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>iAgents Hub · Conexiones</title>
     <!-- CSS globales -->
     <link rel="stylesheet" href="/assets/css/variables.css" />
+    <link rel="stylesheet" href="/assets/themes/themes.css" />
     <link rel="stylesheet" href="/assets/css/base.css" />
     <link rel="stylesheet" href="/assets/css/components.css" />
     <link rel="stylesheet" href="/assets/css/layout.css" />

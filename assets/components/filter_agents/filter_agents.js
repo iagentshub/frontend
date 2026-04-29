@@ -9,66 +9,67 @@ var FilterAgents = (function () {
     var _panelSearch = { skills: '', conn: '' }; // preservar búsqueda al re-renderizar
 
     // ── SVGs ─────────────────────────────────────────────────────────────
-    var _SVG_SEARCH = '<svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="6.5" cy="6.5" r="4" stroke="currentColor" stroke-width="1.5"/><path d="M11 11l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>';
+    var _SVG_SEARCH  = '<svg width="13" height="13" viewBox="0 0 16 16" fill="none"><circle cx="6.5" cy="6.5" r="4" stroke="currentColor" stroke-width="1.6"/><path d="M11 11l3 3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>';
     var _SVG_CHEVRON = '<svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 3.5l3 3 3-3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-    var _SVG_CLEAR = '<svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1 1l8 8M9 1L1 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>';
-    var _SVG_CHECK = '<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    var _SVG_CLEAR   = '<svg width="9" height="9" viewBox="0 0 10 10" fill="none"><path d="M1 1l8 8M9 1L1 9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>';
+    var _SVG_CHECK   = '<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 
     // ── Render ────────────────────────────────────────────────────────────
     function _render(mountEl) {
-        var hasSk = _state.skillIds.length > 0;
+        var srch = document.getElementById('fa-search');
+        var hadFocus = srch && document.activeElement === srch;
+        var cursor   = hadFocus ? srch.selectionStart : null;
+
+        var hasSk  = _state.skillIds.length > 0;
         var hasConn = _state.connIds.length > 0;
-        var hasMem = _state.memory !== null;
-        var hasAny = _state.query || hasSk || hasConn || hasMem;
+        var hasMem  = _state.memory !== null;
+        var hasAny  = _state.query || hasSk || hasConn || hasMem;
 
         mountEl.innerHTML =
             '<div class="fa-bar" id="fa-bar">' +
-            '<div class="fa-search-wrap">' +
-            _SVG_SEARCH +
-            '<input id="fa-search" class="fa-search-input" placeholder="Buscar por nombre o descripción…" value="' + esc(_state.query) + '" autocomplete="off"/>' +
-            (_state.query ? '<button type="button" class="fa-search-clear" id="fa-search-clear" aria-label="Limpiar búsqueda">' + _SVG_CLEAR + '</button>' : '') +
-            '</div>' +
+              '<div class="fa-search-wrap">' +
+                _SVG_SEARCH +
+                '<input id="fa-search" class="fa-search-input" placeholder="Buscar agente…" value="' + esc(_state.query) + '" autocomplete="off"/>' +
+                (_state.query ? '<button type="button" class="fa-search-clear" id="fa-search-clear" aria-label="Limpiar búsqueda">' + _SVG_CLEAR + '</button>' : '') +
+              '</div>' +
 
-            '<div class="fa-filter-group">' +
+              '<div class="fa-filter-group">' +
 
-            // Skills
-            '<div class="fa-dropdown-wrap" id="fa-wrap-skills">' +
-            '<button type="button" class="fa-filter-btn' + (hasSk ? ' fa-filter-btn--active' : '') + '" id="fa-btn-skills">' +
-            'Skills' +
-            (hasSk ? '<span class="fa-filter-count">' + _state.skillIds.length + '</span>' : '') +
-            _SVG_CHEVRON +
-            '</button>' +
-            (_openPanel === 'skills' ? _renderSkillsPanel() : '') +
-            '</div>' +
+              '<div class="fa-dropdown-wrap" id="fa-wrap-skills">' +
+                '<button type="button" class="fa-filter-btn' + (hasSk ? ' fa-filter-btn--active' : '') + '" id="fa-btn-skills">' +
+                  'Skills' + (hasSk ? '<span class="fa-filter-count">' + _state.skillIds.length + '</span>' : '') + _SVG_CHEVRON +
+                '</button>' +
+                (_openPanel === 'skills' ? _renderSkillsPanel() : '') +
+              '</div>' +
 
-            // Conexión
-            '<div class="fa-dropdown-wrap" id="fa-wrap-conn">' +
-            '<button type="button" class="fa-filter-btn' + (hasConn ? ' fa-filter-btn--active' : '') + '" id="fa-btn-conn">' +
-            'Conexión' +
-            (hasConn ? '<span class="fa-filter-count">' + _state.connIds.length + '</span>' : '') +
-            _SVG_CHEVRON +
-            '</button>' +
-            (_openPanel === 'conn' ? _renderConnPanel() : '') +
-            '</div>' +
+              '<div class="fa-dropdown-wrap" id="fa-wrap-conn">' +
+                '<button type="button" class="fa-filter-btn' + (hasConn ? ' fa-filter-btn--active' : '') + '" id="fa-btn-conn">' +
+                  'Conexión' + (hasConn ? '<span class="fa-filter-count">' + _state.connIds.length + '</span>' : '') + _SVG_CHEVRON +
+                '</button>' +
+                (_openPanel === 'conn' ? _renderConnPanel() : '') +
+              '</div>' +
 
-            // Memoria
-            '<div class="fa-dropdown-wrap" id="fa-wrap-memory">' +
-            '<button type="button" class="fa-filter-btn' + (hasMem ? ' fa-filter-btn--active' : '') + '" id="fa-btn-memory">' +
-            'Memoria' +
-            (hasMem ? '<span class="fa-filter-count">1</span>' : '') +
-            _SVG_CHEVRON +
-            '</button>' +
-            (_openPanel === 'memory' ? _renderMemoryPanel() : '') +
-            '</div>' +
+              '<div class="fa-dropdown-wrap" id="fa-wrap-memory">' +
+                '<button type="button" class="fa-filter-btn' + (hasMem ? ' fa-filter-btn--active' : '') + '" id="fa-btn-memory">' +
+                  'Memoria' + (hasMem ? '<span class="fa-filter-count">1</span>' : '') + _SVG_CHEVRON +
+                '</button>' +
+                (_openPanel === 'memory' ? _renderMemoryPanel() : '') +
+              '</div>' +
 
-            '</div>' +
+              '</div>' +
 
-            (hasAny ?
-                '<button type="button" class="fa-clear-all" id="fa-clear-all">' + _SVG_CLEAR + 'Limpiar</button>'
-                : '') +
+              (hasAny ? '<button type="button" class="fa-clear-all" id="fa-clear-all">Limpiar</button>' : '') +
             '</div>';
 
         _bindEvents(mountEl);
+
+        if (hadFocus) {
+            var ni = document.getElementById('fa-search');
+            if (ni) {
+                ni.focus();
+                if (cursor !== null) try { ni.setSelectionRange(cursor, cursor); } catch (e) {}
+            }
+        }
     }
 
     function _renderSkillsPanel() {

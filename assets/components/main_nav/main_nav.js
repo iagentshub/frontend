@@ -40,10 +40,6 @@ function renderNav(mountId, activePage) {
         '</div>' +
         '<div class="nav-spacer"></div>' +
         '<div class="nav-footer">' +
-        '<button class="nav-theme-btn" data-theme-toggle aria-label="Cambiar tema" onclick="toggleTheme()">' +
-        (window.getTheme && window.getTheme() === 'dark' ? window._themeIcons.sun() : window._themeIcons.moon()) +
-        '<span>Tema</span>' +
-        '</button>' +
         '<button class="nav-user" id="nav-logout-btn" title="Cerrar sesion">' +
         '<div class="nav-user-avatar" id="nav-avatar">?</div>' +
         '<span id="nav-username">\u2026</span>' +

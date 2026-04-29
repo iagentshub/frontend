@@ -4,7 +4,7 @@
     border: 1px solid var(--line);
     border-radius: var(--radius-lg);
     padding: 24px;
-    max-width: 480px;
+    max-width: 560px;
     margin-bottom: 16px;
 }
 
@@ -51,4 +51,62 @@
 
 .profile-form-footer {
     margin-top: 8px;
+}
+
+/* ── Theme picker ─────────────────────────────── */
+.theme-picker {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.theme-swatch {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.theme-swatch-preview {
+    width: 52px;
+    height: 36px;
+    border-radius: 9px;
+    background: var(--swatch-bg);
+    border: 2px solid transparent;
+    position: relative;
+    overflow: hidden;
+    transition: border-color .15s, transform .12s;
+}
+
+.theme-swatch-preview::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 10px;
+    background: var(--swatch-accent);
+}
+
+.theme-swatch:hover .theme-swatch-preview {
+    transform: translateY(-1px);
+    border-color: var(--line-strong);
+}
+
+.theme-swatch--active .theme-swatch-preview {
+    border-color: var(--accent);
+}
+
+.theme-swatch-name {
+    font-size: 11px;
+    color: var(--ink-3);
+    font-weight: 500;
+    transition: color .12s;
+}
+
+.theme-swatch--active .theme-swatch-name {
+    color: var(--ink);
+    font-weight: 600;
 }
