@@ -1,0 +1,48 @@
+.btn-guest {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 13px;
+    background: var(--red, #CC2020);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.015em;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
+    box-shadow: 0 4px 22px rgba(204, 32, 32, 0.38);
+}
+
+.btn-guest::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.13) 0%, transparent 55%);
+    pointer-events: none;
+}
+
+.btn-guest:hover {
+    background: #a01818;
+    box-shadow: 0 6px 30px rgba(204, 32, 32, 0.52);
+}
+
+.btn-guest:active {
+    transform: scale(0.98);
+}
+
+.btn-guest:disabled,
+.btn-guest[aria-busy="true"] {
+    opacity: 0.45;
+    pointer-events: none;
+}
+
+.btn-guest__label {
+    flex: 1;
+    text-align: center;
+}
