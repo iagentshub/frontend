@@ -2,7 +2,13 @@
 'use strict';
 
 var FilterAgents = (function () {
-    var _state = { query: '', skillIds: [], connIds: [], memory: null };
+    var _SCOPE_TABS = [
+        { val: null,      label: 'Todos',       icon: '' },
+        { val: 'private', label: 'Mis agentes', icon: '' },
+        { val: 'public',  label: 'Públicos',    icon: '' },
+    ];
+
+    var _state = { query: '', skillIds: [], connIds: [], memory: null, scope: null };
     var _data = { skills: [], connections: [] };
     var _onChange = null;
     var _openPanel = null; // 'skills' | 'conn' | 'memory' | null
@@ -23,15 +29,25 @@ var FilterAgents = (function () {
         var hasSk  = _state.skillIds.length > 0;
         var hasConn = _state.connIds.length > 0;
         var hasMem  = _state.memory !== null;
-        var hasAny  = _state.query || hasSk || hasConn || hasMem;
+        var hasScp  = _state.scope !== null;
+        var hasAny  = _state.query || hasSk || hasConn || hasMem || hasScp;
+
+        var scopeTabs = _SCOPE_TABS.map(function (t) {
+            var active = _state.scope === t.val;
+            return '<button type="button" class="fa-scope-tab' + (active ? ' fa-scope-tab--active' : '') + '" data-scope="' + (t.val || '') + '">' +
+                t.icon + esc(t.label) +
+                '</button>';
+        }).join('');
 
         mountEl.innerHTML =
             '<div class="fa-bar" id="fa-bar">' +
               '<div class="fa-search-wrap">' +
                 _SVG_SEARCH +
-                '<input id="fa-search" class="fa-search-input" placeholder="Buscar agente…" value="' + esc(_state.query) + '" autocomplete="off"/>' +
+                '<input id="fa-search" class="fa-search-input" placeholder="Buscar por nombre o descripción..." value="' + esc(_state.query) + '" autocomplete="off"/>' +
                 (_state.query ? '<button type="button" class="fa-search-clear" id="fa-search-clear" aria-label="Limpiar búsqueda">' + _SVG_CLEAR + '</button>' : '') +
               '</div>' +
+
+              '<div class="fa-scope-tabs">' + scopeTabs + '</div>' +
 
               '<div class="fa-filter-group">' +
 
@@ -58,7 +74,7 @@ var FilterAgents = (function () {
 
               '</div>' +
 
-              (hasAny ? '<button type="button" class="fa-clear-all" id="fa-clear-all">Limpiar</button>' : '') +
+              (hasAny ? '<button type="button" class="fa-clear-all" id="fa-clear-all">× Limpiar</button>' : '') +
             '</div>';
 
         _bindEvents(mountEl);
@@ -178,6 +194,16 @@ var FilterAgents = (function () {
             });
         }
 
+        // Scope tabs
+        mountEl.querySelectorAll('.fa-scope-tab').forEach(function (tab) {
+            tab.addEventListener('click', function () {
+                var val = tab.dataset.scope || null;
+                _state.scope = val;
+                _openPanel = null;
+                _notifyAndRender(mountEl, null);
+            });
+        });
+
         // Filter buttons toggle panels
         ['skills', 'conn', 'memory'].forEach(function (key) {
             var btn = document.getElementById('fa-btn-' + key);
@@ -244,7 +270,7 @@ var FilterAgents = (function () {
         var clearAll = document.getElementById('fa-clear-all');
         if (clearAll) {
             clearAll.addEventListener('click', function () {
-                _state = { query: '', skillIds: [], connIds: [], memory: null };
+                _state = { query: '', skillIds: [], connIds: [], memory: null, scope: null };
                 _panelSearch = { skills: '', conn: '' };
                 _openPanel = null;
                 _notifyAndRender(mountEl, null);
@@ -305,11 +331,12 @@ var FilterAgents = (function () {
                 skillIds: _state.skillIds.slice(),
                 connIds: _state.connIds.slice(),
                 memory: _state.memory,
+                scope: _state.scope,
             };
         },
 
         reset: function (mountEl) {
-            _state = { query: '', skillIds: [], connIds: [], memory: null };
+            _state = { query: '', skillIds: [], connIds: [], memory: null, scope: null };
             _panelSearch = { skills: '', conn: '' };
             _openPanel = null;
             var el = typeof mountEl === 'string' ? document.querySelector(mountEl) : mountEl;

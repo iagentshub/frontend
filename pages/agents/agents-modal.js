@@ -6,6 +6,11 @@ function _openAgentModal(agent) {
     document.getElementById('agent-modal-title').textContent = agent ? 'Editar agente' : 'Nuevo agente';
     document.getElementById('agent-id').value = agent ? (agent.id || '') : '';
     document.getElementById('agent-name').value = agent ? (agent.name || '') : '';
+    const scopeField = document.getElementById('agent-scope-field');
+    const scopeVal = agent ? (agent.scope || 'private') : 'private';
+    const scopeRadio = document.querySelector('input[name="agent-scope"][value="' + scopeVal + '"]');
+    if (scopeRadio) scopeRadio.checked = true;
+    if (scopeField) scopeField.style.display = agent ? 'none' : '';
     document.getElementById('agent-desc').value = agent ? (agent.description || '') : '';
     document.getElementById('agent-prompt').value = agent ? (agent.system_prompt || '') : '';
     _syncConnectionSelect();
@@ -66,6 +71,7 @@ function _bindAgentModal() {
         btn.disabled = true; btn.textContent = 'Guardando...';
         const useMemory = document.getElementById('agent-use-memory').checked;
         const memFile = document.getElementById('agent-memory-file').value || null;
+        const scopeChecked = document.querySelector('input[name="agent-scope"]:checked');
         const payload = {
             id: document.getElementById('agent-id').value || undefined,
             name: document.getElementById('agent-name').value.trim(),
@@ -76,6 +82,7 @@ function _bindAgentModal() {
             skills: _getSelectedSkills(),
             use_memory: useMemory,
             memory_file: useMemory ? memFile : null,
+            scope: scopeChecked ? scopeChecked.value : 'private',
         };
         try {
             await api.post('/api/agents', payload);

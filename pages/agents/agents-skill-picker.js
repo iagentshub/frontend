@@ -61,11 +61,7 @@ function _renderCatTabs() {
             : cat.id === '__none__'
                 ? _skills.filter(s => !s.category).length
                 : _skills.filter(s => s.category === cat.id).length;
-        return `<button type="button" class="skill-cat-tab${active}" data-cat="${esc(cat.id)}">
-            <span class="sct-icon">${cat.icon}</span>
-            <span class="sct-label">${esc(cat.label)}</span>
-            <span class="sct-count">${count}</span>
-        </button>`;
+        return `<button type="button" class="skill-cat-tab${active}" data-cat="${esc(cat.id)}">${esc(cat.label)} <span class="sct-count">${count}</span></button>`;
     }).join('');
 
     tabs.querySelectorAll('.skill-cat-tab').forEach(btn => {
@@ -83,6 +79,7 @@ function _renderSkillGrid() {
     if (!container) return;
 
     const filtered = _skills.filter(sk => {
+        if (_selectedSkillIds.includes(sk.id)) return false;
         if (_activeCat === '__all__') return true;
         if (_activeCat === '__none__') return !sk.category;
         return sk.category === _activeCat;
@@ -94,11 +91,9 @@ function _renderSkillGrid() {
     }
 
     container.innerHTML = filtered.map(sk => {
-        const sel = _selectedSkillIds.includes(sk.id);
-        return `<button type="button" class="skill-grid-chip${sel ? ' selected' : ''}" data-skill-id="${esc(sk.id)}">
+        return `<button type="button" class="skill-grid-chip" data-skill-id="${esc(sk.id)}">
             ${sk.icon ? `<span class="sgc-icon">${esc(sk.icon)}</span>` : ''}
             <span class="sgc-name">${esc(sk.name)}</span>
-            ${sel ? '<span class="sgc-check">✓</span>' : ''}
         </button>`;
     }).join('');
 

@@ -6,10 +6,11 @@ var AgentCard = {
     _TYPE_LABELS: { openai: 'OpenAI', claude: 'Claude', gemini: 'Gemini', ollama: 'Ollama' },
 
     render: function (agent, connections, skills) {
+        var isPublic = agent.scope === 'public';
         var conn = connections.find(function (c) { return c.id === agent.connection_id; });
         var typeKey = conn ? conn.type : null;
-        var connLabel = typeKey ? (AgentCard._TYPE_LABELS[typeKey] || typeKey) : 'Sin IA';
-        var pillCls = typeKey ? 'agent-conn-pill--' + esc(typeKey) : 'agent-conn-pill--default';
+        var connLabel = typeKey ? (AgentCard._TYPE_LABELS[typeKey] || typeKey) : (isPublic ? 'USA TU IA' : 'Sin IA');
+        var pillCls = typeKey ? 'agent-conn-pill--' + esc(typeKey) : (isPublic ? 'agent-conn-pill--usatia' : 'agent-conn-pill--default');
 
         // Skills: max 3 visible + "+N" overflow chip
         var agentSkills = agent.skills || [];
@@ -24,10 +25,16 @@ var AgentCard = {
         }
 
         var metaSep = skillChips ? '<span class="agent-meta-sep"></span>' : '';
+        var scopeBadge = isPublic
+            ? '<span class="agent-scope-badge agent-scope-badge--public">PÚBLICO</span>'
+            : '';
 
         return '<div class="agent-card">' +
             '<div class="agent-card-body">' +
+            '<div class="agent-card-name-row">' +
             '<div class="agent-card-name" title="' + esc(agent.name) + '">' + esc(agent.name) + '</div>' +
+            scopeBadge +
+            '</div>' +
             '<div class="agent-card-desc">' + esc(agent.description || 'Sin descripcion') + '</div>' +
             '<div class="agent-card-meta">' +
             '<span class="agent-conn-pill ' + pillCls + '">' + esc(connLabel) + '</span>' +
@@ -41,15 +48,15 @@ var AgentCard = {
             'Chat' +
             '</button>' +
             '<div class="agent-card-actions-right">' +
-            '<button class="agent-action-icon" data-action="edit" data-id="' + esc(agent.id) + '" title="Editar">' +
+            (!isPublic ? '<button class="agent-action-icon" data-action="edit" data-id="' + esc(agent.id) + '" title="Editar">' +
             '<svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M11 2l3 3-9 9H2v-3l9-9z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>' +
-            '</button>' +
+            '</button>' : '') +
             '<button class="agent-action-icon" data-action="export" data-id="' + esc(agent.id) + '" title="Exportar">' +
             '<svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 2v8M5 7l3 3 3-3M3 13h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>' +
             '</button>' +
-            '<button class="agent-action-icon agent-action-icon--danger" data-action="delete" data-id="' + esc(agent.id) + '" title="Eliminar">' +
+            (!isPublic ? '<button class="agent-action-icon agent-action-icon--danger" data-action="delete" data-id="' + esc(agent.id) + '" title="Eliminar">' +
             '<svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M2 4h12M5 4V2h6v2M6 7v5M10 7v5M3 4l1 9h8l1-9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
-            '</button>' +
+            '</button>' : '') +
             '</div>' +
             '</div>' +
             '</div>';
