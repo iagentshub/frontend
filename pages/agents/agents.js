@@ -5,18 +5,28 @@ async function init() {
     await window.requireAuth();
     renderNav('nav-root', 'agents');
     await _loadAll();
+    _initFilters();
+    if (window.i18n) {
+        window.i18n.onLangChange(async function () {
+            await _loadAll();
+            _initFilters();
+        });
+    }
     _bindActions();
     _bindAgentModal();
     _bindExportModal();
 }
 
-function _bindActions() {
+function _initFilters() {
     FilterAgents.init({
         mountEl: '#filter-agents-root',
         skills: _skills,
         connections: _connections,
         onChange: function () { _applyFilter(); },
     });
+}
+
+function _bindActions() {
 
     document.getElementById('btn-new-agent').addEventListener('click', () => _openAgentModal());
 
@@ -35,10 +45,10 @@ function _bindActions() {
         } else if (action === 'export') {
             _openExportModal(id);
         } else if (action === 'delete') {
-            if (!confirm('Eliminar este agente?')) return;
+            if (!confirm(t('agents.confirm_delete'))) return;
             try {
                 await api.del(`/api/agents/${encodeURIComponent(id)}`);
-                toast('Agente eliminado', 'info');
+                toast(t('agents.deleted'), 'info');
                 await _loadAll();
             } catch (e) { toast(e.message, 'error'); }
         }

@@ -9,10 +9,11 @@ var AgentCard = {
         var isPublic = agent.scope === 'public';
         var conn = connections.find(function (c) { return c.id === agent.connection_id; });
         var typeKey = conn ? conn.type : null;
-        var connLabel = typeKey ? (AgentCard._TYPE_LABELS[typeKey] || typeKey) : (isPublic ? 'USA TU IA' : 'Sin IA');
+        var connLabel = typeKey
+            ? (AgentCard._TYPE_LABELS[typeKey] || typeKey)
+            : (isPublic ? t('agents.card.use_your_ai') : t('agents.card.no_ai'));
         var pillCls = typeKey ? 'agent-conn-pill--' + esc(typeKey) : (isPublic ? 'agent-conn-pill--usatia' : 'agent-conn-pill--default');
 
-        // Skills: max 3 visible + "+N" overflow chip
         var agentSkills = agent.skills || [];
         var visibleSkills = agentSkills.slice(0, AgentCard._MAX_CHIPS);
         var overflow = agentSkills.length - AgentCard._MAX_CHIPS;
@@ -26,7 +27,7 @@ var AgentCard = {
 
         var metaSep = skillChips ? '<span class="agent-meta-sep"></span>' : '';
         var scopeBadge = isPublic
-            ? '<span class="agent-scope-badge agent-scope-badge--public">PÚBLICO</span>'
+            ? '<span class="agent-scope-badge agent-scope-badge--public">' + t('agents.scope.badge_public') + '</span>'
             : '';
 
         return '<div class="agent-card">' +
@@ -35,7 +36,7 @@ var AgentCard = {
             '<div class="agent-card-name" title="' + esc(agent.name) + '">' + esc(agent.name) + '</div>' +
             scopeBadge +
             '</div>' +
-            '<div class="agent-card-desc">' + esc(agent.description || 'Sin descripcion') + '</div>' +
+            '<div class="agent-card-desc">' + esc(agent.description || t('agents.card.no_description')) + '</div>' +
             '<div class="agent-card-meta">' +
             '<span class="agent-conn-pill ' + pillCls + '">' + esc(connLabel) + '</span>' +
             metaSep +
@@ -45,16 +46,16 @@ var AgentCard = {
             '<div class="agent-card-footer">' +
             '<button class="agent-action-chat" data-action="chat" data-id="' + esc(agent.id) + '">' +
             '<svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M14 2H2a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h3l2 2 2-2h5a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>' +
-            'Chat' +
+            t('agents.card.chat') +
             '</button>' +
             '<div class="agent-card-actions-right">' +
-            (!isPublic ? '<button class="agent-action-icon" data-action="edit" data-id="' + esc(agent.id) + '" title="Editar">' +
+            (!isPublic ? '<button class="agent-action-icon" data-action="edit" data-id="' + esc(agent.id) + '" title="' + t('actions.edit') + '">' +
             '<svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M11 2l3 3-9 9H2v-3l9-9z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>' +
             '</button>' : '') +
-            '<button class="agent-action-icon" data-action="export" data-id="' + esc(agent.id) + '" title="Exportar">' +
+            '<button class="agent-action-icon" data-action="export" data-id="' + esc(agent.id) + '" title="' + t('actions.export') + '">' +
             '<svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 2v8M5 7l3 3 3-3M3 13h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>' +
             '</button>' +
-            (!isPublic ? '<button class="agent-action-icon agent-action-icon--danger" data-action="delete" data-id="' + esc(agent.id) + '" title="Eliminar">' +
+            (!isPublic ? '<button class="agent-action-icon agent-action-icon--danger" data-action="delete" data-id="' + esc(agent.id) + '" title="' + t('actions.delete') + '">' +
             '<svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M2 4h12M5 4V2h6v2M6 7v5M10 7v5M3 4l1 9h8l1-9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
             '</button>' : '') +
             '</div>' +
@@ -67,7 +68,7 @@ var AgentCard = {
             container.innerHTML =
                 '<div class="empty-state">' +
                 '<div class="empty-state-icon">&#129302;</div>' +
-                '<p>No hay agentes todavia.<br>Crea el primero con <strong>+ Nuevo agente</strong>.</p>' +
+                '<p>' + t('agents.empty') + '</p>' +
                 '</div>';
             return;
         }
