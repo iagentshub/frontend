@@ -1,14 +1,32 @@
 // dialog_chat.js — Chat SSE con countdown timer
 'use strict';
 
+function _fmtTok(n) {
+    if (!n) return '0';
+    if (n >= 1000000) return (n / 1000000).toFixed(1).replace(/\.0$/, '') + 'M';
+    if (n >= 1000) return (n / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
+    return String(n);
+}
+
 class AgentChatDialog {
     constructor(agent) {
         this.agent = agent;
         this.messages = this._loadHistory();
+        this._sessionTok = this._sumHistoryTok();
         this._timerInterval = null;
         this._timerSecs = 0;
         this._timerRemaining = 0;
         this._el = null;
+    }
+
+    _sumHistoryTok() {
+        return this.messages.reduce(function (acc, m) {
+            if (m.tokens) {
+                acc.in += m.tokens.in || 0;
+                acc.out += m.tokens.out || 0;
+            }
+            return acc;
+        }, { in: 0, out: 0 });
     }
 
     open() {
@@ -25,7 +43,12 @@ class AgentChatDialog {
                 <div class="chat-header-avatar">${esc(initials)}</div>
                 <div class="chat-header-info">
                     <div class="chat-header-name">${esc(name)}</div>
-                    <div class="chat-header-sub">${esc(this.agent.model || '')}</div>
+                    <div class="chat-header-sub">
+                        ${esc(this.agent.model || '')}
+                        <span class="chat-tok-counter" id="ga-tok-counter" style="display:none">
+                            · ↑ <span id="ga-tok-in">0</span> ↓ <span id="ga-tok-out">0</span> tok
+                        </span>
+                    </div>
                 </div>
                 <div class="chat-header-actions">
                     ${hasTimeout ? `
@@ -70,6 +93,16 @@ class AgentChatDialog {
         });
     }
 
+    _updateSessionTok() {
+        var counter = document.getElementById('ga-tok-counter');
+        var inEl = document.getElementById('ga-tok-in');
+        var outEl = document.getElementById('ga-tok-out');
+        if (!counter) return;
+        counter.style.display = '';
+        if (inEl) inEl.textContent = _fmtTok(this._sessionTok.in);
+        if (outEl) outEl.textContent = _fmtTok(this._sessionTok.out);
+    }
+
     _bindSend() {
         const sendBtn = document.getElementById('ga-chat-send');
         const input = document.getElementById('ga-chat-input');
@@ -108,7 +141,8 @@ class AgentChatDialog {
         input.value = '';
         input.style.height = 'auto';
         this._setLoading(true);
-        this.messages.push({ role: 'user', content: text });
+        var now = new Date();
+        this.messages.push({ role: 'user', content: text, ts: now.getHours() + ':' + String(now.getMinutes()).padStart(2, '0') });
         this._saveHistory();
         this._renderMessages();
         this._appendTyping();
@@ -117,13 +151,15 @@ class AgentChatDialog {
             const resp = await fetch(`/api/agents/${encodeURIComponent(this.agent.id)}/chat`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ messages: this.messages }),
+                body: JSON.stringify({ messages: this.messages.map(function (m) { return { role: m.role, content: m.content }; }) }),
             });
             if (!resp.ok) throw new Error(`Error ${resp.status}`);
             const reader = resp.body.getReader();
             const decoder = new TextDecoder();
             let buf = '';
             let reply = '';
+            let tokens = null;
+            let serverError = null;
             while (true) {
                 const { done, value } = await reader.read();
                 if (done) break;
@@ -135,13 +171,25 @@ class AgentChatDialog {
                     try {
                         const ev = JSON.parse(line.slice(6));
                         if (ev.type === 'token') { reply += ev.token; }
-                        if (ev.type === 'done') { reply = ev.reply || reply; }
+                        if (ev.type === 'done') {
+                            reply = ev.reply || reply;
+                            tokens = (ev.tokens && (ev.tokens.in || ev.tokens.out)) ? ev.tokens : null;
+                        }
+                        if (ev.type === 'error') { serverError = ev.message || 'Error desconocido'; }
                     } catch { /* ignorar líneas no-json */ }
                 }
             }
             this._stopTimer();
             this._removeTyping();
-            this.messages.push({ role: 'assistant', content: reply });
+            if (serverError) throw new Error(serverError);
+            var replyTs = new Date();
+            var replyTime = replyTs.getHours() + ':' + String(replyTs.getMinutes()).padStart(2, '0');
+            this.messages.push({ role: 'assistant', content: reply, ts: replyTime, tokens: tokens });
+            if (tokens) {
+                this._sessionTok.in += tokens.in || 0;
+                this._sessionTok.out += tokens.out || 0;
+                this._updateSessionTok();
+            }
             this._saveHistory();
             this._renderMessages();
         } catch (e) {
@@ -157,12 +205,22 @@ class AgentChatDialog {
         const cont = document.getElementById('ga-chat-msgs');
         if (!cont) return;
         const initials = this.agent.name?.charAt(0)?.toUpperCase() || '?';
-        cont.innerHTML = this.messages.map(m => `
+        cont.innerHTML = this.messages.map(m => {
+            const tokBadge = (m.role === 'assistant' && m.tokens)
+                ? `<div class="msg-tok">↑ ${_fmtTok(m.tokens.in)} ↓ ${_fmtTok(m.tokens.out)} tok</div>`
+                : '';
+            const time = m.ts ? `<span class="msg-time">${esc(m.ts)}</span>` : '';
+            return `
             <div class="msg-wrap ${m.role}">
                 <div class="msg-avatar">${m.role === 'assistant' ? esc(initials) : '👤'}</div>
-                <div class="msg-bubble">${esc(m.content)}</div>
-            </div>`).join('');
+                <div class="msg-body">
+                    <div class="msg-bubble">${esc(m.content)}</div>
+                    <div class="msg-meta">${time}${tokBadge}</div>
+                </div>
+            </div>`;
+        }).join('');
         cont.scrollTop = cont.scrollHeight;
+        if (this._sessionTok.in || this._sessionTok.out) this._updateSessionTok();
     }
 
     _appendTyping() {
