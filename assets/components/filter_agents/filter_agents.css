@@ -57,6 +57,40 @@
 
 .fa-search-clear:hover { color: var(--ink); background: var(--surface-2); }
 
+/* ── Scope tabs ── */
+.fa-scope-tabs {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-shrink: 0;
+}
+
+.fa-scope-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 12px;
+    border-radius: var(--radius);
+    border: 1px solid var(--line-strong);
+    background: transparent;
+    color: var(--ink-3);
+    font-size: 12px;
+    font-weight: 500;
+    font-family: var(--font);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: border-color .12s, color .12s, background .12s;
+}
+
+.fa-scope-tab:hover { border-color: var(--accent); color: var(--ink); }
+
+.fa-scope-tab--active {
+    border-color: var(--accent);
+    background: var(--accent-dim);
+    color: var(--accent);
+    font-weight: 600;
+}
+
 /* ── Grupo de filtros ── */
 .fa-filter-group {
     display: flex;

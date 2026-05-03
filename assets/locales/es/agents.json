@@ -1,0 +1,78 @@
+{
+  "page": {
+    "title": "Agentes",
+    "subtitle": "Gestiona y chatea con tus agentes de IA"
+  },
+  "scope": {
+    "all": "Todos",
+    "private": "Mis agentes",
+    "public": "Públicos",
+    "badge_public": "PÚBLICO"
+  },
+  "card": {
+    "no_description": "Sin descripcion",
+    "no_ai": "Sin IA",
+    "use_your_ai": "USA TU IA",
+    "chat": "Chat"
+  },
+  "filter": {
+    "search_placeholder": "Buscar por nombre o descripción...",
+    "skills_label": "Habilidades",
+    "connection_label": "Conexión",
+    "memory_label": "Memoria",
+    "memory_active": "Con memoria activa",
+    "memory_none": "Sin memoria",
+    "no_skills": "Sin habilidades disponibles",
+    "no_connections": "Sin conexiones disponibles",
+    "search_skill": "Buscar skill…",
+    "search_connection": "Buscar conexión…"
+  },
+  "empty": "No hay agentes todavia.<br>Crea el primero con <strong>+ Nuevo agente</strong>.",
+  "confirm_delete": "¿Eliminar este agente?",
+  "deleted": "Agente eliminado",
+  "saved": "Agente guardado",
+  "modal": {
+    "title_new": "Nuevo agente",
+    "title_edit": "Editar agente",
+    "field_name": "Nombre",
+    "field_connection": "Conexion IA",
+    "no_connection": "-- Sin conexion --",
+    "field_visibility": "Visibilidad",
+    "scope_private": "Privado",
+    "scope_public": "Público",
+    "field_description": "Descripcion",
+    "field_prompt": "System prompt",
+    "field_temp": "Temperatura",
+    "field_skills": "Habilidades asignadas",
+    "field_memory": "Habilitar memoria",
+    "field_memory_file": "Archivo de memoria",
+    "memory_hint": "Usa el archivo del agente por defecto o elige otro",
+    "memory_agent_name_placeholder": "(nombre del agente)",
+    "memory_default": "Por defecto: {{name}}",
+    "save_btn": "Guardar agente",
+    "saving": "Guardando...",
+    "placeholder_name": "Mi agente",
+    "placeholder_desc": "Para que sirve este agente",
+    "placeholder_prompt": "Eres un asistente..."
+  },
+  "export": {
+    "title": "Exportar agente",
+    "choose_format": "Elige el formato:",
+    "openai_label": "OpenAI Assistant",
+    "openai_sub": "JSON para Assistants API",
+    "claude_label": "Anthropic Claude",
+    "claude_sub": "JSON para Claude API",
+    "github_label": "GitHub Copilot",
+    "github_sub": ".github/copilot-instructions.md",
+    "exported": "Exportado: {{name}}"
+  },
+  "skill_picker": {
+    "all": "Todas",
+    "other": "Otras",
+    "no_skills": "Sin habilidades en esta categoría"
+  },
+  "chat": {
+    "placeholder": "Escribe un mensaje…",
+    "close": "Cerrar"
+  }
+}

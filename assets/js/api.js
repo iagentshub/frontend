@@ -8,8 +8,14 @@ function _apiError(status, detail) {
 }
 
 window.api = {
+    _langHeader() {
+        var lang = (window.i18n && window.i18n.getLang && window.i18n.getLang()) || localStorage.getItem('ga-lang') || 'es';
+        return { 'Accept-Language': lang };
+    },
     async get(url) {
-        var r = await fetch((window.API_BASE || '') + url);
+        var r = await fetch((window.API_BASE || '') + url, {
+            headers: this._langHeader(),
+        });
         if (r.status === 401) { window.location.replace('/login/'); throw _apiError(401); }
         if (!r.ok) { var d = await r.json().catch(function () { return {}; }); throw _apiError(r.status, d.detail); }
         return r.json();
@@ -17,7 +23,7 @@ window.api = {
     async post(url, body) {
         var r = await fetch((window.API_BASE || '') + url, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: Object.assign({ 'Content-Type': 'application/json' }, this._langHeader()),
             body: JSON.stringify(body),
         });
         if (r.status === 401) { window.location.replace('/login/'); throw _apiError(401); }
@@ -25,7 +31,10 @@ window.api = {
         return r.json();
     },
     async del(url) {
-        var r = await fetch((window.API_BASE || '') + url, { method: 'DELETE' });
+        var r = await fetch((window.API_BASE || '') + url, {
+            method: 'DELETE',
+            headers: this._langHeader(),
+        });
         if (r.status === 401) { window.location.replace('/login/'); throw _apiError(401); }
         if (!r.ok) { var d = await r.json().catch(function () { return {}; }); throw _apiError(r.status, d.detail); }
         return r.json();

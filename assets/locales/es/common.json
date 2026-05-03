@@ -1,0 +1,31 @@
+{
+  "nav": {
+    "agents": "Agentes",
+    "skills": "Habilidades",
+    "connections": "Conexiones",
+    "memory": "Memoria",
+    "profile": "Perfil",
+    "admin": "Admin",
+    "admin_users": "Usuarios",
+    "logout": "Cerrar sesion"
+  },
+  "actions": {
+    "save": "Guardar",
+    "saving": "Guardando…",
+    "cancel": "Cancelar",
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "export": "Exportar",
+    "close": "Cerrar",
+    "clear": "Limpiar",
+    "clear_filters": "× Limpiar",
+    "send": "Enviar",
+    "test": "Test",
+    "view": "Ver",
+    "new_agent": "Nuevo agente"
+  },
+  "search": {
+    "clear_aria": "Limpiar búsqueda"
+  },
+  "redirect": "Redirigiendo a {{target}}…"
+}

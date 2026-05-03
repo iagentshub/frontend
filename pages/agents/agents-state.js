@@ -39,6 +39,7 @@ function _applyFilter() {
     }
     if (f.memory === true) list = list.filter(a => a.use_memory);
     if (f.memory === false) list = list.filter(a => !a.use_memory);
+    if (f.scope) list = list.filter(a => (a.scope || 'private') === f.scope);
 
     AgentCard.renderGrid(list, _connections, _skills, document.getElementById('agents-grid'));
 }

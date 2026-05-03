@@ -1,0 +1,78 @@
+{
+  "page": {
+    "title": "Agents",
+    "subtitle": "Manage and chat with your AI agents"
+  },
+  "scope": {
+    "all": "All",
+    "private": "My agents",
+    "public": "Public",
+    "badge_public": "PUBLIC"
+  },
+  "card": {
+    "no_description": "No description",
+    "no_ai": "No AI",
+    "use_your_ai": "USE YOUR AI",
+    "chat": "Chat"
+  },
+  "filter": {
+    "search_placeholder": "Search by name or description...",
+    "skills_label": "Skills",
+    "connection_label": "Connection",
+    "memory_label": "Memory",
+    "memory_active": "With active memory",
+    "memory_none": "No memory",
+    "no_skills": "No skills available",
+    "no_connections": "No connections available",
+    "search_skill": "Search skill…",
+    "search_connection": "Search connection…"
+  },
+  "empty": "No agents yet.<br>Create the first one with <strong>+ New agent</strong>.",
+  "confirm_delete": "Delete this agent?",
+  "deleted": "Agent deleted",
+  "saved": "Agent saved",
+  "modal": {
+    "title_new": "New agent",
+    "title_edit": "Edit agent",
+    "field_name": "Name",
+    "field_connection": "AI Connection",
+    "no_connection": "-- No connection --",
+    "field_visibility": "Visibility",
+    "scope_private": "Private",
+    "scope_public": "Public",
+    "field_description": "Description",
+    "field_prompt": "System prompt",
+    "field_temp": "Temperature",
+    "field_skills": "Assigned skills",
+    "field_memory": "Enable memory",
+    "field_memory_file": "Memory file",
+    "memory_hint": "Use the agent's default file or choose another",
+    "memory_agent_name_placeholder": "(agent name)",
+    "memory_default": "Default: {{name}}",
+    "save_btn": "Save agent",
+    "saving": "Saving...",
+    "placeholder_name": "My agent",
+    "placeholder_desc": "What does this agent do",
+    "placeholder_prompt": "You are an assistant..."
+  },
+  "export": {
+    "title": "Export agent",
+    "choose_format": "Choose format:",
+    "openai_label": "OpenAI Assistant",
+    "openai_sub": "JSON for Assistants API",
+    "claude_label": "Anthropic Claude",
+    "claude_sub": "JSON for Claude API",
+    "github_label": "GitHub Copilot",
+    "github_sub": ".github/copilot-instructions.md",
+    "exported": "Exported: {{name}}"
+  },
+  "skill_picker": {
+    "all": "All",
+    "other": "Other",
+    "no_skills": "No skills in this category"
+  },
+  "chat": {
+    "placeholder": "Type a message…",
+    "close": "Close"
+  }
+}

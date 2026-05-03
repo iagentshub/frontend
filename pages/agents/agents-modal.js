@@ -3,9 +3,14 @@
 
 function _openAgentModal(agent) {
     agent = agent || null;
-    document.getElementById('agent-modal-title').textContent = agent ? 'Editar agente' : 'Nuevo agente';
+    document.getElementById('agent-modal-title').textContent = agent ? t('agents.modal.title_edit') : t('agents.modal.title_new');
     document.getElementById('agent-id').value = agent ? (agent.id || '') : '';
     document.getElementById('agent-name').value = agent ? (agent.name || '') : '';
+    const scopeField = document.getElementById('agent-scope-field');
+    const scopeVal = agent ? (agent.scope || 'private') : 'private';
+    const scopeRadio = document.querySelector('input[name="agent-scope"][value="' + scopeVal + '"]');
+    if (scopeRadio) scopeRadio.checked = true;
+    if (scopeField) scopeField.style.display = agent ? 'none' : '';
     document.getElementById('agent-desc').value = agent ? (agent.description || '') : '';
     document.getElementById('agent-prompt').value = agent ? (agent.system_prompt || '') : '';
     _syncConnectionSelect();
@@ -27,7 +32,7 @@ function _syncConnectionSelect() {
     const sel = document.getElementById('agent-connection');
     if (!sel) return;
     const cur = sel.value;
-    sel.innerHTML = '<option value="">-- Sin conexion --</option>' +
+    sel.innerHTML = '<option value="">' + t('agents.modal.no_connection') + '</option>' +
         _connections.map(c => `<option value="${esc(c.id)}">${esc(c.name)} (${esc(c.type)})</option>`).join('');
     if (cur) sel.value = cur;
 }
@@ -41,9 +46,9 @@ function _syncMemoryFields(agent) {
     cb.checked = !!(agent && agent.use_memory);
     fileField.style.display = cb.checked ? '' : 'none';
 
-    const defaultName = agentId ? agentId + '.md' : '(nombre del agente).md';
+    const defaultName = agentId ? agentId + '.md' : t('agents.modal.memory_agent_name_placeholder');
     const currentFile = agent ? (agent.memory_file || '') : '';
-    const defaultOpt = `<option value="">${esc('Por defecto: ' + defaultName)}</option>`;
+    const defaultOpt = `<option value="">${esc(t('agents.modal.memory_default', { name: defaultName }))}</option>`;
     const fileOpts = _memories.map(m =>
         `<option value="${esc(m.filename)}"${m.filename === currentFile ? ' selected' : ''}>${esc(m.filename)}</option>`
     ).join('');
@@ -63,9 +68,10 @@ function _bindAgentModal() {
     document.getElementById('agent-form').addEventListener('submit', async e => {
         e.preventDefault();
         const btn = document.getElementById('agent-save-btn');
-        btn.disabled = true; btn.textContent = 'Guardando...';
+        btn.disabled = true; btn.textContent = t('agents.modal.saving');
         const useMemory = document.getElementById('agent-use-memory').checked;
         const memFile = document.getElementById('agent-memory-file').value || null;
+        const scopeChecked = document.querySelector('input[name="agent-scope"]:checked');
         const payload = {
             id: document.getElementById('agent-id').value || undefined,
             name: document.getElementById('agent-name').value.trim(),
@@ -76,13 +82,14 @@ function _bindAgentModal() {
             skills: _getSelectedSkills(),
             use_memory: useMemory,
             memory_file: useMemory ? memFile : null,
+            scope: scopeChecked ? scopeChecked.value : 'private',
         };
         try {
             await api.post('/api/agents', payload);
-            toast('Agente guardado', 'success');
+            toast(t('agents.saved'), 'success');
             _closeAgentModal();
             await _loadAll();
         } catch (err) { toast(err.message, 'error'); }
-        finally { btn.disabled = false; btn.textContent = 'Guardar agente'; }
+        finally { btn.disabled = false; btn.textContent = t('agents.modal.save_btn'); }
     });
 }

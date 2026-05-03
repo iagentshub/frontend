@@ -1,0 +1,58 @@
+{
+  "page": {
+    "title": "Habilidades",
+    "new_btn": "+ Nueva habilidad privada"
+  },
+  "categories": {
+    "ai": "🤖 IA",
+    "ai_agents": "🤖 IA y Agentes",
+    "messaging": "🗣️ Mensajería",
+    "notes": "📝 Notas",
+    "productivity": "✅ Productividad",
+    "dev": "💻 Dev",
+    "dev_full": "💻 Desarrollo",
+    "security": "🔒 Seguridad",
+    "media": "🎬 Media",
+    "data": "🌐 Datos",
+    "company": "🏢 Empresa"
+  },
+  "scope": {
+    "all": "Todas",
+    "public": "Públicas",
+    "private": "Privadas",
+    "badge_public": "pública",
+    "badge_private": "privada"
+  },
+  "filter": {
+    "search_placeholder": "Buscar skill…"
+  },
+  "empty": {
+    "public": "No hay habilidades públicas.",
+    "private": "Sin habilidades privadas todavía.",
+    "no_match": "No hay habilidades que coincidan."
+  },
+  "no_content": "(sin contenido)",
+  "confirm_delete": "¿Eliminar esta skill?",
+  "deleted": "Skill eliminada",
+  "dialog": {
+    "title_new": "Nueva habilidad privada",
+    "title_edit": "Editar skill privada",
+    "field_icon": "Icono",
+    "field_name": "Nombre",
+    "field_description": "Descripción",
+    "field_category": "Categoría",
+    "field_content": "Contenido (Markdown / instrucciones)",
+    "no_category": "Sin categoría",
+    "placeholder_name": "Mi skill...",
+    "placeholder_desc": "Qué hace esta skill...",
+    "placeholder_content": "Instrucciones para el agente...",
+    "name_required": "El nombre es obligatorio",
+    "saved": "Skill guardada",
+    "save_error": "Error: {{message}}"
+  },
+  "actions": {
+    "view": "Ver",
+    "edit": "Editar",
+    "delete": "Eliminar"
+  }
+}
