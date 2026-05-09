@@ -17,7 +17,7 @@
     <!-- Componentes -->
     <link rel="stylesheet" href="/assets/components/main_nav/main_nav.css" />
     <link rel="stylesheet" href="/assets/components/skill-card/skill-card.css" />
-    <link rel="stylesheet" href="/assets/components/filter_skills/filter_skills.css" />
+    <link rel="stylesheet" href="/assets/components/skill-catalog/skill-catalog.css" />
     <link rel="stylesheet" href="/assets/components/dialog_skill/dialog_skill.css" />
     <!-- Página -->
     <link rel="stylesheet" href="/skills/skills.css" />
@@ -30,10 +30,15 @@
             <div class="page-header">
                 <h1 class="page-title" data-i18n="skills.page.title">Skills</h1>
                 <div class="page-actions">
-                    <button class="btn btn-primary" id="btn-new-skill" data-i18n="skills.page.new_btn">+ Nueva habilidad privada</button>
+                    <button class="btn btn-ghost" id="btn-skill-catalog" data-i18n="skills.catalog.open_btn">Catálogo</button>
+                    <button class="btn btn-primary" id="btn-new-skill">
+                        <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                            <path d="M6.5 1v11M1 6.5h11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+                        </svg>
+                        <span data-i18n="skills.page.new_btn">Nueva habilidad privada</span>
+                    </button>
                 </div>
             </div>
-            <div id="filter-skills-root"></div>
             <div id="skills-grid" class="skills-grid"></div>
         </main>
     </div>
@@ -56,6 +61,27 @@
         </div>
     </div>
 
+    <!-- Modal catálogo de skills públicas -->
+    <div id="skill-catalog-bg" class="modal-bg" style="display:none">
+        <div class="sc-box">
+            <div class="sc-header">
+                <div class="sc-search-wrap">
+                    <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                        <circle cx="6.5" cy="6.5" r="4" stroke="currentColor" stroke-width="1.6"/>
+                        <path d="M11 11l3 3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                    </svg>
+                    <input id="sc-search" class="sc-search-input" data-i18n-placeholder="skills.catalog.search_placeholder" placeholder="Buscar skills…" autocomplete="off" />
+                </div>
+                <button id="sc-close" class="modal-close" type="button">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M2 2l12 12M14 2L2 14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+                    </svg>
+                </button>
+            </div>
+            <div id="sc-grid" class="sc-grid"></div>
+        </div>
+    </div>
+
     <!-- JS globales -->
     <script src="/assets/js/i18n.js"></script>
     <script src="/assets/js/config.js"></script>
@@ -67,7 +93,7 @@
     <!-- Componentes -->
     <script src="/assets/components/main_nav/main_nav.js"></script>
     <script src="/assets/components/skill-card/skill-card.js"></script>
-    <script src="/assets/components/filter_skills/filter_skills.js"></script>
+    <script src="/assets/components/skill-catalog/skill-catalog.js"></script>
     <script src="/assets/components/dialog_skill/dialog_skill.js"></script>
     <!-- Página -->
     <script src="/skills/skills.js"></script>

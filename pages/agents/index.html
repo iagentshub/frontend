@@ -114,7 +114,7 @@
                     </div>
 
                     <div class="field">
-                        <label title="Controla la creatividad de las respuestas. Valores bajos (0.1–0.4) dan respuestas más precisas y predecibles; valores altos (0.7–1.0) dan respuestas más variadas y creativas.">Temperatura <span class="field-hint-icon">ⓘ</span></label>
+                        <label data-i18n-title="agents.modal.field_temp_hint"><span data-i18n="agents.modal.field_temp">Temperatura</span> <span class="field-hint-icon">ⓘ</span></label>
                         <div class="range-wrap">
                             <input id="agent-temp" type="range" min="0" max="1" step="0.05" value="0.7" />
                             <span class="range-val" id="agent-temp-val">0.70</span>
@@ -126,13 +126,13 @@
                         <div class="skill-picker" id="skill-picker">
                             <div class="skill-picker-chips" id="skill-selected-chips"></div>
                             <div class="skill-picker-tabs">
-                                <button type="button" class="spt-tab active" data-tab="search">🔍 Buscar</button>
-                                <button type="button" class="spt-tab" data-tab="browse">◈ Explorar</button>
+                                <button type="button" class="spt-tab active" data-tab="search" data-i18n="agents.modal.tab_search">🔍 Buscar</button>
+                                <button type="button" class="spt-tab" data-tab="browse" data-i18n="agents.modal.tab_browse">◈ Explorar</button>
                             </div>
                             <div class="skill-picker-panel" id="skill-panel-search">
                                 <div class="skill-search-wrap">
                                     <input type="text" id="skill-search-input" class="skill-search-input"
-                                        autocomplete="off" placeholder="Buscar skill..." />
+                                        autocomplete="off" data-i18n-placeholder="agents.modal.skill_search_placeholder" placeholder="Buscar skill..." />
                                     <div id="skill-search-dropdown" class="skill-search-dropdown" hidden></div>
                                 </div>
                             </div>
@@ -156,7 +156,6 @@
                             </label>
                         </div>
                         <div id="memory-file-field" style="display:none;margin-top:8px">
-                            <label data-i18n="agents.modal.field_memory_file">Archivo de memoria</label>
                             <select id="agent-memory-file" class="select"></select>
                             <span class="input-hint" data-i18n="agents.modal.memory_hint">Usa el archivo del agente por
                                 defecto o elige otro</span>
@@ -165,16 +164,16 @@
 
                     <!-- ── CONFIGURACIÓN ESPECÍFICA (colapsable) ── -->
                     <details class="advanced-section" id="agent-advanced">
-                        <summary class="advanced-summary">Configuración específica</summary>
+                        <summary class="advanced-summary" data-i18n="agents.modal.specific_config">Configuración específica</summary>
                         <div class="advanced-body">
 
                             <div class="field">
-                                <label title="Determina qué opciones están disponibles y cómo se exporta el agente a cada plataforma.">Tipo de agente <span class="field-hint-icon">ⓘ</span></label>
+                                <label data-i18n-title="agents.modal.agent_type_hint"><span data-i18n="agents.modal.field_agent_type">Tipo de agente</span> <span class="field-hint-icon">ⓘ</span></label>
                                 <select id="agent-type" class="select">
-                                    <option value="generic">Genérico</option>
-                                    <option value="claude">Claude</option>
-                                    <option value="openai">OpenAI</option>
-                                    <option value="github">GitHub Copilot</option>
+                                    <option value="generic" data-i18n="agents.modal.type_generic">Genérico</option>
+                                    <option value="claude" data-i18n="agents.modal.type_claude">Claude</option>
+                                    <option value="openai" data-i18n="agents.modal.type_openai">OpenAI</option>
+                                    <option value="github" data-i18n="agents.modal.type_github">GitHub Copilot</option>
                                 </select>
                             </div>
 
@@ -183,61 +182,61 @@
                                     <path d="M8 1.5L1 14.5h14L8 1.5z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>
                                     <path d="M8 6v4M8 11.5v.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
                                 </svg>
-                                <span>Al exportar un agente a una plataforma diferente a su tipo, la configuración específica (thinking, formato de respuesta, etc.) no se incluirá en el fichero exportado.</span>
+                                <span data-i18n="agents.modal.export_warning">Al exportar un agente a una plataforma diferente a su tipo, la configuración específica (thinking, formato de respuesta, etc.) no se incluirá en el fichero exportado.</span>
                             </div>
 
                             <!-- ── Opciones Claude ── -->
                             <div class="platform-section" id="platform-claude" style="display:none">
-                                <div class="platform-section-title">Opciones Claude</div>
+                                <div class="platform-section-title" data-i18n="agents.modal.claude_section_title">Opciones Claude</div>
                                 <div class="form-row-2">
                                     <div class="field">
-                                        <label class="toggle-label" title="El modelo razona internamente antes de responder. Mejora la calidad en tareas complejas de análisis, matemáticas o código, a cambio de mayor latencia y coste.">
+                                        <label class="toggle-label" data-i18n-title="agents.modal.claude_extended_thinking_hint">
                                             <input type="checkbox" id="claude-extended-thinking" class="toggle-checkbox" />
                                             <span class="toggle-track"></span>
-                                            <span>Extended thinking <span class="field-hint-icon">ⓘ</span></span>
+                                            <span><span data-i18n="agents.modal.claude_extended_thinking">Extended thinking</span> <span class="field-hint-icon">ⓘ</span></span>
                                         </label>
                                     </div>
                                     <div class="field">
-                                        <label class="toggle-label" title="Almacena el system prompt en caché entre llamadas. Reduce el coste hasta un 90% y la latencia cuando el prompt es largo y no cambia entre turnos.">
+                                        <label class="toggle-label" data-i18n-title="agents.modal.claude_prompt_cache_hint">
                                             <input type="checkbox" id="claude-cache-control" class="toggle-checkbox" />
                                             <span class="toggle-track"></span>
-                                            <span>Prompt cache <span class="field-hint-icon">ⓘ</span></span>
+                                            <span><span data-i18n="agents.modal.claude_prompt_cache">Prompt cache</span> <span class="field-hint-icon">ⓘ</span></span>
                                         </label>
                                     </div>
                                 </div>
                                 <div class="field" id="claude-thinking-budget-field" style="display:none">
-                                    <label title="Número máximo de tokens que el modelo puede usar para razonar internamente antes de generar la respuesta visible. Más tokens = razonamiento más profundo, pero más lento y caro.">Tokens para thinking <span class="field-hint-icon">ⓘ</span></label>
+                                    <label data-i18n-title="agents.modal.claude_thinking_budget_hint"><span data-i18n="agents.modal.claude_thinking_budget">Tokens para thinking</span> <span class="field-hint-icon">ⓘ</span></label>
                                     <input id="claude-thinking-budget" type="number" class="input" value="10000" min="1000" max="100000" step="1000" />
                                 </div>
                             </div>
 
                             <!-- ── Opciones OpenAI ── -->
                             <div class="platform-section" id="platform-openai" style="display:none">
-                                <div class="platform-section-title">Opciones OpenAI</div>
+                                <div class="platform-section-title" data-i18n="agents.modal.openai_section_title">Opciones OpenAI</div>
                                 <div class="form-row-2">
                                     <div class="field">
-                                        <label title="Formato que debe usar el modelo al responder. 'Texto libre' es la respuesta normal. 'JSON' fuerza al modelo a devolver siempre un objeto JSON válido, útil para integraciones automáticas.">Formato de respuesta <span class="field-hint-icon">ⓘ</span></label>
+                                        <label data-i18n-title="agents.modal.openai_response_format_hint"><span data-i18n="agents.modal.openai_response_format">Formato de respuesta</span> <span class="field-hint-icon">ⓘ</span></label>
                                         <select id="openai-response-format" class="select">
-                                            <option value="text">Texto libre</option>
+                                            <option value="text" data-i18n="agents.modal.openai_response_text">Texto libre</option>
                                             <option value="json_object">JSON</option>
                                         </select>
                                     </div>
                                     <div class="field">
-                                        <label title="Controla si el modelo puede usar herramientas (funciones). 'Auto' decide solo, 'Ninguno' las desactiva, 'Requerido' obliga a usarlas siempre.">Tool choice <span class="field-hint-icon">ⓘ</span></label>
+                                        <label data-i18n-title="agents.modal.openai_tool_choice_hint"><span data-i18n="agents.modal.openai_tool_choice">Tool choice</span> <span class="field-hint-icon">ⓘ</span></label>
                                         <select id="openai-tool-choice" class="select">
                                             <option value="auto">Auto</option>
-                                            <option value="none">Ninguno</option>
-                                            <option value="required">Requerido</option>
+                                            <option value="none" data-i18n="agents.modal.openai_tool_none">Ninguno</option>
+                                            <option value="required" data-i18n="agents.modal.openai_tool_required">Requerido</option>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="form-row-2">
                                     <div class="field">
-                                        <label title="Penaliza repetir las mismas palabras o frases. Valores positivos reducen la repetición léxica; útil para respuestas largas o resúmenes. Rango: -2 a 2.">Frequency penalty <span class="field-hint-icon">ⓘ</span></label>
+                                        <label data-i18n-title="agents.modal.openai_freq_penalty_hint"><span data-i18n="agents.modal.openai_freq_penalty">Frequency penalty</span> <span class="field-hint-icon">ⓘ</span></label>
                                         <input id="openai-freq-penalty" type="number" class="input" value="0" min="-2" max="2" step="0.1" />
                                     </div>
                                     <div class="field">
-                                        <label title="Penaliza introducir temas ya mencionados. Valores positivos animan al modelo a explorar nuevos temas en lugar de profundizar en los ya tratados. Rango: -2 a 2.">Presence penalty <span class="field-hint-icon">ⓘ</span></label>
+                                        <label data-i18n-title="agents.modal.openai_pres_penalty_hint"><span data-i18n="agents.modal.openai_pres_penalty">Presence penalty</span> <span class="field-hint-icon">ⓘ</span></label>
                                         <input id="openai-pres-penalty" type="number" class="input" value="0" min="-2" max="2" step="0.1" />
                                     </div>
                                 </div>
@@ -245,16 +244,16 @@
 
                             <!-- ── Opciones GitHub Copilot ── -->
                             <div class="platform-section" id="platform-github" style="display:none">
-                                <div class="platform-section-title">Opciones GitHub Copilot</div>
+                                <div class="platform-section-title" data-i18n="agents.modal.github_section_title">Opciones GitHub Copilot</div>
                                 <div class="field">
-                                    <label title="Etiqueta de categoría que ayuda a Copilot a entender el dominio del agente. Ej: 'testing', 'devops', 'security'. No afecta al comportamiento, solo a la organización.">Categoría (topic) <span class="field-hint-icon">ⓘ</span></label>
-                                    <input id="github-topic" class="input" placeholder="Ej: testing, devops, frontend..." />
+                                    <label data-i18n-title="agents.modal.github_topic_hint"><span data-i18n="agents.modal.github_topic">Categoría (topic)</span> <span class="field-hint-icon">ⓘ</span></label>
+                                    <input id="github-topic" class="input" data-i18n-placeholder="agents.modal.github_topic_placeholder" placeholder="Ej: testing, devops, frontend..." />
                                 </div>
                                 <div class="field">
-                                    <label class="toggle-label" title="Incluye en el fichero exportado una sección que indica a Copilot que tenga en cuenta el código del repositorio actual al responder.">
+                                    <label class="toggle-label" data-i18n-title="agents.modal.github_repo_context_hint">
                                         <input type="checkbox" id="github-repo-context" class="toggle-checkbox" />
                                         <span class="toggle-track"></span>
-                                        <span>Incluir contexto del repositorio <span class="field-hint-icon">ⓘ</span></span>
+                                        <span><span data-i18n="agents.modal.github_repo_context">Incluir contexto del repositorio</span> <span class="field-hint-icon">ⓘ</span></span>
                                     </label>
                                 </div>
                             </div>

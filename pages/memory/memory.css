@@ -8,13 +8,13 @@
 /* ── Memory card ── */
 .mem-card {
     position: relative;
-    background: var(--surface);
-    border: 1px solid var(--line);
-    border-radius: var(--radius-lg);
     display: flex;
     flex-direction: column;
+    border-radius: 12px;
+    border: 1px solid var(--line);
+    background: var(--surface);
     overflow: hidden;
-    transition: box-shadow 140ms ease, border-color 140ms ease, transform 140ms ease;
+    transition: box-shadow 140ms, border-color 140ms, transform 140ms;
 }
 
 .mem-card:hover {
@@ -25,97 +25,107 @@
 
 .mem-card-body {
     flex: 1;
-    padding: 16px 16px 12px;
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 8px;
+    padding: 12px 14px 10px;
     cursor: pointer;
+}
+
+.mem-card-head {
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
 }
 
 .mem-card-icon {
-    width: 34px;
-    height: 34px;
-    border-radius: 8px;
-    background: rgba(79, 70, 229, 0.07);
-    color: var(--accent);
+    flex-shrink: 0;
+    width: 30px;
+    height: 30px;
+    border-radius: 7px;
+    background: rgba(79, 70, 229, 0.09);
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 4px;
-    flex-shrink: 0;
+    color: var(--accent);
+}
+
+.mem-card-icon svg {
+    width: 14px;
+    height: 14px;
+}
+
+.mem-card-info {
+    flex: 1;
+    min-width: 0;
 }
 
 .mem-card-name {
-    font-size: 14px;
+    font-size: 0.875rem;
     font-weight: 700;
     color: var(--ink);
-    white-space: nowrap;
+    line-height: 1.25;
     overflow: hidden;
     text-overflow: ellipsis;
-    line-height: 1.25;
+    white-space: nowrap;
 }
 
-.mem-card-filename {
-    font-size: 11px;
+.mem-card-sub {
+    font-size: 0.71rem;
+    color: var(--ink-3);
     font-family: var(--font-mono);
-    color: var(--ink-3);
-}
-
-.mem-card-meta {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-top: 4px;
-    font-size: 11px;
-    color: var(--ink-3);
-}
-
-.mem-card-size {
-    display: flex;
-    align-items: center;
-    gap: 4px;
+    margin-top: 2px;
 }
 
 /* ── Footer actions ── */
-.mem-card-footer {
+.mem-card-actions {
     display: flex;
-    gap: 1px;
+    gap: 4px;
+    padding: 8px 14px 10px;
     border-top: 1px solid var(--line);
-    background: var(--surface-2);
 }
 
 .mem-action {
-    flex: 1;
-    padding: 8px 4px;
-    background: none;
-    border: none;
-    font-size: 11px;
-    font-weight: 500;
-    color: var(--ink-3);
-    cursor: pointer;
-    font-family: var(--font);
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    justify-content: center;
-    gap: 5px;
-    transition: background 0.1s, color 0.1s;
+    gap: 4px;
+    padding: 4px 9px;
+    border-radius: 6px;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    font-size: 0.72rem;
+    font-weight: 600;
+    font-family: var(--font);
+    color: var(--ink-2);
+    cursor: pointer;
+    transition: background 0.12s, color 0.12s, border-color 0.12s;
+    line-height: 1.4;
 }
 
 .mem-action:hover {
-    background: var(--surface-3);
+    background: var(--surface-2);
     color: var(--ink);
+    border-color: var(--line-strong);
+}
+
+.mem-action--edit {
+    color: var(--accent);
+    border-color: rgba(79, 70, 229, 0.2);
+}
+
+.mem-action--edit:hover {
+    background: var(--accent-dim);
+    border-color: rgba(79, 70, 229, 0.35);
 }
 
 .mem-action--delete {
-    flex: none;
-    width: 40px;
-    padding: 8px;
-    margin-left: auto;
+    color: var(--danger);
+    border-color: rgba(220, 38, 38, 0.15);
 }
 
 .mem-action--delete:hover {
-    color: var(--danger);
-    background: rgba(220, 38, 38, 0.05);
+    background: rgba(220, 38, 38, 0.06);
+    border-color: rgba(220, 38, 38, 0.3);
 }
 
 /* ── Empty state ── */

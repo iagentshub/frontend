@@ -2,7 +2,7 @@
   "page": {
     "title": "Memory",
     "subtitle": "Persistent context files for your agents",
-    "new_btn": "+ New memory"
+    "new_btn": "New memory"
   },
   "filter": {
     "search_placeholder": "Search file…"

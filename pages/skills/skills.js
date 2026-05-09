@@ -1,34 +1,36 @@
 // skills.js — pagina /skills
 'use strict';
 
-var _allSkills = [];
+var _privateSkills = [];
 
 async function init() {
     await window.requireAuth();
     renderNav('nav-root', 'skills');
-    FilterSkills.init({
-        mountEl: '#filter-skills-root',
-        onChange: _applyFilter,
-    });
+    _initCatalog();
     await loadSkills();
     bindEvents();
 }
 
-async function loadSkills() {
-    _allSkills = await api.get('/api/skills');
-    _applyFilter();
+function _initCatalog() {
+    SkillCatalog.init({
+        mountEl: '#btn-skill-catalog',
+        onImport: function (skill) {
+            DialogSkill.open(
+                { name: skill.name, description: skill.description, icon: skill.icon, category: skill.category, content: skill.content },
+                loadSkills
+            );
+        },
+    });
 }
 
-function _applyFilter() {
-    var f = FilterSkills.getFilter();
-    var q = (f.query || '').toLowerCase();
-    var filtered = _allSkills.filter(function (s) {
-        if (f.scope && s.scope !== f.scope) return false;
-        if (f.categories && f.categories.length && f.categories.indexOf(s.category || '') < 0) return false;
-        if (q && s.name.toLowerCase().indexOf(q) < 0 && (s.description || '').toLowerCase().indexOf(q) < 0) return false;
-        return true;
-    });
-    SkillCard.renderAll(filtered, document.getElementById('skills-grid'));
+async function loadSkills() {
+    var results = await Promise.all([
+        api.get('/api/skills?scope=private'),
+        api.get('/api/skills?scope=public'),
+    ]);
+    _privateSkills = results[0];
+    SkillCatalog.setSkills(results[1]);
+    SkillCard.renderAll(_privateSkills, document.getElementById('skills-grid'));
 }
 
 async function viewSkill(scope, id) {

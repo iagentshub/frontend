@@ -1,7 +1,7 @@
 {
   "page": {
     "title": "Habilidades",
-    "new_btn": "+ Nueva habilidad privada"
+    "new_btn": "Nueva habilidad privada"
   },
   "categories": {
     "ai": "🤖 IA",
@@ -49,6 +49,13 @@
     "name_required": "El nombre es obligatorio",
     "saved": "Skill guardada",
     "save_error": "Error: {{message}}"
+  },
+  "catalog": {
+    "open_btn": "Catálogo",
+    "search_placeholder": "Buscar skills…",
+    "import_btn": "Importar",
+    "empty": "No hay skills públicas disponibles.",
+    "empty_search": "No se encontraron skills con esa búsqueda."
   },
   "actions": {
     "view": "Ver",
