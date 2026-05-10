@@ -119,11 +119,16 @@
     "choose_format": "Choose format:",
     "openai_label": "OpenAI Assistant",
     "openai_sub": "JSON for Assistants API",
+    "openai_path": "📄 {agent-id}-openai.json",
     "claude_label": "Anthropic Claude",
-    "claude_sub": "JSON for Claude API",
+    "claude_sub": "ZIP for Claude Code",
+    "claude_path": "📁 .claude/agents/{name}.md",
     "github_label": "GitHub Copilot",
-    "github_sub": ".github/copilot-instructions.md",
-    "exported": "Exported: {{name}}"
+    "github_sub": "ZIP for GitHub Copilot",
+    "github_path": "📁 .github/copilot-instructions.md",
+    "exported": "Exported: {{name}}",
+    "zip_hint_claude": "Downloaded. Extract the ZIP in your project root.",
+    "zip_hint_github": "Downloaded. Extract the ZIP in your repository root."
   },
   "skill_picker": {
     "all": "All",
