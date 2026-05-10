@@ -45,6 +45,15 @@ function _parseGithubMdFree(text) {
     };
 }
 
+function _stripRoutinesGuide(body) {
+    var marker = '> **Routines setup guide**';
+    var idx = body.indexOf(marker);
+    if (idx === -1) return body;
+    var before = body.slice(0, idx);
+    var sepIdx = before.lastIndexOf('\n---\n');
+    return sepIdx !== -1 ? before.slice(0, sepIdx).trim() : body;
+}
+
 function _parseAndLoadAgent(filename, text) {
     var lower = filename.toLowerCase();
 
@@ -64,7 +73,7 @@ function _parseAndLoadAgent(filename, text) {
             return {
                 name: parsed.meta.name || '',
                 description: parsed.meta.description || '',
-                system_prompt: parsed.body,
+                system_prompt: _stripRoutinesGuide(parsed.body),
                 model: parsed.meta.model || '',
                 agent_type: 'claude',
             };

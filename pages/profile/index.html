@@ -42,6 +42,12 @@
                 </div>
             </div>
 
+            <div class="profile-card" id="accounts-card">
+                <div class="profile-card-title" data-i18n="profile.accounts.title">Conectar cuentas</div>
+                <p class="profile-card-subtitle" data-i18n="profile.accounts.subtitle"></p>
+                <div id="accounts-list" class="accounts-list"></div>
+            </div>
+
             <div class="profile-card" id="theme-picker-card">
                 <div class="profile-card-title" data-i18n="profile.theme_title">Tema</div>
                 <div class="theme-picker" id="theme-picker"></div>
@@ -78,6 +84,39 @@
         </main>
     </div>
 
+    <!-- Modal vincular cuenta -->
+    <div id="account-modal" class="modal-bg" style="display:none">
+        <div class="modal-box">
+            <div class="modal-header">
+                <span class="modal-title" id="account-modal-title">Vincular cuenta</span>
+                <button class="modal-close" id="account-modal-close" type="button">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M2 2l12 12M14 2L2 14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="account-modal-provider" />
+                <div class="field" id="account-field-apikey">
+                    <label data-i18n="profile.accounts.field_api_key">API Key</label>
+                    <input id="account-api-key" class="input" type="password" autocomplete="off" placeholder="sk-…" />
+                </div>
+                <div class="field" id="account-field-host" style="display:none">
+                    <label data-i18n="profile.accounts.field_host">Host</label>
+                    <input id="account-host" class="input" type="text" placeholder="http://localhost:11434" />
+                    <span class="input-hint" data-i18n="profile.accounts.host_hint">Si usas Docker, prueba con host.docker.internal en lugar de localhost.</span>
+                </div>
+                <div id="account-test-result" class="account-test-result" style="display:none"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-ghost" id="account-modal-test" data-i18n="profile.accounts.test_btn">Testear</button>
+                <div style="flex:1"></div>
+                <button type="button" class="btn btn-ghost" id="account-modal-cancel" data-i18n="common.actions.cancel">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="account-modal-save" data-i18n="profile.accounts.save_btn">Vincular</button>
+            </div>
+        </div>
+    </div>
+
     <!-- JS globales -->
     <script src="/assets/js/i18n.js"></script>
     <script src="/assets/js/config.js"></script>
@@ -90,6 +129,7 @@
     <script src="/assets/components/main_nav/main_nav.js"></script>
     <!-- Página -->
     <script src="/profile/profile.js"></script>
+    <script src="/profile/profile-accounts.js"></script>
 </body>
 
 </html>

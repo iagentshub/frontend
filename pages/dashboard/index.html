@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+    <script>document.documentElement.setAttribute("data-theme", localStorage.getItem("ga-theme") || "noir");</script>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>iAgents Hub · Dashboard</title>
+    <!-- CSS globales -->
+    <link rel="stylesheet" href="/assets/css/variables.css" />
+    <link rel="stylesheet" href="/assets/themes/themes.css" />
+    <link rel="stylesheet" href="/assets/css/base.css" />
+    <link rel="stylesheet" href="/assets/css/components.css" />
+    <link rel="stylesheet" href="/assets/css/layout.css" />
+    <link rel="stylesheet" href="/assets/css/animations.css" />
+    <!-- Componentes -->
+    <link rel="stylesheet" href="/assets/components/main_nav/main_nav.css" />
+    <!-- Página -->
+    <link rel="stylesheet" href="/dashboard/dashboard.css" />
+</head>
+
+<body>
+    <div class="app-shell">
+        <div id="nav-root"></div>
+
+        <main class="page-content">
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title" data-i18n="dashboard.page.title">Dashboard</h1>
+                    <p class="page-subtitle" data-i18n="dashboard.page.subtitle">Visión general de tu plataforma</p>
+                </div>
+                <div class="page-actions">
+                    <button class="btn btn-ghost" id="btn-dash-catalog">
+                        <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
+                            <circle cx="6.5" cy="6.5" r="4" stroke="currentColor" stroke-width="1.6" />
+                            <path d="M11 11l3 3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+                        </svg>
+                        <span data-i18n="dashboard.page.catalog_btn">Catálogo</span>
+                    </button>
+                    <button class="btn btn-ghost" id="btn-dash-new-conn">
+                        <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                            <path d="M6.5 1v11M1 6.5h11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+                        </svg>
+                        <span data-i18n="dashboard.page.new_conn_btn">Nueva conexión</span>
+                    </button>
+                    <button class="btn btn-primary" id="btn-dash-new-agent">
+                        <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                            <path d="M6.5 1v11M1 6.5h11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+                        </svg>
+                        <span data-i18n="dashboard.page.new_agent_btn">Nuevo agente</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- ── Stat cards ── -->
+            <div id="dash-stats" class="dash-stats"></div>
+
+            <!-- ── Tokens + Composición ── -->
+            <div class="dash-columns">
+                <div class="dash-panel">
+                    <div class="dash-panel-title" data-i18n="dashboard.tokens.title">Uso de tokens</div>
+                    <div id="dash-tokens-total" class="dash-token-total"></div>
+                    <div id="dash-tokens-body"></div>
+                </div>
+                <div class="dash-panel">
+                    <div class="dash-panel-title" data-i18n="dashboard.composition.title">Composición de agentes</div>
+                    <div id="dash-composition-body"></div>
+                </div>
+            </div>
+
+            <!-- ── Agentes recientes ── -->
+            <div>
+                <div class="dash-section-header" style="margin-bottom:12px">
+                    <span class="dash-section-title" data-i18n="dashboard.recent.title">Agentes recientes</span>
+                    <a href="/agents" class="btn btn-ghost" style="font-size:0.75rem;padding:4px 10px" data-i18n="nav.agents">Agentes</a>
+                </div>
+                <div id="dash-recent-grid" class="dash-recent-grid"></div>
+            </div>
+        </main>
+    </div>
+
+    <!-- JS globales -->
+    <script src="/assets/js/i18n.js"></script>
+    <script src="/assets/js/config.js"></script>
+    <script src="/assets/js/theme.js"></script>
+    <script src="/assets/js/toast.js"></script>
+    <script src="/assets/js/auth.js"></script>
+    <script src="/assets/js/api.js"></script>
+    <script src="/assets/js/utils.js"></script>
+    <!-- Componentes -->
+    <script src="/assets/components/main_nav/main_nav.js"></script>
+    <!-- Página -->
+    <script src="/dashboard/dashboard.js"></script>
+</body>
+
+</html>

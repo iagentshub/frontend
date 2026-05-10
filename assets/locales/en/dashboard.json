@@ -1,0 +1,31 @@
+{
+  "page": {
+    "title": "Dashboard",
+    "subtitle": "Overview of your platform",
+    "new_agent_btn": "New agent",
+    "catalog_btn": "Catalog",
+    "new_conn_btn": "New connection"
+  },
+  "stats": {
+    "agents": "Agents",
+    "connections": "Connections",
+    "skills": "Skills",
+    "memory": "Memory"
+  },
+  "tokens": {
+    "title": "Token usage",
+    "total": "Total consumed",
+    "no_activity": "No activity recorded",
+    "unit_k": "k tokens"
+  },
+  "composition": {
+    "title": "Agent composition",
+    "with_memory": "With active memory",
+    "no_agents": "No agents yet"
+  },
+  "recent": {
+    "title": "Recent agents",
+    "empty": "No agents yet.",
+    "chat_btn": "Chat"
+  }
+}

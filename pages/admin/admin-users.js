@@ -14,7 +14,7 @@ async function loadUsers() {
         renderTable(users, wrap);
     } catch (e) {
         if (e.status === 403) {
-            window.location.replace('/agents/');
+            window.location.replace('/dashboard/');
         } else {
             wrap.innerHTML = '<div class="loading-state">' + t('admin.error_load') + '</div>';
         }

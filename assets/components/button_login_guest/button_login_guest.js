@@ -19,7 +19,7 @@ function renderGuestLoginButton(mountId, apiBase) {
         try {
             var r = await fetch((apiBase || '') + '/api/auth/guest', { method: 'POST' });
             if (r.ok) {
-                window.location.replace('/agents/');
+                window.location.replace('/dashboard/');
             } else {
                 btn.removeAttribute('aria-busy');
                 btn.querySelector('.btn-guest__label').textContent = loginLabel;

@@ -1,0 +1,31 @@
+{
+  "page": {
+    "title": "Dashboard",
+    "subtitle": "Visión general de tu plataforma",
+    "new_agent_btn": "Nuevo agente",
+    "catalog_btn": "Catálogo",
+    "new_conn_btn": "Nueva conexión"
+  },
+  "stats": {
+    "agents": "Agentes",
+    "connections": "Conexiones",
+    "skills": "Skills",
+    "memory": "Memoria"
+  },
+  "tokens": {
+    "title": "Uso de tokens",
+    "total": "Total consumido",
+    "no_activity": "Sin actividad registrada",
+    "unit_k": "k tokens"
+  },
+  "composition": {
+    "title": "Composición de agentes",
+    "with_memory": "Con memoria activa",
+    "no_agents": "Sin agentes todavía"
+  },
+  "recent": {
+    "title": "Agentes recientes",
+    "empty": "Aún no hay agentes.",
+    "chat_btn": "Chat"
+  }
+}

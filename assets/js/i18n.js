@@ -6,7 +6,7 @@
     var _lang = 'es';
     var _fallback = 'es';
     var _listeners = [];
-    var _namespaces = ['common', 'agents', 'skills', 'connections', 'auth', 'memory', 'profile', 'admin'];
+    var _namespaces = ['common', 'agents', 'skills', 'connections', 'auth', 'memory', 'profile', 'admin', 'dashboard'];
     var _ready = false;
     var _readyCallbacks = [];
 

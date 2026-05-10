@@ -30,6 +30,16 @@ window.api = {
         if (!r.ok) { var d = await r.json().catch(function () { return {}; }); throw _apiError(r.status, d.detail); }
         return r.json();
     },
+    async put(url, body) {
+        var r = await fetch((window.API_BASE || '') + url, {
+            method: 'PUT',
+            headers: Object.assign({ 'Content-Type': 'application/json' }, this._langHeader()),
+            body: JSON.stringify(body),
+        });
+        if (r.status === 401) { window.location.replace('/login/'); throw _apiError(401); }
+        if (!r.ok) { var d = await r.json().catch(function () { return {}; }); throw _apiError(r.status, d.detail); }
+        return r.json();
+    },
     async del(url) {
         var r = await fetch((window.API_BASE || '') + url, {
             method: 'DELETE',
