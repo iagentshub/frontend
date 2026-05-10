@@ -1,7 +1,9 @@
 {
   "page": {
     "title": "Skills",
-    "new_btn": "New private skill"
+    "new_btn": "New private skill",
+    "load_btn": "Load",
+    "load_error": "Could not read file: {{msg}}"
   },
   "categories": {
     "ai": "🤖 AI",

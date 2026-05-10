@@ -47,6 +47,25 @@ function bindEvents() {
         DialogSkill.open(null, loadSkills);
     });
 
+    document.getElementById('btn-load-skill').addEventListener('click', function () {
+        document.getElementById('skill-file-input').click();
+    });
+    document.getElementById('skill-file-input').addEventListener('change', function (e) {
+        var file = e.target.files[0];
+        if (!file) return;
+        e.target.value = '';
+        var reader = new FileReader();
+        reader.onload = function (ev) {
+            try {
+                var skill = _parseAndLoadSkill(ev.target.result);
+                DialogSkill.open(skill, loadSkills);
+            } catch (err) {
+                toast(t('skills.page.load_error', { msg: err.message }), 'error');
+            }
+        };
+        reader.readAsText(file);
+    });
+
     document.getElementById('skill-view-close').addEventListener('click', function () {
         document.getElementById('skill-view-modal').style.display = 'none';
     });

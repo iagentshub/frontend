@@ -2,7 +2,9 @@
   "page": {
     "title": "Memoria",
     "subtitle": "Archivos de contexto persistente para tus agentes",
-    "new_btn": "Nueva memoria"
+    "new_btn": "Nueva",
+    "load_btn": "Cargar",
+    "load_error": "No se pudo leer el fichero: {{msg}}"
   },
   "filter": {
     "search_placeholder": "Buscar archivo…"

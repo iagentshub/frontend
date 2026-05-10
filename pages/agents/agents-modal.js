@@ -30,6 +30,7 @@ function _openAgentModal(agent) {
 
     _initSkillPicker(agent ? (agent.skills || []) : []);
     _syncMemoryFields(agent);
+    _syncRoutines(agent ? (agent.routines || []) : []);
 
     // Open advanced section if editing a typed agent or if any advanced fields are set
     const advanced = document.getElementById('agent-advanced');
@@ -183,6 +184,7 @@ function _bindAgentModal() {
             skills: _getSelectedSkills(),
             use_memory: useMemory,
             memory_file: useMemory ? memFile : null,
+            routines: _getRoutines(),
             scope: scopeChecked ? scopeChecked.value : 'private',
             ..._buildPlatformPayload(agentType),
         };

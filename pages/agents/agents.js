@@ -50,6 +50,25 @@ function _bindActions() {
 
     document.getElementById('btn-new-agent').addEventListener('click', () => _openAgentModal());
 
+    document.getElementById('btn-load-agent').addEventListener('click', function () {
+        document.getElementById('agent-file-input').click();
+    });
+    document.getElementById('agent-file-input').addEventListener('change', function (e) {
+        var file = e.target.files[0];
+        if (!file) return;
+        e.target.value = '';
+        var reader = new FileReader();
+        reader.onload = function (ev) {
+            try {
+                var agent = _parseAndLoadAgent(file.name, ev.target.result);
+                _openAgentModal(agent);
+            } catch (err) {
+                toast(t('agents.page.load_error', { msg: err.message }), 'error');
+            }
+        };
+        reader.readAsText(file);
+    });
+
     document.getElementById('agents-grid').addEventListener('click', async e => {
         const btn = e.target.closest('[data-action]');
         if (!btn) return;

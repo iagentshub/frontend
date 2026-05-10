@@ -32,13 +32,21 @@
                     <p class="page-subtitle" data-i18n="memory.page.subtitle">Archivos de contexto persistente para tus agentes</p>
                 </div>
                 <div class="page-actions">
+                    <button class="btn btn-ghost" id="btn-load-memory">
+                        <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                            <path d="M6.5 8.5V1M3 4L6.5 1 10 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M1 10.5v1a.5.5 0 00.5.5h10a.5.5 0 00.5-.5v-1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                        </svg>
+                        <span data-i18n="memory.page.load_btn">Cargar</span>
+                    </button>
                     <button class="btn btn-primary" id="btn-new-memory">
                         <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
                             <path d="M6.5 1v11M1 6.5h11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
                         </svg>
-                        <span data-i18n="memory.page.new_btn">Nueva memoria</span>
+                        <span data-i18n="memory.page.new_btn">Nueva</span>
                     </button>
                 </div>
+                <input type="file" id="memory-file-input" accept=".md,.json" style="display:none">
             </div>
 
             <div id="filter-memory-root"></div>
@@ -95,6 +103,7 @@
     <!-- Página -->
     <script src="/memory/memory-render.js"></script>
     <script src="/memory/memory-modal.js"></script>
+    <script src="/memory/memory-load.js"></script>
     <script src="/memory/memory.js"></script>
 </body>
 

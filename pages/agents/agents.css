@@ -552,6 +552,138 @@ details[open] > .advanced-summary::before {
     color: var(--ink-3);
 }
 
+/* ── Routine cards ── */
+.routine-empty {
+    font-size: 12px;
+    color: var(--ink-3);
+    padding: 8px 0 4px;
+}
+
+.routine-card {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--surface);
+    margin-bottom: 6px;
+}
+
+.routine-card-body {
+    flex: 1;
+    min-width: 0;
+}
+
+.routine-card-name {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--ink);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.routine-card-desc {
+    font-size: 11px;
+    color: var(--ink-3);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-top: 1px;
+}
+
+.routine-card-meta {
+    flex-shrink: 0;
+}
+
+.routine-badge {
+    display: inline-block;
+    padding: 2px 7px;
+    border-radius: 10px;
+    font-size: 10px;
+    font-weight: 600;
+    font-family: var(--font-mono);
+    white-space: nowrap;
+    max-width: 160px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.routine-badge--manual {
+    background: var(--surface-2);
+    color: var(--ink-2);
+    border: 1px solid var(--line-strong);
+}
+
+.routine-badge--cron {
+    background: rgba(79, 70, 229, 0.08);
+    color: var(--accent);
+    border: 1px solid rgba(79, 70, 229, 0.2);
+}
+
+.routine-badge--webhook {
+    background: rgba(16, 185, 129, 0.07);
+    color: var(--success);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.routine-card-actions {
+    display: flex;
+    gap: 4px;
+    flex-shrink: 0;
+}
+
+.routine-action-btn {
+    padding: 3px 8px;
+    border-radius: 5px;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--ink-2);
+    cursor: pointer;
+    transition: background 0.12s, color 0.12s;
+}
+
+.routine-action-btn:hover {
+    background: var(--surface-2);
+    color: var(--ink);
+}
+
+.routine-action-btn--del {
+    color: var(--danger);
+    border-color: rgba(220, 38, 38, 0.15);
+}
+
+.routine-action-btn--del:hover {
+    background: rgba(220, 38, 38, 0.06);
+    border-color: rgba(220, 38, 38, 0.3);
+}
+
+/* ── Routine inline form ── */
+.routine-form {
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius);
+    padding: 12px;
+    background: var(--surface-2);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 6px;
+}
+
+.routine-form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.routine-form-actions {
+    display: flex;
+    gap: 6px;
+}
+
 /* ── Field hint icon (ⓘ) ── */
 .field-hint-icon {
     font-style: normal;

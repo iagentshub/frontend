@@ -1,7 +1,10 @@
 {
   "page": {
     "title": "Agents",
-    "subtitle": "Manage and chat with your AI agents"
+    "subtitle": "Manage and chat with your AI agents",
+    "new_btn": "New",
+    "load_btn": "Load",
+    "load_error": "Could not read file: {{msg}}"
   },
   "scope": {
     "all": "All",
@@ -92,7 +95,24 @@
     "github_topic_hint": "Category label that helps Copilot understand the agent's domain. E.g.: 'testing', 'devops', 'security'. Does not affect behavior, only organization.",
     "github_topic_placeholder": "E.g.: testing, devops, frontend...",
     "github_repo_context": "Include repository context",
-    "github_repo_context_hint": "Includes a section in the exported file that tells Copilot to take the current repository's code into account when responding."
+    "github_repo_context_hint": "Includes a section in the exported file that tells Copilot to take the current repository's code into account when responding.",
+    "routines_title": "Routines",
+    "routine_add": "Add routine",
+    "routine_name_label": "Name",
+    "routine_desc_label": "Description",
+    "routine_trigger_label": "Trigger",
+    "routine_trigger_manual": "Manual",
+    "routine_trigger_cron": "Scheduled (cron)",
+    "routine_trigger_webhook": "Webhook",
+    "routine_schedule_label": "Cron expression",
+    "routine_schedule_placeholder": "e.g.: 0 9 * * MON-FRI",
+    "routine_schedule_hint": "Cron format: minute hour day-of-month month day-of-week",
+    "routine_prompt_label": "Prompt / task",
+    "routine_prompt_placeholder": "Instruction the agent will execute…",
+    "routine_save": "Save",
+    "routine_edit": "Edit",
+    "routine_delete": "Delete",
+    "routine_empty": "No routines defined."
   },
   "export": {
     "title": "Export agent",

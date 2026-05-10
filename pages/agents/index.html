@@ -43,14 +43,22 @@
                         </svg>
                         <span data-i18n="agents.catalog.open_btn">Catálogo</span>
                     </button>
+                    <button class="btn btn-ghost" id="btn-load-agent">
+                        <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                            <path d="M6.5 8.5V1M3 4L6.5 1 10 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M1 10.5v1a.5.5 0 00.5.5h10a.5.5 0 00.5-.5v-1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                        </svg>
+                        <span data-i18n="agents.page.load_btn">Cargar</span>
+                    </button>
                     <button class="btn btn-primary" id="btn-new-agent">
                         <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
                             <path d="M6.5 1v11M1 6.5h11" stroke="currentColor" stroke-width="1.8"
                                 stroke-linecap="round" />
                         </svg>
-                        <span data-i18n="agents.modal.title_new">Nuevo agente</span>
+                        <span data-i18n="agents.page.new_btn">Nuevo</span>
                     </button>
                 </div>
+                <input type="file" id="agent-file-input" accept=".json,.md" style="display:none">
             </div>
             <div id="filter-agents-root"></div>
             <div id="agents-grid" class="agents-grid"></div>
@@ -161,6 +169,20 @@
                                 defecto o elige otro</span>
                         </div>
                     </div>
+
+                    <!-- ── RUTINAS (colapsable) ── -->
+                    <details class="advanced-section" id="agent-routines-section">
+                        <summary class="advanced-summary" data-i18n="agents.modal.routines_title">Rutinas</summary>
+                        <div class="advanced-body">
+                            <div id="routines-list"></div>
+                            <button type="button" class="btn btn-ghost" id="btn-add-routine" style="margin-top:6px">
+                                <svg width="11" height="11" viewBox="0 0 13 13" fill="none">
+                                    <path d="M6.5 1v11M1 6.5h11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                                </svg>
+                                <span data-i18n="agents.modal.routine_add">Añadir rutina</span>
+                            </button>
+                        </div>
+                    </details>
 
                     <!-- ── CONFIGURACIÓN ESPECÍFICA (colapsable) ── -->
                     <details class="advanced-section" id="agent-advanced">
@@ -334,6 +356,8 @@
     <script src="/agents/agents-skill-picker.js"></script>
     <script src="/agents/agents-modal.js"></script>
     <script src="/agents/agents-export.js"></script>
+    <script src="/agents/agents-load.js"></script>
+    <script src="/agents/agents-routines.js"></script>
     <script src="/agents/agents.js"></script>
 </body>
 

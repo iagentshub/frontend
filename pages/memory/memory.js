@@ -35,6 +35,26 @@ function bindEvents() {
         openModal(null);
     });
 
+    document.getElementById('btn-load-memory').addEventListener('click', function () {
+        document.getElementById('memory-file-input').click();
+    });
+    document.getElementById('memory-file-input').addEventListener('change', function (e) {
+        var file = e.target.files[0];
+        if (!file) return;
+        e.target.value = '';
+        var reader = new FileReader();
+        reader.onload = function (ev) {
+            try {
+                var mem = _parseAndLoadMemory(file.name, ev.target.result);
+                _editingFile = null;
+                openModal(mem);
+            } catch (err) {
+                toast(t('memory.page.load_error', { msg: err.message }), 'error');
+            }
+        };
+        reader.readAsText(file);
+    });
+
     document.getElementById('memory-modal-close').addEventListener('click', closeModal);
     document.getElementById('mem-cancel').addEventListener('click', closeModal);
     document.getElementById('memory-modal').addEventListener('click', function (e) {

@@ -31,6 +31,13 @@
                 <h1 class="page-title" data-i18n="skills.page.title">Skills</h1>
                 <div class="page-actions">
                     <button class="btn btn-ghost" id="btn-skill-catalog" data-i18n="skills.catalog.open_btn">Catálogo</button>
+                    <button class="btn btn-ghost" id="btn-load-skill">
+                        <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                            <path d="M6.5 8.5V1M3 4L6.5 1 10 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M1 10.5v1a.5.5 0 00.5.5h10a.5.5 0 00.5-.5v-1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                        </svg>
+                        <span data-i18n="skills.page.load_btn">Cargar</span>
+                    </button>
                     <button class="btn btn-primary" id="btn-new-skill">
                         <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
                             <path d="M6.5 1v11M1 6.5h11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
@@ -38,6 +45,7 @@
                         <span data-i18n="skills.page.new_btn">Nueva habilidad privada</span>
                     </button>
                 </div>
+                <input type="file" id="skill-file-input" accept=".json" style="display:none">
             </div>
             <div id="skills-grid" class="skills-grid"></div>
         </main>
@@ -96,6 +104,7 @@
     <script src="/assets/components/skill-catalog/skill-catalog.js"></script>
     <script src="/assets/components/dialog_skill/dialog_skill.js"></script>
     <!-- Página -->
+    <script src="/skills/skills-load.js"></script>
     <script src="/skills/skills.js"></script>
 </body>
 

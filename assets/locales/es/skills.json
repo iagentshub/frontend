@@ -1,7 +1,9 @@
 {
   "page": {
     "title": "Habilidades",
-    "new_btn": "Nueva habilidad privada"
+    "new_btn": "Nueva habilidad privada",
+    "load_btn": "Cargar",
+    "load_error": "No se pudo leer el fichero: {{msg}}"
   },
   "categories": {
     "ai": "🤖 IA",

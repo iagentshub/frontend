@@ -1,7 +1,10 @@
 {
   "page": {
     "title": "Agentes",
-    "subtitle": "Gestiona y chatea con tus agentes de IA"
+    "subtitle": "Gestiona y chatea con tus agentes de IA",
+    "new_btn": "Nuevo",
+    "load_btn": "Cargar",
+    "load_error": "No se pudo leer el fichero: {{msg}}"
   },
   "scope": {
     "all": "Todos",
@@ -92,7 +95,24 @@
     "github_topic_hint": "Etiqueta de categoría que ayuda a Copilot a entender el dominio del agente. Ej: 'testing', 'devops', 'security'. No afecta al comportamiento, solo a la organización.",
     "github_topic_placeholder": "Ej: testing, devops, frontend...",
     "github_repo_context": "Incluir contexto del repositorio",
-    "github_repo_context_hint": "Incluye en el fichero exportado una sección que indica a Copilot que tenga en cuenta el código del repositorio actual al responder."
+    "github_repo_context_hint": "Incluye en el fichero exportado una sección que indica a Copilot que tenga en cuenta el código del repositorio actual al responder.",
+    "routines_title": "Rutinas",
+    "routine_add": "Añadir rutina",
+    "routine_name_label": "Nombre",
+    "routine_desc_label": "Descripción",
+    "routine_trigger_label": "Disparador",
+    "routine_trigger_manual": "Manual",
+    "routine_trigger_cron": "Programada (cron)",
+    "routine_trigger_webhook": "Webhook",
+    "routine_schedule_label": "Expresión cron",
+    "routine_schedule_placeholder": "ej: 0 9 * * MON-FRI",
+    "routine_schedule_hint": "Formato cron: minuto hora día-mes mes día-semana",
+    "routine_prompt_label": "Prompt / tarea",
+    "routine_prompt_placeholder": "Instrucción que ejecutará el agente…",
+    "routine_save": "Guardar",
+    "routine_edit": "Editar",
+    "routine_delete": "Eliminar",
+    "routine_empty": "Sin rutinas definidas."
   },
   "export": {
     "title": "Exportar agente",
