@@ -95,6 +95,7 @@ var KnowledgeDocs = (function () {
             var resp = await fetch('/api/knowledge/document', {
                 method: 'POST',
                 body: fd,
+                credentials: 'same-origin',
             });
             if (!resp.ok) {
                 var err = await resp.json().catch(function () { return { detail: resp.statusText }; });
