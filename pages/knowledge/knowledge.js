@@ -1,4 +1,4 @@
-// skills.js — página /skills (tabs: Skills · URLs · Documentos)
+// knowledge.js — página /knowledge (tabs: Skills · Webs · Documentos)
 'use strict';
 
 var _privateSkills = [];
@@ -6,7 +6,7 @@ var _activeTab = 'skills';
 
 async function init() {
     await window.requireAuth();
-    renderNav('nav-root', 'skills');
+    renderNav('nav-root', 'knowledge');
     _initCatalog();
     _bindTabs();
     await loadSkills();

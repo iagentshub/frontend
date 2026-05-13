@@ -32,7 +32,7 @@ Los scripts se cargan con etiquetas `<script>` en un orden específico. Las util
 | Agentes | `agents/agents-state.js`, `agents/agents-modal.js`, `agents/agents-skill-picker.js`, `agents/agents-export.js`, `agents/agents-load.js`, `agents/agents-routines.js`, `agents/agents-catalog.js`, `agents/agents.js` |
 | Conexiones | `connections/connections-state.js`, `connections/connections-modal.js`, `connections/connections.js` — providers cargados dinámicamente vía `Providers` |
 | Memoria | `memory/memory-render.js`, `memory/memory-modal.js`, `memory/memory-load.js`, `memory/memory.js` |
-| Conocimiento | `skills/skills-load.js`, `skills/skills.js`, `skills/knowledge-urls.js`, `skills/knowledge-docs.js` |
+| Conocimiento | `knowledge/skills-load.js`, `knowledge/knowledge.js`, `knowledge/knowledge-urls.js`, `knowledge/knowledge-docs.js` |
 | Perfil | `profile/profile.js` |
 | Admin | `admin/admin-users.js` |
 

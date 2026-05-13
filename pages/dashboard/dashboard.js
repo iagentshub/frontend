@@ -58,9 +58,9 @@ function _renderStats(agents, connections, skills, memories, knowledge) {
     var cards = [
         { icon: _SVG_AGENTS, value: agents.length,      label: t('dashboard.stats.agents'),      href: '/agents' },
         { icon: _SVG_CONNS,  value: connections.length, label: t('dashboard.stats.connections'), href: '/connections' },
-        { icon: _SVG_SKILLS, value: skills.length,      label: t('dashboard.stats.skills'),      href: '/skills' },
+        { icon: _SVG_SKILLS, value: skills.length,      label: t('dashboard.stats.skills'),      href: '/knowledge' },
         { icon: _SVG_MEM,    value: memories.length,    label: t('dashboard.stats.memory'),      href: '/memory' },
-        { icon: _SVG_KNOW,   value: (knowledge || []).length, label: t('dashboard.stats.knowledge'), href: '/skills' },
+        { icon: _SVG_KNOW,   value: (knowledge || []).length, label: t('dashboard.stats.knowledge'), href: '/knowledge' },
     ];
     var root = document.getElementById('dash-stats');
     if (!root) return;
