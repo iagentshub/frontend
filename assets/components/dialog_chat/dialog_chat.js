@@ -1,4 +1,4 @@
-// dialog_chat.js — Chat SSE con countdown timer
+// dialog_chat.js — Chat SSE con countdown timer e historial de conversaciones
 'use strict';
 
 function _fmtTok(n) {
@@ -11,12 +11,15 @@ function _fmtTok(n) {
 class AgentChatDialog {
     constructor(agent) {
         this.agent = agent;
-        this.messages = this._loadHistory();
-        this._sessionTok = this._sumHistoryTok();
+        this.messages = [];
+        this._sessionTok = { in: 0, out: 0 };
         this._timerInterval = null;
         this._timerSecs = 0;
         this._timerRemaining = 0;
         this._el = null;
+        this._convId = null;
+        this._convList = [];
+        this._isGuest = false;
     }
 
     _sumHistoryTok() {
@@ -66,7 +69,10 @@ class AgentChatDialog {
                     </button>
                 </div>
             </div>
-            <div class="chat-messages" id="ga-chat-msgs"></div>
+            <div class="chat-body" id="ga-chat-body">
+                <div class="chat-history-sidebar" id="ga-chat-history" style="display:none"></div>
+                <div class="chat-messages" id="ga-chat-msgs"></div>
+            </div>
             <div class="chat-input-bar">
                 <textarea class="chat-input" id="ga-chat-input" placeholder="${t('agents.chat.placeholder')}" rows="1"></textarea>
                 <button class="chat-send-btn" id="ga-chat-send" title="${t('actions.send')}">
@@ -83,7 +89,132 @@ class AgentChatDialog {
         this._autoResizeInput();
         this._renderMessages();
         document.getElementById('ga-chat-input').focus();
+        this._initConversation();
     }
+
+    // ── Conversation lifecycle ────────────────────────────────────────────────
+
+    async _initConversation() {
+        try {
+            const r = await fetch(`/api/chats/${encodeURIComponent(this.agent.id)}`);
+            if (!r.ok) { this._fallbackGuest(); return; }
+            const list = await r.json();
+            if (list.length > 0) {
+                this._convList = list;
+                const target = this._convId && list.find(c => c.id === this._convId)
+                    ? this._convId : list[0].id;
+                await this._loadConversation(target);
+                this._showSidebar();
+            } else {
+                await this._newConversation();
+            }
+        } catch { this._fallbackGuest(); }
+    }
+
+    _fallbackGuest() {
+        this._isGuest = true;
+        this.messages = this._loadHistory();
+        this._sessionTok = this._sumHistoryTok();
+        this._renderMessages();
+    }
+
+    _showSidebar() {
+        const sidebar = document.getElementById('ga-chat-history');
+        const box = document.getElementById('ga-chat-box');
+        if (!sidebar || !box) return;
+        sidebar.style.display = '';
+        box.classList.add('chat-box--with-history');
+    }
+
+    async _newConversation() {
+        const r = await fetch(`/api/chats/${encodeURIComponent(this.agent.id)}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ title: '' }),
+        });
+        if (r.status === 403) { this._fallbackGuest(); return; }
+        if (!r.ok) return;
+        const conv = await r.json();
+        this._convList.unshift(conv);
+        this._convId = conv.id;
+        this.messages = [];
+        this._sessionTok = { in: 0, out: 0 };
+        this._showSidebar();
+        this._renderSidebar();
+        this._renderMessages();
+    }
+
+    async _loadConversation(convId) {
+        const r = await fetch(`/api/chats/${encodeURIComponent(this.agent.id)}/${encodeURIComponent(convId)}`);
+        if (!r.ok) return;
+        const msgs = await r.json();
+        this._convId = convId;
+        this.messages = msgs.map(m => ({
+            role: m.role,
+            content: m.content,
+            ts: m.created_at ? m.created_at.slice(11, 16) : '',
+        }));
+        this._sessionTok = this._sumHistoryTok();
+        this._renderSidebar();
+        this._renderMessages();
+    }
+
+    async _deleteConversation(convId) {
+        const r = await fetch(
+            `/api/chats/${encodeURIComponent(this.agent.id)}/${encodeURIComponent(convId)}`,
+            { method: 'DELETE' }
+        );
+        if (!r.ok) return;
+        this._convList = this._convList.filter(c => c.id !== convId);
+        if (this._convId === convId) {
+            if (this._convList.length > 0) {
+                await this._loadConversation(this._convList[0].id);
+            } else {
+                this._convId = null;
+                await this._newConversation();
+            }
+        } else {
+            this._renderSidebar();
+        }
+    }
+
+    _renderSidebar() {
+        const el = document.getElementById('ga-chat-history');
+        if (!el) return;
+        const newLabel = t('agents.chat.new_conversation') || 'Nueva conversación';
+        const items = this._convList.map(c => {
+            const title = c.title || newLabel;
+            const active = c.id === this._convId ? ' active' : '';
+            return `<li class="chat-history-item${active}" data-conv-id="${esc(c.id)}">
+                <span class="history-item-title">${esc(title)}</span>
+                <button class="history-del-btn" data-del-id="${esc(c.id)}" title="${t('common.actions.delete') || 'Borrar'}">×</button>
+            </li>`;
+        }).join('');
+        el.innerHTML = `
+            <button class="history-new-btn" id="ga-history-new">
+                <svg width="11" height="11" viewBox="0 0 13 13" fill="none">
+                    <path d="M6.5 1v11M1 6.5h11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                </svg>
+                ${esc(newLabel)}
+            </button>
+            <ul class="chat-history-list">${items}</ul>`;
+        document.getElementById('ga-history-new')?.addEventListener('click', () => this._newConversation());
+        el.querySelectorAll('.chat-history-item').forEach(li => {
+            const convId = li.dataset.convId;
+            li.addEventListener('click', e => {
+                if (e.target.closest('.history-del-btn')) return;
+                this._loadConversation(convId);
+            });
+        });
+        el.querySelectorAll('.history-del-btn').forEach(btn => {
+            btn.addEventListener('click', e => {
+                e.stopPropagation();
+                this._deleteConversation(btn.dataset.delId);
+            });
+        });
+    }
+
+    // ── Input / send ─────────────────────────────────────────────────────────
 
     _bindClose() {
         document.getElementById('ga-chat-close')?.addEventListener('click', () => this.close());
@@ -120,6 +251,7 @@ class AgentChatDialog {
     }
 
     _saveHistory() {
+        if (!this._isGuest) return;
         try {
             localStorage.setItem(`chat_history_${this.agent.id}`, JSON.stringify(this.messages));
         } catch { /* storage lleno o no disponible */ }
@@ -148,10 +280,12 @@ class AgentChatDialog {
         this._appendTyping();
         this._startTimer();
         try {
+            const body = { messages: this.messages.map(function (m) { return { role: m.role, content: m.content }; }) };
+            if (this._convId) body.conversation_id = this._convId;
             const resp = await fetch(`/api/agents/${encodeURIComponent(this.agent.id)}/chat`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ messages: this.messages.map(function (m) { return { role: m.role, content: m.content }; }) }),
+                body: JSON.stringify(body),
             });
             if (!resp.ok) throw new Error(`Error ${resp.status}`);
             const reader = resp.body.getReader();
@@ -192,6 +326,14 @@ class AgentChatDialog {
             }
             this._saveHistory();
             this._renderMessages();
+            // Auto-fill conversation title locally on first message
+            if (this._convId) {
+                const conv = this._convList.find(c => c.id === this._convId);
+                if (conv && !conv.title) {
+                    conv.title = text.slice(0, 80);
+                    this._renderSidebar();
+                }
+            }
         } catch (e) {
             this._stopTimer();
             this._removeTyping();
@@ -200,6 +342,8 @@ class AgentChatDialog {
             this._setLoading(false);
         }
     }
+
+    // ── Rendering ─────────────────────────────────────────────────────────────
 
     _renderMessages() {
         const cont = document.getElementById('ga-chat-msgs');
@@ -250,6 +394,8 @@ class AgentChatDialog {
         if (btn) btn.disabled = on;
         if (input) input.disabled = on;
     }
+
+    // ── Timer ─────────────────────────────────────────────────────────────────
 
     _startTimer() {
         const secs = Number(this.agent.timeout) || 0;

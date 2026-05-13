@@ -29,7 +29,7 @@ function renderNav(mountId, activePage) {
         var links = [
             { href: '/dashboard', label: t('nav.dashboard'), page: 'dashboard' },
             { href: '/agents', label: t('nav.agents'), page: 'agents' },
-            { href: '/skills', label: t('nav.skills'), page: 'skills' },
+            { href: '/skills', label: t('nav.knowledge'), page: 'skills' },
             { href: '/connections', label: t('nav.connections'), page: 'connections' },
             { href: '/memory', label: t('nav.memory'), page: 'memory' },
             { href: '/profile', label: t('nav.profile'), page: 'profile' },

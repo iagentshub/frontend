@@ -143,6 +143,21 @@
     cursor: default;
 }
 
+.conn-url-badge {
+    display: inline-block;
+    flex-shrink: 0;
+    font-size: 0.6rem;
+    font-weight: 700;
+    color: var(--accent);
+    background: var(--accent-dim);
+    border: 1px solid rgba(79, 70, 229, 0.2);
+    border-radius: 4px;
+    padding: 1px 5px;
+    white-space: nowrap;
+    cursor: default;
+    vertical-align: middle;
+}
+
 .conn-card-sub {
     font-size: 11px;
     color: var(--ink-3);

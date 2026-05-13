@@ -137,7 +137,8 @@
   },
   "chat": {
     "placeholder": "Type a message…",
-    "close": "Close"
+    "close": "Close",
+    "new_conversation": "New conversation"
   },
   "catalog": {
     "open_btn": "Catalog",

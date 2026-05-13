@@ -1,14 +1,18 @@
-// skills.js — pagina /skills
+// skills.js — página /skills (tabs: Skills · URLs · Documentos)
 'use strict';
 
 var _privateSkills = [];
+var _activeTab = 'skills';
 
 async function init() {
     await window.requireAuth();
     renderNav('nav-root', 'skills');
     _initCatalog();
+    _bindTabs();
     await loadSkills();
     bindEvents();
+    KnowledgeUrls.init();
+    KnowledgeDocs.init();
 }
 
 function _initCatalog() {
@@ -21,6 +25,34 @@ function _initCatalog() {
             );
         },
     });
+}
+
+function _bindTabs() {
+    document.getElementById('knowledge-tabs').addEventListener('click', function (e) {
+        var btn = e.target.closest('.ktab');
+        if (!btn) return;
+        _switchTab(btn.dataset.tab);
+    });
+}
+
+function _switchTab(tab) {
+    _activeTab = tab;
+    document.querySelectorAll('.ktab').forEach(function (b) {
+        b.classList.toggle('active', b.dataset.tab === tab);
+    });
+    document.querySelectorAll('.tab-panel').forEach(function (p) {
+        p.style.display = 'none';
+    });
+    var panel = document.getElementById('tab-' + tab);
+    if (panel) panel.style.display = '';
+
+    // Mostrar/ocultar acciones según tab
+    document.getElementById('skills-actions').style.display = tab === 'skills' ? '' : 'none';
+    document.getElementById('urls-actions').style.display = tab === 'urls' ? '' : 'none';
+    document.getElementById('docs-actions').style.display = tab === 'documents' ? '' : 'none';
+
+    if (tab === 'urls') KnowledgeUrls.load();
+    if (tab === 'documents') KnowledgeDocs.load();
 }
 
 async function loadSkills() {

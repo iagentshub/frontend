@@ -5,7 +5,7 @@
     <script>document.documentElement.setAttribute("data-theme", localStorage.getItem("ga-theme") || "noir");</script>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>iAgents Hub · Skills</title>
+    <title>iAgents Hub · Conocimiento</title>
     <!-- CSS globales -->
     <link rel="stylesheet" href="/assets/css/variables.css" />
     <link rel="stylesheet" href="/assets/themes/themes.css" />
@@ -28,8 +28,9 @@
         <div id="nav-root"></div>
         <main class="page-content" id="page-main">
             <div class="page-header">
-                <h1 class="page-title" data-i18n="skills.page.title">Skills</h1>
-                <div class="page-actions">
+                <h1 class="page-title" data-i18n="skills.knowledge.page_title">Conocimiento</h1>
+                <!-- Acciones dinámicas según tab activo -->
+                <div class="page-actions" id="skills-actions">
                     <button class="btn btn-ghost" id="btn-skill-catalog" data-i18n="skills.catalog.open_btn">Catálogo</button>
                     <button class="btn btn-ghost" id="btn-load-skill">
                         <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
@@ -45,9 +46,58 @@
                         <span data-i18n="skills.page.new_btn">Nueva habilidad privada</span>
                     </button>
                 </div>
+                <div class="page-actions" id="urls-actions" style="display:none">
+                    <button class="btn btn-primary" id="btn-add-url">
+                        <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                            <path d="M6.5 1v11M1 6.5h11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+                        </svg>
+                        <span data-i18n="skills.knowledge.add_url_btn">Añadir URL</span>
+                    </button>
+                </div>
+                <div class="page-actions" id="docs-actions" style="display:none">
+                    <button class="btn btn-primary" id="btn-upload-doc">
+                        <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                            <path d="M6.5 8.5V1M3 4L6.5 1 10 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M1 10.5v1a.5.5 0 00.5.5h10a.5.5 0 00.5-.5v-1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                        </svg>
+                        <span data-i18n="skills.knowledge.upload_doc_btn">Subir documento</span>
+                    </button>
+                    <input type="file" id="doc-file-input" accept=".txt,.md,.pdf" style="display:none">
+                </div>
                 <input type="file" id="skill-file-input" accept=".json" style="display:none">
             </div>
-            <div id="skills-grid" class="skills-grid"></div>
+
+            <!-- Tabs -->
+            <div class="knowledge-tabs" id="knowledge-tabs">
+                <button class="ktab active" data-tab="skills" data-i18n="skills.knowledge.tab_skills">Skills</button>
+                <button class="ktab" data-tab="urls" data-i18n="skills.knowledge.tab_urls">URLs</button>
+                <button class="ktab" data-tab="documents" data-i18n="skills.knowledge.tab_documents">Documentos</button>
+            </div>
+
+            <!-- Panel Skills -->
+            <div id="tab-skills" class="tab-panel">
+                <div id="skills-grid" class="skills-grid"></div>
+            </div>
+
+            <!-- Panel URLs -->
+            <div id="tab-urls" class="tab-panel" style="display:none">
+                <div id="urls-grid" class="knowledge-grid"></div>
+            </div>
+
+            <!-- Panel Documentos -->
+            <div id="tab-documents" class="tab-panel" style="display:none">
+                <div id="docs-dropzone" class="knowledge-dropzone" id="docs-dropzone">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                        <polyline points="14 2 14 8 20 8"/>
+                        <line x1="12" y1="18" x2="12" y2="12"/>
+                        <polyline points="9 15 12 12 15 15"/>
+                    </svg>
+                    <p data-i18n="skills.knowledge.drop_hint">Arrastra un fichero aquí o haz clic para seleccionarlo</p>
+                    <p class="knowledge-formats" data-i18n="skills.knowledge.formats_hint">.txt .md .pdf · Máx 10 MB</p>
+                </div>
+                <div id="docs-grid" class="knowledge-grid"></div>
+            </div>
         </main>
     </div>
 
@@ -58,8 +108,7 @@
                 <span class="modal-title" id="skill-view-title"></span>
                 <button class="modal-close" id="skill-view-close" type="button">
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                        <path d="M2 2l12 12M14 2L2 14" stroke="currentColor" stroke-width="1.8"
-                            stroke-linecap="round" />
+                        <path d="M2 2l12 12M14 2L2 14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
                     </svg>
                 </button>
             </div>
@@ -90,6 +139,34 @@
         </div>
     </div>
 
+    <!-- Modal añadir URL -->
+    <div id="url-modal" class="modal-bg" style="display:none">
+        <div class="modal-box" style="width:460px">
+            <div class="modal-header">
+                <span class="modal-title" data-i18n="skills.knowledge.add_url_btn">Añadir URL</span>
+                <button class="modal-close" id="url-modal-close" type="button">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M2 2l12 12M14 2L2 14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="field">
+                    <label data-i18n="skills.knowledge.add_url_btn">URL</label>
+                    <input id="url-input" class="input" type="url" data-i18n-placeholder="skills.knowledge.url_placeholder" placeholder="https://ejemplo.com/pagina" autocomplete="off" />
+                </div>
+                <div class="field">
+                    <label data-i18n="skills.knowledge.title_placeholder">Título (opcional)</label>
+                    <input id="url-title-input" class="input" data-i18n-placeholder="skills.knowledge.title_placeholder" placeholder="Título (opcional)" autocomplete="off" />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-ghost" id="url-modal-cancel" data-i18n="common.actions.cancel">Cancelar</button>
+                <button class="btn btn-primary" id="url-modal-save" data-i18n="skills.knowledge.add_url_btn">Añadir URL</button>
+            </div>
+        </div>
+    </div>
+
     <!-- JS globales -->
     <script src="/assets/js/i18n.js"></script>
     <script src="/assets/js/config.js"></script>
@@ -105,6 +182,8 @@
     <script src="/assets/components/dialog_skill/dialog_skill.js"></script>
     <!-- Página -->
     <script src="/skills/skills-load.js"></script>
+    <script src="/skills/knowledge-urls.js"></script>
+    <script src="/skills/knowledge-docs.js"></script>
     <script src="/skills/skills.js"></script>
 </body>
 

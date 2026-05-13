@@ -45,5 +45,8 @@
     "test": "Test",
     "edit": "Editar",
     "delete": "Eliminar"
+  },
+  "card": {
+    "custom_url": "URL personalizada"
   }
 }

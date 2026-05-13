@@ -20,6 +20,7 @@ async function _loadAll() {
     _applyFilter();
     _syncConnectionSelect();
     _testUsedConnections();
+    _loadKnowledgeItems();
 }
 
 async function _testUsedConnections() {

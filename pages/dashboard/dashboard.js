@@ -5,7 +5,9 @@ var _SVG_AGENTS = '<svg width="18" height="18" viewBox="0 0 16 16" fill="none"><
 var _SVG_CONNS  = '<svg width="18" height="18" viewBox="0 0 16 16" fill="none"><circle cx="4" cy="4" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="12" cy="4" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="8" cy="13" r="2" stroke="currentColor" stroke-width="1.4"/><path d="M4 6v2a4 4 0 0 0 4 4m0 0V6m0 6a4 4 0 0 0 4-4V6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>';
 var _SVG_SKILLS = '<svg width="18" height="18" viewBox="0 0 16 16" fill="none"><path d="M8 1.5l1.5 3 3.3.5-2.4 2.3.6 3.3L8 9l-3 1.6.6-3.3L3.2 5l3.3-.5z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>';
 var _SVG_MEM    = '<svg width="18" height="18" viewBox="0 0 16 16" fill="none"><path d="M4 2h6l3 3v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M10 2v3h3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M5.5 8h5M5.5 10.5h5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>';
+var _SVG_KNOW   = '<svg width="18" height="18" viewBox="0 0 16 16" fill="none"><path d="M2 13V3.5A1.5 1.5 0 0 1 3.5 2H13v11H3.5A1.5 1.5 0 0 1 2 11.5v0A1.5 1.5 0 0 1 3.5 10H13" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M5.5 5.5h4M5.5 7.5h3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>';
 var _SVG_MEM_ON = '<svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M4 2h6l3 3v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>';
+var _SVG_KNOW_ON= '<svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M2 13V3.5A1.5 1.5 0 0 1 3.5 2H13v11H3.5A1.5 1.5 0 0 1 2 11.5v0A1.5 1.5 0 0 1 3.5 10H13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 
 async function init() {
     await window.requireAuth();
@@ -16,18 +18,20 @@ async function init() {
         api.get('/api/connections').catch(function () { return []; }),
         api.get('/api/skills?scope=private').catch(function () { return []; }),
         api.get('/api/memory').catch(function () { return []; }),
+        api.get('/api/knowledge').catch(function () { return []; }),
     ]);
 
     var agents      = results[0];
     var connections = results[1];
     var skills      = results[2];
     var memories    = results[3];
+    var knowledge   = results[4];
 
     if (window.i18n) {
-        window.i18n.ready(function () { _render(agents, connections, skills, memories); });
-        window.i18n.onLangChange(function () { _render(agents, connections, skills, memories); });
+        window.i18n.ready(function () { _render(agents, connections, skills, memories, knowledge); });
+        window.i18n.onLangChange(function () { _render(agents, connections, skills, memories, knowledge); });
     } else {
-        _render(agents, connections, skills, memories);
+        _render(agents, connections, skills, memories, knowledge);
     }
 
     document.getElementById('btn-dash-new-agent').addEventListener('click', function () {
@@ -41,8 +45,8 @@ async function init() {
     });
 }
 
-function _render(agents, connections, skills, memories) {
-    _renderStats(agents, connections, skills, memories);
+function _render(agents, connections, skills, memories, knowledge) {
+    _renderStats(agents, connections, skills, memories, knowledge);
     _renderTokens(connections);
     _renderComposition(agents);
     _renderRecent(agents, connections);
@@ -50,12 +54,13 @@ function _render(agents, connections, skills, memories) {
 
 // ── Stat cards ──────────────────────────────────────────────────────────────
 
-function _renderStats(agents, connections, skills, memories) {
+function _renderStats(agents, connections, skills, memories, knowledge) {
     var cards = [
         { icon: _SVG_AGENTS, value: agents.length,      label: t('dashboard.stats.agents'),      href: '/agents' },
         { icon: _SVG_CONNS,  value: connections.length, label: t('dashboard.stats.connections'), href: '/connections' },
         { icon: _SVG_SKILLS, value: skills.length,      label: t('dashboard.stats.skills'),      href: '/skills' },
         { icon: _SVG_MEM,    value: memories.length,    label: t('dashboard.stats.memory'),      href: '/memory' },
+        { icon: _SVG_KNOW,   value: (knowledge || []).length, label: t('dashboard.stats.knowledge'), href: '/skills' },
     ];
     var root = document.getElementById('dash-stats');
     if (!root) return;
@@ -134,10 +139,12 @@ function _renderComposition(agents) {
 
     var counts = { claude: 0, openai: 0, github: 0, generic: 0 };
     var withMemory = 0;
+    var withKnowledge = 0;
     agents.forEach(function (a) {
         var type = counts.hasOwnProperty(a.agent_type) ? a.agent_type : 'generic';
         counts[type]++;
         if (a.use_memory) withMemory++;
+        if (a.knowledge && a.knowledge.length) withKnowledge++;
     });
 
     var maxCount = Math.max.apply(null, Object.values(counts));
@@ -158,11 +165,18 @@ function _renderComposition(agents) {
         }).join('') +
         '</div>';
 
+    var badges = '';
     if (withMemory > 0) {
-        html += '<div class="dash-memory-badge">' + _SVG_MEM_ON +
+        badges += '<div class="dash-memory-badge">' + _SVG_MEM_ON +
             withMemory + ' ' + esc(t('dashboard.composition.with_memory')) +
             '</div>';
     }
+    if (withKnowledge > 0) {
+        badges += '<div class="dash-memory-badge dash-knowledge-badge">' + _SVG_KNOW_ON +
+            withKnowledge + ' ' + esc(t('dashboard.composition.with_knowledge')) +
+            '</div>';
+    }
+    if (badges) html += '<div class="dash-badges-row">' + badges + '</div>';
 
     root.innerHTML = html;
 }

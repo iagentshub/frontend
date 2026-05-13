@@ -10,9 +10,12 @@ function openModal(conn) {
     document.getElementById('conn-api-key').value = (conn && conn.api_key) ? conn.api_key : '';
     document.getElementById('conn-host').value = (conn && conn.host) ? conn.host : '';
     document.getElementById('conn-model').value = (conn && conn.model) ? conn.model : '';
-    var urlField = Providers.fields(defaultType).find(function (f) { return f.key === 'url'; });
-    document.getElementById('conn-url').value = (conn && conn.url) ? conn.url : (urlField ? urlField.default : '');
+    // toggleTypeFields primero (pone la URL por defecto del proveedor),
+    // luego sobreescribimos con la URL guardada si existe.
     toggleTypeFields(defaultType);
+    if (conn && conn.url) {
+        document.getElementById('conn-url').value = conn.url;
+    }
     document.getElementById('conn-modal').style.display = 'flex';
     setTimeout(function () { document.getElementById('conn-name').focus(); }, 80);
 }
@@ -30,9 +33,11 @@ function toggleTypeFields(type) {
     document.getElementById('field-api-key').style.display = hasApiKey ? '' : 'none';
     document.getElementById('field-host').style.display = hasHost ? '' : 'none';
     document.getElementById('field-url').style.display = hasUrl ? '' : 'none';
-    if (hasUrl && urlField && !document.getElementById('conn-url').value) {
-        document.getElementById('conn-url').value = urlField.default || '';
-    }
+    // Siempre resetear la URL al defecto del proveedor cuando cambia el tipo.
+    // openModal() sobreescribe esto con la URL guardada si existe.
+    var urlInput = document.getElementById('conn-url');
+    urlInput.value = (hasUrl && urlField) ? (urlField.default || '') : '';
+    urlInput.placeholder = (hasUrl && urlField) ? (urlField.default || '') : '';
 }
 
 function buildProviderSelect() {

@@ -67,11 +67,20 @@ function _fmtTokens(n) {
     return String(n);
 }
 
+function _isCustomUrl(conn) {
+    var urlField = Providers.fields(conn.type || '').find(function (f) { return f.key === 'url'; });
+    var defaultUrl = urlField ? (urlField.default || '') : '';
+    return !!(conn.url && conn.url !== defaultUrl);
+}
+
 function renderCard(c) {
     var sub = c.model || (c.host ? c.host : '');
     var totalTokens = (c.tokens_in || 0) + (c.tokens_out || 0);
     var tokenBadge = totalTokens
         ? '<span class="conn-token-badge" title="' + _fmtTokens(c.tokens_in || 0) + ' in / ' + _fmtTokens(c.tokens_out || 0) + ' out">' + _fmtTokens(totalTokens) + ' tok</span>'
+        : '';
+    var urlBadge = _isCustomUrl(c)
+        ? '<span class="conn-url-badge" title="' + esc(c.url) + '">' + t('connections.card.custom_url') + '</span>'
         : '';
     return '<article class="conn-card" data-conn-id="' + esc(c.id) + '">' +
         '<div class="conn-card-body">' +
@@ -79,7 +88,7 @@ function renderCard(c) {
         '<div class="conn-card-name">' + esc(c.name) + '</div>' +
         tokenBadge +
         '</div>' +
-        (sub ? '<div class="conn-card-sub">' + esc(sub) + '</div>' : '') +
+        (sub ? '<div class="conn-card-sub">' + esc(sub) + (urlBadge ? ' ' + urlBadge : '') + '</div>' : (!urlBadge ? '' : '<div class="conn-card-sub">' + urlBadge + '</div>')) +
         '<div class="conn-card-status"></div>' +
         '</div>' +
         '<footer class="conn-card-footer">' +

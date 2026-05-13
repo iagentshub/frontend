@@ -1,6 +1,90 @@
 // agents-modal.js — modal de crear/editar agente
 'use strict';
 
+// ── Knowledge picker state ────────────────────────────────────────────────────
+var _allKnowledge = [];
+var _selectedKnowledge = [];
+
+async function _loadKnowledgeItems() {
+    try {
+        _allKnowledge = await api.get('/api/knowledge');
+    } catch (e) {
+        _allKnowledge = [];
+    }
+}
+
+function _initKnowledgePicker(selectedIds) {
+    _selectedKnowledge = Array.isArray(selectedIds) ? selectedIds.slice() : [];
+    _renderKnowledgePicker();
+}
+
+function _renderKnowledgePicker() {
+    var list = document.getElementById('agent-knowledge-list');
+    var chipsEl = document.getElementById('agent-knowledge-chips');
+    var charsEl = document.getElementById('agent-knowledge-chars');
+    if (!list) return;
+
+    if (!_allKnowledge.length) {
+        list.innerHTML = '<span style="font-size:12px;color:var(--ink-3)">' +
+            (t('skills.knowledge.empty_urls') || 'Sin items de conocimiento.') + '</span>';
+        if (chipsEl) chipsEl.innerHTML = '';
+        if (charsEl) charsEl.style.display = 'none';
+        return;
+    }
+
+    list.innerHTML = _allKnowledge.map(function (item) {
+        var checked = _selectedKnowledge.includes(item.id) ? ' checked' : '';
+        var icon = item.type === 'url' ? '🔗' : (item.source && item.source.endsWith('.pdf') ? '📄' : '📝');
+        return '<label class="knowledge-picker-item">' +
+            '<input type="checkbox" class="knowledge-check" data-id="' + esc(item.id) + '"' + checked + '>' +
+            '<span class="knowledge-picker-icon">' + icon + '</span>' +
+            '<span class="knowledge-picker-title">' + esc(item.title) + '</span>' +
+            '<span class="knowledge-picker-chars">(' + _fmtKChars(item.char_count) + ')</span>' +
+            '</label>';
+    }).join('');
+
+    list.querySelectorAll('.knowledge-check').forEach(function (cb) {
+        cb.addEventListener('change', function () {
+            var id = cb.dataset.id;
+            if (cb.checked) {
+                if (!_selectedKnowledge.includes(id)) _selectedKnowledge.push(id);
+            } else {
+                _selectedKnowledge = _selectedKnowledge.filter(function (x) { return x !== id; });
+            }
+            _updateKnowledgeChars();
+        });
+    });
+
+    _updateKnowledgeChars();
+}
+
+function _updateKnowledgeChars() {
+    var charsEl = document.getElementById('agent-knowledge-chars');
+    if (!charsEl) return;
+    var total = _allKnowledge
+        .filter(function (i) { return _selectedKnowledge.includes(i.id); })
+        .reduce(function (acc, i) { return acc + (i.char_count || 0); }, 0);
+    if (total > 0) {
+        var label = (t('skills.knowledge.agent_chars_total') || '~{{n}} chars adjuntos')
+            .replace('{{n}}', _fmtKChars(total));
+        charsEl.textContent = label;
+        charsEl.style.display = '';
+        charsEl.style.color = total > 8000 ? 'var(--warning, #f59e0b)' : '';
+    } else {
+        charsEl.style.display = 'none';
+    }
+}
+
+function _fmtKChars(n) {
+    if (!n) return '0';
+    if (n >= 1000) return (n / 1000).toFixed(1) + 'k chars';
+    return n + ' chars';
+}
+
+function _getSelectedKnowledge() {
+    return _selectedKnowledge.slice();
+}
+
 function _openAgentModal(agent) {
     agent = agent || null;
     const isEdit = !!(agent && agent.id);
@@ -29,6 +113,7 @@ function _openAgentModal(agent) {
     document.getElementById('agent-temp-val').textContent = parseFloat(sl.value).toFixed(2);
 
     _initSkillPicker(agent ? (agent.skills || []) : []);
+    _initKnowledgePicker(agent ? (agent.knowledge || []) : []);
     _syncMemoryFields(agent);
     _syncRoutines(agent ? (agent.routines || []) : []);
 
@@ -182,6 +267,7 @@ function _bindAgentModal() {
             system_prompt: document.getElementById('agent-prompt').value.trim(),
             temperature: parseFloat(document.getElementById('agent-temp').value),
             skills: _getSelectedSkills(),
+            knowledge: _getSelectedKnowledge(),
             use_memory: useMemory,
             memory_file: useMemory ? memFile : null,
             routines: _getRoutines(),

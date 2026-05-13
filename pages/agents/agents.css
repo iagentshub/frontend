@@ -1,3 +1,57 @@
+/* ── Knowledge picker in agent modal ── */
+.agent-knowledge-picker {
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    overflow: hidden;
+}
+
+.agent-knowledge-list {
+    max-height: 180px;
+    overflow-y: auto;
+    padding: 4px 0;
+}
+
+.knowledge-picker-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 12px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: background 0.1s;
+}
+
+.knowledge-picker-item:hover {
+    background: var(--surface-3);
+}
+
+.knowledge-picker-item input[type="checkbox"] {
+    flex-shrink: 0;
+    accent-color: var(--accent);
+    width: 14px;
+    height: 14px;
+}
+
+.knowledge-picker-icon {
+    flex-shrink: 0;
+    font-size: 14px;
+}
+
+.knowledge-picker-title {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.knowledge-picker-chars {
+    font-size: 11px;
+    color: var(--ink-3);
+    font-family: var(--font-mono);
+    flex-shrink: 0;
+}
+
 /* ── Topbar user button ── */
 .topbar-user {
     display: flex;

@@ -32,7 +32,7 @@ Scripts are loaded with `<script>` tags in a specific order. Global utilities mu
 | Agents | `agents/agents-state.js`, `agents/agents-modal.js`, `agents/agents-skill-picker.js`, `agents/agents-export.js`, `agents/agents-load.js`, `agents/agents-routines.js`, `agents/agents-catalog.js`, `agents/agents.js` |
 | Connections | `connections/connections-state.js`, `connections/connections-modal.js`, `connections/connections.js` — providers loaded dynamically via `Providers` |
 | Memory | `memory/memory-render.js`, `memory/memory-modal.js`, `memory/memory-load.js`, `memory/memory.js` |
-| Skills | `skills/skills-load.js`, `skills/skills.js` |
+| Knowledge | `skills/skills-load.js`, `skills/skills.js`, `skills/knowledge-urls.js`, `skills/knowledge-docs.js` |
 | Profile | `profile/profile.js` |
 | Admin | `admin/admin-users.js` |
 

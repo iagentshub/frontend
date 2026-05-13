@@ -63,5 +63,29 @@
     "view": "Ver",
     "edit": "Editar",
     "delete": "Eliminar"
+  },
+  "knowledge": {
+    "page_title": "Conocimiento",
+    "tab_skills": "Skills",
+    "tab_urls": "URLs",
+    "tab_documents": "Documentos",
+    "add_url_btn": "Añadir URL",
+    "url_placeholder": "https://ejemplo.com/pagina",
+    "title_placeholder": "Título (opcional)",
+    "upload_doc_btn": "Subir documento",
+    "drop_hint": "Arrastra un fichero aquí o haz clic para seleccionarlo",
+    "formats_hint": "Formatos: .txt .md .pdf · Máx 10 MB",
+    "char_count": "{{n}} caracteres",
+    "char_warning": "Texto largo — puede consumir mucho contexto del agente",
+    "empty_urls": "Sin URLs todavía. Añade una para adjuntarla a tus agentes.",
+    "empty_docs": "Sin documentos todavía. Sube uno para adjuntarlo a tus agentes.",
+    "confirm_delete": "¿Eliminar este item de conocimiento?",
+    "deleted": "Item eliminado",
+    "fetching": "Obteniendo URL…",
+    "uploading": "Subiendo documento…",
+    "fetch_error": "No se pudo obtener la URL: {{msg}}",
+    "upload_error": "No se pudo subir el documento: {{msg}}",
+    "section_label": "Conocimiento adjunto",
+    "agent_chars_total": "~{{n}} chars adjuntos"
   }
 }

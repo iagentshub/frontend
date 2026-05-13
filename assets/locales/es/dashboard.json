@@ -10,7 +10,8 @@
     "agents": "Agentes",
     "connections": "Conexiones",
     "skills": "Skills",
-    "memory": "Memoria"
+    "memory": "Memoria",
+    "knowledge": "Conocimiento"
   },
   "tokens": {
     "title": "Uso de tokens",
@@ -21,6 +22,7 @@
   "composition": {
     "title": "Composición de agentes",
     "with_memory": "Con memoria activa",
+    "with_knowledge": "Con conocimiento adjunto",
     "no_agents": "Sin agentes todavía"
   },
   "recent": {

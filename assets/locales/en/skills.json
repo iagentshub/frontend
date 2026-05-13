@@ -63,5 +63,29 @@
     "view": "View",
     "edit": "Edit",
     "delete": "Delete"
+  },
+  "knowledge": {
+    "page_title": "Knowledge",
+    "tab_skills": "Skills",
+    "tab_urls": "URLs",
+    "tab_documents": "Documents",
+    "add_url_btn": "Add URL",
+    "url_placeholder": "https://example.com/page",
+    "title_placeholder": "Title (optional)",
+    "upload_doc_btn": "Upload document",
+    "drop_hint": "Drag a file here or click to select it",
+    "formats_hint": "Formats: .txt .md .pdf · Max 10 MB",
+    "char_count": "{{n}} characters",
+    "char_warning": "Long text — may consume a lot of agent context",
+    "empty_urls": "No URLs yet. Add one to attach it to your agents.",
+    "empty_docs": "No documents yet. Upload one to attach it to your agents.",
+    "confirm_delete": "Delete this knowledge item?",
+    "deleted": "Item deleted",
+    "fetching": "Fetching URL…",
+    "uploading": "Uploading document…",
+    "fetch_error": "Could not fetch the URL: {{msg}}",
+    "upload_error": "Could not upload the document: {{msg}}",
+    "section_label": "Attached knowledge",
+    "agent_chars_total": "~{{n}} chars attached"
   }
 }
