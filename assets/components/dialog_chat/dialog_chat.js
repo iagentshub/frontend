@@ -1,6 +1,15 @@
 // dialog_chat.js — Chat SSE con countdown timer e historial de conversaciones
 'use strict';
 
+function _md(text) {
+    let s = esc(text);
+    s = s.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+    s = s.replace(/\*(.+?)\*/g, '<em>$1</em>');
+    s = s.replace(/`([^`]+)`/g, '<code>$1</code>');
+    s = s.replace(/\n/g, '<br>');
+    return s;
+}
+
 function _fmtTok(n) {
     if (!n) return '0';
     if (n >= 1000000) return (n / 1000000).toFixed(1).replace(/\.0$/, '') + 'M';
@@ -218,10 +227,6 @@ class AgentChatDialog {
 
     _bindClose() {
         document.getElementById('ga-chat-close')?.addEventListener('click', () => this.close());
-        this._el.addEventListener('click', e => { if (e.target === this._el) this.close(); });
-        document.addEventListener('keydown', this._onKeydown = (e) => {
-            if (e.key === 'Escape') this.close();
-        });
     }
 
     _updateSessionTok() {
@@ -358,7 +363,7 @@ class AgentChatDialog {
             <div class="msg-wrap ${m.role}">
                 <div class="msg-avatar">${m.role === 'assistant' ? esc(initials) : '👤'}</div>
                 <div class="msg-body">
-                    <div class="msg-bubble">${esc(m.content)}</div>
+                    <div class="msg-bubble">${m.role === 'assistant' ? _md(m.content) : esc(m.content)}</div>
                     <div class="msg-meta">${time}${tokBadge}</div>
                 </div>
             </div>`;
@@ -439,7 +444,6 @@ class AgentChatDialog {
 
     close() {
         this._stopTimer();
-        if (this._onKeydown) document.removeEventListener('keydown', this._onKeydown);
         this._el?.remove();
         this._el = null;
     }
