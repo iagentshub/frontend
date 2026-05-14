@@ -9,9 +9,6 @@ var KnowledgeUrls = (function () {
         document.getElementById('btn-add-url').addEventListener('click', _openModal);
         document.getElementById('url-modal-close').addEventListener('click', _closeModal);
         document.getElementById('url-modal-cancel').addEventListener('click', _closeModal);
-        document.getElementById('url-modal').addEventListener('click', function (e) {
-            if (e.target.id === 'url-modal') _closeModal();
-        });
         document.getElementById('url-modal-save').addEventListener('click', _submit);
         document.getElementById('url-input').addEventListener('keydown', function (e) {
             if (e.key === 'Enter') _submit();

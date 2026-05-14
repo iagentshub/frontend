@@ -19,10 +19,6 @@ function bindEvents() {
     document.getElementById('btn-new-conn').addEventListener('click', function () { openModal(null); });
     document.getElementById('conn-modal-close').addEventListener('click', closeModal);
     document.getElementById('conn-cancel').addEventListener('click', closeModal);
-    document.getElementById('conn-modal').addEventListener('click', function (e) {
-        if (e.target.id === 'conn-modal') closeModal();
-    });
-
     document.getElementById('btn-test-all').addEventListener('click', function () {
         testConnections(_connections.map(function (c) { return c.id; }));
     });
@@ -87,9 +83,6 @@ function bindEvents() {
         } catch (err) { toast(err.message, 'error'); }
     });
 
-    document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape') closeModal();
-    });
 }
 
 init();

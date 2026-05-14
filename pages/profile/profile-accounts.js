@@ -269,17 +269,11 @@ async function loadAccounts() {
     var overlay = document.getElementById('account-modal');
     if (!overlay) return;
 
-    overlay.addEventListener('click', function (e) {
-        if (e.target === overlay) _closeAccountModal();
-    });
     document.getElementById('account-modal-close').addEventListener('click', _closeAccountModal);
     document.getElementById('account-modal-cancel').addEventListener('click', _closeAccountModal);
     document.getElementById('account-modal-test').addEventListener('click', _testAccount);
     document.getElementById('account-modal-save').addEventListener('click', _saveAccount);
 
-    document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape' && overlay.style.display !== 'none') _closeAccountModal();
-    });
 })();
 
 if (window.i18n) {

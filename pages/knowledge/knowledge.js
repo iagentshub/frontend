@@ -101,10 +101,6 @@ function bindEvents() {
     document.getElementById('skill-view-close').addEventListener('click', function () {
         document.getElementById('skill-view-modal').style.display = 'none';
     });
-    document.getElementById('skill-view-modal').addEventListener('click', function (e) {
-        if (e.target.id === 'skill-view-modal') document.getElementById('skill-view-modal').style.display = 'none';
-    });
-
     document.getElementById('skills-grid').addEventListener('click', async function (e) {
         var btn = e.target.closest('[data-action]');
         if (!btn) return;

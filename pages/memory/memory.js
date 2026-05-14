@@ -57,9 +57,6 @@ function bindEvents() {
 
     document.getElementById('memory-modal-close').addEventListener('click', closeModal);
     document.getElementById('mem-cancel').addEventListener('click', closeModal);
-    document.getElementById('memory-modal').addEventListener('click', function (e) {
-        if (e.target.id === 'memory-modal') closeModal();
-    });
     document.getElementById('mem-save-btn').addEventListener('click', saveMemory);
 
     document.getElementById('memory-grid').addEventListener('click', async function (e) {
@@ -82,9 +79,6 @@ function bindEvents() {
         }
     });
 
-    document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape') closeModal();
-    });
 }
 
 init();

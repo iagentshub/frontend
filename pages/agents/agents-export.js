@@ -50,7 +50,4 @@ function _bindExportModal() {
     document.getElementById('export-modal-close').addEventListener('click', () => {
         document.getElementById('export-modal').style.display = 'none';
     });
-    document.getElementById('export-modal').addEventListener('click', e => {
-        if (e.target.id === 'export-modal') document.getElementById('export-modal').style.display = 'none';
-    });
 }
