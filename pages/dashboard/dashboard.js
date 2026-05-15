@@ -37,9 +37,6 @@ async function init() {
     document.getElementById('btn-dash-new-agent').addEventListener('click', function () {
         window.location.href = '/agents';
     });
-    document.getElementById('btn-dash-catalog').addEventListener('click', function () {
-        window.location.href = '/agents';
-    });
     document.getElementById('btn-dash-new-conn').addEventListener('click', function () {
         window.location.href = '/connections';
     });

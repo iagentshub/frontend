@@ -38,7 +38,7 @@ function renderNav(mountId, activePage) {
 
         mount.innerHTML =
             '<nav class="main-nav">' +
-            '<a class="nav-brand" href="/agents">' +
+            '<a class="nav-brand" href="/dashboard">' +
             '<div class="nav-logo-mark">' +
             '<span class="nav-logo-iagents">iAgents</span><span class="nav-logo-hub">Hub</span>' +
             '</div>' +
