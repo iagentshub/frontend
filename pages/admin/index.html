@@ -5,18 +5,15 @@
     <script>document.documentElement.setAttribute("data-theme", localStorage.getItem("ga-theme") || "noir");</script>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>iAgents Hub · Usuarios</title>
-    <!-- CSS globales -->
+    <title>iAgents Hub · Administración</title>
     <link rel="stylesheet" href="/assets/css/variables.css" />
     <link rel="stylesheet" href="/assets/themes/themes.css" />
     <link rel="stylesheet" href="/assets/css/base.css" />
     <link rel="stylesheet" href="/assets/css/components.css" />
     <link rel="stylesheet" href="/assets/css/layout.css" />
     <link rel="stylesheet" href="/assets/css/animations.css" />
-    <!-- Componentes -->
     <link rel="stylesheet" href="/assets/components/main_nav/main_nav.css" />
-    <!-- Página -->
-    <link rel="stylesheet" href="/admin/admin-users.css" />
+    <link rel="stylesheet" href="/admin/admin.css" />
 </head>
 
 <body>
@@ -26,17 +23,105 @@
         <main class="page-content">
             <div class="page-header">
                 <div>
-                    <h1 class="page-title">Usuarios</h1>
-                    <p class="page-subtitle">Gestión de cuentas registradas</p>
+                    <h1 class="page-title">Administración</h1>
+                    <p class="page-subtitle">Panel de control del sistema</p>
+                </div>
+                <div class="admin-refresh">
+                    <span id="refresh-label" class="refresh-label"></span>
+                    <button id="btn-refresh" class="btn btn-ghost btn-sm" title="Actualizar ahora">↺</button>
                 </div>
             </div>
-            <div id="users-table-wrap">
-                <div class="loading-state">Cargando...</div>
+
+            <!-- Tabs -->
+            <div class="admin-tabs">
+                <button class="admin-tab active" data-tab="general">General</button>
+                <button class="admin-tab" data-tab="users">Usuarios</button>
+                <button class="admin-tab" data-tab="agents">Agentes</button>
+                <button class="admin-tab" data-tab="connections">Conexiones</button>
+                <button class="admin-tab" data-tab="knowledge">Conocimiento</button>
+            </div>
+
+            <!-- General tab: stats dashboard -->
+            <div id="tab-general" class="admin-tab-panel">
+                <div id="stats-grid" class="admin-stats-grid">
+                    <div class="admin-stat-card skeleton"></div>
+                    <div class="admin-stat-card skeleton"></div>
+                    <div class="admin-stat-card skeleton"></div>
+                    <div class="admin-stat-card skeleton"></div>
+                </div>
+            </div>
+
+            <!-- Users tab -->
+            <div id="tab-users" class="admin-tab-panel" style="display:none">
+                <div class="admin-toolbar">
+                    <div class="admin-search-wrap">
+                        <span class="search-icon">🔍</span>
+                        <input id="user-search" type="search" class="admin-search" placeholder="Buscar por email…">
+                    </div>
+                    <select id="filter-role" class="admin-select">
+                        <option value="">Todos los roles</option>
+                        <option value="admin">Admin</option>
+                        <option value="standard">Estándar</option>
+                    </select>
+                    <select id="filter-active" class="admin-select">
+                        <option value="">Cualquier estado</option>
+                        <option value="true">Activos</option>
+                        <option value="false">Bloqueados</option>
+                    </select>
+                    <select id="filter-verified" class="admin-select">
+                        <option value="">Verificación</option>
+                        <option value="true">Verificados</option>
+                        <option value="false">Sin verificar</option>
+                    </select>
+                </div>
+                <div id="users-table-wrap"></div>
+            </div>
+
+            <!-- Agents tab -->
+            <div id="tab-agents" class="admin-tab-panel" style="display:none">
+                <div class="admin-toolbar">
+                    <div class="admin-search-wrap">
+                        <span class="search-icon">🔍</span>
+                        <input id="agent-search" type="search" class="admin-search" placeholder="Buscar agente…">
+                    </div>
+                    <select id="filter-agent-owner" class="admin-select">
+                        <option value="">Todos los propietarios</option>
+                    </select>
+                </div>
+                <div id="agents-table-wrap"></div>
+            </div>
+
+            <!-- Connections tab -->
+            <div id="tab-connections" class="admin-tab-panel" style="display:none">
+                <div class="admin-toolbar">
+                    <select id="filter-conn-owner" class="admin-select">
+                        <option value="">Todos los propietarios</option>
+                    </select>
+                </div>
+                <div id="connections-table-wrap"></div>
+            </div>
+
+            <!-- Knowledge tab -->
+            <div id="tab-knowledge" class="admin-tab-panel" style="display:none">
+                <div class="admin-toolbar">
+                    <div class="admin-search-wrap">
+                        <span class="search-icon">🔍</span>
+                        <input id="knowledge-search" type="search" class="admin-search" placeholder="Buscar por título o propietario…">
+                    </div>
+                    <select id="filter-knowledge-type" class="admin-select">
+                        <option value="">Todos los tipos</option>
+                        <option value="url">URL</option>
+                        <option value="document">Documento</option>
+                    </select>
+                    <select id="filter-know-owner" class="admin-select">
+                        <option value="">Todos los propietarios</option>
+                    </select>
+                </div>
+                <div id="knowledge-table-wrap"></div>
             </div>
         </main>
     </div>
 
-    <!-- JS globales -->
     <script src="/assets/js/i18n.js"></script>
     <script src="/assets/js/config.js"></script>
     <script src="/assets/js/theme.js"></script>
@@ -44,10 +129,13 @@
     <script src="/assets/js/auth.js"></script>
     <script src="/assets/js/api.js"></script>
     <script src="/assets/js/utils.js"></script>
-    <!-- Componentes -->
     <script src="/assets/components/main_nav/main_nav.js"></script>
-    <!-- Página -->
+    <script src="/admin/admin-stats.js"></script>
     <script src="/admin/admin-users.js"></script>
+    <script src="/admin/admin-agents.js"></script>
+    <script src="/admin/admin-connections.js"></script>
+    <script src="/admin/admin-knowledge.js"></script>
+    <script src="/admin/admin.js"></script>
 </body>
 
 </html>

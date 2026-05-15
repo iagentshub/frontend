@@ -1,0 +1,144 @@
+'use strict';
+
+var _agentSort = { col: 'name', dir: 1 };
+
+function _populateAgentOwnerSelect() {
+    var sel = document.getElementById('filter-agent-owner');
+    if (!sel) return;
+    var current = sel.value;
+    var owners = [];
+    _allAgents.forEach(function (a) {
+        if (a.scope !== 'private') return;
+        var o = a.owner_email || a.owner_id;
+        if (o && owners.indexOf(o) === -1) owners.push(o);
+    });
+    owners.sort();
+    sel.innerHTML = '<option value="">Todos los propietarios</option>' +
+        owners.map(function (o) { return '<option value="' + esc(o) + '">' + esc(o) + '</option>'; }).join('');
+    if (current) sel.value = current;
+}
+
+function applyAgentFilters() {
+    _populateAgentOwnerSelect();
+    var q = ((document.getElementById('agent-search') || {}).value || '').toLowerCase();
+    var owner = ((document.getElementById('filter-agent-owner') || {}).value || '');
+
+    var filtered = _allAgents.filter(function (a) {
+        if (a.scope !== 'private') return false;
+        if (q && !(a.name || '').toLowerCase().includes(q) && !(a.id || '').toLowerCase().includes(q)) return false;
+        if (owner) {
+            var ao = a.owner_email || a.owner_id || '';
+            if (ao !== owner) return false;
+        }
+        return true;
+    });
+    _sortAndRenderAgents(filtered);
+}
+
+function _sortAndRenderAgents(agents) {
+    var col = _agentSort.col;
+    var dir = _agentSort.dir;
+    var sorted = agents.slice().sort(function (a, b) {
+        var av = (a[col] || '').toString().toLowerCase();
+        var bv = (b[col] || '').toString().toLowerCase();
+        return av < bv ? -dir : av > bv ? dir : 0;
+    });
+    renderAgents(sorted);
+}
+
+function _thA(label, col) {
+    var arrow = _agentSort.col === col ? (_agentSort.dir === 1 ? ' ▲' : ' ▼') : '';
+    return '<th class="sortable" data-sort="' + col + '">' + label + arrow + '</th>';
+}
+
+function renderAgents(agents) {
+    var wrap = document.getElementById('agents-table-wrap');
+    if (!wrap) return;
+    if (!agents || !agents.length) {
+        wrap.innerHTML = '<div class="admin-empty">No hay agentes que coincidan.</div>';
+        return;
+    }
+
+    var typeIcons = { claude: '🟠', openai: '🟢', github: '⚫', ollama: '🔵', generic: '🤖' };
+
+    var rows = agents.map(function (a) {
+        var typeIcon = typeIcons[a.agent_type] || '🤖';
+        var date = a.created_at
+            ? new Date(a.created_at).toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: '2-digit' })
+            : '—';
+        var ownerDisplay = a.owner_email ? esc(a.owner_email) : (a.owner_id ? esc(a.owner_id) : '<span style="opacity:.4">—</span>');
+        var connId = a.connection_id ? esc(a.connection_id) : '<span style="opacity:.4">—</span>';
+
+        var actions =
+            '<div class="admin-actions-menu">' +
+            '<button class="btn-actions">⋮</button>' +
+            '<div class="actions-dropdown" style="display:none">' +
+            '<button class="action-item action-item--danger" data-action="delete" data-agent-id="' + esc(a.id) + '" data-scope="private">🗑 Eliminar</button>' +
+            '</div>' +
+            '</div>';
+
+        return '<tr>' +
+            '<td><span class="conn-name">' + typeIcon + ' ' + esc(a.name || a.id) + '</span></td>' +
+            '<td><span class="badge badge--type">' + esc(a.agent_type || '—') + '</span></td>' +
+            '<td class="td-owner">' + ownerDisplay + '</td>' +
+            '<td class="td-owner">' + connId + '</td>' +
+            '<td class="td-date">' + date + '</td>' +
+            '<td class="td-actions">' + actions + '</td>' +
+            '</tr>';
+    }).join('');
+
+    wrap.innerHTML =
+        '<table class="admin-table">' +
+        '<thead><tr>' +
+        _thA('Nombre', 'name') +
+        _thA('Tipo', 'agent_type') +
+        _thA('Propietario', 'owner_email') +
+        '<th>Conexión</th>' +
+        _thA('Creado', 'created_at') +
+        '<th></th>' +
+        '</tr></thead>' +
+        '<tbody>' + rows + '</tbody>' +
+        '</table>';
+
+    wrap.querySelector('thead').addEventListener('click', function (e) {
+        var th = e.target.closest('.sortable');
+        if (!th) return;
+        var col = th.dataset.sort;
+        _agentSort.dir = _agentSort.col === col ? _agentSort.dir * -1 : 1;
+        _agentSort.col = col;
+        applyAgentFilters();
+    });
+
+    wrap.addEventListener('click', function (e) {
+        var allDropdowns = wrap.querySelectorAll('.actions-dropdown');
+        var btn = e.target.closest('.btn-actions');
+        if (btn) {
+            var menu = btn.nextElementSibling;
+            var isOpen = menu.style.display !== 'none';
+            allDropdowns.forEach(function (d) { d.style.display = 'none'; });
+            if (!isOpen) menu.style.display = '';
+            e.stopPropagation();
+            return;
+        }
+        if (!e.target.closest('.admin-actions-menu')) {
+            allDropdowns.forEach(function (d) { d.style.display = 'none'; });
+        }
+        var item = e.target.closest('.action-item');
+        if (!item) return;
+        allDropdowns.forEach(function (d) { d.style.display = 'none'; });
+        if (item.dataset.action === 'delete') {
+            _handleAgentDelete(item.dataset.agentId, item.dataset.scope);
+        }
+    });
+}
+
+async function _handleAgentDelete(agentId, scope) {
+    if (!confirm('¿Eliminar el agente "' + agentId + '"? Esta acción no se puede deshacer.')) return;
+    try {
+        await api.del('/api/admin/agents/' + encodeURIComponent(agentId) + '?scope=' + encodeURIComponent(scope || 'private'));
+        if (typeof toast === 'function') toast('Agente eliminado', 'success');
+        await reloadData();
+    } catch (err) {
+        if (typeof toast === 'function') toast(err.message || 'Error al eliminar el agente', 'error');
+    }
+}

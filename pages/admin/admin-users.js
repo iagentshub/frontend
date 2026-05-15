@@ -1,74 +1,165 @@
-// admin-users.js — gestión de usuarios (solo admin)
 'use strict';
 
-async function init() {
-    await window.requireAuth();
-    renderNav('nav-root', 'admin-users');
-    await loadUsers();
+var _allUsers = [];
+var _userSort = { col: 'created_at', dir: -1 };
+
+function _thU(label, col) {
+    var arrow = _userSort.col === col ? (_userSort.dir === 1 ? ' ▲' : ' ▼') : '';
+    return '<th class="sortable" data-sort="' + col + '">' + label + arrow + '</th>';
 }
 
-async function loadUsers() {
+function renderUsers(users) {
     var wrap = document.getElementById('users-table-wrap');
-    try {
-        var users = await api.get('/api/admin/users');
-        renderTable(users, wrap);
-    } catch (e) {
-        if (e.status === 403) {
-            window.location.replace('/dashboard/');
-        } else {
-            wrap.innerHTML = '<div class="loading-state">' + t('admin.error_load') + '</div>';
-        }
-    }
-}
-
-function renderTable(users, wrap) {
     if (!users.length) {
-        wrap.innerHTML = '<div class="empty-users">' + t('admin.empty') + '</div>';
+        wrap.innerHTML = '<div class="admin-empty">No hay usuarios que coincidan con los filtros.</div>';
         return;
     }
 
     var rows = users.map(function (u) {
-        var initial = (u.username || '?').charAt(0).toUpperCase();
-        var roleCls = u.role === 'admin' ? 'role-badge--admin' : 'role-badge--standard';
-        var roleLabel = u.role === 'admin' ? t('admin.roles.admin') : t('admin.roles.standard');
-        var date = u.created_at ? new Date(u.created_at).toLocaleDateString(window.i18n ? window.i18n.getLang() + '-' + window.i18n.getLang().toUpperCase() : 'es-ES') : '—';
-        return '<tr>' +
-            '<td><div class="user-name-cell">' +
-            '<div class="user-avatar">' + esc(initial) + '</div>' +
-            '<span>' + esc(u.username) + '</span>' +
-            '</div></td>' +
-            '<td>' + esc(u.email || '—') + '</td>' +
-            '<td><span class="role-badge ' + roleCls + '">' + roleLabel + '</span></td>' +
-            '<td>' + date + '</td>' +
-            '<td>' +
-            (u.role !== 'admin'
-                ? '<button class="btn-delete" data-username="' + esc(u.username) + '">' + t('admin.delete_btn') + '</button>'
-                : '—') +
-            '</td>' +
+        var isActive = u.is_active !== 0 && u.is_active !== false;
+        var isVerified = u.is_verified !== 0 && u.is_verified !== false;
+        var isAdmin = u.role === 'admin';
+
+        var statusBadge = isActive
+            ? '<span class="badge badge--ok">Activo</span>'
+            : '<span class="badge badge--danger">Bloqueado</span>';
+
+        var verifiedBadge = isVerified
+            ? '<span class="badge badge--ok">Verificado</span>'
+            : '<span class="badge badge--warn">Sin verificar</span>';
+
+        var roleBadge = isAdmin
+            ? '<span class="badge badge--admin">Admin</span>'
+            : '<span class="badge badge--std">Estándar</span>';
+
+        var date = u.created_at
+            ? new Date(u.created_at).toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: '2-digit' })
+            : '—';
+
+        var actions = isAdmin ? '' :
+            '<div class="admin-actions-menu" data-username="' + esc(u.username) + '">' +
+            '<button class="btn-actions" data-username="' + esc(u.username) + '">⋮</button>' +
+            '<div class="actions-dropdown" style="display:none">' +
+            (isActive
+                ? '<button class="action-item" data-action="block" data-username="' + esc(u.username) + '">🚫 Bloquear</button>'
+                : '<button class="action-item" data-action="unblock" data-username="' + esc(u.username) + '">✅ Desbloquear</button>') +
+            '<button class="action-item" data-action="make-admin" data-username="' + esc(u.username) + '">👑 Hacer admin</button>' +
+            '<button class="action-item action-item--danger" data-action="delete" data-username="' + esc(u.username) + '">🗑 Eliminar</button>' +
+            '</div>' +
+            '</div>';
+
+        return '<tr data-username="' + esc(u.username) + '">' +
+            '<td class="td-email"><div class="user-avatar-cell"><div class="user-avatar-sm">' +
+            esc((u.email || u.username || '?').charAt(0).toUpperCase()) +
+            '</div><span>' + esc(u.email || u.username) + '</span></div></td>' +
+            '<td>' + roleBadge + '</td>' +
+            '<td>' + statusBadge + '</td>' +
+            '<td>' + verifiedBadge + '</td>' +
+            '<td class="td-date">' + date + '</td>' +
+            '<td class="td-actions">' + actions + '</td>' +
             '</tr>';
     }).join('');
 
     wrap.innerHTML =
-        '<table class="users-table">' +
+        '<table class="admin-table">' +
         '<thead><tr>' +
-        '<th>' + t('admin.table.user') + '</th><th>' + t('admin.table.email') + '</th><th>' + t('admin.table.role') + '</th><th>' + t('admin.table.created') + '</th><th></th>' +
+        _thU('Email', 'email') +
+        _thU('Rol', 'role') +
+        '<th>Estado</th>' +
+        '<th>Verificado</th>' +
+        _thU('Creado', 'created_at') +
+        '<th></th>' +
         '</tr></thead>' +
         '<tbody>' + rows + '</tbody>' +
         '</table>';
 
-    wrap.querySelectorAll('.btn-delete').forEach(function (btn) {
-        btn.addEventListener('click', async function () {
-            var username = btn.dataset.username;
-            if (!confirm(t('admin.confirm_delete', { username: username }))) return;
-            try {
-                await api.del('/api/admin/users/' + encodeURIComponent(username));
-                toast(t('admin.deleted'), 'success');
-                await loadUsers();
-            } catch (e) {
-                toast(e.message || t('admin.error_delete'), 'error');
-            }
-        });
+    wrap.querySelector('thead').addEventListener('click', function (e) {
+        var th = e.target.closest('.sortable');
+        if (!th) return;
+        var col = th.dataset.sort;
+        _userSort.dir = _userSort.col === col ? _userSort.dir * -1 : 1;
+        _userSort.col = col;
+        applyUserFilters();
+    });
+
+    // Dropdown toggle
+    wrap.addEventListener('click', function (e) {
+        // Close all open dropdowns first
+        var allDropdowns = wrap.querySelectorAll('.actions-dropdown');
+        var btn = e.target.closest('.btn-actions');
+        if (btn) {
+            var menu = btn.nextElementSibling;
+            var isOpen = menu.style.display !== 'none';
+            allDropdowns.forEach(function (d) { d.style.display = 'none'; });
+            if (!isOpen) menu.style.display = '';
+            e.stopPropagation();
+            return;
+        }
+        // Close on click outside
+        if (!e.target.closest('.admin-actions-menu')) {
+            allDropdowns.forEach(function (d) { d.style.display = 'none'; });
+        }
+
+        // Action items
+        var item = e.target.closest('.action-item');
+        if (!item) return;
+        var action = item.dataset.action;
+        var username = item.dataset.username;
+        allDropdowns.forEach(function (d) { d.style.display = 'none'; });
+        _handleUserAction(action, username);
     });
 }
 
-init();
+async function _handleUserAction(action, username) {
+    try {
+        if (action === 'block') {
+            await api.patch('/api/admin/users/' + encodeURIComponent(username), { is_active: false });
+            toast('Usuario bloqueado', 'success');
+        } else if (action === 'unblock') {
+            await api.patch('/api/admin/users/' + encodeURIComponent(username), { is_active: true });
+            toast('Usuario desbloqueado', 'success');
+        } else if (action === 'make-admin') {
+            if (!confirm('¿Promover a ' + username + ' a administrador?')) return;
+            await api.patch('/api/admin/users/' + encodeURIComponent(username), { role: 'admin' });
+            toast('Usuario promovido a admin', 'success');
+        } else if (action === 'delete') {
+            if (!confirm('¿Eliminar permanentemente a ' + username + '?')) return;
+            await api.del('/api/admin/users/' + encodeURIComponent(username));
+            toast('Usuario eliminado', 'success');
+        }
+        await reloadData();
+    } catch (err) {
+        toast(err.message || 'Error al realizar la acción', 'error');
+    }
+}
+
+function applyUserFilters() {
+    var q = (document.getElementById('user-search').value || '').toLowerCase();
+    var role = document.getElementById('filter-role').value;
+    var active = document.getElementById('filter-active').value;
+    var verified = document.getElementById('filter-verified').value;
+
+    var filtered = _allUsers.filter(function (u) {
+        if (q && !(u.email || '').toLowerCase().includes(q) && !(u.username || '').toLowerCase().includes(q)) return false;
+        if (role && u.role !== role) return false;
+        if (active) {
+            var want = active === 'true';
+            if (Boolean(u.is_active !== 0 && u.is_active !== false) !== want) return false;
+        }
+        if (verified) {
+            var wantV = verified === 'true';
+            if (Boolean(u.is_verified !== 0 && u.is_verified !== false) !== wantV) return false;
+        }
+        return true;
+    });
+
+    var col = _userSort.col;
+    var dir = _userSort.dir;
+    filtered = filtered.slice().sort(function (a, b) {
+        var av = (a[col] || '').toString().toLowerCase();
+        var bv = (b[col] || '').toString().toLowerCase();
+        return av < bv ? -dir : av > bv ? dir : 0;
+    });
+
+    renderUsers(filtered);
+}
