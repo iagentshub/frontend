@@ -14,24 +14,26 @@
     <div class="orb orb-3"></div>
   </div>
 
+  <button class="login-lang-btn" id="login-lang-btn">ES</button>
+
   <div class="login-wrap">
     <!-- left: branding -->
     <div class="login-brand">
       <div class="login-logo">iAgents<span>Hub</span></div>
-      <h1>Toda tu IA en un solo lugar</h1>
-      <p>Agentes, skills y modelos multi-proveedor desde una sola plataforma.</p>
+      <h1 data-i18n="auth.headline">Toda tu IA en un solo lugar</h1>
+      <p data-i18n="auth.sub">Agentes, skills y modelos multi-proveedor desde una sola plataforma.</p>
       <div class="login-stats">
         <div class="login-stat">
           <span class="stat-num">6<span class="stat-accent">+</span></span>
-          <span class="stat-label">Proveedores</span>
+          <span class="stat-label" data-i18n="auth.stat_providers">Proveedores</span>
         </div>
         <div class="login-stat">
           <span class="stat-num"><span class="stat-accent">&#8734;</span></span>
-          <span class="stat-label">Agentes</span>
+          <span class="stat-label" data-i18n="auth.stat_agents">Agentes</span>
         </div>
         <div class="login-stat">
           <span class="stat-num">100<span class="stat-accent">%</span></span>
-          <span class="stat-label">Privado</span>
+          <span class="stat-label" data-i18n="auth.stat_private">Privado</span>
         </div>
       </div>
     </div>
@@ -39,33 +41,46 @@
     <!-- right: form -->
     <div class="login-card">
       <div class="login-card-logo">iA</div>
-      <h2>Bienvenido</h2>
-      <p class="login-sub">Accede a tu espacio de agentes</p>
+      <h2 data-i18n="auth.card_title">Bienvenido</h2>
+      <p class="login-sub" data-i18n="auth.card_sub">Accede a tu espacio de agentes</p>
 
       <form id="login-form" autocomplete="on" novalidate>
         <div class="field">
-          <label for="login-email">Email</label>
+          <label for="login-email" data-i18n="auth.field_email">Email</label>
           <input id="login-email" type="email" name="email" autocomplete="email" placeholder="tu@email.com" required>
         </div>
         <div class="field">
-          <label for="login-password">Contraseña</label>
+          <label for="login-password" data-i18n="auth.field_password">Contraseña</label>
           <div class="field-pw">
             <input id="login-password" type="password" name="password" autocomplete="current-password" placeholder="••••••••" required>
             <button type="button" id="toggle-pw" class="pw-toggle" tabindex="-1">👁</button>
           </div>
         </div>
         <div id="login-error" class="form-error" style="display:none"></div>
-        <button type="submit" class="btn btn-primary btn-full" id="login-btn">Entrar</button>
+        <button type="submit" class="btn btn-primary btn-full" id="login-btn" data-i18n="auth.login_btn">Entrar</button>
       </form>
 
-      <div class="login-divider"><span>o</span></div>
-      <button id="btn-guest" class="btn btn-ghost btn-full">Acceder como invitado</button>
+      <div class="login-divider"><span data-i18n="auth.divider">o</span></div>
+      <button id="btn-guest" class="btn btn-ghost btn-full" data-i18n="auth.guest_login">Acceder como invitado</button>
 
-      <p class="login-register-link">¿No tienes cuenta? <a href="/register/">Crear cuenta</a></p>
+      <p class="login-register-link"><span data-i18n="auth.register_text">¿No tienes cuenta?</span> <a href="/register/" data-i18n="auth.register_action">Crear cuenta</a></p>
+      <p class="login-register-link" style="margin-top:8px"><a href="/docs" data-i18n="auth.docs_link">Documentación</a></p>
     </div>
   </div>
 
   <script src="/assets/js/i18n.js"></script>
   <script src="/pages/login/login.js"></script>
+  <script>
+    (function () {
+      var btn = document.getElementById('login-lang-btn');
+      function sync() { if (window.i18n) btn.textContent = window.i18n.getLang().toUpperCase(); }
+      btn.addEventListener('click', function () {
+        var next = (window.i18n ? window.i18n.getLang() : 'es') === 'es' ? 'en' : 'es';
+        if (window.i18n) window.i18n.setLang(next);
+        sync();
+      });
+      if (window.i18n) { window.i18n.ready(sync); window.i18n.onLangChange(sync); }
+    })();
+  </script>
 </body>
 </html>

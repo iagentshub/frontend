@@ -9,7 +9,8 @@
     "profile": "Perfil",
     "admin": "Admin",
     "admin_users": "Usuarios",
-    "logout": "Cerrar sesion"
+    "logout": "Cerrar sesion",
+    "docs": "Documentación"
   },
   "actions": {
     "save": "Guardar",

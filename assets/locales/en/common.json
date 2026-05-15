@@ -9,7 +9,8 @@
     "profile": "Profile",
     "admin": "Admin",
     "admin_users": "Users",
-    "logout": "Log out"
+    "logout": "Log out",
+    "docs": "Documentation"
   },
   "actions": {
     "save": "Save",

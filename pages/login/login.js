@@ -9,7 +9,7 @@ document.getElementById('login-form').addEventListener('submit', async function(
 
     errEl.style.display = 'none';
     btn.disabled = true;
-    btn.textContent = 'Entrando…';
+    btn.textContent = window.t ? window.t('auth.login_btn_loading') : 'Entrando…';
 
     try {
         const r = await fetch('/api/auth/login', {
@@ -21,15 +21,15 @@ document.getElementById('login-form').addEventListener('submit', async function(
             window.location.replace('/dashboard/');
         } else {
             const data = await r.json().catch(() => ({}));
-            errEl.textContent = data.detail || 'Credenciales incorrectas';
+            errEl.textContent = data.detail || (window.t ? window.t('auth.error_invalid') : 'Credenciales incorrectas');
             errEl.style.display = '';
         }
     } catch {
-        errEl.textContent = 'Error de conexión';
+        errEl.textContent = window.t ? window.t('auth.error_connection') : 'Error de conexión';
         errEl.style.display = '';
     } finally {
         btn.disabled = false;
-        btn.textContent = 'Entrar';
+        btn.textContent = window.t ? window.t('auth.login_btn') : 'Entrar';
     }
 });
 
