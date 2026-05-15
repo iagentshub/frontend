@@ -1,597 +1,71 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
-
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>iAgents Hub — Acceso</title>
-    <link rel="stylesheet" href="/assets/components/button_login_google/button_login_google.css" />
-    <link rel="stylesheet" href="/assets/components/button_login_guest/button_login_guest.css" />
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
-
-        :root {
-            --red: #CC2020;
-            --red-dark: #a01818;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            font-family: 'Inter', system-ui, sans-serif;
-            background: #080808;
-            color: #fff;
-            min-height: 100vh;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        /* ── Fondo animado ── */
-        .bg {
-            position: fixed;
-            inset: 0;
-            z-index: 0;
-            overflow: hidden;
-            pointer-events: none;
-        }
-
-        .bg-grid {
-            position: absolute;
-            inset: 0;
-            background-image:
-                linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
-            background-size: 60px 60px;
-        }
-
-        .bg-orb {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(90px);
-            opacity: 0;
-            animation: orbFloat 14s ease-in-out infinite;
-        }
-
-        .bg-orb-1 {
-            width: 700px;
-            height: 700px;
-            background: radial-gradient(circle, rgba(204, 32, 32, 0.2) 0%, transparent 70%);
-            top: -200px;
-            left: -150px;
-            animation-delay: 0s;
-        }
-
-        .bg-orb-2 {
-            width: 500px;
-            height: 500px;
-            background: radial-gradient(circle, rgba(204, 32, 32, 0.12) 0%, transparent 70%);
-            bottom: -80px;
-            right: 100px;
-            animation-delay: -6s;
-        }
-
-        .bg-orb-3 {
-            width: 350px;
-            height: 350px;
-            background: radial-gradient(circle, rgba(160, 24, 24, 0.14) 0%, transparent 70%);
-            top: 35%;
-            left: 45%;
-            animation-delay: -10s;
-        }
-
-        @keyframes orbFloat {
-            0% {
-                opacity: 0;
-                transform: translate(0, 0) scale(1);
-            }
-
-            15% {
-                opacity: 1;
-            }
-
-            50% {
-                transform: translate(25px, -35px) scale(1.04);
-            }
-
-            85% {
-                opacity: 1;
-            }
-
-            100% {
-                opacity: 0;
-                transform: translate(0, 0) scale(1);
-            }
-        }
-
-        .bg-noise {
-            position: absolute;
-            inset: 0;
-            opacity: 0.025;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-            background-size: 200px 200px;
-        }
-
-        .shell {
-            position: relative;
-            z-index: 1;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 56px;
-        }
-
-        .topbar {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 32px 0 0;
-            animation: fadeDown 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
-        }
-
-        @keyframes fadeDown {
-            from {
-                opacity: 0;
-                transform: translateY(-12px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .logo-mark {
-            display: inline-flex;
-            align-items: center;
-            gap: 7px;
-            line-height: 1;
-        }
-
-        .logo-iagents {
-            font-size: 1.35rem;
-            font-weight: 700;
-            color: #fff;
-            letter-spacing: -0.025em;
-        }
-
-        .logo-hub {
-            font-size: 1.35rem;
-            font-weight: 700;
-            color: #fff;
-            background: var(--red);
-            border-radius: 7px;
-            padding: 0.08em 0.32em 0.13em;
-            letter-spacing: -0.02em;
-        }
-
-        .topbar-right {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .topbar-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 7px;
-            padding: 5px 13px;
-            border: 1px solid rgba(204, 32, 32, 0.35);
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 600;
-            color: var(--red);
-            letter-spacing: 0.06em;
-            text-transform: uppercase;
-        }
-
-        .lang-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 5px 13px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            background: none;
-            font-size: 11px;
-            font-weight: 600;
-            color: rgba(255, 255, 255, 0.35);
-            letter-spacing: 0.06em;
-            text-transform: uppercase;
-            cursor: pointer;
-            transition: border-color 0.2s, color 0.2s;
-            font-family: inherit;
-        }
-
-        .lang-btn:hover {
-            border-color: rgba(255, 255, 255, 0.28);
-            color: rgba(255, 255, 255, 0.75);
-        }
-
-        .badge-dot {
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background: var(--red);
-            animation: pulse 2s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-
-            0%,
-            100% {
-                opacity: 1;
-                transform: scale(1);
-            }
-
-            50% {
-                opacity: 0.45;
-                transform: scale(0.75);
-            }
-        }
-
-        .main {
-            flex: 1;
-            display: grid;
-            grid-template-columns: 1fr 400px;
-            gap: 80px;
-            align-items: center;
-            padding: 56px 0 64px;
-        }
-
-        .brand {
-            display: flex;
-            flex-direction: column;
-            gap: 0;
-        }
-
-        .brand-headline {
-            font-size: clamp(2.8rem, 5vw, 4.2rem);
-            font-weight: 900;
-            letter-spacing: -0.055em;
-            line-height: 1.06;
-            color: #fff;
-            margin-bottom: 22px;
-            animation: fadeUp 0.6s 0.15s cubic-bezier(0.16, 1, 0.3, 1) both;
-        }
-
-        .brand-headline .accent {
-            color: var(--red);
-        }
-
-        .brand-sub {
-            font-size: 16px;
-            line-height: 1.7;
-            color: rgba(255, 255, 255, 0.36);
-            max-width: 420px;
-            margin-bottom: 52px;
-            animation: fadeUp 0.6s 0.25s cubic-bezier(0.16, 1, 0.3, 1) both;
-        }
-
-        .stats-row {
-            display: flex;
-            align-items: stretch;
-            gap: 0;
-            margin-bottom: 40px;
-            animation: fadeUp 0.6s 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
-        }
-
-        .stat {
-            display: flex;
-            flex-direction: column;
-            gap: 3px;
-            padding: 0 32px 0 0;
-        }
-
-        .stat:not(:last-child) {
-            margin-right: 32px;
-            border-right: 1px solid rgba(255, 255, 255, 0.07);
-        }
-
-        .stat-num {
-            font-size: 1.8rem;
-            font-weight: 800;
-            letter-spacing: -0.045em;
-            color: #fff;
-        }
-
-        .stat-num span {
-            color: var(--red);
-        }
-
-        .stat-label {
-            font-size: 10.5px;
-            color: rgba(255, 255, 255, 0.28);
-            text-transform: uppercase;
-            letter-spacing: 0.07em;
-            font-weight: 600;
-        }
-
-        .providers {
-            display: flex;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 8px;
-            animation: fadeUp 0.6s 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
-        }
-
-        .providers-label {
-            font-size: 10.5px;
-            color: rgba(255, 255, 255, 0.22);
-            text-transform: uppercase;
-            letter-spacing: 0.07em;
-            font-weight: 600;
-            margin-right: 4px;
-        }
-
-        .pill {
-            padding: 4px 11px;
-            border: 1px solid rgba(255, 255, 255, 0.09);
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 600;
-            color: rgba(255, 255, 255, 0.4);
-            transition: border-color 0.2s, color 0.2s;
-            cursor: default;
-        }
-
-        .pill:hover {
-            border-color: var(--red);
-            color: #fff;
-        }
-
-        .form-card {
-            background: rgba(255, 255, 255, 0.035);
-            border: 1px solid rgba(255, 255, 255, 0.07);
-            border-radius: 24px;
-            padding: 44px 40px;
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            box-shadow:
-                0 0 0 1px rgba(204, 32, 32, 0.07),
-                0 32px 80px rgba(0, 0, 0, 0.55),
-                inset 0 1px 0 rgba(255, 255, 255, 0.06);
-            animation: fadeUp 0.7s 0.1s cubic-bezier(0.16, 1, 0.3, 1) both;
-        }
-
-        .card-logo {
-            margin-bottom: 28px;
-        }
-
-        .card-logo .logo-iagents {
-            font-size: 1.1rem;
-        }
-
-        .card-logo .logo-hub {
-            font-size: 1.1rem;
-        }
-
-        .card-title {
-            font-size: 1.25rem;
-            font-weight: 800;
-            letter-spacing: -0.03em;
-            color: #fff;
-            margin-bottom: 5px;
-        }
-
-        .card-sub {
-            font-size: 13px;
-            color: rgba(255, 255, 255, 0.32);
-            margin-bottom: 32px;
-        }
-
-        .divider {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin: 16px 0;
-        }
-
-        .divider::before,
-        .divider::after {
-            content: '';
-            flex: 1;
-            height: 1px;
-            background: rgba(255, 255, 255, 0.07);
-        }
-
-        .divider-text {
-            font-size: 10.5px;
-            color: rgba(255, 255, 255, 0.2);
-            font-weight: 600;
-            letter-spacing: 0.06em;
-            text-transform: uppercase;
-            white-space: nowrap;
-        }
-
-        .card-footer {
-            margin-top: 18px;
-            text-align: center;
-            font-size: 11px;
-            color: rgba(255, 255, 255, 0.12);
-            letter-spacing: 0.02em;
-        }
-
-        @keyframes fadeUp {
-            from {
-                opacity: 0;
-                transform: translateY(18px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @media (max-width: 600px) {
-            .topbar-badge { display: none; }
-        }
-
-        @media (max-width: 900px) {
-            .shell {
-                padding: 0 24px;
-            }
-
-            .main {
-                grid-template-columns: 1fr;
-                gap: 40px;
-                padding: 40px 0 52px;
-            }
-
-            .brand-headline {
-                font-size: 2.6rem;
-            }
-
-            .brand-sub {
-                margin-bottom: 36px;
-            }
-
-            .form-card {
-                padding: 36px 28px;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>iAgents Hub — Login</title>
+  <link rel="stylesheet" href="/pages/login/login.css">
 </head>
+<body class="login-page">
+  <!-- animated background orbs -->
+  <div class="login-bg">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
 
-<body>
-
-    <div class="bg">
-        <div class="bg-grid"></div>
-        <div class="bg-orb bg-orb-1"></div>
-        <div class="bg-orb bg-orb-2"></div>
-        <div class="bg-orb bg-orb-3"></div>
-        <div class="bg-noise"></div>
+  <div class="login-wrap">
+    <!-- left: branding -->
+    <div class="login-brand">
+      <div class="login-logo">iAgents<span>Hub</span></div>
+      <h1>Toda tu IA en un solo lugar</h1>
+      <p>Agentes, skills y modelos multi-proveedor desde una sola plataforma.</p>
+      <div class="login-stats">
+        <div class="login-stat">
+          <span class="stat-num">6<span class="stat-accent">+</span></span>
+          <span class="stat-label">Proveedores</span>
+        </div>
+        <div class="login-stat">
+          <span class="stat-num"><span class="stat-accent">&#8734;</span></span>
+          <span class="stat-label">Agentes</span>
+        </div>
+        <div class="login-stat">
+          <span class="stat-num">100<span class="stat-accent">%</span></span>
+          <span class="stat-label">Privado</span>
+        </div>
+      </div>
     </div>
 
-    <div class="shell">
-        <div class="topbar">
-            <div class="logo-mark">
-                <span class="logo-iagents">iAgents</span><span class="logo-hub">Hub</span>
-            </div>
-            <div class="topbar-right">
-                <div class="topbar-badge">
-                    <div class="badge-dot"></div>
-                    <span data-i18n="auth.badge">Plataforma de agentes IA</span>
-                </div>
-                <button class="lang-btn" id="login-lang-btn" aria-label="Switch language">
-                    <svg width="13" height="13" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                        <circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.4"/>
-                        <path d="M8 2c-1.5 2-2.5 3.8-2.5 6s1 4 2.5 6M8 2c1.5 2 2.5 3.8 2.5 6S9.5 14 8 14M2 8h12" stroke="currentColor" stroke-width="1.2"/>
-                    </svg>
-                    <span id="login-lang-label">ES</span>
-                </button>
-            </div>
+    <!-- right: form -->
+    <div class="login-card">
+      <div class="login-card-logo">iA</div>
+      <h2>Bienvenido</h2>
+      <p class="login-sub">Accede a tu espacio de agentes</p>
+
+      <form id="login-form" autocomplete="on" novalidate>
+        <div class="field">
+          <label for="login-email">Email</label>
+          <input id="login-email" type="email" name="email" autocomplete="email" placeholder="tu@email.com" required>
         </div>
-
-        <div class="main">
-            <div class="brand">
-                <h1 class="brand-headline">
-                    <span data-i18n="auth.headline_1">Toda tu IA</span><br><span data-i18n="auth.headline_pre">en</span> <span class="accent" data-i18n="auth.headline_accent">un solo lugar</span>
-                </h1>
-                <p class="brand-sub" data-i18n="auth.sub">
-                    Crea, configura y chatea con agentes de inteligencia artificial
-                    conectados a cualquier proveedor del mercado.
-                </p>
-
-                <div class="stats-row">
-                    <div class="stat">
-                        <div class="stat-num">4<span>+</span></div>
-                        <div class="stat-label" data-i18n="auth.stat_providers">Proveedores</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-num"><span>&#8734;</span></div>
-                        <div class="stat-label" data-i18n="auth.stat_agents">Agentes</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-num">100<span>%</span></div>
-                        <div class="stat-label" data-i18n="auth.stat_private">Privado</div>
-                    </div>
-                </div>
-
-                <div class="providers">
-                    <span class="providers-label" data-i18n="auth.compat">Compatible con</span>
-                    <span class="pill">OpenAI</span>
-                    <span class="pill">Claude</span>
-                    <span class="pill">Gemini</span>
-                    <span class="pill">Ollama</span>
-                </div>
-            </div>
-
-            <div class="form-card">
-                <div class="card-logo">
-                    <div class="logo-mark">
-                        <span class="logo-iagents">iAgents</span><span class="logo-hub">Hub</span>
-                    </div>
-                </div>
-
-                <div class="card-title" data-i18n="auth.card_title">Bienvenido</div>
-                <div class="card-sub" data-i18n="auth.card_sub">Accede a tu espacio de agentes</div>
-
-                <div id="btn-google-mount"></div>
-
-                <div class="divider">
-                    <span class="divider-text" data-i18n="auth.divider">o</span>
-                </div>
-
-                <div id="btn-guest-mount"></div>
-            </div>
+        <div class="field">
+          <label for="login-password">Contraseña</label>
+          <div class="field-pw">
+            <input id="login-password" type="password" name="password" autocomplete="current-password" placeholder="••••••••" required>
+            <button type="button" id="toggle-pw" class="pw-toggle" tabindex="-1">👁</button>
+          </div>
         </div>
+        <div id="login-error" class="form-error" style="display:none"></div>
+        <button type="submit" class="btn btn-primary btn-full" id="login-btn">Entrar</button>
+      </form>
+
+      <div class="login-divider"><span>o</span></div>
+      <button id="btn-guest" class="btn btn-ghost btn-full">Acceder como invitado</button>
+
+      <p class="login-register-link">¿No tienes cuenta? <a href="/register/">Crear cuenta</a></p>
     </div>
+  </div>
 
-    <script src="/assets/js/i18n.js"></script>
-    <script src="/assets/components/button_login_google/button_login_google.js"></script>
-    <script src="/assets/components/button_login_guest/button_login_guest.js"></script>
-    <script>
-        'use strict';
-        var _API = window.API_BASE || '';
-
-        function _renderButtons() {
-            document.getElementById('btn-google-mount').innerHTML = '';
-            document.getElementById('btn-guest-mount').innerHTML = '';
-            renderGoogleLoginButton('btn-google-mount', _API);
-            renderGuestLoginButton('btn-guest-mount', _API);
-        }
-
-        // ── Botón de idioma ──────────────────────────────────────────────────
-        var _langBtn = document.getElementById('login-lang-btn');
-        var _langLabel = document.getElementById('login-lang-label');
-
-        function _syncLangBtn() {
-            if (_langLabel && window.i18n) {
-                _langLabel.textContent = window.i18n.getLang().toUpperCase();
-            }
-        }
-
-        _langBtn.addEventListener('click', function () {
-            var curr = window.i18n ? window.i18n.getLang() : 'es';
-            var next = curr === 'es' ? 'en' : 'es';
-            if (window.i18n) {
-                window.i18n.setLang(next).then(function () {
-                    _syncLangBtn();
-                    _renderButtons();
-                });
-            }
-        });
-
-        // ── Inicialización ───────────────────────────────────────────────────
-        i18n.ready(function () {
-            _syncLangBtn();
-            _renderButtons();
-        });
-
-        i18n.onLangChange(function () {
-            _syncLangBtn();
-        });
-
-        fetch(_API + '/api/auth/me').then(function (r) {
-            if (r.ok) window.location.replace('/dashboard/');
-        }).catch(function () { });
-    </script>
+  <script src="/assets/js/i18n.js"></script>
+  <script src="/pages/login/login.js"></script>
 </body>
-
 </html>

@@ -29,6 +29,8 @@ Los scripts se cargan con etiquetas `<script>` en un orden específico. Las util
 
 | Página | Ficheros |
 |---|---|
+| Login | `pages/login/login.js` — envía credenciales a `POST /api/auth/login`, gestiona errores, toggle de contraseña, acceso invitado y redirección si ya hay sesión activa |
+| Registro | `pages/register/register.js` — formulario en dos pasos; paso 1 valida email/contraseña, paso 2 envía perfil opcional a `POST /api/auth/register` |
 | Agentes | `agents/agents-state.js`, `agents/agents-modal.js`, `agents/agents-skill-picker.js`, `agents/agents-export.js`, `agents/agents-load.js`, `agents/agents-routines.js`, `agents/agents-catalog.js`, `agents/agents.js` |
 | Conexiones | `connections/connections-state.js`, `connections/connections-modal.js`, `connections/connections.js` — providers cargados dinámicamente vía `Providers` |
 | Memoria | `memory/memory-render.js`, `memory/memory-modal.js`, `memory/memory-load.js`, `memory/memory.js` |

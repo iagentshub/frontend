@@ -13,6 +13,8 @@ The platform is organized into sections accessible from the main navigation.
 
 | Section | Description |
 |---|---|
+| **Login** | Sign-in screen with email and password form. Accessible at `/login/`. Includes a guest access button and a link to the registration page. |
+| **Register** | Two-step new account registration: step 1 (email + password) and step 2 (optional profile: birth date, gender, country, phone). Username is auto-generated from the email. Accessible at `/register/`. |
 | **Chat** | Main interface. Opens a conversation with any configured agent. |
 | **Agents** | Create, configure, and manage agents. Define their instructions, assign skills, and set up **Routines** — named tasks each with a trigger (manual, scheduled, or webhook) and a prompt that describes what the agent should do when run. Includes a **Catalog** button to browse and fork public agents, and a **Load** button to import agents from files exported by Claude, GitHub Copilot, OpenAI, or iAgentshub itself. |
 | **Connections** | Add and manage API keys for AI providers. Each card shows the total tokens consumed through that connection; hovering reveals the breakdown between input and output tokens. |

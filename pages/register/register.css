@@ -1,0 +1,33 @@
+/* ── Register-specific styles ─────────────────────────────────────────────── */
+
+/* Step indicator hint */
+.step2-hint {
+  font-size: 13px;
+  color: rgba(255,255,255,0.45);
+  margin-bottom: 20px;
+  font-style: italic;
+}
+
+/* Two-button row for step 2 */
+.reg-step2-btns {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.reg-step2-btns .btn {
+  flex: 1;
+}
+
+/* Wide card for register */
+.login-card--wide {
+  width: 100%;
+  max-width: 480px;
+}
+
+/* Narrow wrapper override for register */
+@media (max-width: 520px) {
+  .login-card--wide {
+    padding: 32px 20px;
+  }
+}

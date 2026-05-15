@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>iAgents Hub — Crear cuenta</title>
+  <link rel="stylesheet" href="/pages/login/login.css">
+  <link rel="stylesheet" href="/pages/register/register.css">
+</head>
+<body class="login-page">
+  <div class="login-bg">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+
+  <div class="login-wrap login-wrap--narrow">
+    <div class="login-card login-card--wide">
+      <div class="login-card-logo">iA</div>
+      <h2>Crear cuenta</h2>
+      <p class="login-sub">Paso <span id="step-num">1</span> de 2</p>
+
+      <!-- Step 1 -->
+      <div id="step-1">
+        <form id="reg-form-1" novalidate>
+          <div class="field">
+            <label for="reg-email">Email *</label>
+            <input id="reg-email" type="email" placeholder="tu@email.com" required>
+          </div>
+          <div class="field">
+            <label for="reg-pw">Contraseña *</label>
+            <div class="field-pw">
+              <input id="reg-pw" type="password" placeholder="Mínimo 8 caracteres" required>
+              <button type="button" class="pw-toggle" onclick="togglePw('reg-pw')">👁</button>
+            </div>
+          </div>
+          <div class="field">
+            <label for="reg-pw2">Confirmar contraseña *</label>
+            <div class="field-pw">
+              <input id="reg-pw2" type="password" placeholder="Repite la contraseña" required>
+              <button type="button" class="pw-toggle" onclick="togglePw('reg-pw2')">👁</button>
+            </div>
+          </div>
+          <div id="reg-error-1" class="form-error" style="display:none"></div>
+          <button type="submit" class="btn btn-primary btn-full">Continuar →</button>
+        </form>
+      </div>
+
+      <!-- Step 2 -->
+      <div id="step-2" style="display:none">
+        <p class="step2-hint">Completa tu perfil (opcional)</p>
+        <div class="field">
+          <label for="reg-birth">Fecha de nacimiento</label>
+          <input id="reg-birth" type="date">
+        </div>
+        <div class="field">
+          <label for="reg-gender">Género</label>
+          <select id="reg-gender">
+            <option value="">Prefiero no decir</option>
+            <option value="male">Hombre</option>
+            <option value="female">Mujer</option>
+            <option value="other">Otro</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="reg-country">País</label>
+          <select id="reg-country">
+            <option value="">Selecciona tu país</option>
+            <option value="ES">España</option>
+            <option value="MX">México</option>
+            <option value="AR">Argentina</option>
+            <option value="CO">Colombia</option>
+            <option value="CL">Chile</option>
+            <option value="PE">Perú</option>
+            <option value="US">Estados Unidos</option>
+            <option value="GB">Reino Unido</option>
+            <option value="DE">Alemania</option>
+            <option value="FR">Francia</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="reg-phone">Teléfono</label>
+          <input id="reg-phone" type="tel" placeholder="+34 600 000 000">
+        </div>
+        <div id="reg-error-2" class="form-error" style="display:none"></div>
+        <div class="reg-step2-btns">
+          <button id="btn-skip" class="btn btn-ghost">Omitir</button>
+          <button id="btn-finish" class="btn btn-primary">Crear cuenta</button>
+        </div>
+      </div>
+
+      <p class="login-register-link">¿Ya tienes cuenta? <a href="/login/">Iniciar sesión</a></p>
+    </div>
+  </div>
+
+  <script src="/pages/register/register.js"></script>
+</body>
+</html>

@@ -29,6 +29,8 @@ Scripts are loaded with `<script>` tags in a specific order. Global utilities mu
 
 | Page | Files |
 |---|---|
+| Login | `pages/login/login.js` — submits credentials to `POST /api/auth/login`, handles errors, password toggle, guest access, and redirects if a session is already active |
+| Register | `pages/register/register.js` — two-step form; step 1 validates email/password, step 2 sends optional profile fields to `POST /api/auth/register` |
 | Agents | `agents/agents-state.js`, `agents/agents-modal.js`, `agents/agents-skill-picker.js`, `agents/agents-export.js`, `agents/agents-load.js`, `agents/agents-routines.js`, `agents/agents-catalog.js`, `agents/agents.js` |
 | Connections | `connections/connections-state.js`, `connections/connections-modal.js`, `connections/connections.js` — providers loaded dynamically via `Providers` |
 | Memory | `memory/memory-render.js`, `memory/memory-modal.js`, `memory/memory-load.js`, `memory/memory.js` |
