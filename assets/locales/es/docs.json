@@ -57,6 +57,11 @@
   },
   "getting_started": {
     "intro": "iAgents Hub es una plataforma self-hosted de agentes IA. Sigue estos tres pasos para empezar:",
+    "accounts_title": "Tipos de cuenta",
+    "accounts_registered_title": "Cuenta registrada",
+    "accounts_registered_body": "Acceso completo y permanente: agentes, historial de conversaciones, memoria, skills y configuración se conservan entre sesiones.",
+    "accounts_guest_title": "Acceso como invitado",
+    "accounts_guest_body": "Permite explorar la plataforma sin registrarse. Los datos de la sesión (historial, configuraciones) no se conservan al cerrar sesión.",
     "step1_title": "1. Vincula un proveedor",
     "step1_body": "Ve a Perfil → Proveedores. Introduce tu API key de Anthropic, OpenAI, Google u otro proveedor soportado. Pulsa «Testear» para verificar la conexión y «Sincronizar» para importar los modelos disponibles.",
     "step2_title": "2. Crea un agente",

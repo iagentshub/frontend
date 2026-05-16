@@ -106,7 +106,12 @@ function _buildSection(s) {
             }).join('') +
             '</div>';
     } else if (k === 'getting_started') {
-        body = '<p class="docs-intro">' + t('docs.getting_started.intro') + '</p>' +
+        body = '<div class="docs-accounts">' +
+            '<strong class="docs-accounts-title">' + t('docs.getting_started.accounts_title') + '</strong>' +
+            _account('registered', t('docs.getting_started.accounts_registered_title'), t('docs.getting_started.accounts_registered_body')) +
+            _account('guest',      t('docs.getting_started.accounts_guest_title'),      t('docs.getting_started.accounts_guest_body')) +
+            '</div>' +
+            '<p class="docs-intro">' + t('docs.getting_started.intro') + '</p>' +
             '<div class="docs-steps">' +
             _step(t('docs.getting_started.step1_title'), t('docs.getting_started.step1_body')) +
             _step(t('docs.getting_started.step2_title'), t('docs.getting_started.step2_body')) +
@@ -147,6 +152,16 @@ function _buildSection(s) {
         '<div class="docs-section-body">' + body + '</div>' +
         '</details>' +
         '</section>';
+}
+
+function _account(type, title, body) {
+    var icon = type === 'registered'
+        ? '<svg width="13" height="13" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5.5" r="2.5" stroke="currentColor" stroke-width="1.4"/><path d="M2.5 14v-.5A5.5 5.5 0 0 1 8 8a5.5 5.5 0 0 1 5.5 5.5V14" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>'
+        : '<svg width="13" height="13" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5.5" r="2.5" stroke="currentColor" stroke-width="1.4" stroke-dasharray="2 1.5"/><path d="M2.5 14v-.5A5.5 5.5 0 0 1 8 8a5.5 5.5 0 0 1 5.5 5.5V14" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-dasharray="3 2"/></svg>';
+    return '<div class="docs-account docs-account--' + type + '">' +
+        '<span class="docs-account-icon">' + icon + '</span>' +
+        '<div><strong>' + title + '</strong><p>' + body + '</p></div>' +
+        '</div>';
 }
 
 function _item(title, body) {
