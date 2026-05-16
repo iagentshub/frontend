@@ -17,5 +17,26 @@
   "confirm_delete": "¿Eliminar al usuario {{username}}? Esta acción no se puede deshacer.",
   "deleted": "Usuario eliminado",
   "error_delete": "Error al eliminar",
-  "delete_btn": "Eliminar"
+  "delete_btn": "Eliminar",
+  "logs": {
+    "tab": "Logs",
+    "subtitle": "Actividad del sistema en tiempo real",
+    "tab_summary": "Resumen",
+    "tab_viewer": "Visor",
+    "loading": "Cargando…",
+    "col_date": "Fecha",
+    "col_time": "Hora",
+    "col_level": "Nivel",
+    "col_service": "Servicio",
+    "col_message": "Mensaje",
+    "filter_all": "Todos",
+    "search_placeholder": "Buscar en el log…",
+    "service_backend": "Backend",
+    "service_frontend": "Frontend",
+    "no_files": "No hay ficheros de log disponibles.",
+    "no_results": "Sin resultados para los filtros aplicados.",
+    "empty_file": "(fichero vacío)",
+    "error_load": "Error al cargar el log.",
+    "download": "Descargar"
+  }
 }

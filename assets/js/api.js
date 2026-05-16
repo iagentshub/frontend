@@ -50,6 +50,14 @@ window.api = {
         if (!r.ok) { var d = await r.json().catch(function () { return {}; }); throw _apiError(r.status, d.detail); }
         return r.json();
     },
+    async getText(url) {
+        var r = await fetch((window.API_BASE || '') + url, {
+            headers: this._langHeader(),
+        });
+        if (r.status === 401) { window.location.replace('/login/'); throw _apiError(401); }
+        if (!r.ok) { var d = await r.json().catch(function () { return {}; }); throw _apiError(r.status, d.detail); }
+        return r.text();
+    },
     async del(url) {
         var r = await fetch((window.API_BASE || '') + url, {
             method: 'DELETE',
