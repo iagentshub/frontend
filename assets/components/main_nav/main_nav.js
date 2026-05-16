@@ -14,6 +14,7 @@ var NAV_ICONS = {
     admin: '<svg width="15" height="15" viewBox="0 0 16 16" fill="none"><circle cx="6" cy="5" r="2.5" stroke="currentColor" stroke-width="1.4"/><path d="M1.5 13v-.5A4.5 4.5 0 0 1 6 8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><circle cx="11.5" cy="10.5" r="3" stroke="currentColor" stroke-width="1.4"/><path d="M11.5 9.2v1.3l.8.8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>',
     lang: '<svg width="13" height="13" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.4"/><path d="M8 2c-1.5 2-2.5 3.8-2.5 6s1 4 2.5 6M8 2c1.5 2 2.5 3.8 2.5 6S9.5 14 8 14M2 8h12" stroke="currentColor" stroke-width="1.2"/></svg>',
     docs: '<svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M3 2h7l3 3v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M10 2v3h3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="8" cy="9.5" r="1" fill="currentColor"/><path d="M8 7v1.2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>',
+    about: '<svg width="13" height="13" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.4"/><circle cx="8" cy="5.5" r="0.9" fill="currentColor"/><path d="M8 7.5v4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>',
 };
 
 function _renderLangSwitcher() {
@@ -59,8 +60,11 @@ function renderNav(mountId, activePage) {
             '<div class="nav-footer">' +
             '<div class="nav-footer-actions">' +
             _renderLangSwitcher() +
-            '<a href="/docs" class="nav-docs-btn' + (activePage === 'docs' ? ' active' : '') + '" title="' + t('nav.docs') + '" aria-label="' + t('nav.docs') + '">' +
+            '<a href="/docs" class="nav-icon-btn' + (activePage === 'docs' ? ' active' : '') + '" title="' + t('nav.docs') + '" aria-label="' + t('nav.docs') + '">' +
             NAV_ICONS.docs +
+            '</a>' +
+            '<a href="/about" class="nav-icon-btn' + (activePage === 'about' ? ' active' : '') + '" title="' + t('nav.about') + '" aria-label="' + t('nav.about') + '">' +
+            NAV_ICONS.about +
             '</a>' +
             '</div>' +
             '<button class="nav-user" id="nav-logout-btn" title="' + t('nav.logout') + '">' +

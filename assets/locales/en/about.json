@@ -1,0 +1,36 @@
+{
+  "page": {
+    "title": "About",
+    "subtitle": "iAgents Hub"
+  },
+  "header": {
+    "login": "Sign in"
+  },
+  "description": {
+    "title": "What is iAgents Hub?",
+    "body": "iAgents Hub is a self-hosted AI agents platform. It lets you configure, manage and test AI agents connected to multiple providers from a unified interface. Define your agent once and run it with whichever model you prefer."
+  },
+  "stack": {
+    "title": "Tech stack",
+    "python": "Primary backend language",
+    "fastapi": "High-performance REST API",
+    "sqlite": "Embedded database for lightweight deployments",
+    "postgresql": "Relational database for production",
+    "nginx": "Web server and reverse proxy",
+    "docker": "Containerisation and deployment",
+    "vanillajs": "Frontend with no external dependencies"
+  },
+  "creators": {
+    "title": "Creators",
+    "role": "Developer"
+  },
+  "github": {
+    "title": "Source code",
+    "body": "iAgents Hub is an open source project. Contributions are welcome.",
+    "label": "View on GitHub"
+  },
+  "license": {
+    "title": "License",
+    "body": "MIT License — free to use, modify and distribute."
+  }
+}

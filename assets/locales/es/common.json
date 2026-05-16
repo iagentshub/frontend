@@ -10,7 +10,8 @@
     "admin": "Admin",
     "admin_users": "Usuarios",
     "logout": "Cerrar sesion",
-    "docs": "Documentación"
+    "docs": "Documentación",
+    "about": "Acerca de"
   },
   "actions": {
     "save": "Guardar",

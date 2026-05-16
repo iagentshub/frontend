@@ -10,7 +10,8 @@
     "admin": "Admin",
     "admin_users": "Users",
     "logout": "Log out",
-    "docs": "Documentation"
+    "docs": "Documentation",
+    "about": "About"
   },
   "actions": {
     "save": "Save",
