@@ -4,19 +4,19 @@
     justify-content: center;
     width: 100%;
     padding: 13px;
-    background: var(--red, #CC2020);
+    background: var(--accent);
     color: #fff;
     border: none;
     border-radius: 10px;
-    font-family: 'Inter', system-ui, sans-serif;
+    font-family: var(--font);
     font-size: 14px;
     font-weight: 700;
     letter-spacing: 0.015em;
     cursor: pointer;
     position: relative;
     overflow: hidden;
-    transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
-    box-shadow: 0 4px 22px rgba(204, 32, 32, 0.38);
+    transition: filter 0.2s, transform 0.1s, box-shadow 0.2s;
+    box-shadow: 0 4px 22px var(--accent-shadow);
 }
 
 .btn-guest::before {
@@ -28,8 +28,8 @@
 }
 
 .btn-guest:hover {
-    background: #a01818;
-    box-shadow: 0 6px 30px rgba(204, 32, 32, 0.52);
+    filter: brightness(0.88);
+    box-shadow: 0 6px 30px var(--accent-shadow);
 }
 
 .btn-guest:active {

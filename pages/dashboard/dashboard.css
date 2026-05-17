@@ -20,7 +20,7 @@
 }
 
 .dash-stat-card:hover {
-    box-shadow: 0 4px 16px rgba(17, 24, 39, 0.08);
+    box-shadow: var(--shadow-lg);
     border-color: var(--line-strong);
     transform: translateY(-1px);
 }
@@ -30,7 +30,7 @@
     width: 40px;
     height: 40px;
     border-radius: 10px;
-    background: rgba(79, 70, 229, 0.09);
+    background: var(--accent-dim);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -219,9 +219,9 @@
     border-radius: 20px;
     font-size: 0.72rem;
     font-weight: 600;
-    background: rgba(79, 70, 229, 0.08);
+    background: var(--accent-dim);
     color: var(--accent);
-    border: 1px solid rgba(79, 70, 229, 0.18);
+    border: 1px solid color-mix(in srgb, var(--accent) 18%, transparent);
     width: fit-content;
 }
 
@@ -264,7 +264,7 @@
 }
 
 .dash-agent-card:hover {
-    box-shadow: 0 4px 16px rgba(17, 24, 39, 0.08);
+    box-shadow: var(--shadow-lg);
     border-color: var(--line-strong);
     transform: translateY(-1px);
 }
@@ -333,7 +333,7 @@
 
 .dash-chat-btn:hover {
     background: var(--accent-dim);
-    border-color: rgba(79, 70, 229, 0.3);
+    border-color: color-mix(in srgb, var(--accent) 30%, transparent);
 }
 
 /* ── Responsive ── */

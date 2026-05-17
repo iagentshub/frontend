@@ -25,8 +25,8 @@
 }
 
 .skill-card:hover {
-    box-shadow: 0 4px 16px rgba(17, 24, 39, 0.08);
-    border-color: rgba(79, 70, 229, 0.26);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--line-strong);
     transform: translateY(-1px);
 }
 
@@ -51,7 +51,7 @@
     width: 30px;
     height: 30px;
     border-radius: 7px;
-    background: rgba(79, 70, 229, 0.09);
+    background: var(--accent-dim);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -97,7 +97,7 @@
     font-weight: 700;
     letter-spacing: 0.06em;
     text-transform: uppercase;
-    background: rgba(79, 70, 229, 0.1);
+    background: var(--accent-dim);
     color: var(--accent);
     padding: 1px 5px;
     border-radius: 4px;
@@ -210,12 +210,12 @@
 
 .card-action-btn--view {
     color: var(--accent);
-    border-color: rgba(79, 70, 229, 0.2);
+    border-color: color-mix(in srgb, var(--accent) 20%, transparent);
 }
 
 .card-action-btn--view:hover {
     background: var(--accent-dim);
-    border-color: rgba(79, 70, 229, 0.35);
+    border-color: color-mix(in srgb, var(--accent) 35%, transparent);
 }
 
 .card-action-btn--delete {

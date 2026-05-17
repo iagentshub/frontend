@@ -63,10 +63,7 @@ function _renderConnectionsTable(connections) {
         return;
     }
 
-    var typeIcons = { claude: '🟠', openai: '🟢', github: '⚫', ollama: '🔵', nvidia: '🟢', gemini: '🔵' };
-
     var rows = connections.map(function (c) {
-        var icon = typeIcons[c.type] || '🔌';
         var tokTotal = (c.tokens_in || 0) + (c.tokens_out || 0);
         var date = c.created_at
             ? new Date(c.created_at).toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: '2-digit' })
@@ -82,7 +79,7 @@ function _renderConnectionsTable(connections) {
             '</div>';
 
         return '<tr>' +
-            '<td>' + icon + ' <span class="conn-name">' + esc(c.name || c.id) + '</span></td>' +
+            '<td><span class="conn-name">' + esc(c.name || c.id) + '</span></td>' +
             '<td><span class="badge badge--type">' + esc(c.type || '—') + '</span></td>' +
             '<td class="td-owner">' + ownerDisplay + '</td>' +
             '<td class="td-tokens">' + fmtTokens(tokTotal) + '</td>' +

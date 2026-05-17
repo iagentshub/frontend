@@ -63,10 +63,7 @@ function renderKnowledge(items) {
         return;
     }
 
-    var typeIcons = { url: '🌐', document: '📄' };
-
     var rows = items.map(function (k) {
-        var icon = typeIcons[k.type] || '📎';
         var date = k.created_at
             ? new Date(k.created_at).toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: '2-digit' })
             : '—';
@@ -84,7 +81,7 @@ function renderKnowledge(items) {
             '</div>';
 
         return '<tr>' +
-            '<td><span class="conn-name">' + icon + ' ' + esc(k.title || k.id) + '</span></td>' +
+            '<td><span class="conn-name">' + esc(k.title || k.id) + '</span></td>' +
             '<td>' + typeBadge + '</td>' +
             '<td class="td-owner">' + ownerDisplay + '</td>' +
             '<td class="td-tokens">' + (k.char_count || 0).toLocaleString('es-ES') + '</td>' +

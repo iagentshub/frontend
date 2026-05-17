@@ -2,7 +2,7 @@
 <html lang="es">
 
 <head>
-    <script>document.documentElement.setAttribute("data-theme", localStorage.getItem("ga-theme") || "noir");</script>
+    <script>(function(){var m={noir:"dark-red",marble:"light-red",ember:"dark-orange",ocean:"dark-blue",forest:"dark-red",dusk:"dark-purple",light:"light-red"};var t=localStorage.getItem("ga-theme")||"dark-red";t=m[t]||t;document.documentElement.setAttribute("data-theme",t);})();</script>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>iAgents Hub · Administración</title>
@@ -56,7 +56,7 @@
             <div id="tab-users" class="admin-tab-panel" style="display:none">
                 <div class="admin-toolbar">
                     <div class="admin-search-wrap">
-                        <span class="search-icon">🔍</span>
+                        <span class="search-icon"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="6.5" cy="6.5" r="4" stroke="currentColor" stroke-width="1.6"/><path d="M11 11l3 3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span>
                         <input id="user-search" type="search" class="admin-search" placeholder="Buscar por email…">
                     </div>
                     <select id="filter-role" class="admin-select">
@@ -82,7 +82,7 @@
             <div id="tab-agents" class="admin-tab-panel" style="display:none">
                 <div class="admin-toolbar">
                     <div class="admin-search-wrap">
-                        <span class="search-icon">🔍</span>
+                        <span class="search-icon"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="6.5" cy="6.5" r="4" stroke="currentColor" stroke-width="1.6"/><path d="M11 11l3 3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span>
                         <input id="agent-search" type="search" class="admin-search" placeholder="Buscar agente…">
                     </div>
                     <select id="filter-agent-owner" class="admin-select">
@@ -106,7 +106,7 @@
             <div id="tab-knowledge" class="admin-tab-panel" style="display:none">
                 <div class="admin-toolbar">
                     <div class="admin-search-wrap">
-                        <span class="search-icon">🔍</span>
+                        <span class="search-icon"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="6.5" cy="6.5" r="4" stroke="currentColor" stroke-width="1.6"/><path d="M11 11l3 3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span>
                         <input id="knowledge-search" type="search" class="admin-search" placeholder="Buscar por título o propietario…">
                     </div>
                     <select id="filter-knowledge-type" class="admin-select">

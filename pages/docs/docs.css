@@ -1,74 +1,12 @@
-/* docs.css — standalone, misma estética que login */
-
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
-
-*, *::before, *::after {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
-:root {
-    --red:      #CC2020;
-    --bg:       #080808;
-    --surface:  rgba(255,255,255,0.038);
-    --border:   rgba(255,255,255,0.07);
-    --border-s: rgba(255,255,255,0.11);
-    --text:     #f0f0f0;
-    --text-2:   rgba(240,240,240,0.65);
-    --text-3:   rgba(240,240,240,0.36);
-    --text-4:   rgba(240,240,240,0.2);
-}
+/* docs.css — standalone, uses global CSS variable system */
 
 body.docs-page {
-    font-family: 'Inter', system-ui, sans-serif;
+    font-family: var(--font);
     background: var(--bg);
-    color: var(--text);
+    color: var(--ink);
     min-height: 100vh;
     -webkit-font-smoothing: antialiased;
-}
-
-/* ── Background orbs ── */
-.docs-bg {
-    position: fixed;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-    overflow: hidden;
-}
-
-.orb {
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(90px);
-    opacity: 0;
-    animation: orbFloat 14s ease-in-out infinite;
-}
-
-.orb-1 {
-    width: 600px;
-    height: 600px;
-    background: radial-gradient(circle, rgba(204,32,32,0.15) 0%, transparent 70%);
-    top: -180px;
-    left: -100px;
-    animation-delay: 0s;
-}
-
-.orb-2 {
-    width: 400px;
-    height: 400px;
-    background: radial-gradient(circle, rgba(204,32,32,0.08) 0%, transparent 70%);
-    bottom: 10%;
-    right: 5%;
-    animation-delay: -7s;
-}
-
-@keyframes orbFloat {
-    0%   { opacity: 0; transform: translate(0,0) scale(1); }
-    15%  { opacity: 1; }
-    50%  { transform: translate(20px,-28px) scale(1.03); }
-    85%  { opacity: 1; }
-    100% { opacity: 0; transform: translate(0,0) scale(1); }
+    -moz-osx-font-smoothing: grayscale;
 }
 
 /* ── Header ── */
@@ -81,8 +19,8 @@ body.docs-page {
     gap: 12px;
     height: 54px;
     padding: 0 32px;
-    background: rgba(8,8,8,0.85);
-    border-bottom: 1px solid var(--border);
+    background: var(--topbar-bg);
+    border-bottom: 1px solid var(--line);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
 }
@@ -91,13 +29,13 @@ body.docs-page {
     font-size: 0.9rem;
     font-weight: 700;
     letter-spacing: -0.02em;
-    color: #f0f0f0;
+    color: var(--ink);
     text-decoration: none;
     flex-shrink: 0;
 }
 
 .docs-logo span {
-    background: var(--red);
+    background: var(--accent);
     border-radius: 5px;
     padding: 0.06em 0.28em 0.1em;
     margin-left: 3px;
@@ -107,14 +45,14 @@ body.docs-page {
 .docs-header-divider {
     width: 1px;
     height: 16px;
-    background: var(--border-s);
+    background: var(--line-strong);
     flex-shrink: 0;
 }
 
 .docs-header-label {
     font-size: 12.5px;
     font-weight: 500;
-    color: var(--text-3);
+    color: var(--ink-3);
 }
 
 .docs-header-spacer { flex: 1; }
@@ -122,44 +60,42 @@ body.docs-page {
 .docs-header-lang {
     background: none;
     border: none;
-    color: var(--text-3);
+    color: var(--ink-3);
     font-size: 11px;
     font-weight: 600;
     letter-spacing: 0.05em;
     cursor: pointer;
     padding: 5px 10px;
     border-radius: 6px;
-    font-family: inherit;
+    font-family: var(--font);
     transition: color 0.15s, background 0.15s;
 }
 
 .docs-header-lang:hover {
-    color: var(--text-2);
-    background: rgba(255,255,255,0.06);
+    color: var(--ink-2);
+    background: var(--surface-2);
 }
 
 .docs-header-action {
     font-size: 12px;
     font-weight: 600;
-    color: var(--text-3);
+    color: var(--ink-3);
     text-decoration: none;
     padding: 6px 14px;
     border-radius: 8px;
-    border: 1px solid var(--border);
+    border: 1px solid var(--line);
     transition: color 0.15s, border-color 0.15s, background 0.15s;
     white-space: nowrap;
 }
 
 .docs-header-action:hover {
-    color: var(--text);
-    border-color: var(--border-s);
-    background: rgba(255,255,255,0.05);
+    color: var(--ink);
+    border-color: var(--line-strong);
+    background: var(--surface-2);
 }
 
 /* ── Shell layout ── */
 .docs-shell {
-    position: relative;
-    z-index: 1;
     max-width: 1080px;
     margin: 0 auto;
     padding: 52px 32px 96px;
@@ -184,19 +120,19 @@ body.docs-page {
     border-radius: 8px;
     font-size: 12.5px;
     font-weight: 500;
-    color: var(--text-3);
+    color: var(--ink-3);
     text-decoration: none;
     transition: color 0.12s, background 0.12s;
 }
 
 .docs-nav-link:hover {
-    color: var(--text-2);
-    background: rgba(255,255,255,0.04);
+    color: var(--ink-2);
+    background: var(--surface-2);
 }
 
 .docs-nav-link.active {
-    color: var(--text);
-    background: rgba(255,255,255,0.06);
+    color: var(--ink);
+    background: var(--surface-3);
 }
 
 /* ── Hero ── */
@@ -210,11 +146,12 @@ body.docs-page {
     letter-spacing: -0.045em;
     line-height: 1.1;
     margin-bottom: 8px;
+    color: var(--ink);
 }
 
 .docs-hero p {
     font-size: 14px;
-    color: var(--text-3);
+    color: var(--ink-3);
     line-height: 1.6;
 }
 
@@ -227,14 +164,14 @@ body.docs-page {
 
 .docs-section {
     background: var(--surface);
-    border: 1px solid var(--border);
+    border: 1px solid var(--line);
     border-radius: 14px;
     overflow: hidden;
     transition: border-color 0.15s;
 }
 
 .docs-section:hover {
-    border-color: var(--border-s);
+    border-color: var(--line-strong);
 }
 
 .docs-section details { display: block; }
@@ -247,7 +184,7 @@ body.docs-page {
     padding: 15px 20px;
     font-size: 13.5px;
     font-weight: 600;
-    color: var(--text);
+    color: var(--ink);
     cursor: pointer;
     user-select: none;
     gap: 8px;
@@ -261,8 +198,8 @@ body.docs-page {
     display: inline-block;
     width: 7px;
     height: 7px;
-    border-right: 1.5px solid var(--text-3);
-    border-bottom: 1.5px solid var(--text-3);
+    border-right: 1.5px solid var(--ink-3);
+    border-bottom: 1.5px solid var(--ink-3);
     transform: rotate(45deg) translate(-1px, -1px);
     flex-shrink: 0;
     transition: transform 0.15s;
@@ -273,12 +210,12 @@ body.docs-page {
 }
 
 .docs-section summary:hover {
-    background: rgba(255,255,255,0.025);
+    background: var(--surface-2);
 }
 
 .docs-section-body {
     padding: 0 20px 20px;
-    border-top: 1px solid var(--border);
+    border-top: 1px solid var(--line);
     display: flex;
     flex-direction: column;
     gap: 0;
@@ -298,7 +235,7 @@ body.docs-page {
     font-weight: 700;
     letter-spacing: 0.07em;
     text-transform: uppercase;
-    color: var(--text-3);
+    color: var(--ink-3);
     margin-bottom: 4px;
 }
 
@@ -308,11 +245,15 @@ body.docs-page {
     gap: 12px;
     padding: 12px 14px;
     border-radius: 8px;
-    border: 1px solid var(--border);
+    border: 1px solid var(--line);
 }
 
-.docs-account--registered { background: rgba(204,32,32,0.06); border-color: rgba(204,32,32,0.15); }
-.docs-account--guest       { background: rgba(255,255,255,0.03); }
+.docs-account--registered {
+    background: color-mix(in srgb, var(--accent) 6%, transparent);
+    border-color: color-mix(in srgb, var(--accent) 15%, transparent);
+}
+
+.docs-account--guest { background: var(--surface-2); }
 
 .docs-account-icon {
     display: flex;
@@ -327,21 +268,21 @@ body.docs-page {
     display: block;
     font-size: 12px;
     font-weight: 600;
-    color: var(--text);
+    color: var(--ink);
     margin-bottom: 3px;
 }
 
 .docs-account p {
     font-size: 12px;
     line-height: 1.6;
-    color: var(--text-2);
+    color: var(--ink-2);
     margin: 0;
 }
 
 .docs-intro {
     font-size: 13px;
     line-height: 1.7;
-    color: var(--text-2);
+    color: var(--ink-2);
     padding-top: 16px;
     padding-bottom: 4px;
 }
@@ -358,13 +299,13 @@ body.docs-page {
     font-size: 12px;
     font-weight: 600;
     letter-spacing: 0.02em;
-    color: var(--text);
+    color: var(--ink);
 }
 
 .docs-item p {
     font-size: 13px;
     line-height: 1.65;
-    color: var(--text-3);
+    color: var(--ink-3);
     margin: 0;
 }
 
@@ -377,8 +318,8 @@ body.docs-page {
 }
 
 .docs-term {
-    background: rgba(255,255,255,0.022);
-    border: 1px solid var(--border);
+    background: var(--surface-2);
+    border: 1px solid var(--line);
     border-radius: 10px;
     padding: 12px 14px;
     display: flex;
@@ -389,21 +330,19 @@ body.docs-page {
 .docs-term strong {
     font-size: 12px;
     font-weight: 700;
-    color: var(--text);
+    color: var(--ink);
     letter-spacing: 0.01em;
 }
 
 .docs-term p {
     font-size: 12px;
     line-height: 1.6;
-    color: var(--text-3);
+    color: var(--ink-3);
     margin: 0;
 }
 
 @media (max-width: 600px) {
-    .docs-glossary {
-        grid-template-columns: 1fr;
-    }
+    .docs-glossary { grid-template-columns: 1fr; }
 }
 
 /* ── Steps (getting started) ── */
@@ -415,8 +354,8 @@ body.docs-page {
 }
 
 .docs-step {
-    background: rgba(255,255,255,0.022);
-    border: 1px solid var(--border);
+    background: var(--surface-2);
+    border: 1px solid var(--line);
     border-radius: 10px;
     padding: 12px 16px;
     display: flex;
@@ -427,13 +366,13 @@ body.docs-page {
 .docs-step strong {
     font-size: 12.5px;
     font-weight: 600;
-    color: var(--text);
+    color: var(--ink);
 }
 
 .docs-step p {
     font-size: 12.5px;
     line-height: 1.65;
-    color: var(--text-3);
+    color: var(--ink-3);
     margin: 0;
 }
 
@@ -444,20 +383,20 @@ body.docs-page {
     gap: 6px;
     margin-top: 14px;
     padding: 8px 14px;
-    border: 1px solid var(--border);
+    border: 1px solid var(--line);
     border-radius: 8px;
     font-size: 12.5px;
     font-weight: 500;
-    color: var(--text-3);
+    color: var(--ink-3);
     text-decoration: none;
     transition: color 0.12s, border-color 0.12s, background 0.12s;
     width: fit-content;
 }
 
 .docs-api-link:hover {
-    color: var(--text);
-    border-color: var(--border-s);
-    background: rgba(255,255,255,0.04);
+    color: var(--ink);
+    border-color: var(--line-strong);
+    background: var(--surface-2);
 }
 
 /* ── Mobile ── */
@@ -476,7 +415,7 @@ body.docs-page {
     }
 
     .docs-nav-link {
-        background: rgba(255,255,255,0.04);
+        background: var(--surface-2);
         font-size: 12px;
         padding: 5px 10px;
     }

@@ -2,7 +2,7 @@
 .dsk-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(17, 24, 39, 0.45);
+    background: var(--modal-overlay);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -13,7 +13,7 @@
 .dsk-dialog {
     background: var(--surface);
     border-radius: var(--radius-lg);
-    box-shadow: 0 8px 32px rgba(17, 24, 39, 0.18);
+    box-shadow: var(--shadow-lg);
     width: 100%;
     max-width: 560px;
     max-height: 90vh;
@@ -107,7 +107,7 @@
 .dsk-textarea:focus {
     outline: none;
     border-color: var(--accent);
-    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+    box-shadow: 0 0 0 3px var(--accent-dim);
 }
 
 .dsk-input--icon {

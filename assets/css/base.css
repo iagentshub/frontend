@@ -12,14 +12,11 @@ body {
     background: var(--bg);
     color: var(--ink);
     min-height: 100vh;
-    font-size: 14px;
+    font-size: 15px;
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
-    background-image:
-        linear-gradient(var(--grid-line) 1px, transparent 1px),
-        linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
-    background-size: 60px 60px;
-    transition: background-color 0.25s, color 0.25s;
+    -moz-osx-font-smoothing: grayscale;
+    transition: background-color 0.2s, color 0.2s;
 }
 
 a {
@@ -28,16 +25,7 @@ a {
 }
 
 /* ── Scrollbar ── */
-::-webkit-scrollbar {
-    width: 5px;
-    height: 5px;
-}
-
-::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-    background: var(--surface-3);
-    border-radius: 3px;
-}
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--surface-3); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--line-strong); }

@@ -12,12 +12,12 @@
 }
 
 .main-nav {
-    width: 224px;
+    width: 232px;
     min-height: 100vh;
-    background: rgba(13, 13, 13, 0.95);
-    border-right: 1px solid rgba(255, 255, 255, 0.07);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    background: var(--nav-bg);
+    border-right: 1px solid var(--line);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     display: flex;
     flex-direction: column;
     padding: 0;
@@ -27,12 +27,12 @@
     overflow-y: auto;
 }
 
-/* ── Brand: logo iAgents Hub ── */
+/* ── Brand ── */
 .nav-brand {
     display: flex;
     align-items: center;
-    padding: 22px 18px 18px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    padding: 24px 20px 20px;
+    border-bottom: 1px solid var(--line);
     text-decoration: none;
 }
 
@@ -46,25 +46,25 @@
 .nav-logo-iagents {
     font-size: 1rem;
     font-weight: 700;
-    color: #f0f0f0;
-    letter-spacing: -0.025em;
-    font-family: "Inter", system-ui, sans-serif;
+    color: var(--ink);
+    letter-spacing: -0.03em;
+    font-family: var(--font);
 }
 
 .nav-logo-hub {
     font-size: 1rem;
     font-weight: 700;
     color: #fff;
-    background: #CC2020;
-    border-radius: 6px;
+    background: var(--accent);
+    border-radius: var(--radius-sm);
     padding: 0.06em 0.3em 0.1em;
     letter-spacing: -0.02em;
-    font-family: "Inter", system-ui, sans-serif;
+    font-family: var(--font);
 }
 
 /* ── Nav links ── */
 .nav-section {
-    padding: 12px 8px 0;
+    padding: 14px 10px 0;
     display: flex;
     flex-direction: column;
     gap: 2px;
@@ -74,20 +74,18 @@
     display: flex;
     align-items: center;
     flex-shrink: 0;
-    opacity: 0.5;
+    opacity: 0.45;
 }
 
-.nav-link.active .nav-link-icon {
-    opacity: 1;
-}
+.nav-link.active .nav-link-icon { opacity: 1; }
 
 .nav-link {
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 9px 10px;
-    border-radius: 8px;
-    color: rgba(240, 240, 240, 0.45);
+    padding: 9px 11px;
+    border-radius: var(--radius);
+    color: var(--ink-2);
     font-size: 13px;
     font-weight: 500;
     cursor: pointer;
@@ -97,32 +95,29 @@
 }
 
 .nav-link:hover {
-    background: rgba(255, 255, 255, 0.05);
-    color: rgba(240, 240, 240, 0.85);
+    background: var(--surface-2);
+    color: var(--ink);
 }
 
 .nav-link.active {
-    background: rgba(204, 32, 32, 0.12);
-    color: #CC2020;
+    background: var(--accent-dim);
+    color: var(--accent);
+    font-weight: 600;
 }
 
 .nav-link svg {
-    opacity: 0.7;
+    opacity: 0.65;
     flex-shrink: 0;
 }
 
-.nav-link.active svg {
-    opacity: 1;
-}
+.nav-link.active svg { opacity: 1; }
 
-.nav-spacer {
-    flex: 1;
-}
+.nav-spacer { flex: 1; }
 
 .nav-admin-section {
     margin-top: 4px;
     padding-top: 8px;
-    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    border-top: 1px solid var(--line);
 }
 
 .nav-section-label {
@@ -130,23 +125,23 @@
     font-weight: 700;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.2);
-    padding: 4px 10px 6px;
+    color: var(--ink-3);
+    padding: 4px 11px 6px;
 }
 
-/* ── Footer: user ── */
+/* ── Footer: user + actions ── */
 .nav-footer {
-    padding: 12px 8px;
-    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    padding: 12px 10px;
+    border-top: 1px solid var(--line);
 }
 
 .nav-user {
     display: flex;
     align-items: center;
     gap: 8px;
-    padding: 8px 10px;
-    border-radius: 8px;
-    color: rgba(240, 240, 240, 0.4);
+    padding: 8px 11px;
+    border-radius: var(--radius);
+    color: var(--ink-2);
     font-size: 12px;
     cursor: pointer;
     transition: background 0.12s, color 0.12s;
@@ -158,8 +153,8 @@
 }
 
 .nav-user:hover {
-    background: rgba(255, 255, 255, 0.05);
-    color: rgba(240, 240, 240, 0.75);
+    background: var(--surface-2);
+    color: var(--ink);
 }
 
 .nav-logout-icon {
@@ -168,16 +163,14 @@
     flex-shrink: 0;
 }
 
-.nav-user:hover .nav-logout-icon {
-    opacity: 0.7;
-}
+.nav-user:hover .nav-logout-icon { opacity: 0.7; }
 
 .nav-theme-btn {
     display: flex;
     align-items: center;
     gap: 8px;
-    padding: 8px 10px;
-    border-radius: 8px;
+    padding: 8px 11px;
+    border-radius: var(--radius);
     color: var(--ink-2);
     font-size: 12px;
     font-weight: 500;
@@ -200,18 +193,18 @@
     width: 26px;
     height: 26px;
     border-radius: 50%;
-    background: rgba(204, 32, 32, 0.15);
-    color: #CC2020;
+    background: var(--accent-dim);
+    color: var(--accent);
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 11px;
     font-weight: 700;
     flex-shrink: 0;
-    border: 1px solid rgba(204, 32, 32, 0.25);
+    border: 1px solid color-mix(in srgb, var(--accent) 25%, transparent);
 }
 
-/* ── Lang switcher ── */
+/* ── Lang + icon actions ── */
 .nav-footer-actions {
     display: grid;
     grid-template-columns: 1fr 28px 28px;
@@ -231,14 +224,14 @@
     font-weight: 600;
     letter-spacing: 0.04em;
     cursor: pointer;
-    padding: 5px 10px;
-    border-radius: 6px;
+    padding: 5px 11px;
+    border-radius: var(--radius-sm);
     transition: color 0.15s, background 0.15s;
 }
 
 .nav-lang-btn:hover {
-    color: var(--ink-1);
-    background: rgba(255, 255, 255, 0.05);
+    color: var(--ink);
+    background: var(--surface-2);
 }
 
 .nav-icon-btn {
@@ -248,7 +241,7 @@
     flex-shrink: 0;
     width: 28px;
     height: 28px;
-    border-radius: 6px;
+    border-radius: var(--radius-sm);
     color: var(--ink-3);
     text-decoration: none;
     transition: background 0.15s, color 0.15s;
@@ -256,6 +249,6 @@
 
 .nav-icon-btn:hover,
 .nav-icon-btn.active {
-    background: rgba(255, 255, 255, 0.05);
-    color: var(--ink-1);
+    background: var(--surface-2);
+    color: var(--ink);
 }

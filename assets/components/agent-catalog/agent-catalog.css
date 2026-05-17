@@ -74,7 +74,7 @@
 }
 
 .ac-card:hover {
-    box-shadow: 0 4px 18px rgba(17, 24, 39, .07);
+    box-shadow: var(--shadow-lg);
     border-color: var(--line-strong);
     transform: translateY(-2px);
 }
@@ -113,7 +113,7 @@
 .ac-fork-btn {
     padding: 5px 14px;
     border-radius: var(--radius);
-    background: rgba(79, 70, 229, .08);
+    background: var(--accent-dim);
     color: var(--accent);
     border: none;
     font-size: 12px;

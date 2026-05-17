@@ -75,8 +75,8 @@
 }
 
 .conn-card:hover {
-    box-shadow: 0 4px 16px rgba(15,23,42,0.07);
-    border-color: rgba(15,23,42,0.18);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--line-strong);
     transform: translateY(-1px);
 }
 
@@ -150,7 +150,7 @@
     font-weight: 700;
     color: var(--accent);
     background: var(--accent-dim);
-    border: 1px solid rgba(79, 70, 229, 0.2);
+    border: 1px solid color-mix(in srgb, var(--accent) 20%, transparent);
     border-radius: 4px;
     padding: 1px 5px;
     white-space: nowrap;
@@ -204,10 +204,10 @@
 .cca-btn:hover { background: var(--surface-3); color: var(--ink); }
 
 .cca-btn--test  { color: var(--accent); }
-.cca-btn--test:hover { background: rgba(79,70,229,0.07); color: var(--accent); }
+.cca-btn--test:hover { background: var(--accent-dim); color: var(--accent); }
 
 .cca-btn--delete { margin-left: auto; }
-.cca-btn--delete:hover { background: rgba(220,38,38,0.07); color: var(--danger); }
+.cca-btn--delete:hover { background: color-mix(in srgb, var(--danger) 7%, transparent); color: var(--danger); }
 
 /* Empty state */
 .conn-empty {

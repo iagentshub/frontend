@@ -18,7 +18,7 @@
 }
 
 .mem-card:hover {
-    box-shadow: 0 4px 16px rgba(17, 24, 39, 0.08);
+    box-shadow: var(--shadow-lg);
     border-color: var(--line-strong);
     transform: translateY(-1px);
 }
@@ -43,7 +43,7 @@
     width: 30px;
     height: 30px;
     border-radius: 7px;
-    background: rgba(79, 70, 229, 0.09);
+    background: var(--accent-dim);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -110,22 +110,22 @@
 
 .mem-action--edit {
     color: var(--accent);
-    border-color: rgba(79, 70, 229, 0.2);
+    border-color: color-mix(in srgb, var(--accent) 20%, transparent);
 }
 
 .mem-action--edit:hover {
     background: var(--accent-dim);
-    border-color: rgba(79, 70, 229, 0.35);
+    border-color: color-mix(in srgb, var(--accent) 35%, transparent);
 }
 
 .mem-action--delete {
     color: var(--danger);
-    border-color: rgba(220, 38, 38, 0.15);
+    border-color: color-mix(in srgb, var(--danger) 15%, transparent);
 }
 
 .mem-action--delete:hover {
-    background: rgba(220, 38, 38, 0.06);
-    border-color: rgba(220, 38, 38, 0.3);
+    background: color-mix(in srgb, var(--danger) 6%, transparent);
+    border-color: color-mix(in srgb, var(--danger) 30%, transparent);
 }
 
 /* ── Empty state ── */

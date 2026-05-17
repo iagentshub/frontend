@@ -1,5 +1,5 @@
 /* ══════════════════════════════════════════════
-   MODALS — overlay, caja, cabecera, cuerpo, footer
+   MODALS
 ══════════════════════════════════════════════ */
 .modal-bg {
     position: fixed;
@@ -11,7 +11,8 @@
     justify-content: center;
     padding: 20px;
     animation: fadein 0.15s ease;
-    backdrop-filter: blur(4px);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
 }
 
 .modal-box {
@@ -30,13 +31,14 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 18px 22px 14px;
+    padding: 20px 24px 16px;
     border-bottom: 1px solid var(--line);
 }
 
 .modal-title {
-    font-weight: 600;
+    font-weight: 700;
     font-size: 1rem;
+    letter-spacing: -0.02em;
 }
 
 .modal-close {
@@ -44,26 +46,26 @@
     border: none;
     color: var(--ink-3);
     cursor: pointer;
-    padding: 4px;
-    border-radius: 6px;
+    padding: 5px;
+    border-radius: var(--radius-sm);
     display: flex;
     align-items: center;
-    transition: color 0.15s;
+    transition: color 0.15s, background 0.15s;
 }
-
 .modal-close:hover {
     color: var(--danger);
+    background: color-mix(in srgb, var(--danger) 10%, transparent);
 }
 
 .modal-body {
-    padding: 20px 22px;
+    padding: 24px;
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 18px;
 }
 
 .modal-footer {
-    padding: 14px 22px 18px;
+    padding: 16px 24px 20px;
     border-top: 1px solid var(--line);
     display: flex;
     justify-content: flex-end;
@@ -73,7 +75,7 @@
 .modal-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 12px;
+    gap: 14px;
 }
 
 @media (max-width: 480px) {

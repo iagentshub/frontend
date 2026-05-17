@@ -18,7 +18,7 @@
 }
 
 .conn-card:hover {
-    box-shadow: 0 4px 16px rgba(17, 24, 39, 0.08);
+    box-shadow: var(--shadow-lg);
     border-color: var(--line-strong);
     transform: translateY(-1px);
 }
@@ -148,12 +148,12 @@
 /* ── Type-specific card-action-btn overrides ── */
 .card-action-btn--test {
     color: var(--accent);
-    border-color: rgba(79, 70, 229, 0.2);
+    border-color: color-mix(in srgb, var(--accent) 20%, transparent);
 }
 
 .card-action-btn--test:hover {
     background: var(--accent-dim);
-    border-color: rgba(79, 70, 229, 0.35);
+    border-color: color-mix(in srgb, var(--accent) 35%, transparent);
 }
 
 .card-action-btn--icon {

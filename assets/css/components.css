@@ -7,37 +7,32 @@
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    padding: 8px 16px;
+    padding: 9px 18px;
     border-radius: var(--radius);
     border: none;
     cursor: pointer;
     font-size: 13px;
     font-weight: 500;
     font-family: var(--font);
-    transition: background 0.15s, opacity 0.15s, transform 0.1s;
+    transition: filter 0.15s, opacity 0.15s, transform 0.1s;
     white-space: nowrap;
+    line-height: 1;
 }
 
-.btn:active {
-    transform: scale(0.97);
-}
+.btn:active { transform: scale(0.97); }
 
 .btn-primary {
     background: var(--accent);
     color: #fff;
-    box-shadow: 0 2px 12px rgba(204, 32, 32, 0.28);
+    box-shadow: 0 2px 14px var(--accent-shadow);
 }
-
-.btn-primary:hover {
-    background: #a81818;
-}
+.btn-primary:hover { filter: brightness(0.88); }
 
 .btn-ghost {
     background: var(--surface-2);
     color: var(--ink-2);
     border: 1px solid var(--line-strong);
 }
-
 .btn-ghost:hover {
     color: var(--ink);
     background: var(--surface-3);
@@ -48,13 +43,10 @@
     background: var(--danger);
     color: #fff;
 }
-
-.btn-danger:hover {
-    opacity: 0.85;
-}
+.btn-danger:hover { filter: brightness(0.88); }
 
 .btn-sm {
-    padding: 5px 10px;
+    padding: 5px 11px;
     font-size: 12px;
 }
 
@@ -67,7 +59,7 @@
 .field {
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: 6px;
 }
 
 .field label {
@@ -80,21 +72,19 @@
 .textarea,
 .select {
     width: 100%;
-    padding: 9px 12px;
+    padding: 10px 13px;
     background: var(--input-bg);
     border: 1px solid var(--line-strong);
     border-radius: var(--radius);
     color: var(--ink);
     font-family: var(--font);
-    font-size: 13px;
+    font-size: 14px;
     outline: none;
     transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
 }
 
 .input::placeholder,
-.textarea::placeholder {
-    color: var(--ink-3);
-}
+.textarea::placeholder { color: var(--ink-3); }
 
 .input:focus,
 .textarea:focus,
@@ -107,7 +97,7 @@
 .textarea {
     resize: vertical;
     min-height: 90px;
-    line-height: 1.5;
+    line-height: 1.55;
 }
 
 .select {
@@ -115,7 +105,7 @@
     cursor: pointer;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M2 4.5L6 8.5l4-4' stroke='%23888' stroke-width='1.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
-    background-position: right 11px center;
+    background-position: right 12px center;
     padding-right: 34px;
 }
 
@@ -178,7 +168,7 @@
     background: var(--surface);
     border: 1px solid var(--line);
     border-radius: var(--radius-lg);
-    padding: 20px;
+    padding: 24px;
 }
 
 /* ── Badge ── */
@@ -191,37 +181,53 @@
     font-weight: 600;
 }
 
-.badge-public {
-    background: rgba(5, 150, 105, .1);
+.badge--ok {
+    background: color-mix(in srgb, var(--success) 12%, transparent);
     color: var(--success);
 }
+.badge--danger {
+    background: color-mix(in srgb, var(--danger) 12%, transparent);
+    color: var(--danger);
+}
+.badge--warn {
+    background: color-mix(in srgb, var(--warning) 12%, transparent);
+    color: var(--warning);
+}
+.badge--admin {
+    background: var(--accent-dim);
+    color: var(--accent);
+}
+.badge--std {
+    background: var(--surface-3);
+    color: var(--ink-3);
+}
 
+.badge-public {
+    background: color-mix(in srgb, var(--success) 10%, transparent);
+    color: var(--success);
+}
 .badge-private {
     background: var(--accent-dim);
     color: var(--accent);
 }
-
 .badge-openai {
-    background: rgba(5, 150, 105, .08);
+    background: color-mix(in srgb, var(--success) 8%, transparent);
     color: var(--success);
 }
-
 .badge-anthropic {
-    background: rgba(217, 119, 6, .08);
+    background: color-mix(in srgb, var(--warning) 8%, transparent);
     color: var(--warning);
 }
-
 .badge-ollama {
-    background: rgba(107, 114, 128, .1);
+    background: rgba(107, 114, 128, .10);
     color: var(--ink-2);
 }
-
 .badge-google {
     background: rgba(96, 165, 250, .08);
     color: #60a5fa;
 }
 
-/* ── Skill chips (selector de skills en formularios) ── */
+/* ── Skill chips ── */
 .skill-chips {
     display: flex;
     flex-wrap: wrap;
@@ -232,7 +238,7 @@
     display: inline-flex;
     align-items: center;
     gap: 5px;
-    padding: 3px 10px;
+    padding: 4px 10px;
     border-radius: 20px;
     background: var(--surface-2);
     border: 1px solid var(--line);
@@ -241,20 +247,11 @@
     cursor: pointer;
     transition: background 0.12s, border-color 0.12s;
 }
-
 .skill-chip:hover,
 .skill-chip.selected {
     background: var(--accent-dim);
     border-color: var(--accent);
     color: var(--accent);
 }
-
-.skill-chip.selected {
-    font-weight: 600;
-}
-
-.skill-chip .remove {
-    color: var(--ink-3);
-    font-size: 14px;
-    line-height: 1;
-}
+.skill-chip.selected { font-weight: 600; }
+.skill-chip .remove { color: var(--ink-3); font-size: 14px; line-height: 1; }
