@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="/assets/css/animations.css" />
     <link rel="stylesheet" href="/assets/components/main_nav/main_nav.css" />
     <link rel="stylesheet" href="/admin/admin.css" />
+    <link rel="stylesheet" href="/assets/css/modals.css" />
 </head>
 
 <body>
@@ -121,6 +122,93 @@
             </div>
 
         </main>
+    </div>
+
+    <!-- Modal editar agente -->
+    <div id="modal-edit-agent" class="modal-bg" style="display:none">
+        <div class="modal-box" style="max-width:540px">
+            <div class="modal-header">
+                <h3 class="modal-title">Editar agente</h3>
+                <button class="modal-close" id="btn-edit-agent-close">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="field">
+                    <label>Nombre</label>
+                    <input type="text" id="edit-agent-name" class="input">
+                </div>
+                <div class="modal-grid">
+                    <div class="field">
+                        <label>Tipo</label>
+                        <select id="edit-agent-type" class="select">
+                            <option value="claude">Claude</option>
+                            <option value="openai">OpenAI</option>
+                            <option value="github">GitHub</option>
+                            <option value="ollama">Ollama</option>
+                            <option value="generic">Genérico</option>
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label>Modelo</label>
+                        <input type="text" id="edit-agent-model" class="input" placeholder="p.ej. claude-opus-4-7">
+                    </div>
+                    <div class="field">
+                        <label>ID de conexión</label>
+                        <input type="text" id="edit-agent-conn" class="input" placeholder="(opcional)">
+                    </div>
+                    <div class="field">
+                        <label>Temperatura</label>
+                        <input type="number" id="edit-agent-temp" class="input" min="0" max="2" step="0.1">
+                    </div>
+                </div>
+                <div class="field">
+                    <label>Prompt del sistema</label>
+                    <textarea id="edit-agent-prompt" class="textarea" rows="9" style="font-family:var(--font-mono);font-size:12px;line-height:1.6"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-ghost" id="btn-edit-agent-cancel">Cancelar</button>
+                <button class="btn btn-primary" id="btn-edit-agent-save">Guardar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal editar usuario -->
+    <div id="modal-edit-user" class="modal-bg" style="display:none">
+        <div class="modal-box" style="max-width:420px">
+            <div class="modal-header">
+                <h3 class="modal-title">Editar usuario</h3>
+                <button class="modal-close" id="btn-edit-user-close">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="field">
+                    <label>Email</label>
+                    <input type="text" id="edit-user-email" class="input" disabled style="opacity:.6">
+                </div>
+                <div class="field">
+                    <label>Rol</label>
+                    <select id="edit-user-role" class="select">
+                        <option value="standard">Estándar</option>
+                        <option value="admin">Admin</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label>Estado</label>
+                    <label class="toggle">
+                        <input type="checkbox" id="edit-user-active">
+                        <span class="toggle-track"></span>
+                        <span class="toggle-label" id="edit-user-active-label">Activo</span>
+                    </label>
+                </div>
+                <div class="field">
+                    <label>Nueva contraseña <span class="input-hint">(dejar vacío para no cambiar)</span></label>
+                    <input type="password" id="edit-user-password" class="input" autocomplete="new-password">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-ghost" id="btn-edit-user-cancel">Cancelar</button>
+                <button class="btn btn-primary" id="btn-edit-user-save">Guardar</button>
+            </div>
+        </div>
     </div>
 
     <script src="/assets/js/flog.js"></script>

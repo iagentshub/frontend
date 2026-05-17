@@ -38,5 +38,9 @@
     "empty_file": "(fichero vacío)",
     "error_load": "Error al cargar el log.",
     "download": "Descargar"
+  },
+  "edit_modal": {
+    "title": "Editar usuario",
+    "saved": "Usuario actualizado"
   }
 }

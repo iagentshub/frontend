@@ -36,14 +36,16 @@ function renderUsers(users) {
             ? new Date(u.created_at).toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: '2-digit' })
             : '—';
 
-        var actions = isAdmin ? '' :
-            '<div class="admin-actions-menu" data-username="' + esc(u.username) + '">' +
+        var actions =
+            '<div class="admin-actions-menu" data-username="' + esc(u.username) + '" ' +
+            'data-user=\'' + JSON.stringify({email: u.email || '', role: u.role, is_active: isActive}) + '\'>' +
             '<button class="btn-actions" data-username="' + esc(u.username) + '">⋮</button>' +
             '<div class="actions-dropdown" style="display:none">' +
+            '<button class="action-item" data-action="edit" data-username="' + esc(u.username) + '">✏️ Editar</button>' +
             (isActive
                 ? '<button class="action-item" data-action="block" data-username="' + esc(u.username) + '">🚫 Bloquear</button>'
                 : '<button class="action-item" data-action="unblock" data-username="' + esc(u.username) + '">✅ Desbloquear</button>') +
-            '<button class="action-item" data-action="make-admin" data-username="' + esc(u.username) + '">👑 Hacer admin</button>' +
+            (!isAdmin ? '<button class="action-item" data-action="make-admin" data-username="' + esc(u.username) + '">👑 Hacer admin</button>' : '') +
             '<button class="action-item action-item--danger" data-action="delete" data-username="' + esc(u.username) + '">🗑 Eliminar</button>' +
             '</div>' +
             '</div>';
@@ -111,6 +113,12 @@ function renderUsers(users) {
 }
 
 async function _handleUserAction(action, username) {
+    if (action === 'edit') {
+        var menuEl = document.querySelector('.admin-actions-menu[data-username="' + username + '"]');
+        var userData = menuEl ? JSON.parse(menuEl.dataset.user) : { email: username, role: 'standard', is_active: true };
+        _openEditModal(username, userData);
+        return;
+    }
     try {
         if (action === 'block') {
             await api.patch('/api/admin/users/' + encodeURIComponent(username), { is_active: false });
@@ -131,6 +139,18 @@ async function _handleUserAction(action, username) {
     } catch (err) {
         toast(err.message || 'Error al realizar la acción', 'error');
     }
+}
+
+function _openEditModal(username, userData) {
+    document.getElementById('edit-user-email').value    = userData.email || username;
+    document.getElementById('edit-user-role').value     = userData.role || 'standard';
+    var chk = document.getElementById('edit-user-active');
+    chk.checked = !!userData.is_active;
+    document.getElementById('edit-user-active-label').textContent = chk.checked ? 'Activo' : 'Bloqueado';
+    document.getElementById('edit-user-password').value = '';
+    var modal = document.getElementById('modal-edit-user');
+    modal._username = username;
+    modal.style.display = '';
 }
 
 function applyUserFilters() {
@@ -163,3 +183,39 @@ function applyUserFilters() {
 
     renderUsers(filtered);
 }
+
+(function _bindEditModal() {
+    var modal     = document.getElementById('modal-edit-user');
+    var btnClose  = document.getElementById('btn-edit-user-close');
+    var btnCancel = document.getElementById('btn-edit-user-cancel');
+    var btnSave   = document.getElementById('btn-edit-user-save');
+    var chkActive = document.getElementById('edit-user-active');
+    var lblActive = document.getElementById('edit-user-active-label');
+
+    chkActive.addEventListener('change', function () {
+        lblActive.textContent = chkActive.checked ? 'Activo' : 'Bloqueado';
+    });
+
+    function _close() { modal.style.display = 'none'; }
+    btnClose.addEventListener('click', _close);
+    btnCancel.addEventListener('click', _close);
+    modal.addEventListener('click', function (e) { if (e.target === modal) _close(); });
+
+    btnSave.addEventListener('click', async function () {
+        var username = modal._username;
+        var payload = {
+            role:      document.getElementById('edit-user-role').value,
+            is_active: chkActive.checked,
+        };
+        var pw = document.getElementById('edit-user-password').value.trim();
+        if (pw) payload.password = pw;
+        try {
+            await api.patch('/api/admin/users/' + encodeURIComponent(username), payload);
+            toast('Usuario actualizado', 'success');
+            _close();
+            await reloadData();
+        } catch (err) {
+            toast(err.message || 'Error al guardar', 'error');
+        }
+    });
+}());

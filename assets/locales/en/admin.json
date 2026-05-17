@@ -38,5 +38,9 @@
     "empty_file": "(empty file)",
     "error_load": "Error loading log.",
     "download": "Download"
+  },
+  "edit_modal": {
+    "title": "Edit user",
+    "saved": "User updated"
   }
 }

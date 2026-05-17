@@ -73,6 +73,7 @@ function renderAgents(agents) {
             '<div class="admin-actions-menu">' +
             '<button class="btn-actions">⋮</button>' +
             '<div class="actions-dropdown" style="display:none">' +
+            '<button class="action-item" data-action="edit" data-agent-id="' + esc(a.id) + '">✏️ Editar</button>' +
             '<button class="action-item action-item--danger" data-action="delete" data-agent-id="' + esc(a.id) + '" data-scope="private">🗑 Eliminar</button>' +
             '</div>' +
             '</div>';
@@ -128,6 +129,8 @@ function renderAgents(agents) {
         allDropdowns.forEach(function (d) { d.style.display = 'none'; });
         if (item.dataset.action === 'delete') {
             _handleAgentDelete(item.dataset.agentId, item.dataset.scope);
+        } else if (item.dataset.action === 'edit') {
+            _openAgentEditModal(item.dataset.agentId);
         }
     });
 }
@@ -142,3 +145,60 @@ async function _handleAgentDelete(agentId, scope) {
         if (typeof toast === 'function') toast(err.message || 'Error al eliminar el agente', 'error');
     }
 }
+
+async function _openAgentEditModal(agentId) {
+    var modal = document.getElementById('modal-edit-agent');
+    document.getElementById('edit-agent-name').value    = '';
+    document.getElementById('edit-agent-type').value    = 'generic';
+    document.getElementById('edit-agent-model').value   = '';
+    document.getElementById('edit-agent-conn').value    = '';
+    document.getElementById('edit-agent-temp').value    = '0.7';
+    document.getElementById('edit-agent-prompt').value  = '';
+    modal._agentId = agentId;
+    modal.style.display = '';
+    try {
+        var a = await api.get('/api/agents/' + encodeURIComponent(agentId));
+        document.getElementById('edit-agent-name').value    = a.name    || '';
+        document.getElementById('edit-agent-type').value    = a.agent_type || 'generic';
+        document.getElementById('edit-agent-model').value   = a.model   || '';
+        document.getElementById('edit-agent-conn').value    = a.connection_id || '';
+        document.getElementById('edit-agent-temp').value    = (a.temperature !== undefined ? a.temperature : 0.7);
+        document.getElementById('edit-agent-prompt').value  = a.system_prompt || '';
+    } catch (err) {
+        toast(err.message || 'Error al cargar el agente', 'error');
+        modal.style.display = 'none';
+    }
+}
+
+(function _bindAgentEditModal() {
+    var modal     = document.getElementById('modal-edit-agent');
+    var btnClose  = document.getElementById('btn-edit-agent-close');
+    var btnCancel = document.getElementById('btn-edit-agent-cancel');
+    var btnSave   = document.getElementById('btn-edit-agent-save');
+
+    function _close() { modal.style.display = 'none'; }
+    btnClose.addEventListener('click', _close);
+    btnCancel.addEventListener('click', _close);
+    modal.addEventListener('click', function (e) { if (e.target === modal) _close(); });
+
+    btnSave.addEventListener('click', async function () {
+        var agentId = modal._agentId;
+        var payload = {
+            name:          document.getElementById('edit-agent-name').value.trim(),
+            agent_type:    document.getElementById('edit-agent-type').value,
+            model:         document.getElementById('edit-agent-model').value.trim(),
+            connection_id: document.getElementById('edit-agent-conn').value.trim() || null,
+            temperature:   parseFloat(document.getElementById('edit-agent-temp').value) || 0.7,
+            system_prompt: document.getElementById('edit-agent-prompt').value,
+        };
+        if (!payload.name) { toast('El nombre es obligatorio', 'error'); return; }
+        try {
+            await api.put('/api/admin/agents/' + encodeURIComponent(agentId), payload);
+            toast('Agente actualizado', 'success');
+            _close();
+            await reloadData();
+        } catch (err) {
+            toast(err.message || 'Error al guardar', 'error');
+        }
+    });
+}());
