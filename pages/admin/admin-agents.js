@@ -59,10 +59,7 @@ function renderAgents(agents) {
         return;
     }
 
-    var typeIcons = { claude: '🟠', openai: '🟢', github: '⚫', ollama: '🔵', generic: '🤖' };
-
     var rows = agents.map(function (a) {
-        var typeIcon = typeIcons[a.agent_type] || '🤖';
         var date = a.created_at
             ? new Date(a.created_at).toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: '2-digit' })
             : '—';
@@ -79,7 +76,7 @@ function renderAgents(agents) {
             '</div>';
 
         return '<tr>' +
-            '<td><span class="conn-name">' + typeIcon + ' ' + esc(a.name || a.id) + '</span></td>' +
+            '<td><span class="conn-name">' + esc(a.name || a.id) + '</span></td>' +
             '<td><span class="badge badge--type">' + esc(a.agent_type || '—') + '</span></td>' +
             '<td class="td-owner">' + ownerDisplay + '</td>' +
             '<td class="td-owner">' + connId + '</td>' +

@@ -82,7 +82,7 @@ var AgentCard = {
         if (!agents.length) {
             container.innerHTML =
                 '<div class="empty-state">' +
-                '<div class="empty-state-icon">&#129302;</div>' +
+                '<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="9" width="16" height="12" rx="3"/><path d="M9 9V7a3 3 0 0 1 6 0v2"/><circle cx="9" cy="15" r="1.2" fill="currentColor" stroke="none"/><circle cx="15" cy="15" r="1.2" fill="currentColor" stroke="none"/><path d="M9.5 18.5h5"/></svg>' +
                 '<p>' + t('agents.empty') + '</p>' +
                 '</div>';
             return;
