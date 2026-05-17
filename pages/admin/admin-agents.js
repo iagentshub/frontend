@@ -73,8 +73,8 @@ function renderAgents(agents) {
             '<div class="admin-actions-menu">' +
             '<button class="btn-actions">⋮</button>' +
             '<div class="actions-dropdown" style="display:none">' +
-            '<button class="action-item" data-action="edit" data-agent-id="' + esc(a.id) + '">✏️ Editar</button>' +
-            '<button class="action-item action-item--danger" data-action="delete" data-agent-id="' + esc(a.id) + '" data-scope="private">🗑 Eliminar</button>' +
+            '<button class="action-item" data-action="edit" data-agent-id="' + esc(a.id) + '">Editar</button>' +
+            '<button class="action-item action-item--danger" data-action="delete" data-agent-id="' + esc(a.id) + '" data-scope="private">Eliminar</button>' +
             '</div>' +
             '</div>';
 

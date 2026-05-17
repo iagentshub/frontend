@@ -41,12 +41,12 @@ function renderUsers(users) {
             'data-user=\'' + JSON.stringify({email: u.email || '', role: u.role, is_active: isActive}) + '\'>' +
             '<button class="btn-actions" data-username="' + esc(u.username) + '">⋮</button>' +
             '<div class="actions-dropdown" style="display:none">' +
-            '<button class="action-item" data-action="edit" data-username="' + esc(u.username) + '">✏️ Editar</button>' +
+            '<button class="action-item" data-action="edit" data-username="' + esc(u.username) + '">Editar</button>' +
             (isActive
-                ? '<button class="action-item" data-action="block" data-username="' + esc(u.username) + '">🚫 Bloquear</button>'
-                : '<button class="action-item" data-action="unblock" data-username="' + esc(u.username) + '">✅ Desbloquear</button>') +
-            (!isAdmin ? '<button class="action-item" data-action="make-admin" data-username="' + esc(u.username) + '">👑 Hacer admin</button>' : '') +
-            '<button class="action-item action-item--danger" data-action="delete" data-username="' + esc(u.username) + '">🗑 Eliminar</button>' +
+                ? '<button class="action-item" data-action="block" data-username="' + esc(u.username) + '">Bloquear</button>'
+                : '<button class="action-item" data-action="unblock" data-username="' + esc(u.username) + '">Desbloquear</button>') +
+            (!isAdmin ? '<button class="action-item" data-action="make-admin" data-username="' + esc(u.username) + '">Hacer admin</button>' : '') +
+            '<button class="action-item action-item--danger" data-action="delete" data-username="' + esc(u.username) + '">Eliminar</button>' +
             '</div>' +
             '</div>';
 

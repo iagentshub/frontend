@@ -79,7 +79,7 @@ function renderKnowledge(items) {
             '<div class="admin-actions-menu">' +
             '<button class="btn-actions">⋮</button>' +
             '<div class="actions-dropdown" style="display:none">' +
-            '<button class="action-item action-item--danger" data-action="delete" data-know-id="' + esc(k.id) + '">🗑 Eliminar</button>' +
+            '<button class="action-item action-item--danger" data-action="delete" data-know-id="' + esc(k.id) + '">Eliminar</button>' +
             '</div>' +
             '</div>';
 

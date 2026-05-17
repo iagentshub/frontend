@@ -77,7 +77,7 @@ function _renderConnectionsTable(connections) {
             '<div class="admin-actions-menu">' +
             '<button class="btn-actions">⋮</button>' +
             '<div class="actions-dropdown" style="display:none">' +
-            '<button class="action-item action-item--danger" data-action="delete" data-conn-id="' + esc(c.id) + '">🗑 Eliminar</button>' +
+            '<button class="action-item action-item--danger" data-action="delete" data-conn-id="' + esc(c.id) + '">Eliminar</button>' +
             '</div>' +
             '</div>';
 

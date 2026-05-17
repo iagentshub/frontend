@@ -1,6 +1,11 @@
 // dialog_chat.js — Chat SSE con countdown timer e historial de conversaciones
 'use strict';
 
+const _USER_AVATAR = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><circle cx="7" cy="5" r="2.5" stroke="currentColor" stroke-width="1.5"/><path d="M2 12.5c0-2.76 2.24-5 5-5s5 2.24 5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>';
+const _ARR_UP   = '<svg width="8" height="8" viewBox="0 0 8 8" fill="none" aria-hidden="true"><path d="M4 7V1M1.5 3.5L4 1l2.5 2.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const _ARR_DOWN = '<svg width="8" height="8" viewBox="0 0 8 8" fill="none" aria-hidden="true"><path d="M4 1v6M1.5 4.5L4 7l2.5-2.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const _ICON_X   = '<svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M1.5 1.5l7 7M8.5 1.5l-7 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>';
+
 function _md(text) {
     let s = esc(text);
     s = s.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
@@ -58,7 +63,7 @@ class AgentChatDialog {
                     <div class="chat-header-sub">
                         ${esc(this.agent.model || '')}
                         <span class="chat-tok-counter" id="ga-tok-counter" style="display:none">
-                            · ↑ <span id="ga-tok-in">0</span> ↓ <span id="ga-tok-out">0</span> tok
+                            · ${_ARR_UP} <span id="ga-tok-in">0</span> ${_ARR_DOWN} <span id="ga-tok-out">0</span> tok
                         </span>
                     </div>
                 </div>
@@ -196,7 +201,7 @@ class AgentChatDialog {
             const active = c.id === this._convId ? ' active' : '';
             return `<li class="chat-history-item${active}" data-conv-id="${esc(c.id)}">
                 <span class="history-item-title">${esc(title)}</span>
-                <button class="history-del-btn" data-del-id="${esc(c.id)}" title="${t('common.actions.delete') || 'Borrar'}">×</button>
+                <button class="history-del-btn" data-del-id="${esc(c.id)}" title="${t('common.actions.delete') || 'Borrar'}">${_ICON_X}</button>
             </li>`;
         }).join('');
         el.innerHTML = `
@@ -356,12 +361,12 @@ class AgentChatDialog {
         const initials = this.agent.name?.charAt(0)?.toUpperCase() || '?';
         cont.innerHTML = this.messages.map(m => {
             const tokBadge = (m.role === 'assistant' && m.tokens)
-                ? `<div class="msg-tok">↑ ${_fmtTok(m.tokens.in)} ↓ ${_fmtTok(m.tokens.out)} tok</div>`
+                ? `<div class="msg-tok">${_ARR_UP} ${_fmtTok(m.tokens.in)} ${_ARR_DOWN} ${_fmtTok(m.tokens.out)} tok</div>`
                 : '';
             const time = m.ts ? `<span class="msg-time">${esc(m.ts)}</span>` : '';
             return `
             <div class="msg-wrap ${m.role}">
-                <div class="msg-avatar">${m.role === 'assistant' ? esc(initials) : '👤'}</div>
+                <div class="msg-avatar">${m.role === 'assistant' ? esc(initials) : _USER_AVATAR}</div>
                 <div class="msg-body">
                     <div class="msg-bubble">${m.role === 'assistant' ? _md(m.content) : esc(m.content)}</div>
                     <div class="msg-meta">${time}${tokBadge}</div>
