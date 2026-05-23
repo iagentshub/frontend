@@ -4,6 +4,7 @@
 var KnowledgeUrls = (function () {
     var _items = [];
     var _loaded = false;
+    var _activeFolderId = null;
 
     function init() {
         document.getElementById('btn-add-url').addEventListener('click', _openModal);
@@ -14,13 +15,15 @@ var KnowledgeUrls = (function () {
             if (e.key === 'Enter') _submit();
         });
         document.getElementById('urls-grid').addEventListener('click', function (e) {
-            var btn = e.target.closest('[data-del-id]');
-            if (btn) _deleteItem(btn.dataset.delId);
+            var delBtn = e.target.closest('[data-del-id]');
+            if (delBtn) { _deleteItem(delBtn.dataset.delId); return; }
+            var moveBtn = e.target.closest('[data-move-id]');
+            if (moveBtn) _openMoveMenu(moveBtn);
         });
     }
 
-    async function load() {
-        if (_loaded) { _render(); return; }
+    async function load(folderId) {
+        if (folderId !== undefined) _activeFolderId = folderId;
         try {
             _items = await api.get('/api/knowledge?type=url');
             _loaded = true;
@@ -28,20 +31,27 @@ var KnowledgeUrls = (function () {
             _items = [];
         }
         _render();
+        if (window._folderUrls) window._folderUrls.updateStats(_items);
+    }
+
+    function _visibleItems() {
+        if (!_activeFolderId) return _items;
+        return _items.filter(function (i) { return i.folder_id === _activeFolderId; });
     }
 
     function _render() {
         var grid = document.getElementById('urls-grid');
         if (!grid) return;
-        if (!_items.length) {
+        var visible = _visibleItems();
+        if (!visible.length) {
             grid.innerHTML = '<p class="knowledge-empty">' + (t('skills.knowledge.empty_urls') || 'Sin URLs todavía.') + '</p>';
             return;
         }
-        grid.innerHTML = _items.map(function (item) {
+        grid.innerHTML = visible.map(function (item) {
             var warn = item.char_count > 8000
                 ? '<span class="knowledge-warn" title="' + esc(t('skills.knowledge.char_warning') || 'Texto largo') + '">⚠</span>'
                 : '';
-            return '<div class="knowledge-card">' +
+            return '<div class="knowledge-card" draggable="true" data-drag-id="' + esc(item.id) + '" data-drag-section="url">' +
                 '<div class="knowledge-card-header">' +
                 '<span class="knowledge-card-icon">🔗</span>' +
                 '<span class="knowledge-card-title">' + esc(item.title) + '</span>' +
@@ -49,7 +59,9 @@ var KnowledgeUrls = (function () {
                 '<button class="knowledge-del-btn" data-del-id="' + esc(item.id) + '" title="' + esc(t('common.actions.delete') || 'Eliminar') + '">×</button>' +
                 '</div>' +
                 '<a class="knowledge-card-source" href="' + esc(item.source) + '" target="_blank" rel="noopener">' + esc(item.source) + '</a>' +
-                '<div class="knowledge-card-meta">' + esc(_fmtChars(item.char_count)) + '</div>' +
+                '<div class="knowledge-card-meta">' + esc(_fmtChars(item.char_count)) +
+                (_activeFolderId ? '' : '<button class="kf-move-inline" data-move-id="' + esc(item.id) + '" title="Mover a carpeta">→</button>') +
+                '</div>' +
                 '</div>';
         }).join('');
     }
@@ -73,9 +85,14 @@ var KnowledgeUrls = (function () {
         btn.disabled = true;
         btn.textContent = t('skills.knowledge.fetching') || 'Obteniendo URL…';
         try {
-            var item = await api.post('/api/knowledge/url', { url: url, title: title || url });
+            var item = await api.post('/api/knowledge/url', {
+                url: url,
+                title: title || url,
+                folder_id: _activeFolderId || undefined,
+            });
             _items.unshift(item);
             _render();
+            if (window._folderUrls) window._folderUrls.updateStats(_items);
             _closeModal();
             toast(item.title, 'success');
         } catch (e) {
@@ -86,12 +103,42 @@ var KnowledgeUrls = (function () {
         }
     }
 
+    function _openMoveMenu(btn) {
+        var folders = window._folderUrls ? window._folderUrls.getFolders() : [];
+        if (!folders.length) { toast('Crea primero una carpeta', 'info'); return; }
+        var itemId = btn.dataset.moveId;
+        var options = '<option value="">— Sin carpeta —</option>' +
+            folders.map(function (f) { return '<option value="' + esc(f.id) + '">' + esc(f.name) + '</option>'; }).join('');
+        var sel = document.createElement('select');
+        sel.innerHTML = options;
+        sel.style.cssText = 'position:absolute;z-index:200;background:var(--surface);border:1px solid var(--line-strong);border-radius:6px;padding:4px 8px;font-size:13px;';
+        var rect = btn.getBoundingClientRect();
+        sel.style.top = (rect.bottom + window.scrollY + 4) + 'px';
+        sel.style.left = (rect.left + window.scrollX) + 'px';
+        document.body.appendChild(sel);
+        sel.focus();
+        sel.addEventListener('change', function () {
+            var newFolder = sel.value || null;
+            if (sel.parentNode) sel.remove();
+            api.patch('/api/knowledge/' + itemId, { folder_id: newFolder })
+                .then(function () {
+                    var item = _items.find(function (i) { return i.id === itemId; });
+                    if (item) item.folder_id = newFolder;
+                    _render();
+                    if (window._folderUrls) window._folderUrls.updateStats(_items);
+                })
+                .catch(function (e) { toast(e.message, 'error'); });
+        });
+        sel.addEventListener('blur', function () { if (sel.parentNode) sel.remove(); });
+    }
+
     async function _deleteItem(id) {
         if (!confirm(t('skills.knowledge.confirm_delete') || '¿Eliminar?')) return;
         try {
             await api.del('/api/knowledge/' + encodeURIComponent(id));
             _items = _items.filter(function (i) { return i.id !== id; });
             _render();
+            if (window._folderUrls) window._folderUrls.updateStats(_items);
             toast(t('skills.knowledge.deleted') || 'Eliminado', 'info');
         } catch (e) { toast(e.message, 'error'); }
     }

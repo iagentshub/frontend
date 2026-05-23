@@ -11,7 +11,7 @@
     var FALLBACK_ICON = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>';
 
     window.SkillCard = {
-        render: function (skill, scope) {
+        render: function (skill, scope, opts) {
             var resolvedScope = scope || skill.scope || 'public';
             var isPrivate = resolvedScope === 'private';
             var iconHtml = skill.icon
@@ -43,9 +43,15 @@
             var deleteBtn = isPrivate
                 ? '<button class="card-action-btn card-action-btn--delete" data-action="del-skill" data-id="' + esc(skill.id) + '" data-scope="' + resolvedScope + '">' + (window.t ? window.t('skills.actions.delete') : 'Eliminar') + '</button>'
                 : '';
+            var moveBtn = (opts && opts.showMove && isPrivate)
+                ? '<button class="card-action-btn card-action-btn--move" data-move-id="' + esc(skill.id) + '" title="Mover a carpeta"><svg width="11" height="11" viewBox="0 0 16 16" fill="none"><path d="M1.5 13V4a1 1 0 0 1 1-1h3.5l1.5-2H13a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H2.5a1 1 0 0 1-1-1z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg></button>'
+                : '';
 
+            var dragAttrs = isPrivate
+                ? ' draggable="true" data-drag-id="' + esc(skill.id) + '" data-drag-section="skill"'
+                : '';
             return (
-                '<article class="skill-card" data-id="' + esc(skill.id) + '" data-scope="' + resolvedScope + '">' +
+                '<article class="skill-card"' + dragAttrs + ' data-id="' + esc(skill.id) + '" data-scope="' + resolvedScope + '">' +
                 '<div class="skill-card-body">' +
                 '<header class="skill-card-head">' +
                 '<div class="skill-card-icon">' + iconHtml + '</div>' +
@@ -64,6 +70,7 @@
                 '<button class="card-action-btn card-action-btn--view" data-action="view-skill" data-id="' + esc(skill.id) + '" data-scope="' + resolvedScope + '">' + (window.t ? window.t('skills.actions.view') : 'Ver') + '</button>' +
                 editBtn +
                 deleteBtn +
+                moveBtn +
                 '</footer>' +
                 '</article>'
             );
@@ -81,14 +88,14 @@
             }).join('');
         },
 
-        renderAll: function (skills, container) {
+        renderAll: function (skills, container, opts) {
             if (!skills.length) {
                 var msg = window.t ? window.t('skills.empty.no_match') : 'No hay skills que coincidan.';
                 container.innerHTML = '<p class="skills-empty">' + msg + '</p>';
                 return;
             }
             container.innerHTML = skills.map(function (s) {
-                return SkillCard.render(s, s.scope);
+                return SkillCard.render(s, s.scope, opts);
             }).join('');
         },
     };

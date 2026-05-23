@@ -228,6 +228,22 @@
     border-color: rgba(220, 38, 38, 0.3);
 }
 
+.card-action-btn--move {
+    color: var(--ink-3);
+    opacity: 0;
+    transition: opacity 0.1s, background 0.12s, color 0.12s, border-color 0.12s;
+}
+
+.skill-card:hover .card-action-btn--move {
+    opacity: 1;
+}
+
+.card-action-btn--move:hover {
+    color: var(--accent);
+    border-color: color-mix(in srgb, var(--accent) 20%, transparent);
+    background: var(--accent-dim);
+}
+
 /* ── Panel tabs (skills panel) ── */
 .panel-tabs {
     display: flex;

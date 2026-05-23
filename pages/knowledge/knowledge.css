@@ -1,8 +1,178 @@
 /* knowledge.css — Conocimiento (Skills · Webs · Documentos) */
 
+/* ── Folder panel layout ──────────────────────────────────────────────────── */
+.knowledge-tab-layout {
+    display: flex;
+    gap: 0;
+    align-items: flex-start;
+    min-height: 0;
+}
+
+.knowledge-tab-content {
+    flex: 1;
+    min-width: 0;
+    padding-left: 20px;
+}
+
+.kf-panel {
+    width: 168px;
+    flex-shrink: 0;
+    border-right: 1px solid var(--line);
+    padding-right: 12px;
+}
+
+.kf-section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.kf-section-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+}
+
+.kf-add-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--ink-3);
+    padding: 2px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    transition: color 0.12s, background 0.12s;
+}
+
+.kf-add-btn:hover {
+    color: var(--accent);
+    background: var(--accent-dim);
+}
+
+.kf-item {
+    width: 100%;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    padding: 7px 8px;
+    border-radius: 7px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    transition: background 0.12s;
+    font-family: var(--font);
+}
+
+.kf-item:hover {
+    background: var(--surface-2);
+}
+
+.kf-item--active {
+    background: var(--accent-dim) !important;
+}
+
+.kf-item--active .kf-item-name {
+    color: var(--accent);
+}
+
+.kf-item-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 130px;
+}
+
+.kf-item-stats {
+    font-size: 11px;
+    font-family: var(--font-mono);
+    color: var(--ink-3);
+}
+
+.kf-item-row {
+    position: relative;
+    display: flex;
+    align-items: center;
+    border-radius: 7px;
+}
+
+.kf-item-row .kf-item {
+    flex: 1;
+    min-width: 0;
+}
+
+.kf-item-actions {
+    display: none;
+    gap: 2px;
+    padding-right: 4px;
+    flex-shrink: 0;
+}
+
+.kf-item-row:hover .kf-item-actions {
+    display: flex;
+}
+
+.kf-action-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--ink-3);
+    padding: 3px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    transition: color 0.12s, background 0.12s;
+}
+
+.kf-action-btn:hover {
+    color: var(--ink);
+    background: var(--surface-3);
+}
+
+.kf-action-btn--danger:hover {
+    color: var(--danger);
+    background: color-mix(in srgb, var(--danger) 10%, transparent);
+}
+
+/* Move-to-folder inline button inside card meta */
+.kf-move-inline {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--ink-3);
+    font-size: 11px;
+    padding: 0 4px;
+    opacity: 0;
+    transition: opacity 0.1s, color 0.1s;
+    vertical-align: middle;
+    font-family: var(--font-mono);
+}
+
+.knowledge-card:hover .kf-move-inline {
+    opacity: 1;
+}
+
+.kf-move-inline:hover {
+    color: var(--accent);
+}
+
+/* Responsive: hide folder panel on small screens */
+@media (max-width: 600px) {
+    .kf-panel { display: none; }
+    .knowledge-tab-content { padding-left: 0; }
+}
+
 /* ── Tabs ─────────────────────────────────────────────────────────────────── */
 .knowledge-tabs {
     display: flex;
+    align-items: flex-end;
     gap: 2px;
     margin-bottom: 20px;
     border-bottom: 1px solid var(--line);
@@ -177,6 +347,265 @@ a.knowledge-card-source:hover {
 .skills-section-sub {
     font-size: 12px;
     color: var(--ink-3);
+}
+
+/* ── View toggle (grid / list) ────────────────────────────────────────────── */
+.kv-view-controls {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    margin-left: auto;
+    align-self: center;
+    padding-bottom: 1px;
+}
+
+.kv-toggle {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--ink-3);
+    padding: 4px 6px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    transition: color 0.12s, background 0.12s;
+}
+
+.kv-toggle:hover {
+    color: var(--ink);
+    background: var(--surface-2);
+}
+
+.kv-toggle--active {
+    color: var(--accent);
+    background: var(--accent-dim);
+}
+
+/* ── List view: URLs + docs ───────────────────────────────────────────────── */
+.knowledge-grid--list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin-top: 4px;
+}
+
+.knowledge-grid--list .knowledge-card {
+    flex-direction: row;
+    align-items: center;
+    padding: 7px 12px;
+    gap: 12px;
+    border-radius: 7px;
+}
+
+.knowledge-grid--list .knowledge-card-header {
+    flex: 1;
+    min-width: 0;
+}
+
+.knowledge-grid--list .knowledge-card-source {
+    flex-shrink: 0;
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.knowledge-grid--list .knowledge-card-meta {
+    flex-shrink: 0;
+    min-width: 56px;
+    text-align: right;
+    white-space: nowrap;
+}
+
+/* ── List view: skills ────────────────────────────────────────────────────── */
+.skills-grid--list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.skills-grid--list .skill-card {
+    flex-direction: row;
+    align-items: center;
+    border-radius: 8px;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+.skills-grid--list .skill-card-body {
+    flex: 1;
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+    padding: 7px 12px;
+}
+
+.skills-grid--list .skill-card-icon {
+    width: 26px;
+    height: 26px;
+    flex-shrink: 0;
+}
+
+.skills-grid--list .skill-card-head {
+    flex-shrink: 0;
+    min-width: 160px;
+    max-width: 220px;
+}
+
+.skills-grid--list .skill-card-desc {
+    flex: 1;
+    -webkit-line-clamp: 1;
+    margin: 0;
+}
+
+.skills-grid--list .skill-card-preview {
+    display: none;
+}
+
+.skills-grid--list .skill-card-actions {
+    padding: 0 12px 0 0;
+    border-top: none;
+    flex-wrap: nowrap;
+}
+
+/* ── Upload progress dialog ─────────────────────────────────────────────── */
+.kup-dialog {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 288px;
+    background: var(--surface);
+    border: 1px solid var(--line-strong);
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+    z-index: 600;
+    overflow: hidden;
+    font-size: 13px;
+    animation: kup-in 0.18s ease;
+}
+
+@keyframes kup-in {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.kup-header {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 10px 12px;
+    background: var(--surface-2);
+    border-bottom: 1px solid var(--line);
+}
+
+.kup-folder-icon { flex-shrink: 0; font-size: 14px; }
+
+.kup-title {
+    flex: 1;
+    font-weight: 600;
+    font-size: 12px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: var(--ink);
+}
+
+.kup-count {
+    flex-shrink: 0;
+    font-size: 11px;
+    font-family: var(--font-mono);
+    color: var(--ink-3);
+}
+
+.kup-list {
+    max-height: 220px;
+    overflow-y: auto;
+    padding: 4px 0;
+}
+
+.kup-item {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 5px 12px;
+    transition: background 0.1s;
+}
+
+.kup-item--active { background: var(--surface-2); }
+
+.kup-item-name {
+    flex: 1;
+    font-size: 12px;
+    color: var(--ink-3);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.kup-item--active .kup-item-name { color: var(--ink); }
+
+.kup-status {
+    flex-shrink: 0;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+.kup-status--pending  { background: var(--line-strong); }
+.kup-status--ok       { background: #16a34a; }
+.kup-status--fail     { background: var(--danger); }
+.kup-status--uploading {
+    border: 2px solid var(--accent);
+    border-top-color: transparent;
+    background: transparent;
+    animation: kup-spin 0.7s linear infinite;
+}
+
+@keyframes kup-spin { to { transform: rotate(360deg); } }
+
+.kup-footer {
+    padding: 8px 12px;
+    border-top: 1px solid var(--line);
+    display: flex;
+    justify-content: flex-end;
+}
+
+.kup-close-btn {
+    background: none;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 4px 12px;
+    font-size: 12px;
+    font-family: var(--font);
+    color: var(--ink-2);
+    cursor: pointer;
+    transition: background 0.12s, color 0.12s;
+}
+
+.kup-close-btn:hover {
+    background: var(--surface-2);
+    color: var(--ink);
+}
+
+/* ── Drag and drop ────────────────────────────────────────────────────────── */
+.knowledge-card[draggable="true"],
+.skill-card[draggable="true"] {
+    cursor: grab;
+}
+
+.kd-dragging {
+    opacity: 0.35;
+    cursor: grabbing;
+}
+
+.kf-item.kd-drag-over {
+    background: var(--accent-dim) !important;
+    outline: 2px solid color-mix(in srgb, var(--accent) 40%, transparent);
+    outline-offset: -2px;
+}
+
+.kf-item.kd-drag-over .kf-item-name {
+    color: var(--accent);
 }
 
 .skill-content-pre {

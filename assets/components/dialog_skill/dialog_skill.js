@@ -25,7 +25,7 @@ var DialogSkill = (function () {
     function _render(skill) {
         close();
 
-        var isEdit = !!skill;
+        var isEdit = !!(skill && skill.id);
         var title = isEdit ? t('skills.dialog.title_edit') : t('skills.dialog.title_new');
 
         var catOptions = _CATEGORY_IDS.map(function (id) {
@@ -112,6 +112,9 @@ var DialogSkill = (function () {
 
         if (existingSkill && existingSkill.id) {
             payload.id = existingSkill.id;
+        }
+        if (existingSkill && existingSkill.folder_id) {
+            payload.folder_id = existingSkill.folder_id;
         }
 
         var saveBtn = document.getElementById('dsk-save-btn');
