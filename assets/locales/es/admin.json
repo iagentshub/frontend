@@ -2,6 +2,7 @@
   "page": {
     "title": "Administración"
   },
+  "open_webmail": "Ver correos",
   "error_load": "Error al cargar usuarios.",
   "empty": "No hay usuarios registrados.",
   "roles": {

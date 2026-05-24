@@ -50,4 +50,5 @@ function renderStats(stats) {
             '</div>' +
             '</div>';
     }).join('');
+
 }

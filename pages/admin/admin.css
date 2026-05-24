@@ -33,6 +33,14 @@
     min-height: 88px;
     animation: pulse 1.4s ease-in-out infinite;
 }
+.skeleton-row td {
+    height: 36px;
+    background: var(--surface-2);
+    border-radius: 4px;
+    animation: pulse 1.4s ease-in-out infinite;
+    border-bottom: none;
+}
+.skeleton-row td + td { animation-delay: 0.1s; }
 .stat-icon {
     flex-shrink: 0;
     width: 40px;

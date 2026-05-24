@@ -9,34 +9,24 @@ var _allAgents = [];
 var _allKnowledge = [];
 
 async function reloadData() {
+    var promises = [
+        api.get('/api/admin/stats')
+            .then(function (d) { renderStats(d); }),
+        api.get('/api/admin/users')
+            .then(function (d) { _allUsers = d; applyUserFilters(); }),
+        api.get('/api/admin/agents')
+            .then(function (d) { _allAgents = d; applyAgentFilters(); }),
+        api.get('/api/admin/connections')
+            .then(function (d) { _connections = d; applyConnFilters(); }),
+        api.get('/api/admin/knowledge')
+            .then(function (d) { _allKnowledge = d; applyKnowledgeFilters(); }),
+    ];
     try {
-        var results = await Promise.all([
-            api.get('/api/admin/stats'),
-            api.get('/api/admin/users'),
-            api.get('/api/admin/agents'),
-            api.get('/api/admin/connections'),
-            api.get('/api/admin/knowledge'),
-        ]);
-        renderStats(results[0]);
-
-        _allUsers = results[1];
-        applyUserFilters();
-
-        _allAgents = results[2];
-        applyAgentFilters();
-
-        _connections = results[3];
-        applyConnFilters();
-
-        _allKnowledge = results[4];
-        applyKnowledgeFilters();
-
+        await Promise.all(promises);
         _lastRefresh = Date.now();
         _updateRefreshLabel();
     } catch (e) {
-        if (e && e.status === 403) {
-            window.location.replace('/dashboard/');
-        }
+        if (e && e.status === 403) window.location.replace('/dashboard/');
     }
 }
 
@@ -93,11 +83,12 @@ function _bindFilters() {
 }
 
 async function init() {
+    var dataPromise = reloadData();
     await window.requireAuth();
     renderNav('nav-root', 'admin-users');
     _bindTabs();
     _bindFilters();
-    await reloadData();
+    await dataPromise;
     _startPolling();
 }
 

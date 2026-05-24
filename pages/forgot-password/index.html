@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>iAgents Hub — Recuperar contraseña</title>
+  <script>(function(){var m={noir:"dark-red",marble:"light-red",ember:"dark-orange",ocean:"dark-blue",forest:"dark-red",dusk:"dark-purple",light:"light-red"};var t=localStorage.getItem("ga-theme")||"dark-red";t=m[t]||t;document.documentElement.setAttribute("data-theme",t);})();</script>
+  <link rel="stylesheet" href="/assets/css/variables.css" />
+  <link rel="stylesheet" href="/assets/themes/themes.css" />
+  <link rel="stylesheet" href="/assets/css/base.css" />
+  <link rel="stylesheet" href="/pages/login/login.css">
+</head>
+<body class="login-page">
+  <div class="login-wrap login-wrap--narrow">
+    <div class="login-card">
+      <div class="login-card-logo">iA</div>
+      <h2 style="margin-bottom:4px">Recuperar contraseña</h2>
+      <p class="login-sub" style="margin-bottom:24px">Introduce tu email y te enviaremos un enlace</p>
+
+      <div id="form-wrap">
+        <form id="forgot-form" novalidate>
+          <div class="field">
+            <label for="forgot-email">Email</label>
+            <input id="forgot-email" type="email" placeholder="tu@email.com" required autocomplete="email">
+          </div>
+          <div id="forgot-error" class="form-error" style="display:none"></div>
+          <button type="submit" class="btn btn-primary btn-full" id="forgot-btn">Enviar enlace</button>
+        </form>
+      </div>
+
+      <div id="sent-msg" style="display:none;text-align:center">
+        <p style="font-size:14px;color:var(--ink-1,#ccc);line-height:1.6;margin-bottom:24px">
+          Si existe una cuenta con ese email, recibirás un enlace para restablecer la contraseña.<br>
+          <span style="font-size:12px;color:var(--ink-2,#888)">Revisa también la carpeta de spam.</span>
+        </p>
+        <a href="/login/" class="btn btn-ghost btn-full" style="display:block;text-align:center">Volver al login</a>
+      </div>
+
+      <p class="login-register-link" style="margin-top:20px"><a href="/login/">← Volver al login</a></p>
+    </div>
+  </div>
+  <script src="/assets/js/flog.js"></script>
+  <script src="/pages/forgot-password/forgot-password.js"></script>
+</body>
+</html>

@@ -2,6 +2,7 @@
   "page": {
     "title": "Administration"
   },
+  "open_webmail": "Open mailbox",
   "error_load": "Error loading users.",
   "empty": "No registered users.",
   "roles": {

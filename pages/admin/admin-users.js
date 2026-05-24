@@ -112,6 +112,11 @@ function renderUsers(users) {
     });
 }
 
+async function _reloadUsers() {
+    _allUsers = await api.get('/api/admin/users');
+    applyUserFilters();
+}
+
 async function _handleUserAction(action, username) {
     if (action === 'edit') {
         var menuEl = document.querySelector('.admin-actions-menu[data-username="' + username + '"]');
@@ -135,7 +140,7 @@ async function _handleUserAction(action, username) {
             await api.del('/api/admin/users/' + encodeURIComponent(username));
             toast('Usuario eliminado', 'success');
         }
-        await reloadData();
+        await _reloadUsers();
     } catch (err) {
         toast(err.message || 'Error al realizar la acción', 'error');
     }
@@ -213,7 +218,7 @@ function applyUserFilters() {
             await api.patch('/api/admin/users/' + encodeURIComponent(username), payload);
             toast('Usuario actualizado', 'success');
             _close();
-            await reloadData();
+            await _reloadUsers();
         } catch (err) {
             toast(err.message || 'Error al guardar', 'error');
         }

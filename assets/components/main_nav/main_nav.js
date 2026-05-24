@@ -16,6 +16,7 @@ var NAV_ICONS = {
     docs: '<svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M3 2h7l3 3v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M10 2v3h3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="8" cy="9.5" r="1" fill="currentColor"/><path d="M8 7v1.2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>',
     about: '<svg width="13" height="13" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.4"/><circle cx="8" cy="5.5" r="0.9" fill="currentColor"/><path d="M8 7.5v4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>',
     logs: '<svg width="15" height="15" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.4"/><path d="M4.5 5.5h7M4.5 8h5M4.5 10.5h6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>',
+    mail: '<svg width="15" height="15" viewBox="0 0 16 16" fill="none"><rect x="1" y="4" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.4"/><path d="M1 7l7 4.5L15 7" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>',
 };
 
 function _renderLangSwitcher() {
@@ -90,6 +91,12 @@ function renderNav(mountId, activePage) {
             if (d.role === 'admin') {
                 var adminSection = document.createElement('div');
                 adminSection.className = 'nav-section nav-admin-section';
+                var mailItem = d.webmail_url
+                    ? '<a href="' + d.webmail_url + '" target="_blank" rel="noopener" class="nav-link">' +
+                      '<span class="nav-link-icon">' + NAV_ICONS.mail + '</span>' +
+                      t('nav.admin_mail') +
+                      '</a>'
+                    : '';
                 adminSection.innerHTML =
                     '<div class="nav-section-label">' + t('nav.admin') + '</div>' +
                     '<a href="/admin/" class="nav-link' + (activePage === 'admin-users' ? ' active' : '') + '">' +
@@ -99,7 +106,8 @@ function renderNav(mountId, activePage) {
                     '<a href="/admin/logs/" class="nav-link' + (activePage === 'admin-logs' ? ' active' : '') + '">' +
                     '<span class="nav-link-icon">' + NAV_ICONS.logs + '</span>' +
                     t('nav.admin_logs') +
-                    '</a>';
+                    '</a>' +
+                    mailItem;
                 var spacer = mount.querySelector('.nav-spacer');
                 if (spacer) spacer.before(adminSection);
             }

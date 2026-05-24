@@ -48,7 +48,17 @@ async function _doRegister() {
         body: JSON.stringify(payload),
     });
     if (r.ok) {
-        window.location.replace('/dashboard/');
+        const data = await r.json().catch(() => ({}));
+        if (data.pending_verification) {
+            document.querySelector('.login-card').innerHTML =
+                '<div class="login-card-logo">iA</div>' +
+                '<h2 style="margin-bottom:8px">Revisa tu correo</h2>' +
+                '<p class="login-sub" style="margin-bottom:24px">Hemos enviado un enlace de verificación a <strong>' + (data.email || '') + '</strong></p>' +
+                '<p style="font-size:13px;color:var(--ink-2,#888);line-height:1.6">Haz clic en el enlace del correo para activar tu cuenta.<br>Revisa también la carpeta de spam si no lo ves.</p>' +
+                '<a href="/login/" class="btn btn-ghost btn-full" style="margin-top:24px;display:block;text-align:center">Volver al login</a>';
+        } else {
+            window.location.replace('/dashboard/');
+        }
     } else {
         const data = await r.json().catch(() => ({}));
         errEl.textContent = data.detail || 'Error al crear la cuenta';
