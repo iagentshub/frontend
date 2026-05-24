@@ -15,6 +15,8 @@
     <link rel="stylesheet" href="/assets/css/animations.css" />
     <link rel="stylesheet" href="/assets/components/main_nav/main_nav.css" />
     <link rel="stylesheet" href="/profile/profile.css" />
+    <link rel="stylesheet" href="/admin/admin.css" />
+    <link rel="stylesheet" href="/manager/manager.css" />
 </head>
 
 <body>
@@ -66,6 +68,15 @@
                                 <path d="M8 2v2M8 12v2M2 8h2M12 8h2M3.5 3.5l1.4 1.4M11.1 11.1l1.4 1.4M3.5 12.5l1.4-1.4M11.1 4.9l1.4-1.4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
                             </svg>
                             <span data-i18n="profile.nav.preferences">Preferencias</span>
+                        </button>
+                        <button class="profile-nav-item" data-section="section-teams" id="nav-teams">
+                            <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
+                                <circle cx="5" cy="5" r="2" stroke="currentColor" stroke-width="1.4"/>
+                                <circle cx="11" cy="5" r="2" stroke="currentColor" stroke-width="1.4"/>
+                                <path d="M1.5 13v-.5A3.5 3.5 0 0 1 5 9a3.5 3.5 0 0 1 3.5 3.5V13" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+                                <path d="M9 9.2A3.5 3.5 0 0 1 14.5 12.5V13" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+                            </svg>
+                            <span data-i18n="teams.teams.page.title">Equipos</span>
                         </button>
                     </div>
                 </nav>
@@ -121,6 +132,33 @@
                         <div id="accounts-list" class="accounts-list"></div>
                     </div>
 
+                    <!-- Equipos -->
+                    <div id="section-teams" class="profile-section" hidden>
+                        <div class="section-title" data-i18n="teams.teams.page.title">Equipos</div>
+
+                        <!-- Pestañas horizontales -->
+                        <div class="teams-tabs">
+                            <button class="teams-tab active" data-teams-tab="my-teams" data-i18n="teams.teams.tabs.my_teams">Mis equipos</button>
+                            <button class="teams-tab" data-teams-tab="invitations" data-i18n="teams.teams.tabs.invitations">Invitaciones</button>
+                        </div>
+
+                        <!-- Panel: Mis equipos -->
+                        <div id="teams-panel-my" class="teams-tab-panel">
+                            <div style="margin-bottom:12px;text-align:right">
+                                <button class="btn btn-primary btn-sm" id="btn-create-team" data-i18n="teams.teams.create_team">Crear equipo</button>
+                            </div>
+                            <div id="teams-list-wrap"></div>
+                        </div>
+
+                        <!-- Panel: Invitaciones -->
+                        <div id="teams-panel-invitations" class="teams-tab-panel" style="display:none">
+                            <div class="section-subtitle" data-i18n="teams.teams.invitations.received_title">Recibidas</div>
+                            <div id="teams-inv-received-wrap"></div>
+                            <div class="section-subtitle" style="margin-top:20px" data-i18n="teams.teams.invitations.sent_title">Enviadas</div>
+                            <div id="teams-inv-sent-wrap"></div>
+                        </div>
+                    </div>
+
                     <!-- Preferencias -->
                     <div id="section-preferences" class="profile-section" hidden>
                         <div class="section-title" data-i18n="profile.nav.preferences">Preferencias</div>
@@ -170,6 +208,98 @@
         </div>
     </div>
 
+    <!-- Modal miembros del equipo -->
+    <div id="modal-members" class="modal-bg" style="display:none">
+        <div class="modal-box" style="max-width:580px">
+            <div class="modal-header">
+                <h3 class="modal-title" id="members-modal-title">Miembros</h3>
+                <button class="modal-close" id="btn-members-close">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M2 2l12 12M14 2L2 14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="admin-toolbar" style="margin-bottom:12px">
+                    <div class="admin-search-wrap">
+                        <span class="search-icon"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="6.5" cy="6.5" r="4" stroke="currentColor" stroke-width="1.6"/><path d="M11 11l3 3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span>
+                        <input class="admin-search" id="members-modal-filter" placeholder="Filtrar miembros…" />
+                    </div>
+                    <button class="btn btn-ghost btn-sm" id="btn-members-invite" style="display:none" data-i18n="teams.teams.card.invite_member">Invitar</button>
+                </div>
+                <div id="members-table-wrap"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal directorio del equipo -->
+    <div id="modal-directory" class="modal-bg" style="display:none">
+        <div class="modal-box" style="max-width:640px">
+            <div class="modal-header">
+                <h3 class="modal-title" id="directory-modal-title">Directorio</h3>
+                <button class="modal-close" id="btn-directory-close">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M2 2l12 12M14 2L2 14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="directory-modal-wrap"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal permisos (compartido con manager-team.js) -->
+    <div id="modal-permissions" class="modal-bg" style="display:none">
+        <div class="modal-box" style="max-width:580px">
+            <div class="modal-header">
+                <h3 class="modal-title" id="perms-modal-title">Permisos</h3>
+                <button class="modal-close" id="btn-perms-close">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="admin-tabs" style="margin-bottom:16px">
+                    <button class="admin-tab active" data-perms-tab="agents" data-i18n="manager.manager.permissions.tabs.agents">Agentes</button>
+                    <button class="admin-tab" data-perms-tab="connections" data-i18n="manager.manager.permissions.tabs.connections">Conexiones</button>
+                    <button class="admin-tab" data-perms-tab="knowledge" data-i18n="manager.manager.permissions.tabs.knowledge">Conocimiento</button>
+                </div>
+                <div id="perms-tab-agents" class="perms-tab-panel">
+                    <div class="perms-default-row">
+                        <label class="toggle">
+                            <input type="checkbox" id="perms-agents-default">
+                            <span class="toggle-track"></span>
+                        </label>
+                        <span id="perms-agents-default-label"></span>
+                    </div>
+                    <div id="perms-agents-list" class="perms-resource-list"></div>
+                </div>
+                <div id="perms-tab-connections" class="perms-tab-panel" style="display:none">
+                    <div class="perms-default-row">
+                        <label class="toggle">
+                            <input type="checkbox" id="perms-conns-default">
+                            <span class="toggle-track"></span>
+                        </label>
+                        <span id="perms-conns-default-label"></span>
+                    </div>
+                    <div id="perms-conns-list" class="perms-resource-list"></div>
+                </div>
+                <div id="perms-tab-knowledge" class="perms-tab-panel" style="display:none">
+                    <div class="perms-default-row">
+                        <label class="toggle">
+                            <input type="checkbox" id="perms-know-default">
+                            <span class="toggle-track"></span>
+                        </label>
+                        <span id="perms-know-default-label"></span>
+                    </div>
+                    <div id="perms-know-list" class="perms-resource-list"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-ghost" id="btn-perms-cancel" data-i18n="actions.cancel">Cancelar</button>
+                <button class="btn btn-primary" id="btn-perms-save" data-i18n="actions.save">Guardar</button>
+            </div>
+        </div>
+    </div>
+
     <script src="/assets/js/flog.js"></script>
     <script src="/assets/js/i18n.js"></script>
     <script src="/assets/js/config.js"></script>
@@ -181,6 +311,9 @@
     <script src="/assets/components/main_nav/main_nav.js"></script>
     <script src="/profile/profile.js"></script>
     <script src="/profile/profile-accounts.js"></script>
+    <script src="/assets/js/share-teams.js"></script>
+    <script src="/manager/manager-team.js"></script>
+    <script src="/profile/profile-teams.js"></script>
 </body>
 
 </html>

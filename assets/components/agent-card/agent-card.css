@@ -101,6 +101,11 @@
     display: none;
 }
 
+.agent-scope-badge--shared {
+    background: rgba(99, 102, 241, .12);
+    color: #6366f1;
+}
+
 /* ── Description ── */
 .agent-card-desc {
     font-size: 12px;

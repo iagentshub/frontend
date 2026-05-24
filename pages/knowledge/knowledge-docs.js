@@ -63,6 +63,8 @@ var KnowledgeDocs = (function () {
         }
 
         document.getElementById('docs-grid').addEventListener('click', function (e) {
+            var shareBtn = e.target.closest('[data-share-id]');
+            if (shareBtn) { window.shareTeams && shareTeams.open('knowledge', shareBtn.dataset.shareId, shareBtn.dataset.shareName || ''); return; }
             var delBtn = e.target.closest('[data-del-id]');
             if (delBtn) { _deleteItem(delBtn.dataset.delId); return; }
             var moveBtn = e.target.closest('[data-move-id]');
@@ -101,11 +103,16 @@ var KnowledgeDocs = (function () {
             var warn = item.char_count > 8000
                 ? '<span class="knowledge-warn" title="' + esc(t('skills.knowledge.char_warning') || 'Texto largo') + '">⚠</span>'
                 : '';
+            var _SHARE_SVG = '<svg width="11" height="11" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="12" cy="3" r="1.5" stroke="currentColor" stroke-width="1.4"/><circle cx="12" cy="13" r="1.5" stroke="currentColor" stroke-width="1.4"/><circle cx="4" cy="8" r="1.5" stroke="currentColor" stroke-width="1.4"/><path d="M10.5 3.8L5.5 7.2M10.5 12.2L5.5 8.8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>';
+            var shareBtn = !item._shared
+                ? '<button class="knowledge-action-btn knowledge-action-btn--share" data-share-id="' + esc(item.id) + '" data-share-name="' + esc(item.title) + '" title="' + esc(t('teams.teams.sharing.share_with') || 'Compartir') + '">' + _SHARE_SVG + '</button>'
+                : '<span class="knowledge-shared-badge">' + esc(t('teams.teams.sharing.shared_badge') || 'Compartida') + '</span>';
             return '<div class="knowledge-card" draggable="true" data-drag-id="' + esc(item.id) + '" data-drag-section="document">' +
                 '<div class="knowledge-card-header">' +
                 '<span class="knowledge-card-icon">' + icon + '</span>' +
                 '<span class="knowledge-card-title">' + esc(item.title) + '</span>' +
                 warn +
+                shareBtn +
                 '<button class="knowledge-del-btn" data-del-id="' + esc(item.id) + '" title="' + esc(t('common.actions.delete') || 'Eliminar') + '">×</button>' +
                 '</div>' +
                 '<div class="knowledge-card-source">' + esc(item.source) + '</div>' +

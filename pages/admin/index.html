@@ -37,6 +37,7 @@
             <div class="admin-tabs">
                 <button class="admin-tab active" data-tab="general">General</button>
                 <button class="admin-tab" data-tab="users">Usuarios</button>
+                <button class="admin-tab" data-tab="teams">Grupos</button>
                 <button class="admin-tab" data-tab="agents">Agentes</button>
                 <button class="admin-tab" data-tab="connections">Conexiones</button>
                 <button class="admin-tab" data-tab="knowledge">Conocimiento</button>
@@ -76,6 +77,17 @@
                     </select>
                 </div>
                 <div id="users-table-wrap"><table class="admin-table"><tbody><tr class="skeleton-row"><td colspan="6"></td></tr><tr class="skeleton-row"><td colspan="6"></td></tr><tr class="skeleton-row"><td colspan="6"></td></tr></tbody></table></div>
+            </div>
+
+            <!-- Teams tab -->
+            <div id="tab-teams" class="admin-tab-panel" style="display:none">
+                <div class="admin-toolbar">
+                    <div class="admin-search-wrap">
+                        <span class="search-icon"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="6.5" cy="6.5" r="4" stroke="currentColor" stroke-width="1.6"/><path d="M11 11l3 3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span>
+                        <input id="team-search" type="search" class="admin-search" placeholder="Buscar por nombre o creador…">
+                    </div>
+                </div>
+                <div id="teams-table-wrap"><table class="admin-table"><tbody><tr class="skeleton-row"><td colspan="5"></td></tr><tr class="skeleton-row"><td colspan="5"></td></tr><tr class="skeleton-row"><td colspan="5"></td></tr></tbody></table></div>
             </div>
 
             <!-- Agents tab -->
@@ -122,6 +134,22 @@
             </div>
 
         </main>
+    </div>
+
+    <!-- Modal detalle de grupo -->
+    <div id="modal-team-detail" class="modal-bg" style="display:none">
+        <div class="modal-box" style="max-width:560px">
+            <div class="modal-header">
+                <h3 class="modal-title" id="team-detail-title">Grupo</h3>
+                <button class="modal-close" id="btn-team-detail-close">✕</button>
+            </div>
+            <div class="modal-body" id="team-detail-body" style="padding:0">
+                <div style="padding:20px;text-align:center;color:var(--ink-3)">Cargando…</div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-ghost" id="btn-team-detail-cancel">Cerrar</button>
+            </div>
+        </div>
     </div>
 
     <!-- Modal editar agente -->
@@ -222,6 +250,7 @@
     <script src="/assets/components/main_nav/main_nav.js"></script>
     <script src="/admin/admin-stats.js"></script>
     <script src="/admin/admin-users.js"></script>
+    <script src="/admin/admin-teams.js"></script>
     <script src="/admin/admin-agents.js"></script>
     <script src="/admin/admin-connections.js"></script>
     <script src="/admin/admin-knowledge.js"></script>

@@ -17,6 +17,7 @@ var NAV_ICONS = {
     about: '<svg width="13" height="13" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.4"/><circle cx="8" cy="5.5" r="0.9" fill="currentColor"/><path d="M8 7.5v4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>',
     logs: '<svg width="15" height="15" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.4"/><path d="M4.5 5.5h7M4.5 8h5M4.5 10.5h6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>',
     mail: '<svg width="15" height="15" viewBox="0 0 16 16" fill="none"><rect x="1" y="4" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.4"/><path d="M1 7l7 4.5L15 7" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>',
+    team: '<svg width="15" height="15" viewBox="0 0 16 16" fill="none"><circle cx="5" cy="5" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="11" cy="5" r="2" stroke="currentColor" stroke-width="1.4"/><path d="M1.5 13v-.5A3.5 3.5 0 0 1 5 9a3.5 3.5 0 0 1 3.5 3.5V13" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><path d="M9 9.2A3.5 3.5 0 0 1 14.5 12.5V13" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>',
 };
 
 function _renderLangSwitcher() {
@@ -111,6 +112,8 @@ function renderNav(mountId, activePage) {
                 var spacer = mount.querySelector('.nav-spacer');
                 if (spacer) spacer.before(adminSection);
             }
+
+
         }).catch(function () { });
 
         document.getElementById('nav-logout-btn').addEventListener('click', async function () {

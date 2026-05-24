@@ -22,6 +22,7 @@ Scripts are loaded with `<script>` tags in a specific order. Global utilities mu
 | `assets/js/api.js` | `fetch` wrapper — exposes `window.api.get/post/del`; errors include `.status` for programmatic handling |
 | `assets/js/utils.js` | Shared helpers (`esc`, etc.) |
 | `assets/js/providers.js` | Provider singleton — loads `/api/connections/providers` once and exposes `Providers.list/meta/fields/order/first` |
+| `assets/js/share-teams.js` | Resource sharing modal — letter avatars with deterministic colors; invoked via `shareTeams.open(type, id, name)` |
 
 ---
 
@@ -35,8 +36,8 @@ Scripts are loaded with `<script>` tags in a specific order. Global utilities mu
 | Connections | `connections/connections-state.js`, `connections/connections-modal.js`, `connections/connections.js` — providers loaded dynamically via `Providers` |
 | Memory | `memory/memory-render.js`, `memory/memory-modal.js`, `memory/memory-load.js`, `memory/memory.js` |
 | Knowledge | `knowledge/skills-load.js`, `knowledge/knowledge.js`, `knowledge/knowledge-urls.js`, `knowledge/knowledge-docs.js` |
-| Profile | `profile/profile.js` |
-| Admin | `admin/admin-users.js` |
+| Profile | `profile/profile.js`, `profile/profile-teams.js` — group management (create, members, invitations, sharing) |
+| Admin | `admin/admin-stats.js`, `admin/admin-users.js`, `admin/admin-teams.js`, `admin/admin-agents.js`, `admin/admin-connections.js`, `admin/admin-knowledge.js`, `admin/admin-logs.js` |
 
 ---
 

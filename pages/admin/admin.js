@@ -7,6 +7,7 @@ var _countTimer = null;
 var _connections = [];
 var _allAgents = [];
 var _allKnowledge = [];
+var _allTeams = [];
 
 async function reloadData() {
     var promises = [
@@ -20,6 +21,8 @@ async function reloadData() {
             .then(function (d) { _connections = d; applyConnFilters(); }),
         api.get('/api/admin/knowledge')
             .then(function (d) { _allKnowledge = d; applyKnowledgeFilters(); }),
+        api.get('/api/admin/teams')
+            .then(function (d) { _allTeams = d; applyTeamFilters(); }),
     ];
     try {
         await Promise.all(promises);
@@ -43,7 +46,7 @@ function _startPolling() {
     _refreshTimer = setInterval(reloadData, 30000);
 }
 
-var _TAB_IDS = ['general', 'users', 'agents', 'connections', 'knowledge'];
+var _TAB_IDS = ['general', 'users', 'teams', 'agents', 'connections', 'knowledge'];
 
 function _bindTabs() {
     document.querySelectorAll('.admin-tab').forEach(function (btn) {
@@ -66,6 +69,8 @@ function _bindFilters() {
         var el = document.getElementById(id);
         if (el) el.addEventListener('input', applyUserFilters);
     });
+    var teamSearchEl = document.getElementById('team-search');
+    if (teamSearchEl) teamSearchEl.addEventListener('input', applyTeamFilters);
     ['agent-search'].forEach(function (id) {
         var el = document.getElementById(id);
         if (el) el.addEventListener('input', applyAgentFilters);

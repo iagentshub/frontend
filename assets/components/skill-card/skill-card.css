@@ -126,6 +126,11 @@
     color: var(--danger);
 }
 
+.skill-card-scope-badge--shared {
+    background: rgba(99, 102, 241, 0.12);
+    color: #6366f1;
+}
+
 /* ── Category badge ── */
 .skill-card-badges {
     display: flex;
@@ -226,6 +231,16 @@
 .card-action-btn--delete:hover {
     background: rgba(220, 38, 38, 0.06);
     border-color: rgba(220, 38, 38, 0.3);
+}
+
+.card-action-btn--share {
+    color: #6366f1;
+    border-color: rgba(99, 102, 241, 0.2);
+}
+
+.card-action-btn--share:hover {
+    background: rgba(99, 102, 241, 0.06);
+    border-color: rgba(99, 102, 241, 0.35);
 }
 
 .card-action-btn--move {

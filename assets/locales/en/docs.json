@@ -9,6 +9,7 @@
     "agents": "Agents",
     "connections": "Connections",
     "skills": "Skills",
+    "teams": "Teams",
     "memory_knowledge": "Memory & Knowledge",
     "best_practices": "Best practices"
   },
@@ -18,6 +19,7 @@
     "agents": "Agents",
     "connections": "Connections",
     "skills": "Skills",
+    "teams": "Teams & collaboration",
     "memory_knowledge": "Memory & Knowledge",
     "best_practices": "Agent best practices"
   },
@@ -95,6 +97,19 @@
     "private_body": "You can create your own skills from the Skills section. Only you can see and assign them.",
     "activate_title": "Activating a skill",
     "activate_body": "When editing an agent, the Skills tab shows the list of available skills. Enable the ones you want to include in the agent."
+  },
+  "teams": {
+    "intro": "Teams let you share private resources — agents, skills, connections, and knowledge — with other users in a controlled way. Only the owner decides what to share and with whom.",
+    "create_title": "Creating a team",
+    "create_body": "Go to Profile → Groups and click «Create team». You become the manager automatically. Only registered accounts can create teams; guests do not have access to this feature.",
+    "invite_title": "Inviting members",
+    "invite_body": "From the team view, click «Invite» and enter the user's email. They will receive a notification to accept or decline. Managers can invite and remove members.",
+    "share_title": "Sharing resources",
+    "share_body": "Every private resource card (agent, skill, connection, or document) has a share button. Click it and select the team you want to share it with. To stop sharing, open the same menu and deselect the team.",
+    "badge_title": "Resources shared with you",
+    "badge_body": "Resources others have shared with you appear in the corresponding sections with a «Shared» badge in indigo. You can use them normally but cannot edit or export them — ownership stays with the original creator.",
+    "guests_title": "Guest restriction",
+    "guests_body": "Users without an account (guest mode) cannot create or join teams. Register an account to access collaboration features."
   },
   "memory_knowledge": {
     "intro": "iAgents Hub has two ways to give an agent persistent context: conversational memory and a knowledge base.",

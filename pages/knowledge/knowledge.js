@@ -212,6 +212,8 @@ function bindEvents() {
                 toast(t('skills.deleted'), 'info');
                 await loadSkills(_folderSkills ? _folderSkills.getActive() : null);
             } catch (e) { toast(e.message, 'error'); }
+        } else if (action === 'share-skill') {
+            if (window.shareTeams) shareTeams.open('skill', id, btn.dataset.name || id);
         }
     });
 

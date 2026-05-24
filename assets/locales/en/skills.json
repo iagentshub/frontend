@@ -23,7 +23,8 @@
     "public": "Public",
     "private": "Private",
     "badge_public": "public",
-    "badge_private": "private"
+    "badge_private": "private",
+    "badge_shared": "shared"
   },
   "filter": {
     "search_placeholder": "Search skill…"
@@ -62,7 +63,8 @@
   "actions": {
     "view": "View",
     "edit": "Edit",
-    "delete": "Delete"
+    "delete": "Delete",
+    "share": "Share"
   },
   "knowledge": {
     "page_title": "Knowledge",

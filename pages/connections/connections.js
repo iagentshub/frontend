@@ -41,7 +41,10 @@ function bindEvents() {
         var action = btn.dataset.action;
         var id = btn.dataset.id;
 
-        if (action === 'test') {
+        if (action === 'share') {
+            if (window.shareTeams) shareTeams.open('connection', id, btn.dataset.name || id);
+            return;
+        } else if (action === 'test') {
             testConnections([id]);
         } else if (action === 'edit') {
             try {

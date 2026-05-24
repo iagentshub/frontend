@@ -23,7 +23,8 @@
     "public": "Públicas",
     "private": "Privadas",
     "badge_public": "pública",
-    "badge_private": "privada"
+    "badge_private": "privada",
+    "badge_shared": "compartida"
   },
   "filter": {
     "search_placeholder": "Buscar skill…"
@@ -62,7 +63,8 @@
   "actions": {
     "view": "Ver",
     "edit": "Editar",
-    "delete": "Eliminar"
+    "delete": "Eliminar",
+    "share": "Compartir"
   },
   "knowledge": {
     "page_title": "Conocimiento",

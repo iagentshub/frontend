@@ -83,6 +83,8 @@ function _bindActions() {
             } catch (e) { toast(e.message, 'error'); }
         } else if (action === 'export') {
             _openExportModal(id);
+        } else if (action === 'share') {
+            if (window.shareTeams) shareTeams.open('agent', id, btn.dataset.name || id);
         } else if (action === 'delete') {
             if (!confirm(t('agents.confirm_delete'))) return;
             try {

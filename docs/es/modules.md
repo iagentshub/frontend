@@ -22,6 +22,7 @@ Los scripts se cargan con etiquetas `<script>` en un orden específico. Las util
 | `assets/js/api.js` | Wrapper de `fetch` — expone `window.api.get/post/del`; los errores incluyen `.status` para gestión programática |
 | `assets/js/utils.js` | Helpers compartidos (`esc`, etc.) |
 | `assets/js/providers.js` | Singleton de providers — carga `/api/connections/providers` una vez y expone `Providers.list/meta/fields/order/first` |
+| `assets/js/share-teams.js` | Modal de compartición de recursos con grupos — avatares de letra con color determinista; se invoca con `shareTeams.open(type, id, name)` |
 
 ---
 
@@ -35,8 +36,8 @@ Los scripts se cargan con etiquetas `<script>` en un orden específico. Las util
 | Conexiones | `connections/connections-state.js`, `connections/connections-modal.js`, `connections/connections.js` — providers cargados dinámicamente vía `Providers` |
 | Memoria | `memory/memory-render.js`, `memory/memory-modal.js`, `memory/memory-load.js`, `memory/memory.js` |
 | Conocimiento | `knowledge/skills-load.js`, `knowledge/knowledge.js`, `knowledge/knowledge-urls.js`, `knowledge/knowledge-docs.js` |
-| Perfil | `profile/profile.js` |
-| Admin | `admin/admin-users.js` |
+| Perfil | `profile/profile.js`, `profile/profile-teams.js` — gestión de grupos (crear, miembros, invitaciones, compartición) |
+| Admin | `admin/admin-stats.js`, `admin/admin-users.js`, `admin/admin-teams.js`, `admin/admin-agents.js`, `admin/admin-connections.js`, `admin/admin-knowledge.js`, `admin/admin-logs.js` |
 
 ---
 

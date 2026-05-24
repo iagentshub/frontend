@@ -82,11 +82,14 @@ function renderCard(c) {
     var urlBadge = _isCustomUrl(c)
         ? '<span class="conn-url-badge" title="' + esc(c.url) + '">' + t('connections.card.custom_url') + '</span>'
         : '';
+    var sharedBadge = c._shared
+        ? '<span class="conn-token-badge" style="background:var(--surface-3)">' + (t('teams.teams.sharing.shared_badge') || 'Compartido') + '</span>'
+        : '';
     return '<article class="conn-card" data-conn-id="' + esc(c.id) + '">' +
         '<div class="conn-card-body">' +
         '<div class="conn-card-name-row">' +
         '<div class="conn-card-name">' + esc(c.name) + '</div>' +
-        tokenBadge +
+        tokenBadge + sharedBadge +
         '</div>' +
         (sub ? '<div class="conn-card-sub">' + esc(sub) + (urlBadge ? ' ' + urlBadge : '') + '</div>' : (!urlBadge ? '' : '<div class="conn-card-sub">' + urlBadge + '</div>')) +
         '<div class="conn-card-status"></div>' +
@@ -94,6 +97,9 @@ function renderCard(c) {
         '<footer class="conn-card-footer">' +
         '<button class="cca-btn cca-btn--test" data-action="test" data-id="' + esc(c.id) + '">' +
         '<svg width="11" height="11" viewBox="0 0 16 16" fill="none"><path d="M4 2.5l9 5.5-9 5.5V2.5z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>' + t('connections.actions.test') + '</button>' +
+        (!c._shared ? '<button class="cca-btn" data-action="share" data-id="' + esc(c.id) + '" data-name="' + esc(c.name) + '" title="' + (t('teams.teams.sharing.share_with') || 'Compartir') + '">' +
+        '<svg width="11" height="11" viewBox="0 0 16 16" fill="none"><circle cx="12" cy="3" r="1.5" stroke="currentColor" stroke-width="1.4"/><circle cx="12" cy="13" r="1.5" stroke="currentColor" stroke-width="1.4"/><circle cx="4" cy="8" r="1.5" stroke="currentColor" stroke-width="1.4"/><path d="M10.5 3.8L5.5 7.2M10.5 12.2L5.5 8.8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>' +
+        '</button>' : '') +
         '<button class="cca-btn" data-action="edit" data-id="' + esc(c.id) + '">' +
         '<svg width="11" height="11" viewBox="0 0 20 20" fill="none"><path d="M13.5 3.5l3 3L7 16H4v-3L13.5 3.5z" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>' + t('connections.actions.edit') + '</button>' +
         '<button class="cca-btn cca-btn--delete" data-action="delete" data-id="' + esc(c.id) + '" title="' + t('connections.actions.delete') + '">' +

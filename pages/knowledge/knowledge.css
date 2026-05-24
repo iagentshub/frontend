@@ -620,3 +620,41 @@ a.knowledge-card-source:hover {
     max-height: 400px;
     overflow-y: auto;
 }
+
+/* ── Knowledge share button + badge ──────────────────────────────────────── */
+
+.knowledge-action-btn {
+    flex-shrink: 0;
+    border: none;
+    background: transparent;
+    color: var(--ink-3);
+    cursor: pointer;
+    padding: 3px 5px;
+    border-radius: 4px;
+    opacity: 0;
+    transition: opacity 0.1s, color 0.1s, background 0.1s;
+    display: flex;
+    align-items: center;
+}
+
+.knowledge-card:hover .knowledge-action-btn {
+    opacity: 1;
+}
+
+.knowledge-action-btn--share:hover {
+    color: #6366f1;
+    background: rgba(99, 102, 241, 0.08);
+}
+
+.knowledge-shared-badge {
+    flex-shrink: 0;
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    background: rgba(99, 102, 241, 0.12);
+    color: #6366f1;
+    padding: 1px 6px;
+    border-radius: 4px;
+    white-space: nowrap;
+}

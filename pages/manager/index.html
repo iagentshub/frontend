@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+    <script>(function(){var m={noir:"dark-red",marble:"light-red",ember:"dark-orange",ocean:"dark-blue",forest:"dark-red",dusk:"dark-purple",light:"light-red"};var t=localStorage.getItem("ga-theme")||"dark-red";t=m[t]||t;document.documentElement.setAttribute("data-theme",t);})();</script>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>iAgents Hub · Gestor</title>
+    <link rel="stylesheet" href="/assets/css/variables.css" />
+    <link rel="stylesheet" href="/assets/themes/themes.css" />
+    <link rel="stylesheet" href="/assets/css/base.css" />
+    <link rel="stylesheet" href="/assets/css/components.css" />
+    <link rel="stylesheet" href="/assets/css/layout.css" />
+    <link rel="stylesheet" href="/assets/css/animations.css" />
+    <link rel="stylesheet" href="/assets/components/main_nav/main_nav.css" />
+    <link rel="stylesheet" href="/admin/admin.css" />
+    <link rel="stylesheet" href="/assets/css/modals.css" />
+    <link rel="stylesheet" href="/manager/manager.css" />
+</head>
+
+<body>
+    <div class="app-shell">
+        <div id="nav-root"></div>
+
+        <main class="page-content">
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title" id="manager-title" data-i18n="manager.manager.page.title">Panel de gestor</h1>
+                    <p class="page-subtitle" id="manager-team-name">…</p>
+                </div>
+            </div>
+
+            <!-- Tabs -->
+            <div class="admin-tabs">
+                <button class="admin-tab active" data-tab="team" data-i18n="manager.manager.tabs.team">Equipo</button>
+                <button class="admin-tab" data-tab="invitations" data-i18n="manager.manager.tabs.invitations">Invitaciones</button>
+            </div>
+
+            <!-- Team tab -->
+            <div id="tab-team" class="admin-tab-panel">
+                <div id="members-table-wrap">
+                    <table class="admin-table"><tbody>
+                        <tr class="skeleton-row"><td colspan="5"></td></tr>
+                        <tr class="skeleton-row"><td colspan="5"></td></tr>
+                        <tr class="skeleton-row"><td colspan="5"></td></tr>
+                    </tbody></table>
+                </div>
+            </div>
+
+            <!-- Invitations tab -->
+            <div id="tab-invitations" class="admin-tab-panel" style="display:none">
+                <div class="admin-toolbar">
+                    <input id="invite-email" type="email" class="admin-search" style="max-width:280px" placeholder="usuario@ejemplo.com" data-i18n-placeholder="manager.manager.invitations.invite_placeholder">
+                    <button class="btn btn-primary btn-sm" id="btn-send-invite" data-i18n="manager.manager.invitations.send">Enviar invitación</button>
+                </div>
+                <div id="invitations-table-wrap">
+                    <table class="admin-table"><tbody>
+                        <tr class="skeleton-row"><td colspan="3"></td></tr>
+                        <tr class="skeleton-row"><td colspan="3"></td></tr>
+                    </tbody></table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal permisos -->
+    <div id="modal-permissions" class="modal-bg" style="display:none">
+        <div class="modal-box" style="max-width:580px">
+            <div class="modal-header">
+                <h3 class="modal-title" id="perms-modal-title">Permisos</h3>
+                <button class="modal-close" id="btn-perms-close">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="admin-tabs" style="margin-bottom:16px">
+                    <button class="admin-tab active" data-perms-tab="agents" data-i18n="manager.manager.permissions.tabs.agents">Agentes</button>
+                    <button class="admin-tab" data-perms-tab="connections" data-i18n="manager.manager.permissions.tabs.connections">Conexiones</button>
+                    <button class="admin-tab" data-perms-tab="knowledge" data-i18n="manager.manager.permissions.tabs.knowledge">Conocimiento</button>
+                </div>
+                <div id="perms-tab-agents" class="perms-tab-panel">
+                    <div class="perms-default-row">
+                        <label class="toggle">
+                            <input type="checkbox" id="perms-agents-default">
+                            <span class="toggle-track"></span>
+                        </label>
+                        <span id="perms-agents-default-label"></span>
+                    </div>
+                    <div id="perms-agents-list" class="perms-resource-list"></div>
+                </div>
+                <div id="perms-tab-connections" class="perms-tab-panel" style="display:none">
+                    <div class="perms-default-row">
+                        <label class="toggle">
+                            <input type="checkbox" id="perms-conns-default">
+                            <span class="toggle-track"></span>
+                        </label>
+                        <span id="perms-conns-default-label"></span>
+                    </div>
+                    <div id="perms-conns-list" class="perms-resource-list"></div>
+                </div>
+                <div id="perms-tab-knowledge" class="perms-tab-panel" style="display:none">
+                    <div class="perms-default-row">
+                        <label class="toggle">
+                            <input type="checkbox" id="perms-know-default">
+                            <span class="toggle-track"></span>
+                        </label>
+                        <span id="perms-know-default-label"></span>
+                    </div>
+                    <div id="perms-know-list" class="perms-resource-list"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-ghost" id="btn-perms-cancel">Cancelar</button>
+                <button class="btn btn-primary" id="btn-perms-save">Guardar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/assets/js/flog.js"></script>
+    <script src="/assets/js/i18n.js"></script>
+    <script src="/assets/js/config.js"></script>
+    <script src="/assets/js/theme.js"></script>
+    <script src="/assets/js/toast.js"></script>
+    <script src="/assets/js/auth.js"></script>
+    <script src="/assets/js/api.js"></script>
+    <script src="/assets/js/utils.js"></script>
+    <script src="/assets/components/main_nav/main_nav.js"></script>
+    <script src="/manager/manager-team.js"></script>
+    <script src="/manager/manager-invitations.js"></script>
+    <script src="/manager/manager.js"></script>
+</body>
+
+</html>

@@ -10,10 +10,18 @@
 
     var FALLBACK_ICON = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>';
 
+    var SHARE_SVG = '<svg width="11" height="11" viewBox="0 0 16 16" fill="none" aria-hidden="true">' +
+        '<circle cx="12" cy="3" r="1.5" stroke="currentColor" stroke-width="1.4"/>' +
+        '<circle cx="12" cy="13" r="1.5" stroke="currentColor" stroke-width="1.4"/>' +
+        '<circle cx="4" cy="8" r="1.5" stroke="currentColor" stroke-width="1.4"/>' +
+        '<path d="M10.5 3.8L5.5 7.2M10.5 12.2L5.5 8.8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>' +
+        '</svg>';
+
     window.SkillCard = {
         render: function (skill, scope, opts) {
             var resolvedScope = scope || skill.scope || 'public';
             var isPrivate = resolvedScope === 'private';
+            var isShared = !!skill._shared;
             var iconHtml = skill.icon
                 ? '<span style="font-size:1.05rem;line-height:1">' + esc(skill.icon) + '</span>'
                 : FALLBACK_ICON;
@@ -27,9 +35,14 @@
                 ? '<p class="skill-card-preview">' + previewText + '</p>'
                 : '';
 
-            var scopeBadge = isPrivate
-                ? '<span class="skill-card-scope-badge skill-card-scope-badge--private">' + (window.t ? window.t('skills.scope.badge_private') : 'privada') + '</span>'
-                : '<span class="skill-card-scope-badge skill-card-scope-badge--public">' + (window.t ? window.t('skills.scope.badge_public') : 'pública') + '</span>';
+            var scopeBadge = isPrivate && isShared
+                ? '<span class="skill-card-scope-badge skill-card-scope-badge--shared">' +
+                  (window.t ? window.t('skills.scope.badge_shared') : 'compartida') + '</span>'
+                : isPrivate
+                    ? '<span class="skill-card-scope-badge skill-card-scope-badge--private">' +
+                      (window.t ? window.t('skills.scope.badge_private') : 'privada') + '</span>'
+                    : '<span class="skill-card-scope-badge skill-card-scope-badge--public">' +
+                      (window.t ? window.t('skills.scope.badge_public') : 'pública') + '</span>';
 
             var catKey = skill.category;
             var catLabel = catKey ? (window.t ? window.t('skills.categories.' + catKey) : catKey) : '';
@@ -37,17 +50,22 @@
                 ? '<span class="skill-card-category-badge">' + esc(catLabel) + '</span>'
                 : '';
 
-            var editBtn = isPrivate
+            // Only owner sees edit/delete/share (private, not received-as-shared)
+            var canEdit = isPrivate && !isShared;
+            var editBtn = canEdit
                 ? '<button class="card-action-btn card-action-btn--edit" data-action="edit-skill" data-id="' + esc(skill.id) + '" data-scope="' + resolvedScope + '">' + (window.t ? window.t('skills.actions.edit') : 'Editar') + '</button>'
                 : '';
-            var deleteBtn = isPrivate
+            var deleteBtn = canEdit
                 ? '<button class="card-action-btn card-action-btn--delete" data-action="del-skill" data-id="' + esc(skill.id) + '" data-scope="' + resolvedScope + '">' + (window.t ? window.t('skills.actions.delete') : 'Eliminar') + '</button>'
                 : '';
-            var moveBtn = (opts && opts.showMove && isPrivate)
+            var shareBtn = canEdit
+                ? '<button class="card-action-btn card-action-btn--share" data-action="share-skill" data-id="' + esc(skill.id) + '" data-name="' + esc(skill.name) + '" title="' + (window.t ? window.t('skills.actions.share') : 'Compartir') + '">' + SHARE_SVG + '</button>'
+                : '';
+            var moveBtn = (opts && opts.showMove && canEdit)
                 ? '<button class="card-action-btn card-action-btn--move" data-move-id="' + esc(skill.id) + '" title="Mover a carpeta"><svg width="11" height="11" viewBox="0 0 16 16" fill="none"><path d="M1.5 13V4a1 1 0 0 1 1-1h3.5l1.5-2H13a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H2.5a1 1 0 0 1-1-1z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg></button>'
                 : '';
 
-            var dragAttrs = isPrivate
+            var dragAttrs = canEdit
                 ? ' draggable="true" data-drag-id="' + esc(skill.id) + '" data-drag-section="skill"'
                 : '';
             return (
@@ -70,6 +88,7 @@
                 '<button class="card-action-btn card-action-btn--view" data-action="view-skill" data-id="' + esc(skill.id) + '" data-scope="' + resolvedScope + '">' + (window.t ? window.t('skills.actions.view') : 'Ver') + '</button>' +
                 editBtn +
                 deleteBtn +
+                shareBtn +
                 moveBtn +
                 '</footer>' +
                 '</article>'
