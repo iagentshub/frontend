@@ -156,9 +156,17 @@
     "github_label": "GitHub Copilot",
     "github_sub": "ZIP para GitHub Copilot",
     "github_path": "📁 .github/copilot-instructions.md",
+    "mcp_label": "MCP Server",
+    "mcp_sub": "Servidor Python para cualquier cliente MCP",
+    "mcp_path": "📄 {agent-id}-mcp.py",
     "exported": "Exportado: {{name}}",
     "zip_hint_claude": "Descargado. Extrae el ZIP en la raíz de tu proyecto.",
-    "zip_hint_github": "Descargado. Extrae el ZIP en la raíz de tu repositorio."
+    "zip_hint_github": "Descargado. Extrae el ZIP en la raíz de tu repositorio.",
+    "install_title": "Cómo instalarlo",
+    "downloaded": "Archivo descargado",
+    "file_location": "Ruta del archivo descargado (editable)",
+    "back": "Volver",
+    "done": "Listo"
   },
   "skill_picker": {
     "all": "Todas",
