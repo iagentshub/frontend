@@ -36,6 +36,15 @@ function renderUsers(users) {
             ? new Date(u.created_at).toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: '2-digit' })
             : '—';
 
+        var totalTokens = (u.tokens_in || 0) + (u.tokens_out || 0);
+        var tokensDisplay = totalTokens > 0
+            ? (totalTokens >= 1000000
+                ? (totalTokens / 1000000).toFixed(1) + 'M'
+                : totalTokens >= 1000
+                ? (totalTokens / 1000).toFixed(1) + 'K'
+                : totalTokens.toString())
+            : '<span style="opacity:.4">—</span>';
+
         var actions =
             '<div class="admin-actions-menu" data-username="' + esc(u.username) + '" ' +
             'data-user=\'' + JSON.stringify({email: u.email || '', role: u.role, is_active: isActive}) + '\'>' +
@@ -57,6 +66,7 @@ function renderUsers(users) {
             '<td>' + roleBadge + '</td>' +
             '<td>' + statusBadge + '</td>' +
             '<td>' + verifiedBadge + '</td>' +
+            '<td class="td-tokens">' + tokensDisplay + '</td>' +
             '<td class="td-date">' + date + '</td>' +
             '<td class="td-actions">' + actions + '</td>' +
             '</tr>';
@@ -69,6 +79,7 @@ function renderUsers(users) {
         _thU('Rol', 'role') +
         '<th>Estado</th>' +
         '<th>Verificado</th>' +
+        _thU('Tokens', 'tokens_in') +
         _thU('Creado', 'created_at') +
         '<th></th>' +
         '</tr></thead>' +

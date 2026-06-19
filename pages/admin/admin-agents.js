@@ -65,6 +65,14 @@ function renderAgents(agents) {
             : '—';
         var ownerDisplay = a.owner_email ? esc(a.owner_email) : (a.owner_id ? esc(a.owner_id) : '<span style="opacity:.4">—</span>');
         var connId = a.connection_id ? esc(a.connection_id) : '<span style="opacity:.4">—</span>';
+        var totalTokens = (a.tokens_in || 0) + (a.tokens_out || 0);
+        var tokensDisplay = totalTokens > 0
+            ? (totalTokens >= 1000000
+                ? (totalTokens / 1000000).toFixed(1) + 'M'
+                : totalTokens >= 1000
+                ? (totalTokens / 1000).toFixed(1) + 'K'
+                : totalTokens.toString())
+            : '<span style="opacity:.4">—</span>';
 
         var actions =
             '<div class="admin-actions-menu">' +
@@ -80,6 +88,7 @@ function renderAgents(agents) {
             '<td><span class="badge badge--type">' + esc(a.agent_type || '—') + '</span></td>' +
             '<td class="td-owner">' + ownerDisplay + '</td>' +
             '<td class="td-owner">' + connId + '</td>' +
+            '<td class="td-tokens">' + tokensDisplay + '</td>' +
             '<td class="td-date">' + date + '</td>' +
             '<td class="td-actions">' + actions + '</td>' +
             '</tr>';
@@ -92,6 +101,7 @@ function renderAgents(agents) {
         _thA('Tipo', 'agent_type') +
         _thA('Propietario', 'owner_email') +
         '<th>Conexión</th>' +
+        _thA('Tokens', 'tokens_in') +
         _thA('Creado', 'created_at') +
         '<th></th>' +
         '</tr></thead>' +

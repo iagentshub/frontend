@@ -32,6 +32,15 @@ function renderTeams(teams) {
             ? new Date(t.created_at).toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: '2-digit' })
             : '—';
 
+        var totalTokens = (t.tokens_in || 0) + (t.tokens_out || 0);
+        var tokensDisplay = totalTokens > 0
+            ? (totalTokens >= 1000000
+                ? (totalTokens / 1000000).toFixed(1) + 'M'
+                : totalTokens >= 1000
+                ? (totalTokens / 1000).toFixed(1) + 'K'
+                : totalTokens.toString())
+            : '<span style="opacity:.4">—</span>';
+
         var actions =
             '<div class="admin-actions-menu" data-team-id="' + esc(t.id) + '">' +
             '<button class="btn-actions" data-team-id="' + esc(t.id) + '">⋮</button>' +
@@ -51,6 +60,7 @@ function renderTeams(teams) {
             '<td>' + (t.resource_count > 0
                 ? '<span class="badge badge--ok">' + t.resource_count + ' recurso' + (t.resource_count === 1 ? '' : 's') + '</span>'
                 : '<span style="color:var(--ink-3);font-size:12px">—</span>') + '</td>' +
+            '<td class="td-tokens">' + tokensDisplay + '</td>' +
             '<td class="td-date">' + date + '</td>' +
             '<td class="td-actions">' + actions + '</td>' +
             '</tr>';
@@ -63,6 +73,7 @@ function renderTeams(teams) {
         _thT('Creado por', 'created_by') +
         '<th>Miembros</th>' +
         '<th>Recursos</th>' +
+        _thT('Tokens', 'tokens_in') +
         _thT('Creado', 'created_at') +
         '<th></th>' +
         '</tr></thead>' +

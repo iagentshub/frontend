@@ -46,6 +46,21 @@ var AgentCard = {
             ? ' draggable="true" data-drag-id="' + esc(agent.id) + '" data-drag-section="agents"'
             : '';
 
+        // Tokens info
+        var tokensInfo = '';
+        if (conn && (conn.tokens_in > 0 || conn.tokens_out > 0)) {
+            var totalTokens = (conn.tokens_in || 0) + (conn.tokens_out || 0);
+            var formattedTokens = totalTokens >= 1000000 
+                ? (totalTokens / 1000000).toFixed(1) + 'M'
+                : totalTokens >= 1000 
+                ? (totalTokens / 1000).toFixed(1) + 'K'
+                : totalTokens.toString();
+            tokensInfo = '<div class="agent-card-tokens">' +
+                '<svg width="12" height="12" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.5"/><path d="M8 5v3l2 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>' +
+                '<span>' + formattedTokens + ' tokens</span>' +
+                '</div>';
+        }
+
         return '<div class="agent-card"' + dragAttrs + '>' +
             '<div class="agent-card-body">' +
             '<div class="agent-card-top">' +
@@ -60,6 +75,7 @@ var AgentCard = {
             '</div>' +
             '<p class="agent-card-desc">' + esc(agent.description || t('agents.card.no_description')) + '</p>' +
             (skillChips ? '<div class="agent-card-chips">' + skillChips + '</div>' : '') +
+            tokensInfo +
             '</div>' +
             '<div class="agent-card-footer">' +
             '<button class="agent-action-chat" data-action="chat" data-id="' + esc(agent.id) + '"' +
