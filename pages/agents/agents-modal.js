@@ -125,6 +125,10 @@ function _openAgentModal(agent) {
     const effortEl = document.getElementById('agent-effort-level');
     if (effortEl) effortEl.value = agent ? (agent.effort_level || '') : '';
 
+    // Timeout
+    const timeoutEl = document.getElementById('agent-timeout');
+    if (timeoutEl) timeoutEl.value = agent && agent.timeout != null ? String(agent.timeout) : '';
+
     _syncConnectionSelect();
     document.getElementById('agent-connection').value = agent ? (agent.connection_id || '') : '';
 
@@ -281,7 +285,8 @@ function _bindAgentModal() {
         const scopeChecked = document.querySelector('input[name="agent-scope"]:checked');
         const agentType = (document.getElementById('agent-type') || {}).value || 'generic';
 
-        const effortEl = document.getElementById('agent-effort-level');
+        const effortEl  = document.getElementById('agent-effort-level');
+        const timeoutEl = document.getElementById('agent-timeout');
         const payload = {
             id: document.getElementById('agent-id').value || undefined,
             name: document.getElementById('agent-name').value.trim(),
@@ -291,6 +296,7 @@ function _bindAgentModal() {
             system_prompt: document.getElementById('agent-prompt').value.trim(),
             temperature: parseFloat(document.getElementById('agent-temp').value),
             effort_level: effortEl ? (effortEl.value || null) : null,
+            timeout: timeoutEl && timeoutEl.value !== '' ? Number(timeoutEl.value) : null,
             skills: _getSelectedSkills(),
             knowledge: _getSelectedKnowledge(),
             use_memory: useMemory,

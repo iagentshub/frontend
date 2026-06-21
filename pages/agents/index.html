@@ -213,14 +213,27 @@
                     </div>
 
                     <!-- Config general avanzada -->
-                    <div class="field">
-                        <label data-i18n-title="agents.modal.field_effort_level_hint"><span data-i18n="agents.modal.field_effort_level">Nivel de esfuerzo</span> <span class="field-hint-icon">ⓘ</span></label>
-                        <select id="agent-effort-level" class="select">
-                            <option value="" data-i18n="agents.modal.effort_auto">Auto</option>
-                            <option value="low" data-i18n="agents.modal.effort_low">Bajo</option>
-                            <option value="medium" data-i18n="agents.modal.effort_medium">Medio</option>
-                            <option value="high" data-i18n="agents.modal.effort_high">Alto</option>
-                        </select>
+                    <div class="form-row-2">
+                        <div class="field">
+                            <label data-i18n-title="agents.modal.field_effort_level_hint"><span data-i18n="agents.modal.field_effort_level">Nivel de esfuerzo</span> <span class="field-hint-icon">ⓘ</span></label>
+                            <select id="agent-effort-level" class="select">
+                                <option value="" data-i18n="agents.modal.effort_auto">Auto</option>
+                                <option value="low" data-i18n="agents.modal.effort_low">Bajo</option>
+                                <option value="medium" data-i18n="agents.modal.effort_medium">Medio</option>
+                                <option value="high" data-i18n="agents.modal.effort_high">Alto</option>
+                            </select>
+                        </div>
+                        <div class="field">
+                            <label><span data-i18n="agents.modal.field_timeout">Timeout del chat</span></label>
+                            <select id="agent-timeout" class="select">
+                                <option value="" data-i18n="agents.modal.timeout_global">Usar preferencia global</option>
+                                <option value="0" data-i18n="profile.timeout_indefinido">Indefinido</option>
+                                <option value="60" data-i18n="profile.timeout_1">1 minuto</option>
+                                <option value="120" data-i18n="profile.timeout_2">2 minutos</option>
+                                <option value="300" data-i18n="profile.timeout_5">5 minutos</option>
+                                <option value="600" data-i18n="profile.timeout_10">10 minutos</option>
+                            </select>
+                        </div>
                     </div>
 
                     <!-- Opciones Claude (incluye rutinas) -->

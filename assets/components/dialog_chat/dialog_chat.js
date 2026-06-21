@@ -30,6 +30,7 @@ class AgentChatDialog {
         this._timerInterval = null;
         this._timerSecs = 0;
         this._timerRemaining = 0;
+        this._abortCtrl = null;
         this._el = null;
         this._convId = null;
         this._convList = [];
@@ -292,6 +293,8 @@ class AgentChatDialog {
         this._saveHistory();
         this._renderMessages();
         this._appendTyping();
+        const ctrl = new AbortController();
+        this._abortCtrl = ctrl;
         this._startTimer();
         try {
             const body = { messages: this.messages.map(function (m) { return { role: m.role, content: m.content }; }) };
@@ -300,6 +303,7 @@ class AgentChatDialog {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(body),
+                signal: ctrl.signal,
             });
             if (!resp.ok) throw new Error(`Error ${resp.status}`);
             const reader = resp.body.getReader();
@@ -329,6 +333,10 @@ class AgentChatDialog {
             }
             this._stopTimer();
             this._removeTyping();
+            if (ctrl.signal.aborted) {
+                this._pushSystem(t('agents.chat.timeout_msg') || 'Tiempo agotado — el agente no respondió a tiempo.');
+                return;
+            }
             if (serverError) throw new Error(serverError);
             var replyTs = new Date();
             var replyTime = replyTs.getHours() + ':' + String(replyTs.getMinutes()).padStart(2, '0');
@@ -351,8 +359,13 @@ class AgentChatDialog {
         } catch (e) {
             this._stopTimer();
             this._removeTyping();
-            toast(e.message, 'error');
+            if (e.name === 'AbortError' || ctrl.signal.aborted) {
+                this._pushSystem(t('agents.chat.timeout_msg') || 'Tiempo agotado — el agente no respondió a tiempo.');
+            } else {
+                toast(e.message, 'error');
+            }
         } finally {
+            this._abortCtrl = null;
             this._setLoading(false);
         }
     }
@@ -364,6 +377,9 @@ class AgentChatDialog {
         if (!cont) return;
         const initials = this.agent.name?.charAt(0)?.toUpperCase() || '?';
         cont.innerHTML = this.messages.map(m => {
+            if (m.role === 'system') {
+                return `<div class="msg-wrap msg-system"><div class="msg-system-text">${esc(m.content)}</div></div>`;
+            }
             const tokBadge = (m.role === 'assistant' && m.tokens)
                 ? `<div class="msg-tok">${_ARR_UP} ${_fmtTok(m.tokens.in)} ${_ARR_DOWN} ${_fmtTok(m.tokens.out)} tok</div>`
                 : '';
@@ -400,6 +416,11 @@ class AgentChatDialog {
 
     _removeTyping() {
         document.getElementById('ga-typing')?.remove();
+    }
+
+    _pushSystem(text) {
+        this.messages.push({ role: 'system', content: text });
+        this._renderMessages();
     }
 
     _setLoading(on) {
@@ -441,7 +462,10 @@ class AgentChatDialog {
         this._timerInterval = setInterval(() => {
             this._timerRemaining = Math.max(0, this._timerRemaining - 1);
             update();
-            if (this._timerRemaining === 0) this._stopTimer();
+            if (this._timerRemaining === 0) {
+                this._stopTimer();
+                this._abortCtrl?.abort();
+            }
         }, 1000);
     }
 

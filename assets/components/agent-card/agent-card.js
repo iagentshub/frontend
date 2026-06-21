@@ -2,7 +2,6 @@
 'use strict';
 
 var AgentCard = {
-    _MAX_CHIPS: 3,
     _TYPE_LABELS: { openai: 'OpenAI', claude: 'Claude', gemini: 'Gemini', ollama: 'Ollama' },
     _AVATAR_COLORS: ['#4f46e5', '#0891b2', '#059669', '#d97706', '#7c3aed', '#db2777', '#0f766e'],
 
@@ -10,6 +9,13 @@ var AgentCard = {
         var code = 0;
         for (var i = 0; i < (name || '').length; i++) code += name.charCodeAt(i);
         return this._AVATAR_COLORS[code % this._AVATAR_COLORS.length];
+    },
+
+    _fmtTokens: function (n) {
+        if (!n) return '0';
+        if (n >= 1000000) return (n / 1000000).toFixed(1).replace(/\.0$/, '') + 'M';
+        if (n >= 1000) return (n / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
+        return String(n);
     },
 
     render: function (agent, connections, skills, connStatus) {
@@ -25,46 +31,24 @@ var AgentCard = {
             : (isPublic ? t('agents.card.use_your_ai') : t('agents.card.no_ai'));
         var pillCls = typeKey ? 'agent-conn-pill--' + esc(typeKey) : (isPublic ? 'agent-conn-pill--usatia' : 'agent-conn-pill--default');
 
-        var agentSkills = agent.skills || [];
-        var visibleSkills = agentSkills.slice(0, AgentCard._MAX_CHIPS);
-        var overflow = agentSkills.length - AgentCard._MAX_CHIPS;
-        var skillChips = visibleSkills.map(function (sid) {
-            var sk = skills.find(function (s) { return s.id === sid; });
-            return sk ? '<span class="agent-chip agent-chip--skill">' + (sk.icon ? esc(sk.icon) + ' ' : '') + esc(sk.name) + '</span>' : '';
-        }).join('');
-        if (overflow > 0) {
-            skillChips += '<span class="agent-chip agent-chip--more">+' + overflow + '</span>';
-        }
-
         var initial = (agent.name || '?').charAt(0).toUpperCase();
         var avatarColor = AgentCard._avatarColor(agent.name || '');
+
         var scopeBadge = isPublic
             ? '<span class="agent-scope-badge agent-scope-badge--public">' + t('agents.scope.badge_public') + '</span>'
             : (agent._shared ? '<span class="agent-scope-badge agent-scope-badge--shared">' + (t('teams.teams.sharing.shared_badge') || 'Compartido') + '</span>' : '');
+
+        var totalTokens = (agent.tokens_in || 0) + (agent.tokens_out || 0);
+        var tokBadge = totalTokens
+            ? '<span class="agent-tok-badge" title="' + totalTokens.toLocaleString() + ' tokens">' + AgentCard._fmtTokens(totalTokens) + ' tok</span>'
+            : '';
 
         var dragAttrs = (!isPublic && !agent._shared)
             ? ' draggable="true" data-drag-id="' + esc(agent.id) + '" data-drag-section="agents"'
             : '';
 
-        // Tokens info
-        var tokensInfo = '';
-        var agentTokIn = agent.tokens_in || 0;
-        var agentTokOut = agent.tokens_out || 0;
-        if (agentTokIn > 0 || agentTokOut > 0) {
-            var totalTokens = agentTokIn + agentTokOut;
-            var formattedTokens = totalTokens >= 1000000
-                ? (totalTokens / 1000000).toFixed(1) + 'M'
-                : totalTokens >= 1000
-                    ? (totalTokens / 1000).toFixed(1) + 'K'
-                    : totalTokens.toString();
-            tokensInfo = '<div class="agent-card-tokens" title="' + totalTokens.toLocaleString() + ' tokens">' +
-                '<span>' + formattedTokens + '</span>' +
-                '</div>';
-        }
-
         return '<div class="agent-card"' + dragAttrs + '>' +
             '<div class="agent-card-body">' +
-            tokensInfo +
             '<div class="agent-card-top">' +
             '<div class="agent-avatar" style="background:' + avatarColor + '">' + esc(initial) + '</div>' +
             '<div class="agent-card-info">' +
@@ -72,11 +56,13 @@ var AgentCard = {
             '<span class="agent-card-name" title="' + esc(agent.name) + '">' + esc(agent.name) + '</span>' +
             scopeBadge +
             '</div>' +
+            '<div class="agent-card-meta">' +
             '<span class="agent-conn-pill ' + pillCls + '">' + esc(connLabel) + '</span>' +
+            tokBadge +
+            '</div>' +
             '</div>' +
             '</div>' +
             '<p class="agent-card-desc">' + esc(agent.description || t('agents.card.no_description')) + '</p>' +
-            (skillChips ? '<div class="agent-card-chips">' + skillChips + '</div>' : '') +
             '</div>' +
             '<div class="agent-card-footer">' +
             '<button class="agent-action-chat" data-action="chat" data-id="' + esc(agent.id) + '"' +

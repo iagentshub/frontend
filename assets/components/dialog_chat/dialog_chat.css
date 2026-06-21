@@ -346,6 +346,21 @@
 .chat-send-btn:disabled { opacity: 0.4; pointer-events: none; }
 .chat-send-btn svg { pointer-events: none; }
 
+/* ── System message (timeout, etc.) ──────────── */
+.msg-system {
+    justify-content: center;
+}
+
+.msg-system-text {
+    font-size: 11.5px;
+    color: var(--ink-3);
+    border: 1px dashed var(--line-strong);
+    border-radius: 8px;
+    padding: 5px 14px;
+    text-align: center;
+    max-width: 90%;
+}
+
 /* ── Compact density ──────────────────────────── */
 .chat-box--compact .chat-messages {
     gap: 6px;

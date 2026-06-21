@@ -104,6 +104,8 @@
     "agent_type_hint": "Determines which options are available and how the agent is exported to each platform.",
     "type_generic": "Generic",
     "field_effort_level": "Effort level",
+    "field_timeout": "Chat timeout",
+    "timeout_global": "Global preference",
     "field_effort_level_hint": "Controls how much reasoning the model applies. High produces more elaborate but slower and costlier responses.",
     "effort_auto": "Auto (default)",
     "effort_low": "Low — fast and direct",
@@ -197,7 +199,8 @@
   "chat": {
     "placeholder": "Type a message…",
     "close": "Close",
-    "new_conversation": "New conversation"
+    "new_conversation": "New conversation",
+    "timeout_msg": "Timed out — the agent did not respond in time."
   },
   "catalog": {
     "open_btn": "Catalog",
