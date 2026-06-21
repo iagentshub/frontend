@@ -86,15 +86,12 @@
             </div>
             <form id="agent-form" novalidate>
 
-                <!-- ── WIZARD HEADER: dots + step label ── -->
-                <div class="agent-step-header">
-                    <div class="agent-step-dots">
-                        <span class="agent-step-dot active" data-step="1"></span>
-                        <span class="agent-step-dot" data-step="2"></span>
-                        <span class="agent-step-dot" data-step="3"></span>
-                        <span class="agent-step-dot" data-step="4"></span>
-                    </div>
-                    <span class="agent-step-label" id="agent-step-label"></span>
+                <!-- ── TAB HEADER ── -->
+                <div class="agent-tabs">
+                    <button type="button" class="agent-tab active" data-step="1" data-i18n="agents.modal.tab_basic">Básico</button>
+                    <button type="button" class="agent-tab" data-step="2" data-i18n="agents.modal.tab_model">Modelo</button>
+                    <button type="button" class="agent-tab" data-step="3" data-i18n="agents.modal.tab_skills">Skills</button>
+                    <button type="button" class="agent-tab" data-step="4" data-i18n="agents.modal.tab_advanced">Avanzado</button>
                 </div>
 
                 <!-- ── PASO 1: Básico ── -->
@@ -128,6 +125,20 @@
                                 <input type="radio" name="agent-scope" value="public" />
                                 <span data-i18n="agents.modal.scope_public">Público</span>
                             </label>
+                        </div>
+                    </div>
+                    <div class="field field-memory">
+                        <div class="memory-toggle-row">
+                            <label class="toggle-label">
+                                <input type="checkbox" id="agent-use-memory" class="toggle-checkbox" />
+                                <span class="toggle-track"></span>
+                                <span data-i18n="agents.modal.field_memory">Habilitar memoria</span>
+                            </label>
+                        </div>
+                        <div id="memory-file-field" style="display:none;margin-top:8px">
+                            <select id="agent-memory-file" class="select"></select>
+                            <span class="input-hint" data-i18n="agents.modal.memory_hint">Usa el archivo del agente por
+                                defecto o elige otro</span>
                         </div>
                     </div>
                 </div>
@@ -177,20 +188,6 @@
                         </div>
                     </div>
                     <span class="input-hint" id="agent-knowledge-chars" style="display:none;margin-top:4px"></span>
-                    <div class="field field-memory">
-                        <div class="memory-toggle-row">
-                            <label class="toggle-label">
-                                <input type="checkbox" id="agent-use-memory" class="toggle-checkbox" />
-                                <span class="toggle-track"></span>
-                                <span data-i18n="agents.modal.field_memory">Habilitar memoria</span>
-                            </label>
-                        </div>
-                        <div id="memory-file-field" style="display:none;margin-top:8px">
-                            <select id="agent-memory-file" class="select"></select>
-                            <span class="input-hint" data-i18n="agents.modal.memory_hint">Usa el archivo del agente por
-                                defecto o elige otro</span>
-                        </div>
-                    </div>
                 </div>
 
                 <!-- ── PASO 4: Avanzado ── -->
@@ -306,14 +303,8 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-ghost" id="agent-modal-cancel"
                         data-i18n="common.actions.cancel">Cancelar</button>
-                    <div style="display:flex;gap:8px;margin-left:auto">
-                        <button type="button" class="btn btn-ghost" id="agent-step-prev"
-                            style="display:none" data-i18n="agents.modal.btn_prev">← Anterior</button>
-                        <button type="button" class="btn btn-secondary" id="agent-step-next"
-                            data-i18n="agents.modal.btn_next">Siguiente →</button>
-                        <button type="submit" class="btn btn-primary" id="agent-save-btn"
-                            style="display:none" data-i18n="agents.modal.save_btn">Guardar agente</button>
-                    </div>
+                    <button type="submit" class="btn btn-primary" id="agent-save-btn" style="margin-left:auto"
+                        data-i18n="agents.modal.save_btn">Guardar agente</button>
                 </div>
 
             </form>
@@ -369,6 +360,21 @@
                 <button type="button" class="btn btn-primary" id="lp-btn-confirm"
                     data-i18n="agents.preview.confirm_btn">Importar agente</button>
             </div>
+        </div>
+    </div>
+
+    <!-- MODAL: Blueprint de agente -->
+    <div id="agent-blueprint-modal" class="modal-bg" style="display:none">
+        <div class="modal-box abp-box">
+            <div class="modal-header">
+                <span class="modal-title" data-i18n="agents.blueprint.title">Estructura del agente</span>
+                <button class="modal-close" id="abp-close" type="button">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M2 2l12 12M14 2L2 14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+                    </svg>
+                </button>
+            </div>
+            <div id="abp-content" class="abp-content"></div>
         </div>
     </div>
 

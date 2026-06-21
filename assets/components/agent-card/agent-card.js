@@ -48,14 +48,16 @@ var AgentCard = {
 
         // Tokens info
         var tokensInfo = '';
-        if (conn && (conn.tokens_in > 0 || conn.tokens_out > 0)) {
-            var totalTokens = (conn.tokens_in || 0) + (conn.tokens_out || 0);
+        var agentTokIn = agent.tokens_in || 0;
+        var agentTokOut = agent.tokens_out || 0;
+        if (agentTokIn > 0 || agentTokOut > 0) {
+            var totalTokens = agentTokIn + agentTokOut;
             var formattedTokens = totalTokens >= 1000000
                 ? (totalTokens / 1000000).toFixed(1) + 'M'
                 : totalTokens >= 1000
                     ? (totalTokens / 1000).toFixed(1) + 'K'
                     : totalTokens.toString();
-            tokensInfo = '<div class="agent-card-tokens">' +
+            tokensInfo = '<div class="agent-card-tokens" title="' + totalTokens.toLocaleString() + ' tokens">' +
                 '<span>' + formattedTokens + '</span>' +
                 '</div>';
         }
@@ -83,6 +85,9 @@ var AgentCard = {
             t('agents.card.chat') +
             '</button>' +
             '<div class="agent-card-actions-right">' +
+            '<button class="agent-action-icon" data-action="blueprint" data-id="' + esc(agent.id) + '" title="' + t('agents.blueprint.view_btn') + '">' +
+            '<svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M1.5 8C1.5 8 4 3.5 8 3.5S14.5 8 14.5 8 12 12.5 8 12.5 1.5 8 1.5 8z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><circle cx="8" cy="8" r="2" stroke="currentColor" stroke-width="1.4"/></svg>' +
+            '</button>' +
             (!isPublic ? '<button class="agent-action-icon" data-action="edit" data-id="' + esc(agent.id) + '" title="' + t('actions.edit') + '">' +
                 '<svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M11 2l3 3-9 9H2v-3l9-9z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>' +
                 '</button>' : '') +

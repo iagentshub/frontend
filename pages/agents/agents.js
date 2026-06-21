@@ -18,6 +18,7 @@ async function init() {
     _bindAgentModal();
     _bindExportModal();
     _bindLoadPreviewModal();
+    _bindBlueprintModal();
     _setupDragHandlers();
 }
 
@@ -208,8 +209,150 @@ function _bindActions() {
                 toast(t('agents.deleted'), 'info');
                 await _loadAll();
             } catch (e) { toast(e.message, 'error'); }
+        } else if (action === 'blueprint') {
+            try {
+                const full = await api.get(`/api/agents/${encodeURIComponent(id)}`);
+                _openBlueprintModal(full);
+            } catch (e) { toast(e.message, 'error'); }
         }
     });
+}
+
+function _bindBlueprintModal() {
+    document.getElementById('abp-close').addEventListener('click', function () {
+        document.getElementById('agent-blueprint-modal').style.display = 'none';
+    });
+    document.getElementById('agent-blueprint-modal').addEventListener('click', function (e) {
+        if (e.target === this) this.style.display = 'none';
+    });
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && document.getElementById('agent-blueprint-modal').style.display !== 'none') {
+            document.getElementById('agent-blueprint-modal').style.display = 'none';
+        }
+    });
+}
+
+function _openBlueprintModal(agent) {
+    var conn = _connections.find(function (c) { return c.id === agent.connection_id; });
+    var typeKey = conn ? conn.type : null;
+    var typeLabel = typeKey ? (AgentCard._TYPE_LABELS[typeKey] || typeKey) : t('agents.card.no_ai');
+    var connName = conn ? (conn.name || typeLabel) : t('agents.card.no_ai');
+    var pillCls = typeKey ? 'agent-conn-pill--' + typeKey : 'agent-conn-pill--default';
+
+    var agentSkills = (agent.skills || []).map(function (sid) {
+        return _skills.find(function (s) { return s.id === sid; });
+    }).filter(Boolean);
+
+    var knowledgeItems = (agent.knowledge || []).map(function (kid) {
+        return (_allKnowledge || []).find(function (k) { return k.id === kid; });
+    }).filter(Boolean);
+
+    var routines = agent.routines || [];
+    var initial = (agent.name || '?').charAt(0).toUpperCase();
+    var avatarColor = AgentCard._avatarColor(agent.name || '');
+
+    var skillsHtml = agentSkills.length
+        ? agentSkills.map(function (sk) {
+            return '<div class="abp-item"><span class="abp-item-bullet"></span><span>' + esc(sk.name) + '</span></div>';
+        }).join('')
+        : '<span class="abp-empty">' + t('agents.blueprint.none') + '</span>';
+
+    var knowledgeHtml = knowledgeItems.length
+        ? knowledgeItems.map(function (k) {
+            return '<div class="abp-item"><span class="abp-item-bullet"></span><span>' + esc(k.title) + '</span></div>';
+        }).join('')
+        : '<span class="abp-empty">' + t('agents.blueprint.none') + '</span>';
+
+    var memoryHtml = '<div class="abp-cfg-row">'
+        + '<span class="abp-cfg-key">' + t('agents.blueprint.status') + '</span>'
+        + '<span class="abp-cfg-val' + (agent.use_memory ? ' abp-cfg-val--on' : '') + '">'
+        + (agent.use_memory ? t('agents.blueprint.memory_on') : t('agents.blueprint.memory_off'))
+        + '</span></div>';
+    if (agent.use_memory && agent.memory_file) {
+        memoryHtml += '<div class="abp-cfg-row">'
+            + '<span class="abp-cfg-key">' + t('agents.blueprint.memory_file') + '</span>'
+            + '<span class="abp-cfg-val abp-cfg-val--mono">' + esc(agent.memory_file) + '</span></div>';
+    }
+
+    var temp = typeof agent.temperature === 'number' ? agent.temperature : 0.7;
+    var tempPct = Math.round(temp * 100);
+    var agentTypeLabels = {
+        generic: t('agents.modal.type_generic'),
+        claude: 'Claude',
+        openai: 'OpenAI',
+        github: 'GitHub Copilot'
+    };
+    var agentTypeLabel = agentTypeLabels[agent.agent_type] || t('agents.modal.type_generic');
+
+    var configHtml = '<div class="abp-cfg-row">'
+        + '<span class="abp-cfg-key">' + t('agents.blueprint.type') + '</span>'
+        + '<span class="abp-cfg-val">' + esc(agentTypeLabel) + '</span></div>'
+        + '<div class="abp-cfg-row">'
+        + '<span class="abp-cfg-key">' + t('agents.blueprint.temp') + '</span>'
+        + '<span class="abp-temp-bar">'
+        + '<span class="abp-temp-track"><span class="abp-temp-fill" style="width:' + tempPct + '%"></span></span>'
+        + '<span class="abp-cfg-val">' + temp.toFixed(1) + '</span>'
+        + '</span></div>';
+
+    if (agent.agent_type === 'claude') {
+        if (agent.extended_thinking !== undefined) {
+            configHtml += '<div class="abp-cfg-row"><span class="abp-cfg-key">' + t('agents.blueprint.thinking') + '</span>'
+                + '<span class="abp-cfg-val' + (agent.extended_thinking ? ' abp-cfg-val--on' : '') + '">'
+                + (agent.extended_thinking ? 'On' : 'Off') + '</span></div>';
+        }
+        if (agent.cache_control !== undefined) {
+            configHtml += '<div class="abp-cfg-row"><span class="abp-cfg-key">' + t('agents.blueprint.cache') + '</span>'
+                + '<span class="abp-cfg-val' + (agent.cache_control ? ' abp-cfg-val--on' : '') + '">'
+                + (agent.cache_control ? 'On' : 'Off') + '</span></div>';
+        }
+    }
+
+    if (agent.agent_type === 'openai') {
+        if (agent.response_format) {
+            configHtml += '<div class="abp-cfg-row"><span class="abp-cfg-key">' + t('agents.blueprint.response_format') + '</span>'
+                + '<span class="abp-cfg-val">' + esc(agent.response_format) + '</span></div>';
+        }
+        if (agent.tool_choice) {
+            configHtml += '<div class="abp-cfg-row"><span class="abp-cfg-key">' + t('agents.blueprint.tool_choice') + '</span>'
+                + '<span class="abp-cfg-val">' + esc(agent.tool_choice) + '</span></div>';
+        }
+    }
+
+    var routinesHtml = routines.length
+        ? routines.map(function (r) {
+            var triggerLabel = r.trigger === 'cron'
+                ? ('Cron · ' + esc(r.schedule || ''))
+                : r.trigger === 'webhook'
+                    ? t('agents.blueprint.trigger_webhook')
+                    : t('agents.blueprint.trigger_manual');
+            return '<div class="abp-item">'
+                + '<span class="abp-item-bullet"></span>'
+                + '<span>' + esc(r.name || '—') + '</span>'
+                + '<span class="abp-item-meta">' + triggerLabel + '</span>'
+                + '</div>';
+        }).join('')
+        : '<span class="abp-empty">' + t('agents.blueprint.none') + '</span>';
+
+    document.getElementById('abp-content').innerHTML =
+        '<div class="abp-header">'
+        + '<div class="agent-avatar" style="background:' + esc(avatarColor) + ';width:38px;height:38px;font-size:16px;flex-shrink:0">' + esc(initial) + '</div>'
+        + '<div class="abp-agent-meta">'
+        + '<div class="abp-agent-name">' + esc(agent.name) + '</div>'
+        + '<div class="abp-agent-desc">' + esc(agent.description || t('agents.blueprint.no_description')) + '</div>'
+        + '<div class="abp-agent-badges">'
+        + '<span class="agent-conn-pill ' + esc(pillCls) + '">' + esc(connName) + '</span>'
+        + '</div>'
+        + '</div>'
+        + '</div>'
+        + '<div class="abp-grid-2">'
+        + '<div class="abp-section"><div class="abp-section-label">' + t('agents.blueprint.skills') + '</div>' + skillsHtml + '</div>'
+        + '<div class="abp-section"><div class="abp-section-label">' + t('agents.blueprint.knowledge') + '</div>' + knowledgeHtml + '</div>'
+        + '<div class="abp-section"><div class="abp-section-label">' + t('agents.blueprint.memory') + '</div>' + memoryHtml + '</div>'
+        + '<div class="abp-section"><div class="abp-section-label">' + t('agents.blueprint.config') + '</div>' + configHtml + '</div>'
+        + '</div>'
+        + '<div class="abp-section"><div class="abp-section-label">' + t('agents.blueprint.routines') + '</div>' + routinesHtml + '</div>';
+
+    document.getElementById('agent-blueprint-modal').style.display = 'flex';
 }
 
 init();

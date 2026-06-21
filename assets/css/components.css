@@ -137,40 +137,36 @@
     margin-top: 1px;
 }
 
-/* ── Agent wizard step indicator ── */
-.agent-step-header {
+/* ── Agent tab navigation ── */
+.agent-tabs {
     display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 10px 24px;
     border-bottom: 1px solid var(--line);
     background: var(--surface);
     flex-shrink: 0;
+    padding: 0 8px;
 }
 
-.agent-step-dots {
-    display: flex;
-    gap: 7px;
-    align-items: center;
-}
-
-.agent-step-dot {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: var(--line-strong);
-    transition: background 0.15s, transform 0.15s;
-}
-
-.agent-step-dot.active {
-    background: var(--accent);
-    transform: scale(1.25);
-}
-
-.agent-step-label {
+.agent-tab {
+    flex: 1;
+    padding: 10px 4px;
     font-size: 12px;
+    font-weight: 500;
     color: var(--ink-3);
-    margin-left: auto;
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    transition: color 0.15s, border-color 0.15s;
+    white-space: nowrap;
+}
+
+.agent-tab:hover {
+    color: var(--ink);
+}
+
+.agent-tab.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
 }
 
 /* Panels use style.display in JS — no CSS display rule here to avoid overriding [hidden] */

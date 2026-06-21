@@ -1,13 +1,9 @@
 // agents-modal.js — modal de crear/editar agente
 'use strict';
 
-// ── Wizard state ──────────────────────────────────────────────────────────────
+// ── Tab state ─────────────────────────────────────────────────────────────────
 var _agentStep = 1;
 var _AGENT_STEPS = 4;
-var _STEP_NAMES = {
-    es: ['Básico', 'Modelo', 'Skills', 'Avanzado'],
-    en: ['Basic',  'Model',  'Skills', 'Advanced'],
-};
 
 function _goToAgentStep(n) {
     _agentStep = n;
@@ -15,23 +11,9 @@ function _goToAgentStep(n) {
         var panel = document.getElementById('agent-step-' + i);
         if (panel) panel.style.display = (i === n) ? '' : 'none';
     }
-    document.querySelectorAll('.agent-step-dot').forEach(function (dot) {
-        dot.classList.toggle('active', +dot.dataset.step === n);
+    document.querySelectorAll('.agent-tab').forEach(function (tab) {
+        tab.classList.toggle('active', +tab.dataset.step === n);
     });
-    var lang = (window.i18n && window.i18n.getLang && window.i18n.getLang()) || localStorage.getItem('ga-lang') || 'es';
-    var names = _STEP_NAMES[lang] || _STEP_NAMES.en;
-    var labelEl = document.getElementById('agent-step-label');
-    if (labelEl) {
-        var counter = t('agents.step.counter') || 'Paso {{current}} de {{total}}';
-        labelEl.textContent = names[n - 1] + ' · ' +
-            counter.replace('{{current}}', n).replace('{{total}}', _AGENT_STEPS);
-    }
-    var prevBtn = document.getElementById('agent-step-prev');
-    var nextBtn = document.getElementById('agent-step-next');
-    var saveBtn = document.getElementById('agent-save-btn');
-    if (prevBtn) prevBtn.style.display = n > 1 ? '' : 'none';
-    if (nextBtn) nextBtn.style.display = n < _AGENT_STEPS ? '' : 'none';
-    if (saveBtn) saveBtn.style.display = n === _AGENT_STEPS ? '' : 'none';
 }
 
 // ── Knowledge picker state ────────────────────────────────────────────────────
@@ -258,16 +240,11 @@ function _bindAgentModal() {
     document.getElementById('agent-modal-close').addEventListener('click', _closeAgentModal);
     document.getElementById('agent-modal-cancel').addEventListener('click', _closeAgentModal);
 
-    // Wizard navigation
-    document.getElementById('agent-step-next').addEventListener('click', function () {
-        if (_agentStep === 1) {
-            const nameEl = document.getElementById('agent-name');
-            if (!nameEl.value.trim()) { nameEl.reportValidity(); return; }
-        }
-        if (_agentStep < _AGENT_STEPS) _goToAgentStep(_agentStep + 1);
-    });
-    document.getElementById('agent-step-prev').addEventListener('click', function () {
-        if (_agentStep > 1) _goToAgentStep(_agentStep - 1);
+    // Tab navigation
+    document.querySelectorAll('.agent-tab').forEach(function (tab) {
+        tab.addEventListener('click', function () {
+            _goToAgentStep(+tab.dataset.step);
+        });
     });
     document.getElementById('agent-temp').addEventListener('input', e => {
         document.getElementById('agent-temp-val').textContent = parseFloat(e.target.value).toFixed(2);
