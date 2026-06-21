@@ -15,6 +15,8 @@ async function init() {
     await loadUser();
     await renderThemePicker();
     await renderLangPicker();
+    renderDensityPicker();
+    renderPreferences();
     bindPasswordForm();
     bindNavItems();
 }
@@ -78,8 +80,7 @@ function bindNavItems() {
 }
 
 async function renderThemePicker() {
-    var container = document.getElementById('theme-picker');
-    if (!container || !window.THEMES) return;
+    if (!window.THEMES) return;
 
     if (_currentRole !== 'guest') {
         try {
@@ -91,34 +92,78 @@ async function renderThemePicker() {
         } catch (e) { }
     }
 
-    var current = window.getTheme();
+    var _MODES = [
+        { id: 'dark',  labelKey: 'profile.theme_dark',  fallback: 'Oscuro', bg: '#0A0A0A' },
+        { id: 'light', labelKey: 'profile.theme_light', fallback: 'Claro',  bg: '#F5F5F7' },
+    ];
+    var _ACCENTS = [
+        { id: 'red',    labelKey: 'profile.theme_red',    fallback: 'Rojo'    },
+        { id: 'blue',   labelKey: 'profile.theme_blue',   fallback: 'Azul'    },
+        { id: 'orange', labelKey: 'profile.theme_orange', fallback: 'Naranja' },
+        { id: 'purple', labelKey: 'profile.theme_purple', fallback: 'Morado'  },
+    ];
 
-    container.innerHTML = window.THEMES.map(function (th) {
-        var active = current === th.id;
-        return '<div class="theme-swatch' + (active ? ' theme-swatch--active' : '') + '" data-theme-pick="' + th.id + '">' +
-            '<div class="theme-swatch-preview" style="--swatch-bg:' + th.bg + ';--swatch-accent:' + th.accent + '"></div>' +
-            '<span class="theme-swatch-name">' + th.name + '</span>' +
-            '</div>';
-    }).join('');
+    function _curMode()   { return window.getTheme().split('-')[0]; }
+    function _curAccent() { return window.getTheme().split('-')[1]; }
 
-    container.querySelectorAll('[data-theme-pick]').forEach(function (sw) {
-        sw.addEventListener('click', async function () {
-            var themeId = sw.dataset.themePick;
-            window.setTheme(themeId);
-            container.querySelectorAll('.theme-swatch').forEach(function (s) {
-                s.classList.toggle('theme-swatch--active', s.dataset.themePick === themeId);
-            });
-            if (_currentRole !== 'guest') {
-                try {
-                    await fetch('/api/settings', {
-                        method: 'PUT',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ theme: themeId }),
-                    });
-                } catch (e) { }
-            }
+    function _accentColor(accentId) {
+        var th = window.THEMES.find(function (t) { return t.id === _curMode() + '-' + accentId; });
+        return th ? th.accentColor : '#888';
+    }
+
+    var checkSvg = '<svg class="lang-check" width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+    async function _pick(mode, accent) {
+        window.setTheme(mode + '-' + accent);
+        _renderMode();
+        _renderAccent();
+        if (_currentRole !== 'guest') {
+            try {
+                await fetch('/api/settings', {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ theme: mode + '-' + accent }),
+                });
+            } catch (e) { }
+        }
+    }
+
+    function _renderMode() {
+        var container = document.getElementById('theme-mode-picker');
+        if (!container) return;
+        var cur = _curMode();
+        container.innerHTML = _MODES.map(function (m) {
+            var active = cur === m.id;
+            return '<button type="button" class="theme-mode-btn' + (active ? ' theme-mode-btn--active' : '') + '" data-mode="' + m.id + '">' +
+                '<span class="theme-mode-dot" style="background:' + m.bg + '"></span>' +
+                (t(m.labelKey) || m.fallback) +
+                (active ? checkSvg : '') +
+                '</button>';
+        }).join('');
+        container.querySelectorAll('[data-mode]').forEach(function (btn) {
+            btn.addEventListener('click', function () { _pick(btn.dataset.mode, _curAccent()); });
         });
-    });
+    }
+
+    function _renderAccent() {
+        var container = document.getElementById('theme-accent-picker');
+        if (!container) return;
+        var cur = _curAccent();
+        container.innerHTML = _ACCENTS.map(function (a) {
+            var active = cur === a.id;
+            return '<button type="button" class="theme-accent-btn' + (active ? ' theme-accent-btn--active' : '') + '" data-accent="' + a.id + '" title="' + (t(a.labelKey) || a.fallback) + '">' +
+                '<span class="theme-accent-dot" style="background:' + _accentColor(a.id) + '"></span>' +
+                (t(a.labelKey) || a.fallback) +
+                (active ? checkSvg : '') +
+                '</button>';
+        }).join('');
+        container.querySelectorAll('[data-accent]').forEach(function (btn) {
+            btn.addEventListener('click', function () { _pick(_curMode(), btn.dataset.accent); });
+        });
+    }
+
+    _renderMode();
+    _renderAccent();
 }
 
 async function renderLangPicker() {
@@ -165,6 +210,59 @@ async function renderLangPicker() {
     }
 
     _render();
+}
+
+function renderDensityPicker() {
+    var container = document.getElementById('density-picker');
+    var preview = document.getElementById('density-preview');
+    if (!container) return;
+    var options = [
+        { id: 'normal', labelKey: 'profile.density_normal', fallback: 'Normal' },
+        { id: 'compact', labelKey: 'profile.density_compact', fallback: 'Compacto' },
+    ];
+    var checkSvg = '<svg class="lang-check" width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+    function _applyPreview(val) {
+        if (!preview) return;
+        preview.classList.toggle('density-preview--compact', val === 'compact');
+    }
+
+    function _render() {
+        var cur = localStorage.getItem('ga-chat-density') || 'normal';
+        container.innerHTML = options.map(function (o) {
+            var active = cur === o.id;
+            return '<button type="button" class="density-option' + (active ? ' density-option--active' : '') + '" data-density="' + o.id + '">' +
+                (t(o.labelKey) || o.fallback) +
+                (active ? checkSvg : '') +
+                '</button>';
+        }).join('');
+        _applyPreview(cur);
+        container.querySelectorAll('[data-density]').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                localStorage.setItem('ga-chat-density', btn.dataset.density);
+                _render();
+            });
+        });
+    }
+    _render();
+}
+
+function renderPreferences() {
+    var timeoutEl = document.getElementById('pref-timeout');
+    if (timeoutEl) {
+        timeoutEl.value = localStorage.getItem('ga-chat-timeout') || '0';
+        timeoutEl.addEventListener('change', function () {
+            localStorage.setItem('ga-chat-timeout', timeoutEl.value);
+        });
+    }
+
+    var sendEnterEl = document.getElementById('pref-send-enter');
+    if (sendEnterEl) {
+        sendEnterEl.checked = localStorage.getItem('ga-send-on-enter') !== 'false';
+        sendEnterEl.addEventListener('change', function () {
+            localStorage.setItem('ga-send-on-enter', sendEnterEl.checked ? 'true' : 'false');
+        });
+    }
 }
 
 function bindPasswordForm() {

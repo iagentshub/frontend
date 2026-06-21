@@ -53,9 +53,11 @@ class AgentChatDialog {
         el.className = 'chat-modal-bg';
         const name = this.agent.name || 'Agente';
         const initials = name.charAt(0).toUpperCase();
-        const hasTimeout = this.agent.timeout > 0;
+        const globalTimeout = Number(localStorage.getItem('ga-chat-timeout')) || 0;
+        const hasTimeout = (this.agent.timeout > 0) || globalTimeout > 0;
+        const density = localStorage.getItem('ga-chat-density') || 'normal';
         el.innerHTML = `
-        <div class="chat-box" id="ga-chat-box">
+        <div class="chat-box${density === 'compact' ? ' chat-box--compact' : ''}" id="ga-chat-box">
             <div class="chat-header">
                 <div class="chat-header-avatar">${esc(initials)}</div>
                 <div class="chat-header-info">
@@ -249,7 +251,9 @@ class AgentChatDialog {
         const input = document.getElementById('ga-chat-input');
         sendBtn.addEventListener('click', () => this._send());
         input.addEventListener('keydown', e => {
-            if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); this._send(); }
+            const enterToSend = localStorage.getItem('ga-send-on-enter') !== 'false';
+            if (e.key === 'Enter' && !e.shiftKey && enterToSend) { e.preventDefault(); this._send(); }
+            if (e.key === 'Enter' && e.ctrlKey && !enterToSend) { e.preventDefault(); this._send(); }
         });
     }
 
@@ -408,7 +412,8 @@ class AgentChatDialog {
     // ── Timer ─────────────────────────────────────────────────────────────────
 
     _startTimer() {
-        const secs = Number(this.agent.timeout) || 0;
+        let secs = Number(this.agent.timeout) || 0;
+        if (!secs) secs = Number(localStorage.getItem('ga-chat-timeout')) || 0;
         if (!secs) return;
         this._timerSecs = secs;
         this._timerRemaining = secs;

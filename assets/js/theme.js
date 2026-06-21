@@ -20,11 +20,11 @@
     window.THEMES = [
         { id: 'dark-red',     name: 'Rojo',    dark: true,  mode: 'dark',  accent: 'red',    bg: '#0A0A0A', accentColor: '#FF3B30' },
         { id: 'dark-blue',    name: 'Azul',    dark: true,  mode: 'dark',  accent: 'blue',   bg: '#0A0A0A', accentColor: '#0A84FF' },
-        { id: 'dark-orange',  name: 'Naranja', dark: true,  mode: 'dark',  accent: 'orange', bg: '#0A0A0A', accentColor: '#FF9F0A' },
+        { id: 'dark-orange',  name: 'Naranja', dark: true,  mode: 'dark',  accent: 'orange', bg: '#0A0A0A', accentColor: '#ffa31a' },
         { id: 'dark-purple',  name: 'Morado',  dark: true,  mode: 'dark',  accent: 'purple', bg: '#0A0A0A', accentColor: '#BF5AF2' },
         { id: 'light-red',    name: 'Rojo',    dark: false, mode: 'light', accent: 'red',    bg: '#F5F5F7', accentColor: '#E0282A' },
         { id: 'light-blue',   name: 'Azul',    dark: false, mode: 'light', accent: 'blue',   bg: '#F5F5F7', accentColor: '#006ADB' },
-        { id: 'light-orange', name: 'Naranja', dark: false, mode: 'light', accent: 'orange', bg: '#F5F5F7', accentColor: '#E07500' },
+        { id: 'light-orange', name: 'Naranja', dark: false, mode: 'light', accent: 'orange', bg: '#F5F5F7', accentColor: '#d4870e' },
         { id: 'light-purple', name: 'Morado',  dark: false, mode: 'light', accent: 'purple', bg: '#F5F5F7', accentColor: '#7B2FF7' },
     ];
 

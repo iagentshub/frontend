@@ -70,6 +70,14 @@
                             </svg>
                             <span data-i18n="profile.nav.preferences">Preferencias</span>
                         </button>
+                        <button class="profile-nav-item" data-section="section-style">
+                            <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
+                                <circle cx="8" cy="8" r="5.5" stroke="currentColor" stroke-width="1.4"/>
+                                <path d="M8 2.5C8 2.5 5 5 5 8s3 5.5 3 5.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+                                <path d="M2.5 8h11" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+                            </svg>
+                            <span data-i18n="profile.nav.style">Estilo</span>
+                        </button>
                         <button class="profile-nav-item" data-section="section-teams" id="nav-teams">
                             <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
                                 <circle cx="5" cy="5" r="2" stroke="currentColor" stroke-width="1.4"/>
@@ -164,11 +172,57 @@
                     <div id="section-preferences" class="profile-section" hidden>
                         <div class="section-title" data-i18n="profile.nav.preferences">Preferencias</div>
 
-                        <div class="section-subtitle" data-i18n="profile.theme_title">Tema</div>
-                        <div class="theme-picker" id="theme-picker"></div>
-
-                        <div class="section-subtitle" style="margin-top:28px" data-i18n="profile.lang_title">Idioma</div>
+                        <div class="section-subtitle" data-i18n="profile.lang_title">Idioma</div>
                         <div class="lang-picker" id="lang-picker"></div>
+
+                        <div class="section-subtitle" style="margin-top:28px" data-i18n="profile.timeout_title">Timeout del chat</div>
+                        <p class="section-desc" data-i18n="profile.timeout_desc">Tiempo máximo de espera por respuesta. Si el agente tiene su propio timeout, tiene prioridad.</p>
+                        <select id="pref-timeout" class="select pref-select">
+                            <option value="0" data-i18n="profile.timeout_indefinido">Indefinido</option>
+                            <option value="60" data-i18n="profile.timeout_1">1 minuto</option>
+                            <option value="120" data-i18n="profile.timeout_2">2 minutos</option>
+                            <option value="300" data-i18n="profile.timeout_5">5 minutos</option>
+                            <option value="600" data-i18n="profile.timeout_10">10 minutos</option>
+                        </select>
+
+                        <div class="pref-row">
+                            <div class="pref-row-info">
+                                <div class="section-subtitle" data-i18n="profile.send_enter_title">Enviar con Enter</div>
+                                <p class="section-desc" data-i18n="profile.send_enter_desc">Shift+Enter para nueva línea.</p>
+                            </div>
+                            <label class="toggle">
+                                <input type="checkbox" id="pref-send-enter" />
+                                <span class="toggle-track"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Estilo -->
+                    <div id="section-style" class="profile-section" hidden>
+                        <div class="section-title" data-i18n="profile.nav.style">Estilo</div>
+
+                        <div class="section-subtitle" data-i18n="profile.theme_title">Tema</div>
+                        <div class="theme-mode-row" id="theme-mode-picker"></div>
+                        <div class="theme-accent-row" id="theme-accent-picker"></div>
+
+                        <div class="section-subtitle" style="margin-top:28px" data-i18n="profile.density_title">Densidad del chat</div>
+                        <div class="density-picker" id="density-picker"></div>
+                        <div class="density-preview" id="density-preview">
+                            <div class="dp-msg dp-assistant">
+                                <div class="dp-avatar">A</div>
+                                <div class="dp-bubble" data-i18n="profile.density_preview_1">Hola, ¿en qué puedo ayudarte hoy?</div>
+                            </div>
+                            <div class="dp-msg dp-user">
+                                <div class="dp-avatar">
+                                    <svg width="10" height="10" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="5" r="2.5" stroke="currentColor" stroke-width="1.5"/><path d="M2 12.5c0-2.76 2.24-5 5-5s5 2.24 5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                                </div>
+                                <div class="dp-bubble" data-i18n="profile.density_preview_2">Necesito ayuda con un informe.</div>
+                            </div>
+                            <div class="dp-msg dp-assistant">
+                                <div class="dp-avatar">A</div>
+                                <div class="dp-bubble" data-i18n="profile.density_preview_3">Claro, cuéntame más sobre el informe.</div>
+                            </div>
+                        </div>
                     </div>
 
                 </div>

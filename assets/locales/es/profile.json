@@ -6,7 +6,8 @@
   "nav": {
     "account": "Mi cuenta",
     "providers": "Proveedores",
-    "preferences": "Preferencias"
+    "preferences": "Preferencias",
+    "style": "Estilo"
   },
   "auth_method": {
     "internal": "Interno",
@@ -23,7 +24,28 @@
   "field_role": "Rol",
   "field_auth": "Acceso",
   "theme_title": "Tema",
+  "theme_dark": "Oscuro",
+  "theme_light": "Claro",
+  "theme_red": "Rojo",
+  "theme_blue": "Azul",
+  "theme_orange": "Naranja",
+  "theme_purple": "Morado",
   "lang_title": "Idioma",
+  "density_title": "Densidad del chat",
+  "density_normal": "Normal",
+  "density_compact": "Compacto",
+  "density_preview_1": "Hola, ¿en qué puedo ayudarte hoy?",
+  "density_preview_2": "Necesito ayuda con un informe.",
+  "density_preview_3": "Claro, cuéntame más sobre el informe.",
+  "timeout_title": "Timeout del chat",
+  "timeout_desc": "Tiempo máximo de espera por respuesta. Si el agente tiene su propio timeout, tiene prioridad.",
+  "timeout_indefinido": "Indefinido",
+  "timeout_1": "1 minuto",
+  "timeout_2": "2 minutos",
+  "timeout_5": "5 minutos",
+  "timeout_10": "10 minutos",
+  "send_enter_title": "Enviar con Enter",
+  "send_enter_desc": "Shift+Enter para nueva línea.",
   "password_title": "Cambiar contraseña",
   "accounts": {
     "title": "Conectar cuentas",
