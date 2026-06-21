@@ -29,6 +29,12 @@
     "placeholder_host": "http://localhost:11434",
     "placeholder_model": "gpt-4o / claude-sonnet-4-5 / llama3.2"
   },
+  "ollama": {
+    "enter_host": "Enter the host first",
+    "loading": "Loading models…",
+    "no_models": "No models installed (use ollama pull <name>)",
+    "load_error": "Could not connect to server"
+  },
   "confirm_delete": "Delete this connection?",
   "deleted": "Connection deleted",
   "saved": "Connection saved",

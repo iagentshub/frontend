@@ -175,7 +175,7 @@ async function _hubSync(connId, btn) {
 
 async function loadAccounts() {
     try {
-        _profileConns = await api.get('/api/connections');
+        _profileConns = await api.get('/api/connections/raw');
         _renderProviderGroups();
     } catch (e) {
         var root = document.getElementById('accounts-list');
