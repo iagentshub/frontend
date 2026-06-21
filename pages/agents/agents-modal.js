@@ -121,6 +121,10 @@ function _openAgentModal(agent) {
     if (agentTypeEl) agentTypeEl.value = agent ? (agent.agent_type || 'generic') : 'generic';
     _syncPlatformFields(agent ? (agent.agent_type || 'generic') : 'generic', agent);
 
+    // Effort level
+    const effortEl = document.getElementById('agent-effort-level');
+    if (effortEl) effortEl.value = agent ? (agent.effort_level || '') : '';
+
     _syncConnectionSelect();
     document.getElementById('agent-connection').value = agent ? (agent.connection_id || '') : '';
 
@@ -277,6 +281,7 @@ function _bindAgentModal() {
         const scopeChecked = document.querySelector('input[name="agent-scope"]:checked');
         const agentType = (document.getElementById('agent-type') || {}).value || 'generic';
 
+        const effortEl = document.getElementById('agent-effort-level');
         const payload = {
             id: document.getElementById('agent-id').value || undefined,
             name: document.getElementById('agent-name').value.trim(),
@@ -285,11 +290,12 @@ function _bindAgentModal() {
             connection_id: document.getElementById('agent-connection').value || null,
             system_prompt: document.getElementById('agent-prompt').value.trim(),
             temperature: parseFloat(document.getElementById('agent-temp').value),
+            effort_level: effortEl ? (effortEl.value || null) : null,
             skills: _getSelectedSkills(),
             knowledge: _getSelectedKnowledge(),
             use_memory: useMemory,
             memory_file: useMemory ? memFile : null,
-            routines: _getRoutines(),
+            routines: agentType === 'claude' ? _getRoutines() : [],
             scope: scopeChecked ? scopeChecked.value : 'private',
             ..._buildPlatformPayload(agentType),
         };
