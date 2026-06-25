@@ -90,9 +90,25 @@ function collectDynamicFields() {
     return out;
 }
 
+// ── Scope selector ─────────────────────────────────────────────────────────────
+
+function _updateScopeHint(scope, wsName) {
+    var hint = document.getElementById('conn-scope-hint');
+    if (!hint) return;
+    hint.textContent = scope === 'personal'
+        ? (t('connections.modal.scope_hint_personal') || 'Solo visible para ti, en cualquier workspace')
+        : (t('connections.modal.scope_hint_workspace') || 'Visible para todos los miembros del workspace') +
+          (wsName ? ' "' + wsName + '"' : '');
+}
+
+function getModalScope() {
+    var el = document.getElementById('conn-scope');
+    return el ? el.value : 'workspace';
+}
+
 // ── Open / close ──────────────────────────────────────────────────────────────
 
-function openModal(conn) {
+function openModal(conn, wsCtx) {
     var defaultType = conn && conn.type ? conn.type : Providers.first();
     document.getElementById('conn-modal-title').textContent =
         conn ? t('connections.modal.title_edit') : t('connections.modal.title_new');
@@ -101,6 +117,20 @@ function openModal(conn) {
     document.getElementById('conn-type').value = defaultType;
 
     buildDynamicFields(defaultType, conn);
+
+    // Scope row: only in team workspace
+    var scopeRow = document.getElementById('conn-scope-row');
+    var scopeEl = document.getElementById('conn-scope');
+    var ctx = wsCtx || (typeof _wsCtx !== 'undefined' ? _wsCtx : null);
+    if (scopeRow && scopeEl && ctx && !ctx.personal) {
+        scopeRow.style.display = '';
+        var initialScope = conn && conn._personal_key ? 'personal' : 'workspace';
+        scopeEl.value = initialScope;
+        _updateScopeHint(initialScope, ctx.name);
+        scopeEl.onchange = function () { _updateScopeHint(scopeEl.value, ctx.name); };
+    } else if (scopeRow) {
+        scopeRow.style.display = 'none';
+    }
 
     document.getElementById('conn-modal').style.display = 'flex';
     setTimeout(function () { document.getElementById('conn-name').focus(); }, 80);

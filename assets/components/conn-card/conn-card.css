@@ -159,3 +159,16 @@
 .card-action-btn--icon {
     padding: 4px 7px;
 }
+
+.conn-scope-badge {
+    flex-shrink: 0;
+    font-size: 0.6rem;
+    font-weight: 600;
+    color: var(--ink-3);
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 1px 5px;
+    white-space: nowrap;
+    opacity: 0.75;
+}

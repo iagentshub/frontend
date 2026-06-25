@@ -2,6 +2,9 @@
 'use strict';
 
 var _connections = [];
+var _wsCtx = { personal: true, id: null, name: 'Personal' };
+
+function setWsCtx(ctx) { _wsCtx = ctx || { personal: true, id: null, name: 'Personal' }; }
 
 async function loadConnections() {
     _connections = await api.get('/api/connections');
@@ -85,11 +88,14 @@ function renderCard(c) {
     var sharedBadge = c._shared
         ? '<span class="conn-token-badge" style="background:var(--surface-3)">' + (t('teams.teams.sharing.shared_badge') || 'Compartido') + '</span>'
         : '';
+    var personalBadge = c._personal_key
+        ? '<span class="conn-scope-badge">' + (t('connections.card.scope_personal') || 'Personal') + '</span>'
+        : '';
     return '<article class="conn-card" data-conn-id="' + esc(c.id) + '">' +
         '<div class="conn-card-body">' +
         '<div class="conn-card-name-row">' +
         '<div class="conn-card-name">' + esc(c.name) + '</div>' +
-        tokenBadge + sharedBadge +
+        tokenBadge + sharedBadge + personalBadge +
         '</div>' +
         (sub ? '<div class="conn-card-sub">' + esc(sub) + (urlBadge ? ' ' + urlBadge : '') + '</div>' : (!urlBadge ? '' : '<div class="conn-card-sub">' + urlBadge + '</div>')) +
         '<div class="conn-card-status"></div>' +

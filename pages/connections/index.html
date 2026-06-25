@@ -78,6 +78,14 @@
                             <!-- poblado dinámicamente por connections-modal.js vía Providers -->
                         </select>
                     </div>
+                    <div class="field" id="conn-scope-row" style="display:none">
+                        <label data-i18n="connections.modal.field_scope">Guardar como</label>
+                        <select id="conn-scope" class="select">
+                            <option value="workspace" data-i18n="connections.modal.scope_workspace">Clave del workspace</option>
+                            <option value="personal" data-i18n="connections.modal.scope_personal">Clave personal</option>
+                        </select>
+                        <span class="input-hint" id="conn-scope-hint"></span>
+                    </div>
                     <!-- campos dinámicos según proveedor — generados por buildDynamicFields() -->
                     <div id="conn-dynamic-fields"></div>
                 </div>

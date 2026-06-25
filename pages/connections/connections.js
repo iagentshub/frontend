@@ -4,6 +4,22 @@
 async function init() {
     await window.requireAuth();
     renderNav('nav-root', 'connections');
+
+    // Workspace context — needed for scope selector and subtitle
+    try {
+        var me = await api.get('/api/auth/me');
+        var wsCtx = {
+            personal: me.workspace_personal !== false,
+            id: me.workspace_id || me.username,
+            name: me.workspace_name || (me.workspace_personal !== false ? 'Personal' : me.workspace_id),
+        };
+        setWsCtx(wsCtx);
+        if (!wsCtx.personal) {
+            var subtitle = document.querySelector('.page-subtitle');
+            if (subtitle) subtitle.textContent = wsCtx.name;
+        }
+    } catch (_) {}
+
     await Providers.load();
     buildProviderSelect();
     FilterConnections.init({
@@ -16,7 +32,7 @@ async function init() {
 }
 
 function bindEvents() {
-    document.getElementById('btn-new-conn').addEventListener('click', function () { openModal(null); });
+    document.getElementById('btn-new-conn').addEventListener('click', function () { openModal(null, _wsCtx); });
     document.getElementById('conn-modal-close').addEventListener('click', closeModal);
     document.getElementById('conn-cancel').addEventListener('click', closeModal);
     document.getElementById('btn-test-all').addEventListener('click', function () {
@@ -49,7 +65,7 @@ function bindEvents() {
         } else if (action === 'edit') {
             try {
                 var c = await api.get('/api/connections/' + encodeURIComponent(id));
-                openModal(c);
+                openModal(c, _wsCtx);
             } catch (e) { toast(e.message, 'error'); }
         } else if (action === 'delete') {
             if (!confirm(t('connections.confirm_delete'))) return;
@@ -72,6 +88,7 @@ function bindEvents() {
             id: document.getElementById('conn-id').value || undefined,
             name: document.getElementById('conn-name').value.trim(),
             type: type,
+            scope: getModalScope(),
         };
         Object.assign(payload, collectDynamicFields());
         try {
