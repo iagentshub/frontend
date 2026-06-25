@@ -1,0 +1,6 @@
+/* recent widget */
+.w-recent-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(150px, 1fr)); gap:10px; }
+.w-recent-card { display:flex; flex-direction:column; gap:6px; padding:12px 14px; border-radius:8px; background:var(--surface-2); border:1px solid var(--line); cursor:pointer; text-decoration:none; transition:border-color 0.15s, box-shadow 0.15s; }
+.w-recent-card:hover { border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-a10); }
+.w-recent-name { font-size:0.82rem; font-weight:600; color:var(--ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.w-recent-model { font-size:0.7rem; color:var(--ink-3); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }

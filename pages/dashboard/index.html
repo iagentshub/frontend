@@ -6,59 +6,49 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>iAgents Hub · Dashboard</title>
-    <!-- CSS globales -->
     <link rel="stylesheet" href="/assets/css/variables.css" />
     <link rel="stylesheet" href="/assets/themes/themes.css" />
     <link rel="stylesheet" href="/assets/css/base.css" />
     <link rel="stylesheet" href="/assets/css/components.css" />
     <link rel="stylesheet" href="/assets/css/layout.css" />
     <link rel="stylesheet" href="/assets/css/animations.css" />
-    <!-- Componentes -->
     <link rel="stylesheet" href="/assets/components/main_nav/main_nav.css" />
-    <!-- Página -->
     <link rel="stylesheet" href="/dashboard/dashboard.css" />
+    <!-- Widget styles -->
+    <link rel="stylesheet" href="/dashboard/widgets/summary/widget.css" />
+    <link rel="stylesheet" href="/dashboard/widgets/token-usage/widget.css" />
+    <link rel="stylesheet" href="/dashboard/widgets/activity/widget.css" />
+    <link rel="stylesheet" href="/dashboard/widgets/conn-status/widget.css" />
+    <link rel="stylesheet" href="/dashboard/widgets/recent/widget.css" />
 </head>
 
 <body>
     <div class="app-shell">
         <div id="nav-root"></div>
 
+        <!-- Panel lateral de edicion — reemplaza al nav durante la personalizacion -->
+        <aside id="dash-edit-sidebar" class="dash-edit-sidebar" style="display:none" aria-hidden="true">
+            <div class="des-header">
+                <span class="des-title">Personalizar</span>
+                <button class="btn btn-primary btn-sm" id="btn-done-editing">Listo</button>
+            </div>
+            <p class="des-hint">Pulsa un panel para anadirlo. Arrastra en el dashboard para reordenar. Usa × para quitar.</p>
+            <div class="des-list" id="des-widget-list"></div>
+        </aside>
+
         <main class="page-content">
             <div class="page-header">
                 <div>
                     <h1 class="page-title" data-i18n="dashboard.page.title">Dashboard</h1>
-                    <p class="page-subtitle" data-i18n="dashboard.page.subtitle">Visión general de tu plataforma</p>
+                    <p class="page-subtitle" data-i18n="dashboard.page.subtitle">Vision general de tu plataforma</p>
                 </div>
+                <button id="btn-edit-dashboard" class="btn btn-ghost btn-sm">Personalizar</button>
             </div>
 
-            <!-- ── Stat cards ── -->
-            <div id="dash-stats" class="dash-stats"></div>
-
-            <!-- ── Tokens + Composición ── -->
-            <div class="dash-columns">
-                <div class="dash-panel">
-                    <div class="dash-panel-title" data-i18n="dashboard.tokens.title">Uso de tokens</div>
-                    <div id="dash-tokens-total" class="dash-token-total"></div>
-                    <div id="dash-tokens-body"></div>
-                </div>
-                <div class="dash-panel">
-                    <div class="dash-panel-title" data-i18n="dashboard.composition.title">Composición de agentes</div>
-                    <div id="dash-composition-body"></div>
-                </div>
-            </div>
-
-            <!-- ── Agentes recientes ── -->
-            <div>
-                <div class="dash-section-header" style="margin-bottom:12px">
-                    <span class="dash-section-title" data-i18n="dashboard.recent.title">Agentes recientes</span>
-                    <a href="/agents" class="btn btn-ghost" style="font-size:0.75rem;padding:4px 10px" data-i18n="nav.agents">Agentes</a>
-                </div>
-                <div id="dash-recent-grid" class="dash-recent-grid"></div>
-            </div>
+            <div id="dash-grid" class="dash-grid"></div>
         </main>
     </div>
 
-    <!-- JS globales -->
     <script src="/assets/js/flog.js"></script>
     <script src="/assets/js/i18n.js"></script>
     <script src="/assets/js/config.js"></script>
@@ -67,9 +57,13 @@
     <script src="/assets/js/auth.js"></script>
     <script src="/assets/js/api.js"></script>
     <script src="/assets/js/utils.js"></script>
-    <!-- Componentes -->
     <script src="/assets/components/main_nav/main_nav.js"></script>
-    <!-- Página -->
+    <!-- Widget modules (deben cargarse antes que dashboard.js) -->
+    <script src="/dashboard/widgets/summary/widget.js"></script>
+    <script src="/dashboard/widgets/token-usage/widget.js"></script>
+    <script src="/dashboard/widgets/activity/widget.js"></script>
+    <script src="/dashboard/widgets/conn-status/widget.js"></script>
+    <script src="/dashboard/widgets/recent/widget.js"></script>
     <script src="/dashboard/dashboard.js"></script>
 </body>
 
