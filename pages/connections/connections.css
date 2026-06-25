@@ -218,3 +218,11 @@
     color: var(--ink-3);
     font-size: 13px;
 }
+
+/* ── Responsive 480px ── */
+@media (max-width: 480px) {
+    .conn-group         { margin-bottom: 20px; }
+    .conn-group-header  { flex-wrap: wrap; gap: 6px; }
+    .conn-group-test    { margin-left: 0; }
+    .conn-group-grid    { gap: 8px; }
+}

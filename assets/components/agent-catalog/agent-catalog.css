@@ -135,3 +135,9 @@
     color: var(--ink-3);
     font-size: 14px;
 }
+
+@media (max-width: 480px) {
+    .ac-box     { max-height: 92vh; border-radius: var(--radius-lg) var(--radius-lg) 0 0; }
+    .ac-header  { padding: 12px; }
+    .ac-grid    { padding: 12px; gap: 10px; }
+}

@@ -348,3 +348,10 @@
     .dash-columns { flex-direction: column; }
     .dash-recent-grid { grid-template-columns: 1fr; }
 }
+
+@media (max-width: 480px) {
+    .dash-stats       { grid-template-columns: 1fr; gap: 8px; }
+    .dash-recent-grid { grid-template-columns: 1fr; }
+    .dash-stat-card   { padding: 14px 16px; gap: 12px; }
+    .dash-stat-icon   { width: 34px; height: 34px; }
+}

@@ -253,6 +253,16 @@
     .admin-search-wrap { min-width: 100%; }
 }
 
+@media (max-width: 480px) {
+    .admin-stats-grid  { grid-template-columns: 1fr; gap: 8px; }
+    .admin-tabs        { overflow-x: auto; -webkit-overflow-scrolling: touch; flex-wrap: nowrap; scrollbar-width: none; }
+    .admin-tabs::-webkit-scrollbar { display: none; }
+    .admin-tab         { white-space: nowrap; flex-shrink: 0; }
+    .admin-table       { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .admin-table th,
+    .admin-table td    { white-space: nowrap; }
+}
+
 /* Sortable column headers */
 .admin-table th.sortable {
     cursor: pointer;

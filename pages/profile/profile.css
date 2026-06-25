@@ -508,6 +508,16 @@
     }
 }
 
+@media (max-width: 480px) {
+    .profile-sections  { padding: 16px 12px; }
+    .profile-nav-user  { font-size: 13px; }
+    .section-subtitle  { font-size: 13px; }
+    .theme-mode-btn,
+    .lang-option,
+    .density-option    { padding: 8px 10px; font-size: 13px; }
+    .pref-select       { font-size: 13px; }
+}
+
 /* ── Provider groups (sección Proveedores) ─────────── */
 .provider-group {
     margin-bottom: 4px;

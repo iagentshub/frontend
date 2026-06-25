@@ -125,6 +125,15 @@
     }
 }
 
+@media (max-width: 480px) {
+    .page-content    { padding: 54px 12px 20px; gap: 16px; }
+    .page-title      { font-size: 1.1rem; }
+    .page-actions    { gap: 6px; }
+    .topbar          { padding: 0 12px 0 52px; gap: 8px; }
+    .topbar-brand    { font-size: 14px; }
+    .empty-state     { padding: 48px 16px; }
+}
+
 /* ── Empty state ── */
 .empty-state {
     display: flex;

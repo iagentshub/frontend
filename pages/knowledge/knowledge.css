@@ -163,10 +163,68 @@
     color: var(--accent);
 }
 
-/* Responsive: hide folder panel on small screens */
-@media (max-width: 600px) {
-    .kf-panel { display: none; }
-    .knowledge-tab-content { padding-left: 0; }
+/* Responsive: folder chips on mobile */
+@media (max-width: 768px) {
+    /* Layout: stack vertically */
+    .knowledge-tab-layout    { flex-direction: column; }
+    .knowledge-tab-content   { padding-left: 0; }
+
+    /* Panel → horizontal chip strip */
+    .kf-panel {
+        width: 100%;
+        border-right: none;
+        padding-right: 0;
+        border-bottom: 1px solid var(--line);
+        padding-bottom: 10px;
+        margin-bottom: 16px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 6px;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        flex-wrap: nowrap;
+        scrollbar-width: none;
+    }
+    .kf-panel::-webkit-scrollbar { display: none; }
+    .kf-panel:empty              { display: none; }
+
+    /* Ocultar header "Carpetas" y acciones rename/delete */
+    .kf-section-header { display: none; }
+    .kf-item-row       { display: contents; }
+    .kf-item-actions   { display: none !important; }
+    .kf-item-stats     { display: none; }
+
+    /* Chips */
+    .kf-item {
+        width: auto;
+        flex: none;
+        flex-direction: row;
+        padding: 5px 12px;
+        border-radius: 20px;
+        border: 1px solid var(--line-strong);
+        background: var(--surface-2);
+        font-size: 12px;
+        gap: 0;
+    }
+    .kf-item:hover { background: var(--surface-3); }
+    .kf-item--active {
+        background: var(--accent) !important;
+        border-color: var(--accent) !important;
+    }
+    .kf-item--active .kf-item-name { color: #fff; }
+
+    /* Anular el flex:1 que aplica .kf-item-row .kf-item en desktop */
+    .kf-item-row .kf-item { flex: none; min-width: auto; }
+
+    .kf-item-name {
+        max-width: none;
+        font-size: 12px;
+        font-weight: 500;
+        overflow: visible;
+        text-overflow: clip;
+        white-space: nowrap;
+    }
 }
 
 /* ── Tabs ─────────────────────────────────────────────────────────────────── */
@@ -641,4 +699,24 @@ a.knowledge-card-source:hover {
     padding: 1px 6px;
     border-radius: 4px;
     white-space: nowrap;
+}
+
+/* ── Responsive 480px ───────────────────────────────────────────────────── */
+@media (max-width: 480px) {
+    .knowledge-tabs {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        flex-wrap: nowrap;
+        scrollbar-width: none;
+        margin-bottom: 16px;
+    }
+    .knowledge-tabs::-webkit-scrollbar { display: none; }
+    .ktab { white-space: nowrap; flex-shrink: 0; padding: 8px 14px; font-size: 12.5px; }
+
+    .kup-dialog {
+        right: 10px;
+        bottom: 10px;
+        width: calc(100vw - 20px);
+        max-width: 288px;
+    }
 }
