@@ -8,6 +8,7 @@ var _connections = [];
 var _allAgents = [];
 var _allKnowledge = [];
 var _allTeams = [];
+var _allWorkspaces = [];
 
 async function reloadData() {
     var promises = [
@@ -15,13 +16,15 @@ async function reloadData() {
             .then(function (d) { renderStats(d); }),
         api.get('/api/admin/users')
             .then(function (d) { _allUsers = d; applyUserFilters(); }),
+        api.get('/api/admin/workspaces')
+            .then(function (d) { _allWorkspaces = d; applyWorkspaceFilters(); }),
         api.get('/api/admin/agents')
             .then(function (d) { _allAgents = d; applyAgentFilters(); }),
         api.get('/api/admin/connections')
             .then(function (d) { _connections = d; applyConnFilters(); }),
         api.get('/api/admin/knowledge')
             .then(function (d) { _allKnowledge = d; applyKnowledgeFilters(); }),
-        api.get('/api/admin/teams')
+        api.get('/api/admin/groups')
             .then(function (d) { _allTeams = d; applyTeamFilters(); }),
     ];
     try {
@@ -46,7 +49,7 @@ function _startPolling() {
     _refreshTimer = setInterval(reloadData, 30000);
 }
 
-var _TAB_IDS = ['general', 'users', 'teams', 'agents', 'connections', 'knowledge'];
+var _TAB_IDS = ['general', 'users', 'workspaces', 'teams', 'agents', 'connections', 'knowledge'];
 
 function _bindTabs() {
     document.querySelectorAll('.admin-tab').forEach(function (btn) {
@@ -69,6 +72,8 @@ function _bindFilters() {
         var el = document.getElementById(id);
         if (el) el.addEventListener('input', applyUserFilters);
     });
+    var wsSearchEl = document.getElementById('ws-search');
+    if (wsSearchEl) wsSearchEl.addEventListener('input', applyWorkspaceFilters);
     var teamSearchEl = document.getElementById('team-search');
     if (teamSearchEl) teamSearchEl.addEventListener('input', applyTeamFilters);
     ['agent-search'].forEach(function (id) {

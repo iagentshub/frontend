@@ -796,3 +796,129 @@
     font-size: 12px;
     line-height: 1.4;
 }
+
+/* ── Workspace cards ─────────────────────────────── */
+.profile-ws-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 12px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--surface);
+    margin-bottom: 8px;
+}
+
+.profile-ws-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.profile-ws-name {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--ink);
+}
+
+.profile-ws-role {
+    font-size: 0.72rem;
+    color: var(--ink-3);
+}
+
+/* ── Pending invitation rows (inside modal) ─────── */
+.ws-inv-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--line);
+    font-size: 0.85rem;
+}
+
+.ws-inv-row:last-child {
+    border-bottom: none;
+}
+
+.ws-inv-username {
+    color: var(--ink);
+    font-weight: 500;
+}
+
+/* ── Received invitation cards ───────────────────── */
+.ws-inv-received-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 14px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--surface);
+    margin-bottom: 8px;
+    gap: 12px;
+}
+
+.ws-inv-info {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    min-width: 0;
+}
+
+.ws-inv-ws-name {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--ink);
+}
+
+.ws-inv-from {
+    font-size: 0.78rem;
+    color: var(--ink-3);
+}
+
+.ws-inv-actions {
+    display: flex;
+    gap: 6px;
+    flex-shrink: 0;
+}
+
+.profile-empty-msg {
+    font-size: 0.82rem;
+    color: var(--ink-3);
+    padding: 8px 0;
+}
+
+/* ── Workspace groups (in modal) ─────────────────────────────── */
+.ws-group-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--line);
+    gap: 10px;
+}
+
+.ws-group-row:last-child { border-bottom: none; }
+
+.ws-group-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.ws-group-name {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--ink);
+}
+
+.ws-group-count {
+    font-size: 0.72rem;
+    color: var(--ink-3);
+}
+
+.ws-group-actions {
+    display: flex;
+    gap: 6px;
+    flex-shrink: 0;
+}

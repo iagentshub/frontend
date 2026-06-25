@@ -13,30 +13,38 @@ function fmtTokens(n) {
 
 function renderStats(stats) {
     var grid = document.getElementById('stats-grid');
+    var sparklineHtml = (window.tokenSparkline && stats.tokens_daily)
+        ? '<div class="stat-sparkline">' + tokenSparkline(stats.tokens_daily, 14) + '</div>'
+        : '';
+
     var cards = [
         {
             label: 'Usuarios',
             value: stats.users_total,
             sub: stats.users_active + ' activos · ' + stats.users_verified + ' verificados',
             icon: _ICO_USERS,
+            extra: '',
         },
         {
             label: 'Conexiones',
             value: stats.connections_total,
             sub: fmtTokens(stats.tokens_in + stats.tokens_out) + ' tokens totales',
             icon: _ICO_CONNS,
+            extra: '',
         },
         {
             label: 'Agentes',
             value: stats.agents_public + stats.agents_private,
             sub: stats.agents_public + ' públicos · ' + stats.agents_private + ' privados',
             icon: _ICO_AGENTS,
+            extra: '',
         },
         {
             label: 'Tokens consumidos',
             value: fmtTokens(stats.tokens_in + stats.tokens_out),
             sub: fmtTokens(stats.tokens_in) + ' in · ' + fmtTokens(stats.tokens_out) + ' out',
             icon: _ICO_TOKENS,
+            extra: sparklineHtml,
         },
     ];
 
@@ -47,8 +55,8 @@ function renderStats(stats) {
             '<div class="stat-value">' + esc(String(c.value)) + '</div>' +
             '<div class="stat-label">' + esc(c.label) + '</div>' +
             '<div class="stat-sub">' + esc(c.sub) + '</div>' +
+            c.extra +
             '</div>' +
             '</div>';
     }).join('');
-
 }

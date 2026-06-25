@@ -56,6 +56,7 @@
 .stat-value { font-size: 22px; font-weight: 700; color: var(--ink); line-height: 1.1; }
 .stat-label { font-size: 13px; color: var(--ink-2); margin-top: 2px; }
 .stat-sub { font-size: 11px; color: var(--ink-3); margin-top: 4px; }
+.stat-sparkline { margin-top: 10px; opacity: 0.9; }
 
 /* Tabs */
 .admin-tabs {

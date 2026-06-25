@@ -1,16 +1,17 @@
-// share-teams.js — modal reutilizable para compartir recursos con equipos
+// share-teams.js — modal para compartir recursos con grupos de workspace
 'use strict';
 
 (function () {
     var _resourceType = null;
     var _resourceId   = null;
     var _resourceName = null;
-    var _sharedTeams  = new Set();
-    var _allTeams     = [];
+    var _sharedGroups = new Set();
+    var _allGroups    = [];
+    var _workspaceId  = null;
 
     var _PALETTE = ['#4f46e5', '#0891b2', '#059669', '#d97706', '#7c3aed', '#db2777'];
 
-    function _teamColor(name) {
+    function _groupColor(name) {
         var c = 0;
         for (var i = 0; i < (name || '').length; i++) c += name.charCodeAt(i);
         return _PALETTE[c % _PALETTE.length];
@@ -23,22 +24,22 @@
     }
 
     function _injectStyles() {
-        if (document.getElementById('share-teams-styles')) return;
+        if (document.getElementById('share-groups-styles')) return;
         var s = document.createElement('style');
-        s.id = 'share-teams-styles';
+        s.id = 'share-groups-styles';
         s.textContent =
-            '.share-teams-table { width:100%; border-collapse:collapse; }' +
-            '.share-teams-table thead th { font-size:11px; font-weight:600; text-transform:uppercase;' +
+            '.share-groups-table { width:100%; border-collapse:collapse; }' +
+            '.share-groups-table thead th { font-size:11px; font-weight:600; text-transform:uppercase;' +
             '  letter-spacing:.05em; color:var(--ink-3); padding:0 14px 8px; text-align:left; }' +
-            '.share-teams-table tbody tr { border-top:1px solid var(--line); }' +
-            '.share-teams-table tbody tr:first-child { border-top:1px solid var(--line-strong); }' +
-            '.share-teams-table tbody td { padding:10px 14px; vertical-align:middle; }' +
-            '.share-teams-table td:last-child { text-align:right; width:1%; white-space:nowrap; }' +
-            '.share-team-cell { display:flex; align-items:center; gap:9px; }' +
-            '.share-team-avatar { flex-shrink:0; width:28px; height:28px; border-radius:7px;' +
+            '.share-groups-table tbody tr { border-top:1px solid var(--line); }' +
+            '.share-groups-table tbody tr:first-child { border-top:1px solid var(--line-strong); }' +
+            '.share-groups-table tbody td { padding:10px 14px; vertical-align:middle; }' +
+            '.share-groups-table td:last-child { text-align:right; width:1%; white-space:nowrap; }' +
+            '.share-group-cell { display:flex; align-items:center; gap:9px; }' +
+            '.share-group-avatar { flex-shrink:0; width:28px; height:28px; border-radius:7px;' +
             '  display:flex; align-items:center; justify-content:center;' +
             '  font-size:12px; font-weight:700; color:#fff; }' +
-            '.share-team-name { font-size:13px; font-weight:500; color:var(--ink);' +
+            '.share-group-name { font-size:13px; font-weight:500; color:var(--ink);' +
             '  white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }' +
             '.share-revoke-btn { display:inline-flex; align-items:center; gap:4px;' +
             '  padding:4px 10px; border-radius:var(--radius); border:1px solid color-mix(in srgb,var(--danger) 30%,transparent);' +
@@ -71,16 +72,14 @@
             '</div>' +
             '<div class="modal-body" id="share-teams-body" style="padding:16px 0 4px;gap:0;overflow-x:auto"></div>' +
             '<div class="modal-footer" style="justify-content:flex-end">' +
-            '<button class="btn btn-ghost" id="btn-share-teams-done"></button>' +
+            '<button class="btn btn-ghost" id="btn-share-teams-done">Cerrar</button>' +
             '</div>' +
             '</div>' +
             '</div>';
         document.body.appendChild(div.firstElementChild);
 
         document.getElementById('btn-share-teams-close').addEventListener('click', _close);
-        var doneBtn = document.getElementById('btn-share-teams-done');
-        doneBtn.textContent = (typeof t === 'function' ? t('common.actions.close') : null) || 'Cerrar';
-        doneBtn.addEventListener('click', _close);
+        document.getElementById('btn-share-teams-done').addEventListener('click', _close);
         document.getElementById('modal-share-teams').addEventListener('click', function (e) {
             if (e.target === this) _close();
         });
@@ -92,57 +91,49 @@
         if (modal) modal.style.display = 'none';
     }
 
-    function _buildBtn(teamId) {
-        var shared = _sharedTeams.has(teamId);
-        var grantLabel  = (typeof t === 'function' ? t('teams.teams.sharing.grant_access')  : null) || 'Dar acceso';
-        var revokeLabel = (typeof t === 'function' ? t('teams.teams.sharing.revoke_access') : null) || 'Quitar acceso';
+    function _buildBtn(groupId) {
+        var shared = _sharedGroups.has(groupId);
         if (shared) {
-            return '<button class="share-revoke-btn" data-team="' + esc(teamId) + '">' +
+            return '<button class="share-revoke-btn" data-group="' + esc(groupId) + '">' +
                 '<svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M2 8h12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>' +
-                esc(revokeLabel) + '</button>';
+                'Quitar acceso</button>';
         }
-        return '<button class="share-grant-btn" data-team="' + esc(teamId) + '">' +
+        return '<button class="share-grant-btn" data-group="' + esc(groupId) + '">' +
             '<svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M8 2v12M2 8h12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>' +
-            esc(grantLabel) + '</button>';
+            'Dar acceso</button>';
     }
 
     function _renderTable() {
         var bodyEl = document.getElementById('share-teams-body');
         if (!bodyEl) return;
 
-        if (!_allTeams.length) {
-            bodyEl.innerHTML = '<p style="padding:24px 16px;text-align:center;font-size:13px;color:var(--ink-3)">' +
-                esc((typeof t === 'function' ? t('teams.teams.sharing.no_teams') : null) || 'No perteneces a ningún equipo.') +
+        if (!_allGroups.length) {
+            bodyEl.innerHTML =
+                '<p style="padding:24px 16px;text-align:center;font-size:13px;color:var(--ink-3)">' +
+                'Este workspace no tiene grupos. Crea uno en Perfil &rarr; Workspaces.' +
                 '</p>';
             return;
         }
 
-        var managerLabel = (typeof t === 'function' ? t('teams.teams.manager_badge') : null) || 'Gestor';
-        var memberLabel  = (typeof t === 'function' ? t('teams.teams.member_badge')  : null) || 'Miembro';
-
-        var rows = _allTeams.map(function (team) {
-            var letter = (team.name || '?').charAt(0).toUpperCase();
-            var color  = _teamColor(team.name || '');
-            var roleBadge = team.is_manager
-                ? '<span class="badge badge--ok">' + esc(managerLabel) + '</span>'
-                : '<span class="badge badge--std">' + esc(memberLabel) + '</span>';
+        var rows = _allGroups.map(function (group) {
+            var letter = (group.name || '?').charAt(0).toUpperCase();
+            var color  = _groupColor(group.name || '');
+            var members = group.member_count != null ? group.member_count + ' miembros' : '';
             return '<tr>' +
-                '<td><div class="share-team-cell">' +
-                '<span class="share-team-avatar" style="background:' + color + '">' + esc(letter) + '</span>' +
-                '<span class="share-team-name">' + esc(team.name) + '</span>' +
+                '<td><div class="share-group-cell">' +
+                '<span class="share-group-avatar" style="background:' + color + '">' + esc(letter) + '</span>' +
+                '<span class="share-group-name">' + esc(group.name) + '</span>' +
                 '</div></td>' +
-                '<td>' + roleBadge + '</td>' +
-                '<td>' + _buildBtn(team.id) + '</td>' +
+                '<td style="font-size:12px;color:var(--ink-3)">' + esc(members) + '</td>' +
+                '<td>' + _buildBtn(group.id) + '</td>' +
                 '</tr>';
         }).join('');
 
-        var thGroup = esc((typeof t === 'function' ? t('teams.teams.sharing.col_group') : null) || 'Grupo');
-        var thRole  = esc((typeof t === 'function' ? t('teams.teams.sharing.col_role')  : null) || 'Rol');
         bodyEl.innerHTML =
-            '<table class="share-teams-table">' +
+            '<table class="share-groups-table">' +
             '<thead><tr>' +
-            '<th>' + thGroup + '</th>' +
-            '<th>' + thRole + '</th>' +
+            '<th>Grupo</th>' +
+            '<th>Miembros</th>' +
             '<th></th>' +
             '</tr></thead>' +
             '<tbody>' + rows + '</tbody>' +
@@ -152,23 +143,22 @@
     async function _onToggle(e) {
         var btn = e.target.closest('.share-grant-btn,.share-revoke-btn');
         if (!btn) return;
-        var teamId   = btn.dataset.team;
+        var groupId  = btn.dataset.group;
         var isRevoke = btn.classList.contains('share-revoke-btn');
 
         btn.disabled = true;
         try {
             if (isRevoke) {
-                await api.del('/api/sharing/' + _resourceType + '/' + _resourceId + '/' + teamId);
-                _sharedTeams.delete(teamId);
+                await api.del('/api/sharing/' + _resourceType + '/' + _resourceId + '/' + groupId);
+                _sharedGroups.delete(groupId);
             } else {
-                await api.post('/api/sharing/' + _resourceType + '/' + _resourceId, { team_id: teamId });
-                _sharedTeams.add(teamId);
+                await api.post('/api/sharing/' + _resourceType + '/' + _resourceId, { group_id: groupId });
+                _sharedGroups.add(groupId);
             }
-            // Swap button in place
-            btn.outerHTML = _buildBtn(teamId);
+            btn.outerHTML = _buildBtn(groupId);
         } catch (err) {
             btn.disabled = false;
-            if (typeof toast === 'function') toast(err.message || 'Error', 'error');
+            if (typeof toast === 'function') toast(err.detail || err.message || 'Error', 'error');
         }
     }
 
@@ -177,31 +167,33 @@
         _resourceType = resourceType;
         _resourceId   = resourceId;
         _resourceName = resourceName;
-        _sharedTeams  = new Set();
-        _allTeams     = [];
+        _sharedGroups = new Set();
+        _allGroups    = [];
 
         var modal   = document.getElementById('modal-share-teams');
         var titleEl = document.getElementById('share-teams-title');
         var bodyEl  = document.getElementById('share-teams-body');
 
-        var title = ((typeof t === 'function' ? t('teams.teams.sharing.modal_title') : null) || 'Compartir — {{name}}').replace('{{name}}', resourceName);
-        if (titleEl) titleEl.textContent = title;
+        if (titleEl) titleEl.textContent = 'Compartir — ' + resourceName;
         if (bodyEl) bodyEl.innerHTML =
-            '<p style="padding:24px 16px;text-align:center;font-size:13px;color:var(--ink-3)">' +
-            esc((typeof t === 'function' ? t('teams.teams.sharing.loading') : null) || 'Cargando…') + '</p>';
+            '<p style="padding:24px 16px;text-align:center;font-size:13px;color:var(--ink-3)">Cargando…</p>';
         if (modal) modal.style.display = '';
 
         try {
+            // Get current workspace_id from /api/auth/me
+            var me = await api.get('/api/auth/me');
+            _workspaceId = me.workspace_id || me.username;
+
             var results = await Promise.all([
-                api.get('/api/teams/'),
+                api.get('/api/workspaces/' + _workspaceId + '/groups'),
                 api.get('/api/sharing/' + resourceType + '/' + resourceId),
             ]);
-            _allTeams    = results[0] || [];
-            _sharedTeams = new Set((results[1] || []).map(function (s) { return s.team_id; }));
+            _allGroups    = results[0] || [];
+            _sharedGroups = new Set((results[1] || []).map(function (s) { return s.group_id; }));
             _renderTable();
         } catch (e) {
             if (bodyEl) bodyEl.innerHTML =
-                '<p style="padding:24px 16px;text-align:center;font-size:13px;color:var(--danger)">' + esc(e.message) + '</p>';
+                '<p style="padding:24px 16px;text-align:center;font-size:13px;color:var(--danger)">' + esc(e.message || String(e)) + '</p>';
         }
     }
 

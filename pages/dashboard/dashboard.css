@@ -84,8 +84,20 @@
 /* ── Token bars ── */
 .dash-token-total {
     display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.dash-token-total-row {
+    display: flex;
     align-items: baseline;
     gap: 6px;
+}
+
+.dash-sparkline {
+    margin-top: 8px;
+    margin-bottom: 12px;
+    opacity: 0.9;
 }
 
 .dash-token-total-value {

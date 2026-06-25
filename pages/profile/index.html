@@ -78,14 +78,13 @@
                             </svg>
                             <span data-i18n="profile.nav.style">Estilo</span>
                         </button>
-                        <button class="profile-nav-item" data-section="section-teams" id="nav-teams">
+                        <button class="profile-nav-item" data-section="section-workspaces" id="nav-workspaces">
                             <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
-                                <circle cx="5" cy="5" r="2" stroke="currentColor" stroke-width="1.4"/>
-                                <circle cx="11" cy="5" r="2" stroke="currentColor" stroke-width="1.4"/>
-                                <path d="M1.5 13v-.5A3.5 3.5 0 0 1 5 9a3.5 3.5 0 0 1 3.5 3.5V13" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
-                                <path d="M9 9.2A3.5 3.5 0 0 1 14.5 12.5V13" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+                                <rect x="2" y="4" width="12" height="9" rx="2" stroke="currentColor" stroke-width="1.4"/>
+                                <path d="M2 7h12" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+                                <path d="M5 2v2M11 2v2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
                             </svg>
-                            <span data-i18n="teams.teams.page.title">Equipos</span>
+                            <span>Workspaces</span>
                         </button>
                     </div>
                 </nav>
@@ -141,30 +140,21 @@
                         <div id="accounts-list" class="accounts-list"></div>
                     </div>
 
-                    <!-- Equipos -->
-                    <div id="section-teams" class="profile-section" hidden>
-                        <div class="section-title" data-i18n="teams.teams.page.title">Equipos</div>
+                    <!-- Workspaces -->
+                    <div id="section-workspaces" class="profile-section" hidden>
+                        <div class="section-title">Workspaces</div>
 
-                        <!-- Pestañas horizontales -->
                         <div class="teams-tabs">
-                            <button class="teams-tab active" data-teams-tab="my-teams" data-i18n="teams.teams.tabs.my_teams">Mis equipos</button>
-                            <button class="teams-tab" data-teams-tab="invitations" data-i18n="teams.teams.tabs.invitations">Invitaciones</button>
+                            <button class="teams-tab active" data-ws-tab="mine">Mis workspaces</button>
+                            <button class="teams-tab" data-ws-tab="invitations">Invitaciones <span id="ws-inv-badge" style="display:none;margin-left:4px;background:var(--accent);color:var(--surface);font-size:0.65rem;font-weight:700;padding:1px 5px;border-radius:10px;vertical-align:middle"></span></button>
                         </div>
 
-                        <!-- Panel: Mis equipos -->
-                        <div id="teams-panel-my" class="teams-tab-panel">
-                            <div style="margin-bottom:12px;text-align:right">
-                                <button class="btn btn-primary btn-sm" id="btn-create-team" data-i18n="teams.teams.create_team">Crear equipo</button>
-                            </div>
-                            <div id="teams-list-wrap"></div>
+                        <div id="ws-panel-mine" class="teams-tab-panel">
+                            <div id="ws-list-wrap"></div>
                         </div>
 
-                        <!-- Panel: Invitaciones -->
-                        <div id="teams-panel-invitations" class="teams-tab-panel" style="display:none">
-                            <div class="section-subtitle" data-i18n="teams.teams.invitations.received_title">Recibidas</div>
-                            <div id="teams-inv-received-wrap"></div>
-                            <div class="section-subtitle" style="margin-top:20px" data-i18n="teams.teams.invitations.sent_title">Enviadas</div>
-                            <div id="teams-inv-sent-wrap"></div>
+                        <div id="ws-panel-invitations" class="teams-tab-panel" style="display:none">
+                            <div id="ws-inv-wrap"></div>
                         </div>
                     </div>
 
@@ -363,6 +353,54 @@
         </div>
     </div>
 
+    <!-- Modal gestión de workspace (miembros + grupos) -->
+    <div id="modal-ws-members" class="modal-bg" style="display:none">
+        <div class="modal-box" style="max-width:580px">
+            <div class="modal-header">
+                <h3 class="modal-title" id="ws-members-modal-title">Workspace</h3>
+                <button class="modal-close" id="btn-ws-members-close">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M2 2l12 12M14 2L2 14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+                    </svg>
+                </button>
+            </div>
+            <!-- Modal tabs -->
+            <div class="teams-tabs" style="margin:0 0 0;border-bottom:1px solid var(--line);padding:0 20px">
+                <button class="teams-tab active" id="ws-modal-tab-members">Miembros</button>
+                <button class="teams-tab" id="ws-modal-tab-groups">Grupos</button>
+            </div>
+            <!-- Panel: Miembros -->
+            <div id="ws-modal-panel-members" class="modal-body" style="display:flex;flex-direction:column;gap:18px">
+                <div>
+                    <div class="section-subtitle" style="margin-bottom:8px">Miembros actuales</div>
+                    <div id="ws-members-list"></div>
+                </div>
+                <div id="ws-invite-section">
+                    <div class="section-subtitle" style="margin-bottom:8px">Invitar por nombre de usuario</div>
+                    <div style="display:flex;gap:8px;align-items:center">
+                        <input class="input" id="ws-invite-username" placeholder="nombre de usuario" style="flex:1;min-width:0" />
+                        <button class="btn btn-primary btn-sm" id="btn-ws-invite">Invitar</button>
+                    </div>
+                </div>
+                <div id="ws-pending-section">
+                    <div class="section-subtitle" style="margin-bottom:8px">Invitaciones pendientes</div>
+                    <div id="ws-pending-list"></div>
+                </div>
+            </div>
+            <!-- Panel: Grupos -->
+            <div id="ws-modal-panel-groups" class="modal-body" style="display:none;flex-direction:column;gap:16px">
+                <div id="ws-groups-list"></div>
+                <div id="ws-new-group-row">
+                    <div class="section-subtitle" style="margin-bottom:8px">Nuevo grupo</div>
+                    <div style="display:flex;gap:8px;align-items:center">
+                        <input class="input" id="ws-new-group-name" placeholder="Nombre del grupo" style="flex:1;min-width:0" />
+                        <button class="btn btn-primary btn-sm" id="btn-ws-new-group">Crear</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="/assets/js/flog.js"></script>
     <script src="/assets/js/i18n.js"></script>
     <script src="/assets/js/config.js"></script>
@@ -379,6 +417,7 @@
     <script src="/assets/js/share-teams.js"></script>
     <script src="/manager/manager-team.js"></script>
     <script src="/profile/profile-teams.js"></script>
+    <script src="/profile/profile-workspaces.js"></script>
 </body>
 
 </html>

@@ -19,6 +19,7 @@ async function init() {
         api.get('/api/skills?scope=private').catch(function () { return []; }),
         api.get('/api/memory').catch(function () { return []; }),
         api.get('/api/knowledge').catch(function () { return []; }),
+        api.get('/api/connections/tokens-daily?days=14').catch(function () { return []; }),
     ]);
 
     var agents      = results[0];
@@ -26,19 +27,20 @@ async function init() {
     var skills      = results[2];
     var memories    = results[3];
     var knowledge   = results[4];
+    var tokenDaily  = results[5];
 
     if (window.i18n) {
-        window.i18n.ready(function () { _render(agents, connections, skills, memories, knowledge); });
-        window.i18n.onLangChange(function () { _render(agents, connections, skills, memories, knowledge); });
+        window.i18n.ready(function () { _render(agents, connections, skills, memories, knowledge, tokenDaily); });
+        window.i18n.onLangChange(function () { _render(agents, connections, skills, memories, knowledge, tokenDaily); });
     } else {
-        _render(agents, connections, skills, memories, knowledge);
+        _render(agents, connections, skills, memories, knowledge, tokenDaily);
     }
 
 }
 
-function _render(agents, connections, skills, memories, knowledge) {
+function _render(agents, connections, skills, memories, knowledge, tokenDaily) {
     _renderStats(agents, connections, skills, memories, knowledge);
-    _renderTokens(connections);
+    _renderTokens(connections, tokenDaily);
     _renderComposition(agents);
     _renderRecent(agents, connections);
 }
@@ -75,7 +77,7 @@ function _formatTokens(n) {
     return String(n);
 }
 
-function _renderTokens(connections) {
+function _renderTokens(connections, tokenDaily) {
     var root = document.getElementById('dash-tokens-body');
     if (!root) return;
 
@@ -87,11 +89,18 @@ function _renderTokens(connections) {
     var grandTotal = withUsage.reduce(function (s, c) { return s + c.total; }, 0);
     var maxVal = withUsage.length ? withUsage[0].total : 0;
 
-    // Total display
+    // Total display + sparkline
     var totalEl = document.getElementById('dash-tokens-total');
     if (totalEl) {
-        totalEl.innerHTML = '<span class="dash-token-total-value">' + _formatTokens(grandTotal) + '</span>' +
-            '<span class="dash-token-total-label">' + esc(t('dashboard.tokens.unit_k').replace('k ', '')) + '</span>';
+        var sparkHtml = (window.tokenSparkline && tokenDaily && tokenDaily.length)
+            ? '<div class="dash-sparkline">' + tokenSparkline(tokenDaily, 14) + '</div>'
+            : '';
+        totalEl.innerHTML =
+            '<div class="dash-token-total-row">' +
+            '<span class="dash-token-total-value">' + _formatTokens(grandTotal) + '</span>' +
+            '<span class="dash-token-total-label">' + esc(t('dashboard.tokens.unit_k').replace('k ', '')) + '</span>' +
+            '</div>' +
+            sparkHtml;
     }
 
     if (!withUsage.length) {
