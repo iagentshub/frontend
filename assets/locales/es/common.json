@@ -13,7 +13,8 @@
     "admin_mail": "Correos",
     "logout": "Cerrar sesion",
     "docs": "Documentación",
-    "about": "Acerca de"
+    "about": "Acerca de",
+    "explore": "Explorar"
   },
   "actions": {
     "save": "Guardar",

@@ -13,7 +13,8 @@
     "admin_mail": "Mailbox",
     "logout": "Log out",
     "docs": "Documentation",
-    "about": "About"
+    "about": "About",
+    "explore": "Explore"
   },
   "actions": {
     "save": "Save",

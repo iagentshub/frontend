@@ -141,8 +141,33 @@ function _openAgentModal(agent) {
     _syncMemoryFields(agent);
     _syncRoutines(agent ? (agent.routines || []) : []);
 
+    // Visibility section — only show when editing an existing private agent
+    const visSection = document.getElementById('agent-visibility-section');
+    if (visSection) visSection.style.display = (isEdit && agent.scope !== 'public') ? '' : 'none';
+    if (isEdit && agent.scope !== 'public') _loadAgentVisibility(agent.id, agent.scope || 'private');
+
     document.getElementById('agent-modal').style.display = 'flex';
     setTimeout(() => document.getElementById('agent-name').focus(), 60);
+}
+
+async function _loadAgentVisibility(agentId, scope) {
+    const pubCb   = document.getElementById('agent-social-public');
+    const opts    = document.getElementById('agent-social-opts');
+    const catEl   = document.getElementById('agent-social-category');
+    if (!pubCb) return;
+    try {
+        const data = await api.get('/api/social/me/resources?type=agent');
+        const row  = (data.resources || []).find(function (r) { return r.resource_id === agentId; });
+        const isPublic = !!(row && row.is_public);
+        pubCb.checked = isPublic;
+        if (opts) opts.style.display = isPublic ? '' : 'none';
+        if (isPublic && catEl) catEl.value = row.category || 'Other';
+        if (isPublic) {
+            const dep = row.trial_missing_deps || 'warn';
+            const radio = document.querySelector('input[name="agent-trial-deps"][value="' + dep + '"]');
+            if (radio) radio.checked = true;
+        }
+    } catch (_) {}
 }
 
 function _closeAgentModal() {
@@ -273,6 +298,40 @@ function _bindAgentModal() {
         extThinkingEl.addEventListener('change', e => {
             const f = document.getElementById('claude-thinking-budget-field');
             if (f) f.style.display = e.target.checked ? '' : 'none';
+        });
+    }
+
+    // Social public toggle → show/hide options
+    const socialPubCb = document.getElementById('agent-social-public');
+    if (socialPubCb) {
+        socialPubCb.addEventListener('change', function () {
+            const opts = document.getElementById('agent-social-opts');
+            if (opts) opts.style.display = this.checked ? '' : 'none';
+        });
+    }
+
+    // Visibility save button
+    const socialSaveBtn = document.getElementById('agent-social-save-btn');
+    if (socialSaveBtn) {
+        socialSaveBtn.addEventListener('click', async function () {
+            const agentId = document.getElementById('agent-id').value;
+            const scope   = (document.querySelector('input[name="agent-scope"]:checked') || {}).value || 'private';
+            if (!agentId) return;
+            const isPublic = document.getElementById('agent-social-public').checked;
+            const category = (document.getElementById('agent-social-category') || {}).value || 'Other';
+            const depRadio = document.querySelector('input[name="agent-trial-deps"]:checked');
+            const trialDeps = depRadio ? depRadio.value : 'warn';
+            socialSaveBtn.disabled = true;
+            try {
+                await api.put('/api/agents/' + encodeURIComponent(scope) + '/' + encodeURIComponent(agentId) + '/visibility', {
+                    is_public: isPublic,
+                    category: category,
+                    trial_missing_deps: trialDeps,
+                });
+                toast(t('social.visibility.saved'), 'success');
+                if (window._loadAll) _loadAll();
+            } catch (err) { toast(err.message, 'error'); }
+            finally { socialSaveBtn.disabled = false; }
         });
     }
 

@@ -9,6 +9,18 @@ var _LANGS = [
     { id: 'en', label: 'English', flag: '🇬🇧' },
 ];
 
+var _ALL_LANGS = [
+    { id: 'es', label: 'Español',    flag: '🇪🇸' },
+    { id: 'en', label: 'English',    flag: '🇬🇧' },
+    { id: 'fr', label: 'Français',   flag: '🇫🇷' },
+    { id: 'de', label: 'Deutsch',    flag: '🇩🇪' },
+    { id: 'pt', label: 'Português',  flag: '🇵🇹' },
+    { id: 'it', label: 'Italiano',   flag: '🇮🇹' },
+    { id: 'zh', label: '中文',        flag: '🇨🇳' },
+    { id: 'ja', label: '日本語',      flag: '🇯🇵' },
+    { id: 'ar', label: 'العربية',    flag: '🇸🇦' },
+];
+
 async function init() {
     await window.requireAuth();
     renderNav('nav-root', 'profile');
@@ -54,7 +66,90 @@ async function loadUser() {
 
         _initNav(_authMethod);
         if (typeof window.initAvatarCrop === 'function') window.initAvatarCrop(u);
+        _initSocialForm(u);
     } catch (e) { }
+}
+
+function _initSocialForm(username) {
+    var grid = document.getElementById('social-lang-grid');
+    var bioEl = document.getElementById('social-bio');
+    var bioCount = document.getElementById('social-bio-count');
+    var emailEl = document.getElementById('social-email');
+    var githubEl = document.getElementById('social-github');
+    var cvEl = document.getElementById('social-cv');
+    var form = document.getElementById('social-form');
+    var saveBtn = document.getElementById('social-save-btn');
+    var profileLink = document.getElementById('social-view-profile-link');
+
+    if (!form) return;
+
+    if (profileLink) profileLink.href = '/u/' + encodeURIComponent(username);
+
+    // Render language checkboxes
+    if (grid) {
+        grid.innerHTML = _ALL_LANGS.map(function (l) {
+            return '<label class="social-lang-item">' +
+                '<input type="checkbox" name="lang" value="' + l.id + '">' +
+                '<span>' + l.flag + '</span>' +
+                '<span>' + l.label + '</span>' +
+                '</label>';
+        }).join('');
+    }
+
+    // Bio counter
+    if (bioEl && bioCount) {
+        bioEl.addEventListener('input', function () {
+            bioCount.textContent = bioEl.value.length;
+        });
+    }
+
+    // Load current values
+    fetch('/api/users/' + encodeURIComponent(username), { credentials: 'include' })
+        .then(function (r) { return r.json(); })
+        .then(function (d) {
+            if (bioEl) { bioEl.value = d.bio || ''; if (bioCount) bioCount.textContent = bioEl.value.length; }
+            if (emailEl) emailEl.value = d.email_public || '';
+            if (githubEl) githubEl.value = d.github || '';
+            if (cvEl) cvEl.value = d.cv || '';
+            var selected = d.languages || [];
+            if (grid) {
+                grid.querySelectorAll('input[type=checkbox]').forEach(function (cb) {
+                    cb.checked = selected.indexOf(cb.value) !== -1;
+                });
+            }
+        })
+        .catch(function () {});
+
+    // Save
+    form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var langs = [];
+        if (grid) {
+            grid.querySelectorAll('input:checked').forEach(function (cb) { langs.push(cb.value); });
+        }
+        saveBtn.disabled = true;
+        saveBtn.textContent = t('common.saving') || 'Guardando…';
+        fetch('/api/auth/me/profile', {
+            method: 'PUT',
+            credentials: 'include',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                bio:          bioEl  ? bioEl.value.trim()   : null,
+                languages:    langs,
+                email_public: emailEl ? emailEl.value.trim() : null,
+                github:       githubEl ? githubEl.value.trim() : null,
+                cv:           cvEl    ? cvEl.value           : null,
+            }),
+        }).then(function (r) { return r.json(); }).then(function (d) {
+            if (d.ok) toast(t('profile.social.saved') || 'Perfil guardado', 'success');
+            else toast(d.detail || t('profile.social.error') || 'Error al guardar', 'error');
+        }).catch(function () {
+            toast(t('profile.social.error') || 'Error al guardar', 'error');
+        }).finally(function () {
+            saveBtn.disabled = false;
+            saveBtn.textContent = t('profile.social.save_btn') || 'Guardar perfil';
+        });
+    });
 }
 
 function _initNav(authMethod) {

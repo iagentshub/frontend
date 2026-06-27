@@ -105,6 +105,13 @@
     color: #6366f1;
 }
 
+.agent-scope-badge--social {
+    background: rgba(14, 165, 233, .12);
+    color: #0ea5e9;
+    font-size: 11px;
+    padding: 0 4px;
+}
+
 /* ── Meta row: provider pill + token badge ── */
 .agent-card-meta {
     display: flex;

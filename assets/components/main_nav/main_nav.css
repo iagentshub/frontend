@@ -28,12 +28,34 @@
 }
 
 /* ── Brand ── */
+.nav-brand-row {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid var(--line);
+}
+
 .nav-brand {
     display: flex;
     align-items: center;
+    flex: 1;
     padding: 24px 20px 20px;
-    border-bottom: 1px solid var(--line);
     text-decoration: none;
+}
+
+.nav-close-btn {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--ink-muted);
+    cursor: pointer;
+    padding: 8px 14px;
+    flex-shrink: 0;
+    line-height: 0;
+}
+.nav-close-btn:hover { color: var(--ink); }
+
+@media (max-width: 768px) {
+    .nav-close-btn { display: flex; align-items: center; }
 }
 
 .nav-logo-mark {

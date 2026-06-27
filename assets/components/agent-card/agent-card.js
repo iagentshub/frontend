@@ -37,6 +37,9 @@ var AgentCard = {
         var scopeBadge = isPublic
             ? '<span class="agent-scope-badge agent-scope-badge--public">' + t('agents.scope.badge_public') + '</span>'
             : (agent._shared ? '<span class="agent-scope-badge agent-scope-badge--shared">' + (t('teams.teams.sharing.shared_badge') || 'Compartido') + '</span>' : '');
+        var socialBadge = agent._social_public
+            ? '<span class="agent-scope-badge agent-scope-badge--social" title="' + esc(agent._social_category || '') + '">🌐</span>'
+            : '';
 
         var totalTokens = (agent.tokens_in || 0) + (agent.tokens_out || 0);
         var tokBadge = totalTokens
@@ -54,7 +57,7 @@ var AgentCard = {
             '<div class="agent-card-info">' +
             '<div class="agent-card-name-row">' +
             '<span class="agent-card-name" title="' + esc(agent.name) + '">' + esc(agent.name) + '</span>' +
-            scopeBadge +
+            scopeBadge + socialBadge +
             '</div>' +
             '<div class="agent-card-meta">' +
             '<span class="agent-conn-pill ' + pillCls + '">' + esc(connLabel) + '</span>' +

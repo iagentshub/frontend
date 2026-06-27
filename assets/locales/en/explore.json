@@ -1,0 +1,12 @@
+{
+  "title": "Explore",
+  "subtitle": "Discover public agents, skills and knowledge from the community",
+  "search_placeholder": "Search resources...",
+  "all_categories": "All categories",
+  "type_all": "All",
+  "type_agents": "Agents",
+  "type_skills": "Skills",
+  "type_knowledge": "Knowledge",
+  "load_more": "Load more",
+  "empty": "No resources match your search."
+}

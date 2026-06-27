@@ -39,6 +39,10 @@ function KnowledgeFolders(section, onSelect) {
                 '<span class="kf-item-stats">' + s.count + ' · ' + _fmtChars(s.chars) + '</span>' +
                 '</button>' +
                 '<div class="kf-item-actions">' +
+                (section === 'knowledge' ?
+                '<button class="kf-action-btn" data-action="visibility" data-folder-id="' + esc(f.id) + '" title="Visibilidad">' +
+                '<svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M1.5 8C1.5 8 4 3.5 8 3.5S14.5 8 14.5 8 12 12.5 8 12.5 1.5 8 1.5 8z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><circle cx="8" cy="8" r="2" stroke="currentColor" stroke-width="1.4"/></svg>' +
+                '</button>' : '') +
                 '<button class="kf-action-btn" data-action="rename" data-folder-id="' + esc(f.id) + '" title="Renombrar">' +
                 '<svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M11 2l3 3-9 9H2v-3L11 2z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>' +
                 '</button>' +
@@ -107,6 +111,16 @@ function KnowledgeFolders(section, onSelect) {
                     });
             });
         }
+
+        _panel.querySelectorAll('[data-action="visibility"]').forEach(function (btn) {
+            btn.addEventListener('click', function (e) {
+                e.stopPropagation();
+                var folderId = btn.dataset.folderId;
+                var folder   = _folders.find(function (f) { return f.id === folderId; });
+                if (!folder) return;
+                KnowledgeVisibilityDialog.open(folder, function () {});
+            });
+        });
 
         _panel.querySelectorAll('[data-action="rename"]').forEach(function (btn) {
             btn.addEventListener('click', function (e) {

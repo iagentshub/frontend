@@ -18,6 +18,7 @@ var NAV_ICONS = {
     logs: '<svg width="15" height="15" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.4"/><path d="M4.5 5.5h7M4.5 8h5M4.5 10.5h6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>',
     mail: '<svg width="15" height="15" viewBox="0 0 16 16" fill="none"><rect x="1" y="4" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.4"/><path d="M1 7l7 4.5L15 7" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>',
     team: '<svg width="15" height="15" viewBox="0 0 16 16" fill="none"><circle cx="5" cy="5" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="11" cy="5" r="2" stroke="currentColor" stroke-width="1.4"/><path d="M1.5 13v-.5A3.5 3.5 0 0 1 5 9a3.5 3.5 0 0 1 3.5 3.5V13" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><path d="M9 9.2A3.5 3.5 0 0 1 14.5 12.5V13" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>',
+    explore: '<svg width="15" height="15" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.4"/><path d="M10.5 5.5l-2 4.5-4.5 2 2-4.5 4.5-2z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><circle cx="8" cy="8" r="1" fill="currentColor" stroke="none"/></svg>',
 };
 
 function _renderLangSwitcher() {
@@ -40,17 +41,23 @@ function renderNav(mountId, activePage) {
             { href: '/dashboard', label: t('nav.dashboard'), page: 'dashboard' },
             { href: '/agents', label: t('nav.agents'), page: 'agents' },
             { href: '/knowledge', label: t('nav.knowledge'), page: 'knowledge' },
+            { href: '/explore', label: t('nav.explore'), page: 'explore' },
             { href: '/connections', label: t('nav.connections'), page: 'connections' },
             { href: '/profile', label: t('nav.profile'), page: 'profile' },
         ];
 
         mount.innerHTML =
             '<nav class="main-nav">' +
+            '<div class="nav-brand-row">' +
             '<a class="nav-brand" href="/dashboard">' +
             '<div class="nav-logo-mark">' +
             '<span class="nav-logo-iagents">iAgents</span><span class="nav-logo-hub">Hub</span>' +
             '</div>' +
             '</a>' +
+            '<button class="nav-close-btn" id="nav-close-btn" aria-label="Cerrar menú">' +
+            '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 2l12 12M14 2L2 14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>' +
+            '</button>' +
+            '</div>' +
             '<div class="nav-workspace-bar">' +
             '<button class="nav-ws-btn" id="nav-ws-btn" aria-label="Cambiar workspace">' +
             '<svg class="nav-ws-icon" width="11" height="11" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="5" height="5" rx="1.2" stroke="currentColor" stroke-width="1.5"/><rect x="9" y="2" width="5" height="5" rx="1.2" stroke="currentColor" stroke-width="1.5"/><rect x="2" y="9" width="5" height="5" rx="1.2" stroke="currentColor" stroke-width="1.5"/><rect x="9" y="9" width="5" height="5" rx="1.2" stroke="currentColor" stroke-width="1.5"/></svg>' +
@@ -222,6 +229,19 @@ function renderNav(mountId, activePage) {
             window.location.replace('/login');
         });
 
+        // ── Close button inside nav (móvil) ─────────────────────────────────
+        var _navCloseBtn = document.getElementById('nav-close-btn');
+        if (_navCloseBtn) {
+            _navCloseBtn.addEventListener('click', function () {
+                var nav = document.querySelector('.main-nav');
+                var backdrop = document.getElementById('nav-backdrop');
+                var hamburger = document.getElementById('nav-hamburger');
+                if (nav) nav.classList.remove('nav-open');
+                if (backdrop) backdrop.classList.remove('visible');
+                if (hamburger) hamburger.style.display = '';
+            });
+        }
+
         var langBtn = document.getElementById('nav-lang-btn');
         if (langBtn) {
             langBtn.addEventListener('click', function () {
@@ -266,12 +286,14 @@ function renderNav(mountId, activePage) {
             var nav = document.querySelector('.main-nav');
             if (nav) nav.classList.add('nav-open');
             _backdrop.classList.add('visible');
+            _hamburger.style.display = 'none';
             _hamburger.setAttribute('aria-expanded', 'true');
         }
         function _closeNav() {
             var nav = document.querySelector('.main-nav');
             if (nav) nav.classList.remove('nav-open');
             _backdrop.classList.remove('visible');
+            _hamburger.style.display = '';
             _hamburger.setAttribute('aria-expanded', 'false');
         }
         function _toggleNav() {

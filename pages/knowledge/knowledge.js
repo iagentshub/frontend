@@ -174,11 +174,31 @@ function _renderSkillsPage() {
     renderLoadMore(grid, _lastSkillsFiltered.length, shown, function () { _skillsPage++; _renderSkillsPage(); });
 }
 
+var _skillViewScope = 'private';
+var _skillViewId    = '';
+
 async function viewSkill(scope, id) {
+    _skillViewScope = scope;
+    _skillViewId    = id;
     try {
         var s = await api.get('/api/skills/' + scope + '/' + encodeURIComponent(id));
         document.getElementById('skill-view-title').textContent = (s.icon ? s.icon + ' ' : '') + s.name;
         document.getElementById('skill-view-content').textContent = s.content || t('skills.no_content');
+        // Pre-fill visibility
+        var pubCb = document.getElementById('skill-social-public');
+        var opts  = document.getElementById('skill-social-opts');
+        if (pubCb) {
+            pubCb.checked = false;
+            if (opts) opts.style.display = 'none';
+            api.get('/api/social/me/resources?type=skill').then(function (data) {
+                var row = (data.resources || []).find(function (r) { return r.resource_id === id; });
+                if (!row) return;
+                pubCb.checked = !!row.is_public;
+                if (opts) opts.style.display = row.is_public ? '' : 'none';
+                var catEl = document.getElementById('skill-social-category');
+                if (catEl && row.category) catEl.value = row.category;
+            }).catch(function () {});
+        }
         document.getElementById('skill-view-modal').style.display = 'flex';
     } catch (e) { toast(e.message, 'error'); }
 }
@@ -240,6 +260,32 @@ function bindEvents() {
     document.getElementById('skill-view-close').addEventListener('click', function () {
         document.getElementById('skill-view-modal').style.display = 'none';
     });
+
+    // Skill visibility bindings
+    var skillPubCb = document.getElementById('skill-social-public');
+    if (skillPubCb) {
+        skillPubCb.addEventListener('change', function () {
+            var opts = document.getElementById('skill-social-opts');
+            if (opts) opts.style.display = this.checked ? '' : 'none';
+        });
+    }
+    var skillVisSaveBtn = document.getElementById('skill-social-save-btn');
+    if (skillVisSaveBtn) {
+        skillVisSaveBtn.addEventListener('click', async function () {
+            if (!_skillViewId) return;
+            var isPublic = document.getElementById('skill-social-public').checked;
+            var catEl    = document.getElementById('skill-social-category');
+            skillVisSaveBtn.disabled = true;
+            try {
+                await api.put('/api/skills/' + encodeURIComponent(_skillViewScope) + '/' + encodeURIComponent(_skillViewId) + '/visibility', {
+                    is_public: isPublic,
+                    category: catEl ? catEl.value : 'Other',
+                });
+                toast(t('social.visibility.saved'), 'success');
+            } catch (err) { toast(err.message, 'error'); }
+            finally { skillVisSaveBtn.disabled = false; }
+        });
+    }
     document.getElementById('skill-export-close').addEventListener('click', function () {
         document.getElementById('skill-export-modal').style.display = 'none';
     });

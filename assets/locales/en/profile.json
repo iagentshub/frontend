@@ -5,10 +5,26 @@
   },
   "nav": {
     "account": "My account",
+    "social": "Public profile",
     "providers": "Providers",
     "preferences": "Preferences",
     "style": "Style",
     "privacy": "Privacy"
+  },
+  "social": {
+    "desc": "This information will appear on your public profile.",
+    "view_profile": "View my profile →",
+    "field_bio": "Bio",
+    "bio_placeholder": "Tell us something about you…",
+    "field_languages": "Languages",
+    "field_email": "Public email",
+    "email_placeholder": "contact@example.com",
+    "field_github": "GitHub",
+    "field_cv": "CV",
+    "cv_hint": "Supports Markdown. Will appear on your public profile.",
+    "save_btn": "Save profile",
+    "saved": "Profile saved",
+    "error": "Error saving profile"
   },
   "avatar": {
     "modal_title": "Change profile photo",

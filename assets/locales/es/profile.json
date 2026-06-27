@@ -5,10 +5,26 @@
   },
   "nav": {
     "account": "Mi cuenta",
+    "social": "Perfil público",
     "providers": "Proveedores",
     "preferences": "Preferencias",
     "style": "Estilo",
     "privacy": "Privacidad"
+  },
+  "social": {
+    "desc": "Esta información aparecerá en tu perfil público.",
+    "view_profile": "Ver mi perfil →",
+    "field_bio": "Biografía",
+    "bio_placeholder": "Cuéntanos algo sobre ti…",
+    "field_languages": "Idiomas",
+    "field_email": "Email público",
+    "email_placeholder": "contacto@ejemplo.com",
+    "field_github": "GitHub",
+    "field_cv": "CV",
+    "cv_hint": "Soporta Markdown. Aparecerá en tu perfil público.",
+    "save_btn": "Guardar perfil",
+    "saved": "Perfil guardado",
+    "error": "Error al guardar el perfil"
   },
   "avatar": {
     "modal_title": "Cambiar foto de perfil",

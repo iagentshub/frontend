@@ -20,6 +20,16 @@ async function _loadAll() {
         api.get('/api/memory').catch(() => []),
         api.get('/api/knowledge').catch(() => []),
     ]);
+    // Merge social visibility flags into agent objects
+    try {
+        const social = await api.get('/api/social/me/resources?type=agent');
+        const map = {};
+        (social.resources || []).forEach(function (r) { map[r.resource_id] = r; });
+        _agents = _agents.map(function (a) {
+            const s = map[a.id];
+            return s ? Object.assign({}, a, { _social_public: !!s.is_public, _social_category: s.category, _social_stars: s.stars_count }) : a;
+        });
+    } catch (_) {}
     FilterAgents.setData(_skills, _connections, _knowledge);
     AgentCatalog.setAgents(_agents.filter(a => (a.scope || 'private') === 'public'));
     _applyFilter();

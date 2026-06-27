@@ -161,6 +161,26 @@
             </div>
             <div class="modal-body">
                 <pre id="skill-view-content" class="skill-content-pre"></pre>
+                <!-- Visibilidad -->
+                <div class="skill-visibility-section" id="skill-visibility-section" style="margin-top:16px;border-top:1px solid var(--line);padding-top:14px">
+                    <div class="platform-section-title" data-i18n="social.visibility.title">Visibilidad en iAgents Hub</div>
+                    <label class="toggle-label" style="margin-bottom:8px">
+                        <input type="checkbox" id="skill-social-public" class="toggle-checkbox" />
+                        <span class="toggle-track"></span>
+                        <span data-i18n="social.visibility.make_public">Hacer público en el explorador</span>
+                    </label>
+                    <div id="skill-social-opts" style="display:none;margin-top:8px">
+                        <select id="skill-social-category" class="select" style="max-width:200px">
+                            <option value="Coding">Coding</option><option value="Writing">Writing</option>
+                            <option value="Research">Research</option><option value="Data">Data</option>
+                            <option value="DevOps">DevOps</option><option value="Support">Support</option>
+                            <option value="Education">Education</option><option value="Productivity">Productivity</option>
+                            <option value="Marketing">Marketing</option><option value="Finance">Finance</option>
+                            <option value="Other" selected>Other</option>
+                        </select>
+                    </div>
+                    <button type="button" id="skill-social-save-btn" class="btn btn-ghost" style="margin-top:10px" data-i18n="social.visibility.save_btn">Guardar visibilidad</button>
+                </div>
             </div>
         </div>
     </div>
@@ -284,6 +304,7 @@
     <!-- Página -->
     <script src="/knowledge/skills-load.js"></script>
     <script src="/knowledge/knowledge-folders.js"></script>
+    <script src="/knowledge/knowledge-visibility.js"></script>
     <script src="/knowledge/knowledge-urls.js"></script>
     <script src="/knowledge/knowledge-docs.js"></script>
     <script src="/knowledge/knowledge-memory.js"></script>

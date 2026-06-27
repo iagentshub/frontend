@@ -323,6 +323,52 @@
                     </div>
                 </div>
 
+                    <!-- ── Visibilidad social ── -->
+                    <div class="platform-section" id="agent-visibility-section" style="display:none">
+                        <div class="platform-section-title" data-i18n="social.visibility.title">Visibilidad en iAgents Hub</div>
+                        <div class="field">
+                            <label class="toggle-label">
+                                <input type="checkbox" id="agent-social-public" class="toggle-checkbox" />
+                                <span class="toggle-track"></span>
+                                <span data-i18n="social.visibility.make_public">Hacer público en el explorador</span>
+                            </label>
+                        </div>
+                        <div id="agent-social-opts" style="display:none">
+                            <div class="field">
+                                <label data-i18n="social.visibility.category">Categoría</label>
+                                <select id="agent-social-category" class="select">
+                                    <option value="Coding">Coding</option>
+                                    <option value="Writing">Writing</option>
+                                    <option value="Research">Research</option>
+                                    <option value="Data">Data</option>
+                                    <option value="DevOps">DevOps</option>
+                                    <option value="Support">Support</option>
+                                    <option value="Education">Education</option>
+                                    <option value="Productivity">Productivity</option>
+                                    <option value="Marketing">Marketing</option>
+                                    <option value="Finance">Finance</option>
+                                    <option value="Other" selected>Other</option>
+                                </select>
+                            </div>
+                            <div class="field">
+                                <label data-i18n="social.visibility.private_skills">Si el agente usa skills privadas, los usuarios que lo prueben:</label>
+                                <div class="radio-group">
+                                    <label class="radio-label">
+                                        <input type="radio" name="agent-trial-deps" value="warn" checked />
+                                        <span data-i18n="social.visibility.deps_warn">Reciben un aviso de que falta la skill</span>
+                                    </label>
+                                    <label class="radio-label">
+                                        <input type="radio" name="agent-trial-deps" value="silent" />
+                                        <span data-i18n="social.visibility.deps_silent">No reciben aviso (falla en silencio)</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" id="agent-social-save-btn" class="btn btn-ghost" style="margin-top:4px">
+                            <span data-i18n="social.visibility.save_btn">Guardar visibilidad</span>
+                        </button>
+                    </div>
+
                 <!-- ── FOOTER ── -->
                 <div class="modal-footer">
                     <button type="button" class="btn btn-ghost" id="agent-modal-cancel"

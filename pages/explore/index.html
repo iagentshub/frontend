@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <script>(function(){var m={noir:"dark-red",marble:"light-red",ember:"dark-orange",ocean:"dark-blue",forest:"dark-red",dusk:"dark-purple",light:"light-red"};var t=localStorage.getItem("ga-theme")||"dark-red";t=m[t]||t;document.documentElement.setAttribute("data-theme",t);})();</script>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>iAgents Hub · Explorar</title>
+    <link rel="stylesheet" href="/assets/css/variables.css" />
+    <link rel="stylesheet" href="/assets/themes/themes.css" />
+    <link rel="stylesheet" href="/assets/css/base.css" />
+    <link rel="stylesheet" href="/assets/css/components.css" />
+    <link rel="stylesheet" href="/assets/css/layout.css" />
+    <link rel="stylesheet" href="/assets/components/main_nav/main_nav.css" />
+    <link rel="stylesheet" href="/explore/explore.css" />
+</head>
+<body>
+<div class="app-shell">
+    <div id="nav-root"></div>
+
+    <main class="page-content explore-page">
+
+        <!-- Header -->
+        <div class="page-header">
+            <div class="page-header-left">
+                <h1 class="page-title" data-i18n="explore.title">Explorar</h1>
+                <p class="page-subtitle" data-i18n="explore.subtitle">Descubre agentes, skills y conocimiento público de la comunidad</p>
+            </div>
+        </div>
+
+        <!-- Filters bar -->
+        <div class="explore-filters">
+            <div class="explore-search-wrap">
+                <svg class="explore-search-icon" width="14" height="14" viewBox="0 0 16 16" fill="none">
+                    <circle cx="6.5" cy="6.5" r="4.5" stroke="currentColor" stroke-width="1.5"/>
+                    <path d="M10 10l3.5 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+                <input id="explore-search" class="explore-search" type="search"
+                    data-i18n-placeholder="explore.search_placeholder" placeholder="Buscar recursos..." />
+            </div>
+            <div class="explore-type-tabs" id="explore-type-tabs">
+                <button class="explore-type-tab active" data-type="all" data-i18n="explore.type_all">Todo</button>
+                <button class="explore-type-tab" data-type="agent" data-i18n="explore.type_agents">Agentes</button>
+                <button class="explore-type-tab" data-type="skill" data-i18n="explore.type_skills">Skills</button>
+                <button class="explore-type-tab" data-type="knowledge" data-i18n="explore.type_knowledge">Knowledge</button>
+            </div>
+            <select id="explore-category" class="select explore-category-select">
+                <option value="" data-i18n="explore.all_categories">Todas las categorías</option>
+                <option value="Coding">Coding</option>
+                <option value="Writing">Writing</option>
+                <option value="Research">Research</option>
+                <option value="Data">Data</option>
+                <option value="DevOps">DevOps</option>
+                <option value="Support">Support</option>
+                <option value="Education">Education</option>
+                <option value="Productivity">Productivity</option>
+                <option value="Marketing">Marketing</option>
+                <option value="Finance">Finance</option>
+                <option value="Other">Other</option>
+            </select>
+        </div>
+
+        <!-- Results -->
+        <div id="explore-loading" class="explore-loading" hidden>
+            <div class="spinner"></div>
+        </div>
+        <div id="explore-empty" class="explore-empty" hidden>
+            <p data-i18n="explore.empty">No hay recursos que coincidan con tu búsqueda.</p>
+        </div>
+        <div id="explore-grid" class="explore-grid"></div>
+        <div id="explore-load-more" hidden style="text-align:center;padding:24px 0">
+            <button class="btn btn-ghost" id="explore-load-more-btn" data-i18n="explore.load_more">Cargar más</button>
+        </div>
+
+    </main>
+</div>
+
+<script src="/assets/js/i18n.js"></script>
+<script src="/assets/js/config.js"></script>
+<script src="/assets/js/utils.js"></script>
+<script src="/assets/js/api.js"></script>
+<script src="/assets/js/theme.js"></script>
+<script src="/assets/js/auth.js"></script>
+<script src="/assets/components/main_nav/main_nav.js"></script>
+<script src="/explore/explore.js"></script>
+</body>
+</html>
