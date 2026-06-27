@@ -240,8 +240,30 @@
     font-size: 11px;
     color: var(--ink-muted);
 }
+.pub-resource-actions {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-shrink: 0;
+}
 .pub-resource-stars {
     font-size: 12px;
     color: var(--ink-muted);
-    flex-shrink: 0;
 }
+
+/* Botón de fork en el perfil público */
+.pub-resource-fork {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--ink-muted);
+    padding: 3px 6px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    line-height: 0;
+    transition: color .12s, background .12s;
+}
+.pub-resource-fork:hover { color: var(--accent); background: var(--accent-dim); }
+.pub-resource-fork.forked { color: var(--accent); opacity: .6; cursor: default; }
+.pub-resource-fork:disabled { cursor: default; }

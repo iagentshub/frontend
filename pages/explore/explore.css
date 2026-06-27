@@ -207,3 +207,28 @@
     border-radius: 10px;
     padding: 1px 6px;
 }
+
+/* Agrupación de acciones (fork + star) en el footer */
+.explore-card-actions {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+}
+
+/* Botón de fork */
+.explore-card-fork-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--ink-muted);
+    padding: 2px 6px;
+    border-radius: 6px;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    transition: color .12s, background .12s;
+    line-height: 0;
+}
+.explore-card-fork-btn:hover { color: var(--accent); background: var(--accent-dim); }
+.explore-card-fork-btn.forked { color: var(--accent); opacity: .6; cursor: default; }
+.explore-card-fork-btn:disabled { cursor: default; }

@@ -122,6 +122,16 @@
 
     var _profileUsername = '';
     var _isFollowing     = false;
+    var _me              = '';
+    var _isSelf          = false;
+    var _forked          = {};
+
+    var _SVG_FORK = '<svg width="11" height="11" viewBox="0 0 16 16" fill="none">' +
+        '<circle cx="8" cy="2.5" r="1.7" stroke="currentColor" stroke-width="1.4"/>' +
+        '<circle cx="3" cy="13.5" r="1.7" stroke="currentColor" stroke-width="1.4"/>' +
+        '<circle cx="13" cy="13.5" r="1.7" stroke="currentColor" stroke-width="1.4"/>' +
+        '<path d="M8 4.2v3.5m0 0L3 11.8m5-4.1l5 4.1" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>' +
+        '</svg>';
 
     function _loadFollowStatus(username) {
         var btn     = document.getElementById('pub-follow-btn');
@@ -133,8 +143,9 @@
         fetch('/api/auth/me', { credentials: 'include' })
             .then(function (r) { return r.json(); })
             .then(function (me) {
-                var isSelf = me.username === username;
-                if (!isSelf && btn) btn.hidden = false;
+                _me = me.username || '';
+                _isSelf = _me === username;
+                if (!_isSelf && btn) btn.hidden = false;
                 if (stats) stats.hidden = false;
             }).catch(function () {});
 
@@ -182,7 +193,16 @@
         if (!items.length) {
             return '<p class="pub-empty">Este usuario no tiene recursos públicos todavía.</p>';
         }
+        var isForkable = !_isSelf && (_activeTab === 'agent' || _activeTab === 'skill');
         return items.map(function (r) {
+            var key    = r.resource_type + ':' + r.resource_id;
+            var forked = !!_forked[key];
+            var forkBtn = isForkable
+                ? '<button class="pub-resource-fork' + (forked ? ' forked' : '') + '" data-action="pub-fork"' +
+                  ' data-type="' + _esc(r.resource_type) + '" data-id="' + _esc(r.resource_id) + '"' +
+                  ' data-key="' + _esc(key) + '" title="' + (forked ? 'Ya copiado' : 'Copiar a mi workspace') + '"' +
+                  (forked ? ' disabled' : '') + '>' + _SVG_FORK + '</button>'
+                : '';
             return '<div class="pub-resource-card">' +
                 '<div class="pub-resource-avatar" style="background:' + _avatarColor(r.name) + '">' +
                 (r.name || '?').charAt(0).toUpperCase() + '</div>' +
@@ -190,9 +210,37 @@
                 '<span class="pub-resource-name">' + _esc(r.name) + '</span>' +
                 '<span class="pub-resource-cat">' + _esc(r.category || '') + '</span>' +
                 '</div>' +
+                '<div class="pub-resource-actions">' +
+                forkBtn +
                 '<span class="pub-resource-stars">★ ' + (r.stars_count || 0) + '</span>' +
+                '</div>' +
                 '</div>';
         }).join('');
+    }
+
+    async function _forkResource(btn) {
+        var type = btn.dataset.type;
+        var id   = btn.dataset.id;
+        var key  = btn.dataset.key;
+        btn.disabled = true;
+        try {
+            var plural = type === 'skill' ? 'skills' : 'agents';
+            var r = await fetch('/api/' + plural + '/private/' + encodeURIComponent(id) + '/fork', {
+                method: 'POST', credentials: 'include',
+            });
+            var data = await r.json();
+            if (!r.ok) {
+                if (window.toast) toast(data.detail || 'Error al copiar', 'error');
+                btn.disabled = false;
+                return;
+            }
+            _forked[key] = true;
+            btn.classList.add('forked');
+            btn.title = 'Ya copiado';
+            if (window.toast) toast((type === 'skill' ? 'Skill' : 'Agente') + ' copiado a tu workspace', 'success');
+        } catch (_) {
+            btn.disabled = false;
+        }
     }
 
     function _esc(s) {
@@ -247,10 +295,20 @@
         });
     }
 
+    function _bindResourceActions() {
+        var list = document.getElementById('pub-resources-list');
+        if (!list) return;
+        list.addEventListener('click', function (e) {
+            var btn = e.target.closest('[data-action="pub-fork"]');
+            if (btn) { e.stopPropagation(); _forkResource(btn); }
+        });
+    }
+
     async function init() {
         await window.requireAuth();
         renderNav('nav-root', '');
         _bindTabs();
+        _bindResourceActions();
 
         var parts = window.location.pathname.split('/').filter(Boolean);
         var username = parts[1] || '';
