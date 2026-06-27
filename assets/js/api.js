@@ -15,6 +15,9 @@ function _apiError(status, detail) {
     }
     var e = new Error(msg);
     e.status = status;
+    if (detail && typeof detail === 'object' && !Array.isArray(detail)) {
+        e.data = detail;
+    }
     return e;
 }
 

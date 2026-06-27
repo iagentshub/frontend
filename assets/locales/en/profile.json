@@ -7,7 +7,8 @@
     "account": "My account",
     "providers": "Providers",
     "preferences": "Preferences",
-    "style": "Style"
+    "style": "Style",
+    "privacy": "Privacy"
   },
   "auth_method": {
     "internal": "Internal",
@@ -82,6 +83,34 @@
     "summary_agents": "{n} agents",
     "summary_routines": "{n} routines",
     "summary_skills": "{n} private skills"
+  },
+  "privacy": {
+    "export_title": "Download my data",
+    "export_desc": "Download a ZIP with all your data: agents, skills, conversations, knowledge and settings.",
+    "export_btn": "Download my data",
+    "export_loading": "Preparing…",
+    "delete_title": "Delete account",
+    "delete_desc": "All your data will be permanently deleted after a 30-day grace period. You can cancel the deletion at any time during that period.",
+    "delete_btn": "Request account deletion",
+    "delete_ok": "Deletion scheduled. You will receive an email with a link to cancel.",
+    "delete_error": "Error requesting deletion",
+    "deletion_scheduled_title": "Account scheduled for deletion",
+    "deletion_scheduled_date": "Your account will be deleted on {date}",
+    "cancel_deletion": "Cancel deletion",
+    "cancel_ok": "Deletion cancelled successfully.",
+    "cancel_error": "Error cancelling deletion",
+    "cancel_no_token": "Use the link in the email to cancel deletion.",
+    "resolve_ws_title": "Resolve your workspaces",
+    "resolve_ws_desc": "You own the following workspaces. Transfer ownership to another member or delete them before continuing.",
+    "btn_transfer": "Transfer",
+    "btn_delete_ws": "Delete",
+    "confirm_delete_ws": "Delete this workspace and all its data?",
+    "transfer_ws_title": "Transfer workspace",
+    "transfer_ws_desc": "Enter the username of the new owner (must be a member of the workspace).",
+    "transfer_confirm": "Transfer",
+    "transfer_ok": "Ownership transferred successfully",
+    "transfer_error": "Error transferring ownership",
+    "transfer_user_required": "Enter the new owner's username"
   },
   "password": {
     "field_current": "Current password",

@@ -7,7 +7,8 @@
     "account": "Mi cuenta",
     "providers": "Proveedores",
     "preferences": "Preferencias",
-    "style": "Estilo"
+    "style": "Estilo",
+    "privacy": "Privacidad"
   },
   "auth_method": {
     "internal": "Interno",
@@ -82,6 +83,34 @@
     "summary_agents": "{n} agentes",
     "summary_routines": "{n} rutinas",
     "summary_skills": "{n} skills privadas"
+  },
+  "privacy": {
+    "export_title": "Descargar mis datos",
+    "export_desc": "Descarga un ZIP con todos tus datos: agentes, skills, conversaciones, conocimiento y configuración.",
+    "export_btn": "Descargar mis datos",
+    "export_loading": "Preparando…",
+    "delete_title": "Eliminar cuenta",
+    "delete_desc": "Todos tus datos se borrarán permanentemente tras un período de gracia de 30 días. Durante ese tiempo puedes cancelar la eliminación.",
+    "delete_btn": "Solicitar eliminación de cuenta",
+    "delete_ok": "Eliminación programada. Recibirás un email con el enlace para cancelar.",
+    "delete_error": "Error al solicitar eliminación",
+    "deletion_scheduled_title": "Cuenta programada para eliminación",
+    "deletion_scheduled_date": "Tu cuenta se eliminará el {date}",
+    "cancel_deletion": "Cancelar eliminación",
+    "cancel_ok": "Eliminación cancelada correctamente.",
+    "cancel_error": "Error al cancelar la eliminación",
+    "cancel_no_token": "Usa el enlace del email para cancelar la eliminación.",
+    "resolve_ws_title": "Resuelve tus workspaces",
+    "resolve_ws_desc": "Eres propietario de los siguientes workspaces. Transfiere la propiedad a otro miembro o elimínalos antes de continuar.",
+    "btn_transfer": "Transferir",
+    "btn_delete_ws": "Eliminar",
+    "confirm_delete_ws": "¿Eliminar este workspace y todos sus datos?",
+    "transfer_ws_title": "Transferir workspace",
+    "transfer_ws_desc": "Introduce el nombre de usuario del nuevo propietario (debe ser miembro del workspace).",
+    "transfer_confirm": "Transferir",
+    "transfer_ok": "Propiedad transferida correctamente",
+    "transfer_error": "Error al transferir la propiedad",
+    "transfer_user_required": "Introduce el nombre de usuario del nuevo propietario"
   },
   "password": {
     "field_current": "Contraseña actual",
