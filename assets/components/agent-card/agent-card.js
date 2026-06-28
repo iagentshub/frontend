@@ -48,7 +48,7 @@ var AgentCard = {
             ? '<span class="agent-tok-badge" title="' + totalTokens.toLocaleString() + ' tokens">' + AgentCard._fmtTokens(totalTokens) + ' tok</span>'
             : '';
 
-        var _BLOCKED_LABELS = ['quarantine', 'archived', 'delete'];
+        var _BLOCKED_LABELS = ['draft', 'quarantine', 'archived', 'delete'];
         var agentLabels = agent.labels || ['private'];
         var isBlocked = _BLOCKED_LABELS.some(function (bl) { return agentLabels.indexOf(bl) !== -1; });
         var blockingLabel = isBlocked ? agentLabels.find(function (l) { return _BLOCKED_LABELS.indexOf(l) !== -1; }) : null;

@@ -1,7 +1,8 @@
 (function () {
     'use strict';
 
-    var _BLOCKED_KEYS = ['quarantine', 'archived', 'delete'];
+    var _BLOCKED_KEYS = ['draft', 'quarantine', 'archived', 'delete'];
+    var _WARN_KEYS    = ['deprecated'];
     var _DEFAULT_KEY  = 'private';
 
     var _SVG_LOCK = '<svg width="9" height="9" viewBox="0 0 16 16" fill="none"><rect x="3" y="7" width="10" height="8" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M5 7V5a3 3 0 0 1 6 0v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>';
@@ -34,9 +35,13 @@
                 html += '<div class="lcat-label-name">' + name + '</div>';
                 html += '<div class="lcat-label-key">' + lbl.key + '</div>';
                 if (desc) html += '<div class="lcat-label-desc">' + desc + '</div>';
+                var isWarn = _WARN_KEYS.indexOf(lbl.key) !== -1;
                 if (isBlocked) {
                     html += '<span class="lcat-label-behavior">' + _SVG_LOCK + ' ' +
                         (window.t ? t('labels.catalog.blocks') : 'Blocks') + '</span>';
+                } else if (isWarn) {
+                    html += '<span class="lcat-label-behavior" style="color:var(--warning,#ca8a04);background:color-mix(in srgb,#ca8a04 10%,transparent)">' + _SVG_STAR + ' ' +
+                        (window.t ? t('labels.catalog.warns') : 'Warning') + '</span>';
                 }
                 if (isDefault) {
                     html += '<span class="lcat-label-default">' + _SVG_STAR + ' ' +

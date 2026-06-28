@@ -26,7 +26,7 @@
             var resolvedScope = scope || skill.scope || 'public';
             var isPrivate = resolvedScope === 'private';
             var isShared = !!skill._shared;
-            var _BLOCKED_LBLS = ['quarantine', 'archived', 'delete'];
+            var _BLOCKED_LBLS = ['draft', 'quarantine', 'archived', 'delete'];
             var skillLabels = skill.labels || ['private'];
             var isSkillBlocked = _BLOCKED_LBLS.some(function (bl) { return skillLabels.indexOf(bl) !== -1; });
 

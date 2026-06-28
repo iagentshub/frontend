@@ -9,10 +9,13 @@
   "public":      "Public",
   "private":     "Private",
   "production":  "Production",
+  "staging":     "Staging",
   "development": "Development",
   "test":        "Test",
   "favorite":    "Favorite",
+  "draft":       "Draft",
   "review":      "Review",
+  "deprecated":  "Deprecated",
   "quarantine":  "Quarantine",
   "archived":    "Archived",
   "delete":      "Mark for deletion",
@@ -22,10 +25,13 @@
     "public":      "The resource is visible to everyone in Explore and on your public profile.",
     "private":     "Only you can see and use this resource. It does not appear in any public listing.",
     "production":  "Indicates this resource is in active use in a production environment.",
+    "staging":     "Pre-production environment. The resource is ready for final validation before going to production.",
     "development": "Resource under development or testing. Signals it may still change.",
     "test":        "Resource reserved for testing and validation.",
     "favorite":    "Marks the resource as a favorite for quick access.",
+    "draft":       "Work in progress, not ready to use. Blocks access until it is complete.",
     "review":      "The resource needs review before being used or published.",
+    "deprecated":  "Still works but is obsolete. A more recent alternative is recommended.",
     "quarantine":  "Blocks the resource. Cannot be used or start chats until the label is removed.",
     "archived":    "Blocks the resource. Indicates it is no longer active. Can be kept for reference.",
     "delete":      "Marks the resource for deletion. Blocks its use and allows bulk removal from the panel."
@@ -35,6 +41,7 @@
     "intro":     "Labels define the state and behavior of your resources. Every resource always has at least one visibility label.",
     "default":   "Default",
     "blocks":    "Blocks the resource",
+    "warns":     "Visual warning",
     "nav_title": "Labels"
   }
 }

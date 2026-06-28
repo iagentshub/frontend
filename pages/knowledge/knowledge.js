@@ -173,7 +173,7 @@ function _renderSkillsPage() {
 var _skillLabelFilters     = [];
 var _activeFolderIdSkill   = null;
 
-var _SKILL_FILTER_LABELS = ['public','production','development','test','favorite','review','quarantine','archived','delete'];
+var _SKILL_FILTER_LABELS = ['public','production','staging','development','test','favorite','draft','review','deprecated','quarantine','archived','delete'];
 
 function _renderSkillLabelStrip() {
     var strip = document.getElementById('skills-label-strip');

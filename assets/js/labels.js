@@ -22,6 +22,7 @@ window.LABELS = (function () {
             i18nKey: 'labels.group.environment',
             labels: [
                 { key: 'production',  color: '#0891b2', i18nKey: 'labels.production'  },
+                { key: 'staging',     color: '#475569', i18nKey: 'labels.staging'     },
                 { key: 'development', color: '#d97706', i18nKey: 'labels.development' },
                 { key: 'test',        color: '#7c3aed', i18nKey: 'labels.test'        },
             ],
@@ -32,11 +33,13 @@ window.LABELS = (function () {
             required: false,
             i18nKey: 'labels.group.status',
             labels: [
-                { key: 'favorite',   color: '#f59e0b', i18nKey: 'labels.favorite'   },
-                { key: 'review',     color: '#f97316', i18nKey: 'labels.review'     },
-                { key: 'quarantine', color: '#ef4444', i18nKey: 'labels.quarantine' },
-                { key: 'archived',   color: '#94a3b8', i18nKey: 'labels.archived'   },
-                { key: 'delete',     color: '#dc2626', i18nKey: 'labels.delete'     },
+                { key: 'favorite',    color: '#f59e0b', i18nKey: 'labels.favorite'    },
+                { key: 'draft',       color: '#8b5cf6', i18nKey: 'labels.draft'       },
+                { key: 'review',      color: '#f97316', i18nKey: 'labels.review'      },
+                { key: 'deprecated',  color: '#ca8a04', i18nKey: 'labels.deprecated'  },
+                { key: 'quarantine',  color: '#ef4444', i18nKey: 'labels.quarantine'  },
+                { key: 'archived',    color: '#94a3b8', i18nKey: 'labels.archived'    },
+                { key: 'delete',      color: '#dc2626', i18nKey: 'labels.delete'      },
             ],
         },
     ];

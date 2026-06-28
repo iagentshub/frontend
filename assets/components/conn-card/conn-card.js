@@ -10,7 +10,7 @@
 
     var TYPE_LABEL = { openai: 'OpenAI', claude: 'Claude', gemini: 'Gemini', ollama: 'Ollama' };
 
-    var _BLOCKED_LABELS = ['quarantine', 'archived', 'delete'];
+    var _BLOCKED_LABELS = ['draft', 'quarantine', 'archived', 'delete'];
 
     window.ConnCard = {
         render: function (conn) {
