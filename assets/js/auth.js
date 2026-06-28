@@ -7,7 +7,10 @@ document.body.style.visibility = 'hidden';
 
 window.requireAuth = async function () {
     try {
-        var r = await fetch((window.API_BASE || '') + '/api/auth/me');
+        var ctrl = new AbortController();
+        var t = setTimeout(function () { ctrl.abort(); }, 8000);
+        var r = await fetch((window.API_BASE || '') + '/api/auth/me', { signal: ctrl.signal });
+        clearTimeout(t);
         if (!r.ok) { window.location.replace('/login/'); return; }
         var d = await r.json();
         if (d.role !== 'guest') {
