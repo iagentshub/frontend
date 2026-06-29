@@ -232,3 +232,18 @@
     border-color: var(--danger, #ef4444);
     background: color-mix(in srgb, var(--danger, #ef4444) 4%, var(--surface));
 }
+
+.skill-scope-badge--stars {
+    background: #fffbeb;
+    color: #92400e;
+    border: 1px solid #fde68a;
+}
+
+.skill-scope-badge--verified {
+    background: #eff6ff;
+    color: #1d4ed8;
+    border: 1px solid #bfdbfe;
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+}

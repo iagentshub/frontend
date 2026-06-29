@@ -244,6 +244,17 @@ function _bindActions() {
                 toast(window.t ? t('labels.actions.sync_error') : e.message, 'error');
                 btn.disabled = false;
             }
+        } else if (action === 'convert-fork') {
+            if (!confirm('¿Convertir este enlace a fork? El agente quedará como copia independiente.')) return;
+            btn.disabled = true;
+            try {
+                await api.post(`/api/agents/private/${encodeURIComponent(id)}/link/convert-to-fork`);
+                toast(window.t ? t('labels.actions.fork_success') : 'Convertido a fork', 'success');
+                await _loadAll();
+            } catch (e) {
+                toast(e.message, 'error');
+                btn.disabled = false;
+            }
         }
     });
 }

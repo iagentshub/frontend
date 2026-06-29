@@ -73,7 +73,7 @@
             btn.classList.toggle('starred', !was);
             var span = btn.querySelector('span');
             if (span) span.textContent = d.stars || 0;
-        } catch (_) {}
+        } catch (err) { console.error('[feed-widget] Error al actualizar estrella:', err); }
     }
 
     function _render(data, cfg, el) {

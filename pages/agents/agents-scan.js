@@ -72,7 +72,7 @@ var AgentScanner = (function () {
             ]);
             _loadedFolders.agents = results[0] || [];
             _loadedFolders.skill  = results[1] || [];
-        } catch (_) {}
+        } catch (err) { console.error('[agents-scan] Error cargando carpetas:', err); }
     }
 
     // Returns folder_id for the given section+name, creating it if needed.
@@ -89,7 +89,7 @@ var AgentScanner = (function () {
                 (_loadedFolders[section] = _loadedFolders[section] || []).push(created);
                 return created.id;
             }
-        } catch (_) {}
+        } catch (err) { console.error('[agents-scan] Error creando carpeta:', err); }
         return null;
     }
 
@@ -259,7 +259,7 @@ var AgentScanner = (function () {
                 allSkills.push(rec);
                 if (parsed.meta.id) skillById[parsed.meta.id] = rec;
                 else                globalSkills.push(rec);
-            } catch (_) {}
+            } catch (err) { console.error('[agents-scan] Error leyendo skill:', err); }
         }));
 
         // Leer agentes y vincular skills.
@@ -332,7 +332,7 @@ var AgentScanner = (function () {
                     _skillCache[cacheKey] = created.id;
                     skillIds.push(created.id);
                 }
-            } catch (_) {}
+            } catch (err) { console.error('[agents-scan] Error creando skill:', err); }
         }
 
         // 2. Construir payload del agente

@@ -14,6 +14,37 @@
     <link rel="stylesheet" href="/assets/css/labels.css" />
     <link rel="stylesheet" href="/assets/css/modals.css" />
     <link rel="stylesheet" href="/explore/explore.css" />
+    <style>
+        .explore-card-try-btn {
+            font-size: 11px;
+            padding: 3px 8px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            background: var(--surface-2, #f8f9fa);
+            color: var(--ink-1);
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        .explore-card-try-btn:hover {
+            background: var(--primary, #4f46e5);
+            color: #fff;
+            border-color: transparent;
+        }
+        .explore-card-verified-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+            font-size: 11px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            background: #eff6ff;
+            color: #1d4ed8;
+            border: 1px solid #bfdbfe;
+            font-weight: 500;
+            white-space: nowrap;
+            margin-left: 4px;
+        }
+    </style>
 </head>
 <body>
 <div class="app-shell">
@@ -90,6 +121,33 @@
             </button>
         </div>
         <div id="ep-content" class="modal-body" style="overflow-y:auto;flex:1;display:flex;flex-direction:column;gap:14px"></div>
+    </div>
+</div>
+
+<!-- Modal Probar agente -->
+<div id="explore-try-modal" class="modal-bg" style="display:none">
+    <div class="modal-box" style="max-width:480px;width:90%">
+        <div class="modal-header">
+            <span class="modal-title" id="et-title">Probar agente</span>
+            <button class="modal-close" id="et-close" type="button">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path d="M2 2l12 12M14 2L2 14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                </svg>
+            </button>
+        </div>
+        <div class="modal-body" style="display:flex;flex-direction:column;gap:12px">
+            <div>
+                <label style="font-size:13px;font-weight:500;margin-bottom:4px;display:block">Connection</label>
+                <select id="et-conn-select" style="width:100%;padding:7px 10px;border:1px solid var(--border);border-radius:6px;background:var(--surface);color:var(--ink-1);font-size:13px"></select>
+            </div>
+            <div>
+                <label style="font-size:13px;font-weight:500;margin-bottom:4px;display:block">Mensaje</label>
+                <textarea id="et-message" rows="3" style="width:100%;padding:7px 10px;border:1px solid var(--border);border-radius:6px;background:var(--surface);color:var(--ink-1);font-size:13px;resize:vertical" placeholder="Escribe tu mensaje..."></textarea>
+            </div>
+            <div id="et-warnings" hidden style="background:#fffbeb;border:1px solid #fbbf24;border-radius:6px;padding:8px 12px;font-size:12px;color:#92400e"></div>
+            <div id="et-result" hidden style="background:var(--surface-2,#f8f9fa);border:1px solid var(--border);border-radius:6px;padding:10px 12px;font-size:13px;white-space:pre-wrap;max-height:200px;overflow-y:auto"></div>
+            <button id="et-submit" class="btn btn-primary" style="align-self:flex-end">Enviar</button>
+        </div>
     </div>
 </div>
 

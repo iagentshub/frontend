@@ -78,7 +78,7 @@
             _starred[key] = !starred;
             btn.classList.toggle('starred', !starred);
             btn.textContent = '★ ' + (data.stars || 0);
-        } catch (_) {}
+        } catch (err) { console.error('[feed_widget] Error al actualizar estrella:', err); }
     }
 
     async function _load() {

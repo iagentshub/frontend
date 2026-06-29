@@ -69,6 +69,14 @@
             var categoryBadge = catLabel
                 ? '<span class="skill-category-badge">' + esc(catLabel) + '</span>'
                 : '';
+            var starsBadge = (skill._social_stars > 0)
+                ? '<span class="skill-scope-badge skill-scope-badge--stars" title="Estrellas">★ ' + skill._social_stars + '</span>'
+                : '';
+            var verifiedBadge = skill._social_verified
+                ? '<span class="skill-scope-badge skill-scope-badge--verified" title="Verificado">' +
+                  '<svg width="9" height="9" viewBox="0 0 16 16" fill="none"><path d="M3 8l3.5 4L13 4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+                  ' Verificado</span>'
+                : '';
 
             var descHtml = skill.description
                 ? '<p class="skill-card-desc">' + esc(skill.description) + '</p>'
@@ -115,7 +123,7 @@
                 '<div class="skill-card-meta">' +
                 '<div class="skill-card-name-row">' +
                 '<span class="skill-card-name" title="' + esc(skill.name) + '">' + esc(skill.name) + '</span>' +
-                scopeBadge +
+                scopeBadge + starsBadge + verifiedBadge +
                 '</div>' +
                 (categoryBadge ? '<div class="skill-card-sub">' + categoryBadge + '</div>' : '') +
                 '</div>' +

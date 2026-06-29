@@ -241,3 +241,30 @@
 .agent-card--blocked .agent-action-chat {
     cursor: not-allowed;
 }
+
+.agent-scope-badge--linked {
+    background: #fff7ed;
+    color: #9a3412;
+    border: 1px solid #fed7aa;
+}
+
+.agent-scope-badge--link-broken {
+    background: #fef2f2;
+    color: #991b1b;
+    border: 1px solid #fecaca;
+}
+
+.agent-scope-badge--stars {
+    background: #fffbeb;
+    color: #92400e;
+    border: 1px solid #fde68a;
+}
+
+.agent-scope-badge--verified {
+    background: #eff6ff;
+    color: #1d4ed8;
+    border: 1px solid #bfdbfe;
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+}

@@ -191,7 +191,7 @@ async function _loadAgentVisibility(agentId, scope) {
             const radio = document.querySelector('input[name="agent-trial-deps"][value="' + dep + '"]');
             if (radio) radio.checked = true;
         }
-    } catch (_) {}
+    } catch (err) { console.error('[agents-modal] Error cargando visibilidad del agente:', err); }
 }
 
 function _closeAgentModal() {

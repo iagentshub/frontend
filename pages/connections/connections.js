@@ -18,7 +18,7 @@ async function init() {
             var subtitle = document.querySelector('.page-subtitle');
             if (subtitle) subtitle.textContent = wsCtx.name;
         }
-    } catch (_) {}
+    } catch (err) { console.error('[connections] Error cargando contexto del workspace:', err); }
 
     await Providers.load();
     buildProviderSelect();

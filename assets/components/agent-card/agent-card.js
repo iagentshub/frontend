@@ -58,6 +58,22 @@ var AgentCard = {
               '<svg width="9" height="9" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.6"/><path d="M8 1.5C6 4 5 6 5 8s1 4 3 6.5M8 1.5C10 4 11 6 11 8s-1 4-3 6.5M1.5 8h13" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>' +
               '</span>'
             : '';
+        var linkBadge = '';
+        if (agentLabels.indexOf('linked') !== -1) {
+            if (agent._linked_broken) {
+                linkBadge = '<span class="agent-scope-badge agent-scope-badge--link-broken">Enlace roto</span>';
+            } else if (agent._linked_to_user) {
+                linkBadge = '<span class="agent-scope-badge agent-scope-badge--linked">Enlace · @' + esc(agent._linked_to_user) + '</span>';
+            }
+        }
+        var starsBadge = (agent._social_stars > 0)
+            ? '<span class="agent-scope-badge agent-scope-badge--stars" title="Estrellas">★ ' + agent._social_stars + '</span>'
+            : '';
+        var verifiedBadge = agent._social_verified
+            ? '<span class="agent-scope-badge agent-scope-badge--verified" title="Verificado por el equipo de iAgentsHub">' +
+              '<svg width="9" height="9" viewBox="0 0 16 16" fill="none"><path d="M3 8l3.5 4L13 4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+              ' Verificado</span>'
+            : '';
 
         var totalTokens = (agent.tokens_in || 0) + (agent.tokens_out || 0);
         var tokBadge = totalTokens
@@ -92,7 +108,7 @@ var AgentCard = {
             '<div class="agent-card-info">' +
             '<div class="agent-card-name-row">' +
             '<span class="agent-card-name" title="' + esc(agent.name) + '">' + esc(agent.name) + '</span>' +
-            scopeBadge + socialBadge +
+            scopeBadge + socialBadge + linkBadge + starsBadge + verifiedBadge +
             '</div>' +
             '<div class="agent-card-meta">' +
             '<span class="agent-conn-pill ' + pillCls + '">' + esc(connLabel) + '</span>' +
@@ -128,6 +144,9 @@ var AgentCard = {
             (isPublic ? '<button class="agent-action-icon" data-action="fork" data-id="' + esc(agent.id) + '" title="' + (window.t ? t('labels.actions.fork') : 'Fork') + '">' + _SVG_FORK_AGENT + '</button>' : '') +
             (isPublic ? '<button class="agent-action-icon" data-action="link" data-id="' + esc(agent.id) + '" title="' + (window.t ? t('labels.actions.link') : 'Link') + '">' + _SVG_LINK_AGENT + '</button>' : '') +
             (!isPublic && agentLabels.indexOf('linked') !== -1 ? '<button class="agent-action-icon" data-action="sync" data-id="' + esc(agent.id) + '" title="' + (window.t ? t('labels.actions.sync') : 'Sync') + '">' + _SVG_SYNC_AGENT + '</button>' : '') +
+            (agent._linked_broken ? '<button class="agent-action-icon" data-action="convert-fork" data-id="' + esc(agent.id) + '" title="Convertir a fork">' +
+                '<svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M4 2v5l4 4 4-4V2M4 7H2v7h12V7h-2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+                '</button>' : '') +
             (!isPublic ? '<button class="agent-action-icon agent-action-icon--danger" data-action="delete" data-id="' + esc(agent.id) + '" title="' + t('actions.delete') + '">' +
                 '<svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M2 4h12M5 4V2h6v2M6 7v5M10 7v5M3 4l1 9h8l1-9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
                 '</button>' : '') +

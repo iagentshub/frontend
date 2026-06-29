@@ -75,6 +75,11 @@
         var originBadge = r.fork_of_id
             ? '<span class="explore-card-fork-badge">' + (window.t ? t('labels.fork') : 'fork') + '</span>'
             : (r.linked_to_id ? '<span class="explore-card-fork-badge">' + (window.t ? t('labels.linked') : 'linked') + '</span>' : '');
+        var verifiedBadge = r.verified
+            ? '<span class="explore-card-verified-badge" title="Verificado por el equipo">' +
+              '<svg width="9" height="9" viewBox="0 0 16 16" fill="none"><path d="M3 8l3.5 4L13 4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+              ' Verificado</span>'
+            : '';
         var labelChips = (window.LABELS && r.labels && r.labels.length)
             ? '<div class="label-chips-row" style="margin-top:4px">' + LABELS.renderChips(r.labels) + '</div>'
             : '';
@@ -95,6 +100,9 @@
               _SVG_LINK +
               '</button>'
             : '';
+        var tryBtn = (!isOwn && r.resource_type === 'agent')
+            ? '<button class="explore-card-try-btn" data-action="try" data-id="' + esc(r.resource_id) + '" data-owner="' + esc(r.owner) + '" title="Probar agente">Probar</button>'
+            : '';
         return '<div class="explore-card" data-id="' + esc(r.resource_id) + '" data-type="' + esc(r.resource_type) + '" data-owner="' + esc(r.owner) + '">' +
             '<div class="explore-card-top">' +
             '<div class="explore-card-avatar" style="background:' + color + '">' + initial + '</div>' +
@@ -104,6 +112,7 @@
             '<span class="explore-card-type-badge">' + esc(_TYPE_LABELS[r.resource_type] || r.resource_type) + '</span>' +
             esc(r.category || '') +
             originBadge +
+            verifiedBadge +
             '</div>' +
             '</div>' +
             '</div>' +
@@ -116,6 +125,7 @@
             _SVG_EYE + '</button>' +
             forkBtn +
             linkBtn +
+            tryBtn +
             '<button class="explore-card-star-btn' + (starred ? ' starred' : '') + '" data-action="star" data-key="' + esc(key) + '" data-type="' + esc(r.resource_type) + '" data-id="' + esc(r.resource_id) + '">' +
             '★ <span class="star-count">' + (r.stars_count || 0) + '</span>' +
             '</button>' +
@@ -173,7 +183,7 @@
                 _offset += items.length;
                 if (moreWrap) moreWrap.hidden = !_hasMore;
             }
-        } catch (_) {}
+        } catch (err) { console.error('[explore] Error cargando items:', err); }
         _setLoading(false);
     }
 
@@ -244,7 +254,7 @@
             btn.classList.toggle('starred', !isStarred);
             var countEl = btn.querySelector('.star-count');
             if (countEl) countEl.textContent = data.stars || 0;
-        } catch (_) {}
+        } catch (err) { console.error('[explore] Error al actualizar estrella:', err); }
     }
 
     // ── Users mode ────────────────────────────────────────────────────────────
@@ -308,7 +318,7 @@
                 _userOffset += items.length;
                 if (moreWrap) moreWrap.hidden = !_userHasMore;
             }
-        } catch (_) {}
+        } catch (err) { console.error('[explore] Error cargando usuarios:', err); }
         _userLoading = false;
         _setLoading(false);
     }
@@ -457,6 +467,78 @@
         }
     }
 
+    async function _openTryModal(agentId, owner) {
+        var modal = document.getElementById('explore-try-modal');
+        if (!modal) return;
+
+        // Reset state
+        document.getElementById('et-result').hidden = true;
+        document.getElementById('et-warnings').hidden = true;
+        document.getElementById('et-message').value = '';
+
+        // Load connections
+        var select = document.getElementById('et-conn-select');
+        select.innerHTML = '<option value="">Cargando...</option>';
+        modal.style.display = 'flex';
+
+        try {
+            var conns = await fetch('/api/connections', { credentials: 'include' })
+                .then(function (r) { return r.ok ? r.json() : []; });
+            if (!conns.length) {
+                select.innerHTML = '<option value="">Sin connections disponibles</option>';
+            } else {
+                select.innerHTML = conns.map(function (c) {
+                    return '<option value="' + esc(c.id) + '">' + esc(c.name || c.id) + '</option>';
+                }).join('');
+            }
+        } catch (_) {
+            select.innerHTML = '<option value="">Error cargando connections</option>';
+        }
+
+        // Store agentId for submit
+        modal.dataset.agentId = agentId;
+        document.getElementById('et-title').textContent = 'Probar agente de @' + owner;
+    }
+
+    async function _submitTry() {
+        var modal     = document.getElementById('explore-try-modal');
+        var agentId   = modal.dataset.agentId || '';
+        var connId    = document.getElementById('et-conn-select').value;
+        var message   = (document.getElementById('et-message').value || '').trim();
+        var submitBtn = document.getElementById('et-submit');
+
+        if (!connId) { if (window.toast) toast('Selecciona una connection', 'error'); return; }
+        if (!message) { if (window.toast) toast('Escribe un mensaje', 'error'); return; }
+
+        submitBtn.disabled = true;
+        document.getElementById('et-result').hidden = true;
+        document.getElementById('et-warnings').hidden = true;
+
+        try {
+            var res = await fetch('/api/agents/public/' + encodeURIComponent(agentId) + '/try', {
+                method: 'POST',
+                credentials: 'include',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ connection_id: connId, message: message }),
+            }).then(function (r) { if (!r.ok) throw new Error(r.statusText); return r.json(); });
+
+            // Show warnings
+            if (res.warnings && res.warnings.length) {
+                var warnEl = document.getElementById('et-warnings');
+                warnEl.innerHTML = '<strong>Skills no disponibles:</strong> ' + res.warnings.map(esc).join(', ');
+                warnEl.hidden = false;
+            }
+            // Show reply
+            var resultEl = document.getElementById('et-result');
+            resultEl.textContent = res.reply || '(sin respuesta)';
+            resultEl.hidden = false;
+        } catch (err) {
+            if (window.toast) toast('Error al probar el agente: ' + err.message, 'error');
+        } finally {
+            submitBtn.disabled = false;
+        }
+    }
+
     function _toggleCategoryBar(show) {
         var el = document.getElementById('explore-category');
         if (el) el.style.display = show ? '' : 'none';
@@ -512,7 +594,9 @@
             var forkBtn = e.target.closest('[data-action="fork"]');
             if (forkBtn) { e.stopPropagation(); _forkResource(forkBtn); return; }
             var lnkBtn = e.target.closest('[data-action="link"]');
-            if (lnkBtn) { e.stopPropagation(); _linkResource(lnkBtn); }
+            if (lnkBtn) { e.stopPropagation(); _linkResource(lnkBtn); return; }
+            var tryBtn2 = e.target.closest('[data-action="try"]');
+            if (tryBtn2) { e.stopPropagation(); _openTryModal(tryBtn2.dataset.id, tryBtn2.dataset.owner); return; }
         });
 
         // Load more
@@ -523,6 +607,15 @@
                 else _loadResources(false);
             });
         }
+
+        // Try modal
+        document.getElementById('et-close').addEventListener('click', function () {
+            document.getElementById('explore-try-modal').style.display = 'none';
+        });
+        document.getElementById('explore-try-modal').addEventListener('click', function (e) {
+            if (e.target === this) this.style.display = 'none';
+        });
+        document.getElementById('et-submit').addEventListener('click', _submitTry);
     }
 
     async function init() {

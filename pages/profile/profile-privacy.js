@@ -24,7 +24,7 @@
                 banner.style.display = 'none';
                 if (reqBtn) reqBtn.disabled = false;
             }
-        } catch (_) {}
+        } catch (err) { console.error('[profile-privacy] Error cargando estado de borrado:', err); }
     }
 
     // ── Exportar datos ────────────────────────────────────────────────────────

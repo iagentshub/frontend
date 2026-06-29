@@ -180,6 +180,20 @@ async function loadSkills(folderId) {
         api.get('/api/skills?scope=public'),
     ]);
     _privateSkills = results[0];
+    // Merge social data (stars, verified) into private skills
+    try {
+        var socialSkills = await api.get('/api/social/me/resources?type=skill');
+        var socialMap = {};
+        (socialSkills.resources || []).forEach(function (r) { socialMap[r.resource_id] = r; });
+        _privateSkills = _privateSkills.map(function (s) {
+            var soc = socialMap[s.id];
+            return soc ? Object.assign({}, s, {
+                _social_public: !!soc.is_public,
+                _social_stars: soc.stars_count || 0,
+                _social_verified: !!(soc.verified),
+            }) : s;
+        });
+    } catch (err) { console.error('[knowledge] Error cargando datos sociales de skills:', err); }
     SkillCatalog.setSkills(results[1]);
     _applySkillFilter();
     if (_folderSkills) _folderSkills.updateStats(_privateSkills);

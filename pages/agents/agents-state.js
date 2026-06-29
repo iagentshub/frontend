@@ -27,9 +27,9 @@ async function _loadAll() {
         (social.resources || []).forEach(function (r) { map[r.resource_id] = r; });
         _agents = _agents.map(function (a) {
             const s = map[a.id];
-            return s ? Object.assign({}, a, { _social_public: !!s.is_public, _social_category: s.category, _social_stars: s.stars_count }) : a;
+            return s ? Object.assign({}, a, { _social_public: !!s.is_public, _social_category: s.category, _social_stars: s.stars_count, _linked_broken: !!s.linked_broken, _linked_to_user: s.linked_to_user || null, _social_verified: !!(s.verified) }) : a;
         });
-    } catch (_) {}
+    } catch (err) { console.error('[agents-state] Error cargando datos sociales:', err); }
     FilterAgents.setData(_skills, _connections, _knowledge);
     AgentCatalog.setAgents(_agents.filter(a => (a.scope || 'private') === 'public'));
     _applyFilter();
@@ -114,7 +114,7 @@ function _updateDeleteBanner() {
             try {
                 await api.del('/api/agents/' + encodeURIComponent(toDelete[i].id));
                 ok++;
-            } catch (_) {}
+            } catch (err) { console.error('[agents-state] Error al borrar agente:', err); }
         }
         if (window.toast) toast('Borrado' + (ok > 1 ? 's ' + ok + ' agentes' : ' 1 agente'), 'success');
         await _loadAll();
