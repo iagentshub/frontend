@@ -5,15 +5,16 @@ function togglePw(id) {
     if (inp) inp.type = inp.type === 'password' ? 'text' : 'password';
 }
 
-let _email = '', _password = '';
+let _email = '', _password = '', _plan = '';
 
+// ── Step 1: credentials ────────────────────────────────────────────────────
 document.getElementById('reg-form-1').addEventListener('submit', function(e) {
     e.preventDefault();
     const errEl = document.getElementById('reg-error-1');
     errEl.style.display = 'none';
     const email = document.getElementById('reg-email').value.trim();
-    const pw = document.getElementById('reg-pw').value;
-    const pw2 = document.getElementById('reg-pw2').value;
+    const pw    = document.getElementById('reg-pw').value;
+    const pw2   = document.getElementById('reg-pw2').value;
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
         errEl.textContent = 'Email inválido'; errEl.style.display = ''; return;
     }
@@ -29,18 +30,41 @@ document.getElementById('reg-form-1').addEventListener('submit', function(e) {
     document.getElementById('step-num').textContent = '2';
 });
 
+// ── Step 2: plan selection ─────────────────────────────────────────────────
+document.querySelectorAll('.reg-plan-card').forEach(function(card) {
+    card.addEventListener('click', function() {
+        document.querySelectorAll('.reg-plan-card').forEach(function(c) {
+            c.classList.remove('selected');
+        });
+        this.classList.add('selected');
+        _plan = this.dataset.plan;
+        document.getElementById('reg-error-plan').style.display = 'none';
+    });
+});
+
+document.getElementById('btn-plan-next').addEventListener('click', function() {
+    if (!_plan) {
+        document.getElementById('reg-error-plan').style.display = '';
+        return;
+    }
+    document.getElementById('step-2').style.display = 'none';
+    document.getElementById('step-3').style.display = '';
+    document.getElementById('step-num').textContent = '3';
+});
+
+// ── Step 3: profile + submit ───────────────────────────────────────────────
 async function _doRegister() {
     const errEl = document.getElementById('reg-error-2');
     errEl.style.display = 'none';
-    const payload = { email: _email, password: _password };
-    const birth = document.getElementById('reg-birth').value;
-    const gender = document.getElementById('reg-gender').value;
+    const payload = { email: _email, password: _password, plan: _plan };
+    const birth   = document.getElementById('reg-birth').value;
+    const gender  = document.getElementById('reg-gender').value;
     const country = document.getElementById('reg-country').value;
-    const phone = document.getElementById('reg-phone').value.trim();
-    if (birth) payload.birth_date = birth;
-    if (gender) payload.gender = gender;
-    if (country) payload.country = country;
-    if (phone) payload.phone = phone;
+    const phone   = document.getElementById('reg-phone').value.trim();
+    if (birth)   payload.birth_date = birth;
+    if (gender)  payload.gender     = gender;
+    if (country) payload.country    = country;
+    if (phone)   payload.phone      = phone;
 
     const r = await fetch('/api/auth/register', {
         method: 'POST',

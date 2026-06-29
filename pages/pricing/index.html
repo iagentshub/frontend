@@ -1,0 +1,442 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <script>(function(){var m={noir:"dark-red",marble:"light-red",ember:"dark-orange",ocean:"dark-blue",forest:"dark-red",dusk:"dark-purple",light:"light-red"};var t=localStorage.getItem("ga-theme")||"dark-red";t=m[t]||t;document.documentElement.setAttribute("data-theme",t);})();</script>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>iAgents Hub · Precios</title>
+    <meta name="description" content="El software es open source. Pagas el servicio gestionado y el soporte, no el código." />
+    <link rel="stylesheet" href="/assets/css/variables.css" />
+    <link rel="stylesheet" href="/assets/themes/themes.css" />
+    <link rel="stylesheet" href="/assets/css/base.css" />
+    <link rel="stylesheet" href="/pricing/pricing.css" />
+</head>
+<body class="pricing-page">
+
+    <header class="pr-header">
+        <a class="pr-logo" href="/">iAgents<span>Hub</span></a>
+        <div class="pr-header-divider"></div>
+        <span class="pr-header-label" data-i18n="pricing.badge">Precios</span>
+        <div class="pr-header-spacer"></div>
+        <a href="/about/" class="pr-header-link" data-i18n="pricing.nav_about">Acerca de</a>
+        <a href="/login/" class="pr-header-link" data-i18n="pricing.nav_login">Iniciar sesión</a>
+        <a href="/register/" class="pr-header-cta" data-i18n="pricing.nav_cta">Empezar gratis</a>
+    </header>
+
+    <main class="pr-main">
+
+        <!-- Hero -->
+        <div class="pr-hero">
+            <div class="pr-hero-badge" data-i18n="pricing.badge">Precios</div>
+            <h1 class="pr-hero-title" data-i18n="pricing.title">Pagas el servicio,<br>no el software.</h1>
+            <p class="pr-hero-subtitle" data-i18n="pricing.subtitle">El código es open source. Despliégalo tú mismo gratis, o deja que lo gestionemos nosotros.</p>
+            <div class="pr-toggle">
+                <button class="pr-toggle-btn active" id="toggle-monthly" data-i18n="pricing.toggle_monthly">Mensual</button>
+                <button class="pr-toggle-btn" id="toggle-annual">
+                    <span data-i18n="pricing.toggle_annual">Anual</span>
+                    <span class="pr-toggle-badge" data-i18n="pricing.toggle_badge">2 meses gratis</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- OSS banner -->
+        <div class="pr-oss">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.4"/>
+                <path d="M5.5 10.5c.5-1.5 2.5-3 2.5-4.5a2 2 0 1 0-4 0" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+                <circle cx="8" cy="13" r=".8" fill="currentColor"/>
+            </svg>
+            <div class="pr-oss-body">
+                <strong data-i18n="pricing.oss_title">El código es tuyo</strong>
+                <span data-i18n="pricing.oss_desc">iAgentsHub es open source. Descárgalo, despliégalo en tu servidor y úsalo sin coste de plataforma. Lo que ofrecemos en los planes de pago es el servicio gestionado, el soporte y la relación.</span>
+            </div>
+            <a href="https://github.com/iagentshub" target="_blank" rel="noopener" class="pr-oss-cta" data-i18n="pricing.oss_cta">Ver repositorio →</a>
+        </div>
+
+        <!-- Plans grid -->
+        <div class="pr-grid">
+
+            <!-- Free -->
+            <div class="pr-card">
+                <div class="pr-card-head">
+                    <div class="pr-plan-name" data-i18n="pricing.plan_free">Free</div>
+                    <div class="pr-plan-target" data-i18n="pricing.target_free">Para explorar sin compromiso</div>
+                    <div class="pr-price-wrap">
+                        <span class="pr-price" data-i18n="pricing.price_free">Gratis</span>
+                    </div>
+                </div>
+                <p class="pr-service-desc" data-i18n="pricing.service_desc_free">Accede a la plataforma en nuestro cloud. Sin tarjeta, sin compromiso. Todas las funciones disponibles.</p>
+                <div class="pr-service">
+                    <div class="pr-service-label" data-i18n="pricing.service_label">Lo que gestionamos por ti</div>
+                    <ul class="pr-service-list">
+                        <li data-i18n="pricing.svc_managed">Infraestructura gestionada</li>
+                        <li data-i18n="pricing.svc_updates">Actualizaciones automáticas</li>
+                    </ul>
+                </div>
+                <div class="pr-support-row">
+                    <span class="pr-support-label" data-i18n="pricing.support_label">Soporte</span>
+                    <div class="pr-support-tags">
+                        <span class="pr-support-tag" data-i18n="pricing.svc_community">Comunidad</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Rookie -->
+            <div class="pr-card">
+                <div class="pr-card-head">
+                    <div class="pr-plan-name" data-i18n="pricing.plan_starter">Starter</div>
+                    <div class="pr-plan-target" data-i18n="pricing.target_starter">Cuenta gratuita · acceso a grupos</div>
+                    <div class="pr-price-wrap">
+                        <span class="pr-price" data-i18n="pricing.price_free">Gratis</span>
+                    </div>
+                    <div class="pr-seats" data-i18n="pricing.seats_starter">1 cuenta gratuita</div>
+                </div>
+                <p class="pr-service-desc" data-i18n="pricing.service_desc_starter">Crea una cuenta gratuita y accede a los grupos. Ideal para colaborar sin coste.</p>
+                <div class="pr-service">
+                    <div class="pr-service-label" data-i18n="pricing.service_label">Lo que gestionamos por ti</div>
+                    <ul class="pr-service-list">
+                        <li class="pr-service-prev" data-i18n="pricing.svc_prev_anon">Todo lo del plan Anónimo</li>
+                        <li data-i18n="pricing.svc_groups">Acceso a grupos</li>
+                        <li data-i18n="pricing.svc_training_basic">Acceso a formación básica</li>
+                    </ul>
+                </div>
+                <div class="pr-support-row">
+                    <span class="pr-support-label" data-i18n="pricing.support_label">Soporte</span>
+                    <div class="pr-support-tags">
+                        <span class="pr-support-tag" data-i18n="pricing.svc_community">Comunidad</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Soldado -->
+            <div class="pr-card">
+                <div class="pr-card-head">
+                    <div class="pr-plan-name" data-i18n="pricing.plan_dev">Individual</div>
+                    <div class="pr-plan-target" data-i18n="pricing.target_dev">Uso personal · licencia única</div>
+                    <div class="pr-price-wrap pr-price-monthly">
+                        <span class="pr-price">€9</span>
+                        <span class="pr-price-period" data-i18n="pricing.per_month">/ mes</span>
+                    </div>
+                    <div class="pr-price-wrap pr-price-annual" hidden>
+                        <span class="pr-price">€90</span>
+                        <span class="pr-price-period" data-i18n="pricing.per_year">/ año</span>
+                    </div>
+                    <div class="pr-seats" data-i18n="pricing.seats_dev">1 licencia · personal e intransferible</div>
+                </div>
+                <p class="pr-service-desc" data-i18n="pricing.service_desc_dev">Infraestructura gestionada para un único usuario. La licencia es personal y no puede cederse a otra persona.</p>
+                <div class="pr-service">
+                    <div class="pr-service-label" data-i18n="pricing.service_label">Lo que gestionamos por ti</div>
+                    <ul class="pr-service-list">
+                        <li class="pr-service-prev" data-i18n="pricing.svc_prev_starter">Todo lo del plan Starter</li>
+                        <li data-i18n="pricing.svc_backups">Backups diarios</li>
+                        <li data-i18n="pricing.svc_training_mid">Acceso a formación media</li>
+                    </ul>
+                </div>
+                <div class="pr-support-row">
+                    <span class="pr-support-label" data-i18n="pricing.support_label">Soporte</span>
+                    <div class="pr-support-tags">
+                        <span class="pr-support-tag pr-support-tag--hi" data-i18n="pricing.svc_support_direct">Contacto directo</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tropa -->
+            <div class="pr-card">
+                <div class="pr-card-head">
+                    <div class="pr-plan-name" data-i18n="pricing.plan_biz">Business</div>
+                    <div class="pr-plan-target" data-i18n="pricing.target_biz">Equipos de 5 a 100 usuarios</div>
+                    <div class="pr-price-wrap pr-price-monthly">
+                        <span class="pr-price-from" data-i18n="pricing.price_from">desde</span>
+                        <span class="pr-price">€6</span>
+                        <span class="pr-price-period" data-i18n="pricing.per_lic_month">/ licencia / mes</span>
+                    </div>
+                    <div class="pr-price-wrap pr-price-annual" hidden>
+                        <span class="pr-price-from" data-i18n="pricing.price_from">desde</span>
+                        <span class="pr-price">€60</span>
+                        <span class="pr-price-period" data-i18n="pricing.per_lic_year">/ licencia / año</span>
+                    </div>
+                    <div class="pr-seats" data-i18n="pricing.seats_biz">1 admin + hasta 99 licencias</div>
+                </div>
+                <p class="pr-service-desc" data-i18n="pricing.service_desc_biz">El administrador gestiona el equipo y asigna licencias desde el panel de admin. El precio por licencia baja según el volumen.</p>
+                <div class="pr-service">
+                    <div class="pr-service-label" data-i18n="pricing.service_label">Lo que gestionamos por ti</div>
+                    <ul class="pr-service-list">
+                        <li class="pr-service-prev" data-i18n="pricing.svc_prev_dev">Todo lo del plan Developer</li>
+                        <li data-i18n="pricing.svc_admin_panel">Panel de admin · gestión de licencias</li>
+                        <li data-i18n="pricing.svc_onboarding">Onboarding asistido</li>
+                        <li data-i18n="pricing.svc_discounts_training">Descuentos en formación y asesoría especializada</li>
+                    </ul>
+                </div>
+                <div class="pr-support-row">
+                    <span class="pr-support-label" data-i18n="pricing.support_label">Soporte</span>
+                    <div class="pr-support-tags">
+                        <span class="pr-support-tag pr-support-tag--hi" data-i18n="pricing.svc_support_direct">Contacto directo</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Legión -->
+            <div class="pr-card">
+                <div class="pr-card-head">
+                    <div class="pr-plan-name" data-i18n="pricing.plan_ent">Enterprise</div>
+                    <div class="pr-plan-target" data-i18n="pricing.target_ent">Organizaciones de 101+ usuarios</div>
+                    <div class="pr-price-wrap pr-price-monthly">
+                        <span class="pr-price-from" data-i18n="pricing.price_from">desde</span>
+                        <span class="pr-price">€4,50</span>
+                        <span class="pr-price-period" data-i18n="pricing.per_lic_month">/ licencia / mes</span>
+                    </div>
+                    <div class="pr-price-wrap pr-price-annual" hidden>
+                        <span class="pr-price-from" data-i18n="pricing.price_from">desde</span>
+                        <span class="pr-price">€45</span>
+                        <span class="pr-price-period" data-i18n="pricing.per_lic_year">/ licencia / año</span>
+                    </div>
+                    <div class="pr-seats" data-i18n="pricing.seats_ent">1 admin + licencias ilimitadas</div>
+                </div>
+                <p class="pr-service-desc" data-i18n="pricing.service_desc_ent">Contrato anual con licencias ilimitadas y descuentos en asesoría y formación. Self-hosted disponible como add-on.</p>
+                <div class="pr-service">
+                    <div class="pr-service-label" data-i18n="pricing.service_label">Lo que gestionamos por ti</div>
+                    <ul class="pr-service-list">
+                        <li class="pr-service-prev" data-i18n="pricing.svc_prev_biz">Todo lo del plan Business</li>
+                        <li data-i18n="pricing.svc_discounts_training">Descuentos en formación y asesoría especializada</li>
+                    </ul>
+                </div>
+                <div class="pr-support-row">
+                    <span class="pr-support-label" data-i18n="pricing.support_label">Soporte</span>
+                    <div class="pr-support-tags">
+                        <span class="pr-support-tag pr-support-tag--hi" data-i18n="pricing.svc_support_direct">Contacto directo</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Extras strip -->
+        <div class="pr-extras">
+
+            <div class="pr-extra-item">
+                <div class="pr-extra-icon">
+                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+                        <rect x="1" y="3" width="16" height="4" rx="1.5" stroke="currentColor" stroke-width="1.4"/>
+                        <rect x="1" y="10" width="16" height="4" rx="1.5" stroke="currentColor" stroke-width="1.4"/>
+                        <circle cx="14" cy="5" r="1" fill="currentColor"/>
+                        <circle cx="14" cy="12" r="1" fill="currentColor"/>
+                    </svg>
+                </div>
+                <div class="pr-extra-body">
+                    <div class="pr-extra-name" data-i18n="pricing.extra_sh_name">Self-hosted</div>
+                    <div class="pr-extra-desc" data-i18n="pricing.extra_sh_desc">Tu infraestructura, tu control. Incluye SLA garantizado por contrato.</div>
+                </div>
+            </div>
+
+            <div class="pr-extra-sep"></div>
+
+            <div class="pr-extra-item">
+                <div class="pr-extra-icon">
+                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+                        <path d="M9 1.5L11 6h5l-4 3 1.5 5L9 11.5 4.5 14 6 9 2 6h5z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <div class="pr-extra-body">
+                    <div class="pr-extra-name" data-i18n="pricing.extra_training_name">Formación</div>
+                    <div class="pr-extra-desc" data-i18n="pricing.extra_training_desc">Sesiones presenciales u online adaptadas a tu equipo y nivel.</div>
+                </div>
+            </div>
+
+            <div class="pr-extra-sep"></div>
+
+            <div class="pr-extra-item">
+                <div class="pr-extra-icon">
+                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+                        <circle cx="9" cy="6" r="3" stroke="currentColor" stroke-width="1.4"/>
+                        <path d="M2 16c0-3.314 3.134-6 7-6s7 2.686 7 6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <div class="pr-extra-body">
+                    <div class="pr-extra-name" data-i18n="pricing.extra_consulting_name">Asesoría</div>
+                    <div class="pr-extra-desc" data-i18n="pricing.extra_consulting_desc">Acompañamiento personalizado para maximizar el uso de la plataforma.</div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Plan calculator trigger -->
+        <div class="pr-open-plan-wrap">
+            <button type="button" id="open-plan-modal" class="pr-btn pr-open-plan-btn">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                    <path d="M8 2v12M2 8h12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                </svg>
+                <span data-i18n="pricing.pm_open_btn">Calcular tu mejor plan y presupuesto</span>
+            </button>
+        </div>
+
+        <!-- BYOK note -->
+        <div class="pr-byok">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M10.5 1a4.5 4.5 0 0 0-4.27 5.9L1.5 11.6V14h2.4l.5-.5v-1h1v-1h1l1.1-1.1A4.5 4.5 0 1 0 10.5 1zm0 2a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" fill="currentColor"/>
+            </svg>
+            <span id="byok-note">Todos los planes usan <strong>tus propias API keys</strong> — nunca pagamos inferencia LLM por ti. El coste de IA queda íntegramente bajo tu control.</span>
+        </div>
+
+        <!-- FAQ -->
+        <section class="pr-faq">
+            <h2 class="pr-faq-title" data-i18n="pricing.faq_title">Preguntas frecuentes</h2>
+            <div class="pr-faq-list">
+                <details class="pr-faq-item">
+                    <summary class="pr-faq-q" data-i18n="pricing.faq1_q">¿Puedo usar iAgentsHub sin pagar nada?</summary>
+                    <p class="pr-faq-a" data-i18n="pricing.faq1_a">Sí, de dos formas: el plan Free en nuestro cloud, o desplegando la versión open source en tu propio servidor. El self-hosted no tiene coste de plataforma ni restricciones de funcionalidades.</p>
+                </details>
+                <details class="pr-faq-item">
+                    <summary class="pr-faq-q" data-i18n="pricing.faq2_q">¿Qué obtengo en los planes de pago que no tengo en el self-hosted?</summary>
+                    <p class="pr-faq-a" data-i18n="pricing.faq2_a">Servicio gestionado: nos encargamos de la infraestructura, los backups, las actualizaciones y la disponibilidad. Y soporte: acceso directo con tiempos de respuesta garantizados y, en Enterprise, un contrato con SLA.</p>
+                </details>
+                <details class="pr-faq-item">
+                    <summary class="pr-faq-q" data-i18n="pricing.faq3_q">¿Cómo funciona la escala de precios en Business?</summary>
+                    <p class="pr-faq-a" data-i18n="pricing.faq3_a">El precio por licencia baja automáticamente al añadir más usuarios. En mensual el ajuste es inmediato. En anual bloqueas el precio del tramo contratado durante 12 meses y puedes comprar paquetes adicionales de 5 o 10 licencias al mismo precio unitario, prorrateado.</p>
+                </details>
+                <details class="pr-faq-item">
+                    <summary class="pr-faq-q" data-i18n="pricing.faq4_q">¿Puedo transferir la licencia Developer a otra persona?</summary>
+                    <p class="pr-faq-a" data-i18n="pricing.faq4_a">No. La licencia Developer es estrictamente personal e intransferible. Está asociada a una única cuenta y no puede cederse, compartirse ni usarse por más de una persona.</p>
+                </details>
+                <details class="pr-faq-item">
+                    <summary class="pr-faq-q" data-i18n="pricing.faq5_q">¿Cómo funciona la facturación anual?</summary>
+                    <p class="pr-faq-a" data-i18n="pricing.faq5_a">Pagas 10 meses y tienes acceso durante 12 — equivale a un 17% de descuento. La factura se emite una vez al año por el importe completo. El precio por licencia queda bloqueado durante toda la vigencia del contrato.</p>
+                </details>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Plan calculator modal -->
+    <div class="pm-overlay" id="plan-modal" hidden role="dialog" aria-modal="true" aria-labelledby="pm-title">
+        <div class="pm-dialog">
+
+            <div class="pm-header">
+                <div class="pm-header-text">
+                    <div class="pm-title" id="pm-title" data-i18n="pricing.pm_title">Calcula tu mejor plan y presupuesto</div>
+                    <div class="pm-subtitle" data-i18n="pricing.pm_subtitle">Mueve el control para encontrar el plan adecuado para tu equipo</div>
+                </div>
+                <button class="pm-close" id="pm-close" aria-label="Cerrar">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 3l10 10M13 3L3 13" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+                </button>
+            </div>
+
+            <div class="pm-slider-section">
+                <div class="pm-slider-row">
+                    <input type="range" id="pm-slider" class="pm-slider-input" min="1" max="500" value="1" step="1" />
+                    <div class="pm-count-wrap">
+                        <span id="pm-count" class="pm-count-num">1</span>
+                        <span class="pm-count-label" id="pm-count-label" data-i18n="pricing.calc_licenses">licencia</span>
+                    </div>
+                </div>
+                <div class="pm-zones">
+                    <button class="pm-zone active" id="pz-dev" data-val="1" data-i18n="pricing.plan_dev">Soldado</button>
+                    <button class="pm-zone" id="pz-biz" data-val="25" data-i18n="pricing.plan_biz">Tropa</button>
+                    <button class="pm-zone" id="pz-ent" data-val="150" data-i18n="pricing.plan_ent">Legión</button>
+                </div>
+                <div class="pm-tier-toggle" id="pm-tier-toggle" hidden>
+                    <button type="button" class="pm-tier-btn" id="pt-rookie" data-plan="rookie">
+                        <span data-i18n="pricing.plan_starter">Novato</span>
+                        <span class="pm-tier-price" data-i18n="pricing.price_free">Gratis</span>
+                    </button>
+                    <button type="button" class="pm-tier-btn pm-tier-btn--active" id="pt-soldier" data-plan="developer">
+                        <span data-i18n="pricing.plan_dev">Soldado</span>
+                        <span class="pm-tier-price">€9/mes</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="pm-body">
+                <div class="pm-left">
+                    <div class="pm-card" id="pm-plan-card">
+                        <div class="pm-badge" data-i18n="pricing.pm_recommended">Plan recomendado</div>
+                        <div class="pm-plan-name" id="pm-plan-name">Developer</div>
+                        <ul class="pm-benefits" id="pm-benefits"></ul>
+                    </div>
+                </div>
+
+                <div class="pm-right">
+                    <div class="pm-billing-wrap">
+                        <span class="pm-billing-label" data-i18n="pricing.calc_billing">Facturación</span>
+                        <div class="pm-billing-toggle">
+                            <button class="pm-tbtn active" id="pm-toggle-monthly" data-i18n="pricing.toggle_monthly">Mensual</button>
+                            <button class="pm-tbtn" id="pm-toggle-annual" data-i18n="pricing.toggle_annual">Anual</button>
+                        </div>
+                    </div>
+
+                    <div class="pm-sh-row">
+                        <label class="pm-sh-wrap" id="pm-sh-wrap">
+                            <input type="checkbox" id="pm-sh-check" class="pr-calc-check" />
+                            <span class="pr-calc-check-box"></span>
+                            <span class="pm-sh-text">
+                                <span id="pm-sh-label" data-i18n="pricing.calc_sh_label">Añadir self-hosted</span>
+                                <span class="pr-calc-sh-note" id="pm-sh-note">+€400/mes</span>
+                            </span>
+                        </label>
+                        <button type="button" class="pm-info-btn" id="pm-sh-info-btn" aria-label="Más información">
+                            i
+                            <div class="pm-info-tooltip" data-i18n="pricing.calc_sh_info">Mayor seguridad del dato: tu información queda encapsulada en tu propio entorno, sin que ningún tercero pueda acceder. Incluye SLA garantizado por contrato.</div>
+                        </button>
+                    </div>
+
+                    <div class="pm-divider"></div>
+
+                    <div class="pm-price-block">
+                        <div class="pm-ppl" id="pm-ppl"></div>
+                        <div class="pm-total-monthly">
+                            <span class="pm-total-num" id="pm-monthly">€9</span>
+                            <span class="pm-total-period" data-i18n="pricing.calc_month">/ mes</span>
+                        </div>
+                        <div class="pm-total-annual" id="pm-annual-row" hidden>
+                            <span class="pm-total-annual-num" id="pm-annual">€90</span>
+                            <span class="pm-total-period" data-i18n="pricing.calc_year">/ año</span>
+                        </div>
+                        <div class="pm-savings" id="pm-savings"></div>
+                        <div class="pm-vat-note" data-i18n="pricing.vat_note">+ IVA según tu país</div>
+                    </div>
+
+                    <button type="button" class="pr-btn pm-cta" id="pm-cta" data-i18n="pricing.pm_cta">Contratar</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Contact modal -->
+    <div class="pr-modal-overlay" id="contact-modal" hidden role="dialog" aria-modal="true">
+        <div class="pr-modal">
+            <button class="pr-modal-close" id="modal-close" aria-label="Cerrar">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 3l10 10M13 3L3 13" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+            </button>
+            <div class="pr-modal-title" id="modal-title">Solicitar información</div>
+            <div class="pr-modal-subtitle" id="modal-subtitle"></div>
+            <form class="pr-modal-form" id="contact-form" novalidate>
+                <input type="hidden" id="modal-type" name="type" />
+                <div class="pr-modal-field">
+                    <label class="pr-modal-label" for="modal-name" data-i18n="pricing.contact_name">Nombre</label>
+                    <input class="pr-modal-input" type="text" id="modal-name" name="name" autocomplete="name" required />
+                </div>
+                <div class="pr-modal-field">
+                    <label class="pr-modal-label" for="modal-email" data-i18n="pricing.contact_email">Email</label>
+                    <input class="pr-modal-input" type="email" id="modal-email" name="email" autocomplete="email" required />
+                </div>
+                <div class="pr-modal-field">
+                    <label class="pr-modal-label" for="modal-message" data-i18n="pricing.contact_message">Mensaje (opcional)</label>
+                    <textarea class="pr-modal-input pr-modal-textarea" id="modal-message" name="message" rows="3"></textarea>
+                </div>
+                <div class="pr-modal-status" id="modal-status" hidden></div>
+                <button type="submit" class="pr-btn" id="modal-submit" data-i18n="pricing.contact_send">Enviar solicitud</button>
+            </form>
+        </div>
+    </div>
+
+    <footer class="pr-footer">
+        <span>© 2026 iAgentsHub</span>
+        <a href="/about/" data-i18n="pricing.footer_about">Acerca de</a>
+        <a href="mailto:hola@iagentshub.com" data-i18n="pricing.footer_contact">Contacto</a>
+    </footer>
+
+    <script src="/assets/js/flog.js"></script>
+    <script src="/assets/js/i18n.js"></script>
+    <script src="/pricing/pricing.js"></script>
+</body>
+</html>

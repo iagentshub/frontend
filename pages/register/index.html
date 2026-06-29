@@ -16,7 +16,7 @@
     <div class="login-card login-card--wide">
       <div class="login-card-logo">iA</div>
       <h2>Crear cuenta</h2>
-      <p class="login-sub">Paso <span id="step-num">1</span> de 2</p>
+      <p class="login-sub">Paso <span id="step-num">1</span> de 3</p>
 
       <!-- Step 1 -->
       <div id="step-1">
@@ -44,8 +44,38 @@
         </form>
       </div>
 
-      <!-- Step 2 -->
+      <!-- Step 2 · Plan selection -->
       <div id="step-2" style="display:none">
+        <p class="step2-hint">Elige tu plan de inicio</p>
+        <div class="reg-plan-cards">
+
+          <button type="button" class="reg-plan-card" id="plan-rookie" data-plan="rookie">
+            <div class="reg-plan-name">Novato</div>
+            <div class="reg-plan-price">Gratis</div>
+            <ul class="reg-plan-features">
+              <li>Todo lo del plan Anónimo</li>
+              <li>Acceso a espacios de trabajo</li>
+              <li>Soporte comunidad</li>
+            </ul>
+          </button>
+
+          <button type="button" class="reg-plan-card" id="plan-soldier" data-plan="soldier">
+            <div class="reg-plan-name">Soldado</div>
+            <div class="reg-plan-price">€9<span>/mes</span></div>
+            <ul class="reg-plan-features">
+              <li>Todo lo de Novato</li>
+              <li>Backups diarios</li>
+              <li>Contacto directo</li>
+            </ul>
+          </button>
+
+        </div>
+        <div id="reg-error-plan" class="form-error" style="display:none">Selecciona un plan para continuar</div>
+        <button id="btn-plan-next" class="btn btn-primary btn-full" style="margin-top:16px">Continuar →</button>
+      </div>
+
+      <!-- Step 3 · Profile -->
+      <div id="step-3" style="display:none">
         <p class="step2-hint">Completa tu perfil (opcional)</p>
         <div class="field">
           <label for="reg-birth">Fecha de nacimiento</label>
@@ -88,10 +118,16 @@
       </div>
 
       <p class="login-register-link">¿Ya tienes cuenta? <a href="/login/">Iniciar sesión</a></p>
+      <div class="login-explore">
+        <a href="/pricing/" data-i18n="auth.pricing_link">Precios</a>
+        <span class="login-explore-sep"></span>
+        <a href="/about" data-i18n="auth.about_link">¿Qué es esto?</a>
+      </div>
     </div>
   </div>
 
   <script src="/assets/js/flog.js"></script>
+  <script src="/assets/js/i18n.js"></script>
   <script src="/pages/register/register.js"></script>
 </body>
 </html>
