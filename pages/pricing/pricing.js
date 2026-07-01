@@ -288,10 +288,16 @@
         pmCtaBtn.dataset.planKey = pmPlan;
     }
 
-    // CTA: Free → /register/, others → contact modal
+    // CTA: Free → /register/, Developer/Business → checkout, Enterprise → contacto
     pmCtaBtn.addEventListener('click', function () {
         if (this.dataset.planKey === 'free' || this.dataset.planKey === 'rookie') {
             window.location.href = '/register/';
+            return;
+        }
+        if (this.dataset.planKey === 'developer' || this.dataset.planKey === 'business') {
+            var interval = pmAnnual ? 'year' : 'month';
+            var params = 'tier=' + this.dataset.planKey + '&seats=' + pmLic + '&interval=' + interval + '&selfHosted=' + (pmSh ? '1' : '0');
+            window.location.href = '/checkout/?' + params;
             return;
         }
         var data = PLANS[pmPlan];

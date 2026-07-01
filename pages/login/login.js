@@ -1,5 +1,12 @@
 'use strict';
 
+// Post-login redirect target — solo rutas internas (evita open redirect)
+function _redirectTarget() {
+    const raw = new URLSearchParams(window.location.search).get('redirect') || '';
+    if (raw.startsWith('/') && !raw.startsWith('//')) return raw;
+    return '/dashboard/';
+}
+
 document.getElementById('login-form').addEventListener('submit', async function(e) {
     e.preventDefault();
     const email = document.getElementById('login-email').value.trim();
@@ -18,7 +25,7 @@ document.getElementById('login-form').addEventListener('submit', async function(
             body: JSON.stringify({ email, password }),
         });
         if (r.ok) {
-            window.location.replace('/dashboard/');
+            window.location.replace(_redirectTarget());
         } else {
             const data = await r.json().catch(() => ({}));
             errEl.textContent = data.detail || (window.t ? window.t('auth.error_invalid') : 'Credenciales incorrectas');
@@ -50,7 +57,7 @@ document.getElementById('btn-guest')?.addEventListener('click', async function()
     btn.disabled = true;
     try {
         const r = await fetch('/api/auth/guest', { method: 'POST' });
-        if (r.ok) window.location.replace('/dashboard/');
+        if (r.ok) window.location.replace(_redirectTarget());
     } finally {
         btn.disabled = false;
     }
@@ -58,5 +65,5 @@ document.getElementById('btn-guest')?.addEventListener('click', async function()
 
 // Redirect if already logged in
 fetch('/api/auth/me').then(r => {
-    if (r.ok) window.location.replace('/dashboard/');
+    if (r.ok) window.location.replace(_redirectTarget());
 });

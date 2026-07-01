@@ -107,6 +107,13 @@
                             </svg>
                             <span data-i18n="profile.nav.privacy">Privacidad</span>
                         </button>
+                        <button class="profile-nav-item" data-section="section-billing" id="nav-billing">
+                            <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
+                                <rect x="1.5" y="3.5" width="13" height="9" rx="1.5" stroke="currentColor" stroke-width="1.4"/>
+                                <path d="M1.5 6.5h13" stroke="currentColor" stroke-width="1.4"/>
+                            </svg>
+                            <span>Suscripción</span>
+                        </button>
                     </div>
                 </nav>
 
@@ -282,6 +289,46 @@
                         <div class="section-subtitle" style="margin-top:32px;color:var(--danger,#e55)" data-i18n="profile.privacy.delete_title">Eliminar cuenta</div>
                         <p class="section-desc" data-i18n="profile.privacy.delete_desc">Todos tus datos se borrarán permanentemente tras un período de gracia de 30 días. Durante ese tiempo puedes cancelar la eliminación.</p>
                         <button class="btn btn-danger" id="btn-request-deletion" data-i18n="profile.privacy.delete_btn">Solicitar eliminación de cuenta</button>
+                    </div>
+
+                    <!-- Suscripción -->
+                    <div id="section-billing" class="profile-section" hidden>
+                        <div class="section-title">Suscripción</div>
+
+                        <div id="billing-free-block" hidden>
+                            <p class="section-desc">Actualmente estás en el plan Free.</p>
+                            <a class="btn btn-ghost" href="/pricing/">Ver planes</a>
+                        </div>
+
+                        <div id="billing-active-block" hidden>
+                            <div class="profile-info-block">
+                                <div class="profile-info-row">
+                                    <span class="profile-info-label">Plan</span>
+                                    <span class="profile-info-value" id="billing-tier">—</span>
+                                </div>
+                                <div class="profile-info-row">
+                                    <span class="profile-info-label">Estado</span>
+                                    <span class="profile-info-value" id="billing-status">—</span>
+                                </div>
+                                <div class="profile-info-row">
+                                    <span class="profile-info-label">Próxima renovación</span>
+                                    <span class="profile-info-value" id="billing-renewal">—</span>
+                                </div>
+                            </div>
+
+                            <div id="billing-seats-block" style="margin-top:20px" hidden>
+                                <div class="section-subtitle">Asientos (Business)</div>
+                                <div style="display:flex;gap:8px;align-items:center;margin-top:8px">
+                                    <input type="number" id="billing-seats-input" min="2" max="100" style="width:90px" class="pr-modal-input" />
+                                    <button class="btn btn-ghost btn-sm" id="btn-change-seats">Actualizar asientos</button>
+                                </div>
+                            </div>
+
+                            <div style="margin-top:24px;display:flex;gap:10px">
+                                <button class="btn btn-ghost" id="btn-cancel-sub" hidden>Cancelar suscripción</button>
+                                <button class="btn btn-ghost" id="btn-reactivate-sub" hidden>Reactivar suscripción</button>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Estilo -->
@@ -594,6 +641,7 @@
     <script src="/profile/profile-workspaces.js"></script>
     <script src="/profile/profile-privacy.js"></script>
     <script src="/profile/profile-avatar-crop.js"></script>
+    <script src="/profile/profile-billing.js"></script>
 </body>
 
 </html>

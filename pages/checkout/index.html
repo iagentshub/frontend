@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <script>(function(){var m={noir:"dark-red",marble:"light-red",ember:"dark-orange",ocean:"dark-blue",forest:"dark-red",dusk:"dark-purple",light:"light-red"};var t=localStorage.getItem("ga-theme")||"dark-red";t=m[t]||t;document.documentElement.setAttribute("data-theme",t);})();</script>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>iAgents Hub · Checkout</title>
+    <link rel="stylesheet" href="/assets/css/variables.css" />
+    <link rel="stylesheet" href="/assets/themes/themes.css" />
+    <link rel="stylesheet" href="/assets/css/base.css" />
+    <link rel="stylesheet" href="/pricing/pricing.css" />
+    <link rel="stylesheet" href="/checkout/checkout.css" />
+    <script src="https://js.stripe.com/v3/"></script>
+</head>
+<body class="pricing-page">
+
+    <header class="pr-header">
+        <a class="pr-logo" href="/">iAgents<span>Hub</span></a>
+        <div class="pr-header-divider"></div>
+        <span class="pr-header-label">Checkout</span>
+        <div class="pr-header-spacer"></div>
+        <a href="/pricing/" class="pr-header-link">← Volver a precios</a>
+    </header>
+
+    <main class="pr-main co-main">
+        <div class="co-card">
+            <h1 class="co-title">Confirma tu suscripción</h1>
+
+            <div class="co-summary" id="co-summary">
+                <div class="co-summary-row">
+                    <span id="co-plan-name">—</span>
+                    <span id="co-plan-seats"></span>
+                </div>
+                <div class="co-summary-total">
+                    <span id="co-total">—</span>
+                    <span id="co-interval-label"></span>
+                </div>
+            </div>
+
+            <form id="co-form">
+                <div id="payment-element"></div>
+                <div class="co-error" id="co-error" hidden></div>
+                <button type="submit" class="pr-btn co-submit" id="co-submit" disabled>
+                    <span id="co-submit-label">Cargando…</span>
+                </button>
+            </form>
+
+            <div class="co-success" id="co-success" hidden>
+                <p>Suscripción activada. Redirigiendo…</p>
+            </div>
+        </div>
+    </main>
+
+    <script src="/assets/js/flog.js"></script>
+    <script src="/assets/js/config.js"></script>
+    <script src="/assets/js/api.js"></script>
+    <script src="/checkout/checkout.js"></script>
+</body>
+</html>
