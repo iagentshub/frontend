@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+    <script>(function () { var m = { noir: "dark-red", marble: "light-red", ember: "dark-orange", ocean: "dark-blue", forest: "dark-red", dusk: "dark-purple", light: "light-red" }; var t = localStorage.getItem("ga-theme") || "dark-red"; t = m[t] || t; document.documentElement.setAttribute("data-theme", t); })();</script>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>iAgents Hub · Metadata</title>
+    <link rel="stylesheet" href="/assets/css/variables.css" />
+    <link rel="stylesheet" href="/assets/themes/themes.css" />
+    <link rel="stylesheet" href="/assets/css/base.css" />
+    <link rel="stylesheet" href="/assets/css/components.css" />
+    <link rel="stylesheet" href="/assets/css/layout.css" />
+    <link rel="stylesheet" href="/assets/css/modals.css" />
+    <link rel="stylesheet" href="/assets/css/animations.css" />
+    <link rel="stylesheet" href="/assets/components/main_nav/main_nav.css" />
+    <link rel="stylesheet" href="/admin/admin.css" />
+</head>
+
+<body>
+    <div class="app-shell">
+        <div id="nav-root"></div>
+
+        <main class="page-content">
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">Metadata del sistema</h1>
+                    <p class="page-subtitle">Estado de la base de datos y actividad del sistema</p>
+                </div>
+            </div>
+
+            <!-- Tabs principales -->
+            <div class="admin-tabs" style="margin-bottom:24px">
+                <button class="admin-tab active" data-meta-tab="logs"
+                    onclick="window._metaSwitchTab('logs')">Logs</button>
+                <button class="admin-tab" data-meta-tab="tables"
+                    onclick="window._metaSwitchTab('tables')">Tablas</button>
+            </div>
+
+            <!-- ── Tab: Logs ── -->
+            <div id="meta-panel-logs">
+                <div id="logs-summary-grid" class="logs-summary-grid"></div>
+            </div>
+
+            <!-- ── Tab: Tablas ── -->
+            <div id="meta-panel-tables" style="display:none">
+                <div style="display:flex;gap:8px;margin-bottom:16px;align-items:center">
+                    <input type="search" id="meta-table-search" class="input" placeholder="Buscar tabla…"
+                        style="max-width:260px" oninput="window._metaFilterTables()" />
+                    <span id="meta-table-count" style="font-size:0.8rem;color:var(--text-2);margin-left:8px"></span>
+                </div>
+                <div id="meta-tables-grid"
+                    style="display:grid;grid-template-columns:repeat(auto-fill,minmax(165px,1fr));gap:12px"></div>
+            </div>
+        </main>
+    </div>
+
+    <!-- ── Dialog: navegador de tabla ── -->
+    <div id="meta-table-dialog"
+        style="display:none;position:fixed;inset:0;z-index:950;background:rgba(0,0,0,0.55);backdrop-filter:blur(2px)">
+        <div
+            style="position:absolute;inset:4% 3%;background:var(--surface);border:1px solid var(--border);border-radius:10px;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.4)">
+            <div
+                style="display:flex;align-items:center;gap:12px;padding:12px 18px;border-bottom:1px solid var(--border);flex-shrink:0">
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" style="opacity:0.5">
+                    <rect x="1" y="1" width="14" height="14" rx="2" stroke="currentColor" stroke-width="1.4" />
+                    <path d="M1 5h14M5 5v9" stroke="currentColor" stroke-width="1.3" />
+                </svg>
+                <span id="meta-table-dialog-title"
+                    style="font-weight:700;font-size:0.95rem;font-family:monospace;flex:1"></span>
+                <input id="meta-table-search-data" type="search" class="input"
+                    style="height:30px;font-size:0.78rem;width:220px"
+                    placeholder="Buscar en todos los campos… (Enter)" />
+                <button class="btn btn-primary btn-sm" id="meta-table-search-btn">Buscar</button>
+                <button id="meta-table-dialog-close" class="modal-close" type="button">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M2 2l12 12M14 2L2 14" stroke="currentColor" stroke-width="1.8"
+                            stroke-linecap="round" />
+                    </svg>
+                </button>
+            </div>
+            <div id="meta-table-data-wrap" style="flex:1;overflow:auto;padding:0">
+                <p style="text-align:center;padding:28px;color:var(--text-2)">Cargando…</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Modal: visor de logs por día ── -->
+    <div id="logs-modal"
+        style="display:none;position:fixed;inset:0;z-index:900;background:rgba(0,0,0,0.55);backdrop-filter:blur(2px)">
+        <div
+            style="position:absolute;inset:5% 4%;background:var(--surface);border:1px solid var(--border);border-radius:10px;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.4)">
+
+            <!-- Header del modal -->
+            <div
+                style="display:flex;align-items:center;gap:12px;padding:14px 18px;border-bottom:1px solid var(--border);flex-shrink:0">
+                <span id="logs-modal-title" style="font-weight:700;font-size:1rem;flex:1"></span>
+                <!-- Filtros inline -->
+                <select id="logs-level-select" class="select" style="height:30px;font-size:0.78rem;min-width:90px">
+                    <option value="">Nivel</option>
+                    <option value="DEBUG">DEBUG</option>
+                    <option value="INFO">INFO</option>
+                    <option value="OK">OK</option>
+                    <option value="WARNING">WARNING</option>
+                    <option value="ERROR">ERROR</option>
+                </select>
+                <select id="logs-service-select" class="select" style="height:30px;font-size:0.78rem;min-width:90px">
+                    <option value="">Fuente</option>
+                    <option value="BE">Backend</option>
+                    <option value="FE">Frontend</option>
+                </select>
+                <input id="logs-search" type="search" class="input" style="height:30px;font-size:0.78rem;width:180px"
+                    placeholder="Buscar IP, usuario, acción…" />
+                <a id="btn-logs-download" class="btn btn-ghost btn-sm" download style="display:none"
+                    title="Descargar CSV">⬇ CSV</a>
+                <button id="btn-logs-modal-close" class="modal-close" type="button">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M2 2l12 12M14 2L2 14" stroke="currentColor" stroke-width="1.8"
+                            stroke-linecap="round" />
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Tabla de logs -->
+            <div class="logs-table-wrap" style="flex:1;overflow:auto">
+                <table class="logs-table" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th class="logs-th sortable" data-col="date">Fecha</th>
+                            <th class="logs-th sortable" data-col="ts">Hora</th>
+                            <th class="logs-th sortable" data-col="level">Nivel</th>
+                            <th class="logs-th sortable" data-col="ip" title="Clic para filtrar por IP">IP &#x1F50D;
+                            </th>
+                            <th class="logs-th sortable" data-col="username" title="Clic para filtrar por usuario">
+                                Usuario &#x1F50D;</th>
+                            <th class="logs-th sortable" data-col="source">Fuente</th>
+                            <th class="logs-th">Mensaje</th>
+                        </tr>
+                    </thead>
+                    <tbody id="logs-tbody"></tbody>
+                </table>
+            </div>
+
+            <!-- Footer del modal -->
+            <div
+                style="padding:8px 18px;border-top:1px solid var(--border);display:flex;align-items:center;flex-shrink:0">
+                <span id="logs-count" class="logs-count" style="font-size:0.78rem;color:var(--text-2)"></span>
+            </div>
+        </div>
+    </div>
+
+    <script src="/assets/js/flog.js"></script>
+    <script src="/assets/js/i18n.js"></script>
+    <script src="/assets/js/config.js"></script>
+    <script src="/assets/js/theme.js"></script>
+    <script src="/assets/js/toast.js"></script>
+    <script src="/assets/js/auth.js"></script>
+    <script src="/assets/js/api.js"></script>
+    <script src="/assets/js/utils.js"></script>
+    <script src="/assets/components/main_nav/main_nav.js"></script>
+    <script src="/admin/admin-logs.js"></script>
+    <script src="/admin/admin-metadata.js"></script>
+    <script>
+        (async function () {
+            await window.requireAuth();
+            renderNav('nav-root', 'admin-metadata');
+            window.adminMetadata.init();
+        })();
+    </script>
+</body>
+
+</html>
