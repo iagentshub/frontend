@@ -13,11 +13,11 @@ function _initLabelsPicker(currentLabels) {
         _agentLabels = newLabels;
         // Sincronizar con la sección de visibilidad social
         var isPublic = _agentLabels.indexOf('public') !== -1;
-        var pubCb  = document.getElementById('agent-social-public');
-        var opts   = document.getElementById('agent-social-opts');
+        var pubCb = document.getElementById('agent-social-public');
+        var opts = document.getElementById('agent-social-opts');
         var visSec = document.getElementById('agent-visibility-section');
         if (pubCb) pubCb.checked = isPublic;
-        if (opts)  opts.style.display = isPublic ? '' : 'none';
+        if (opts) opts.style.display = isPublic ? '' : 'none';
         if (visSec && visSec.style.display !== 'none') {
             // ya visible — no cambiar display, solo sincronizar checkbox
         }
@@ -165,33 +165,8 @@ function _openAgentModal(agent) {
     _syncMemoryFields(agent);
     _syncRoutines(agent ? (agent.routines || []) : []);
 
-    // Visibility section — only show when editing an existing private agent
-    const visSection = document.getElementById('agent-visibility-section');
-    if (visSection) visSection.style.display = (isEdit && agent.scope !== 'public') ? '' : 'none';
-    if (isEdit && agent.scope !== 'public') _loadAgentVisibility(agent.id, agent.scope || 'private');
-
     document.getElementById('agent-modal').style.display = 'flex';
     setTimeout(() => document.getElementById('agent-name').focus(), 60);
-}
-
-async function _loadAgentVisibility(agentId, scope) {
-    const pubCb   = document.getElementById('agent-social-public');
-    const opts    = document.getElementById('agent-social-opts');
-    const catEl   = document.getElementById('agent-social-category');
-    if (!pubCb) return;
-    try {
-        const data = await api.get('/api/social/me/resources?type=agent');
-        const row  = (data.resources || []).find(function (r) { return r.resource_id === agentId; });
-        const isPublic = !!(row && row.is_public);
-        pubCb.checked = isPublic;
-        if (opts) opts.style.display = isPublic ? '' : 'none';
-        if (isPublic && catEl) catEl.value = row.category || 'Other';
-        if (isPublic) {
-            const dep = row.trial_missing_deps || 'warn';
-            const radio = document.querySelector('input[name="agent-trial-deps"][value="' + dep + '"]');
-            if (radio) radio.checked = true;
-        }
-    } catch (err) { console.error('[agents-modal] Error cargando visibilidad del agente:', err); }
 }
 
 function _closeAgentModal() {
@@ -343,40 +318,17 @@ function _bindAgentModal() {
                     LABELS.bindPicker('agent-labels-picker', _agentLabels, function (newLabels) {
                         _agentLabels = newLabels;
                         var isPublic = _agentLabels.indexOf('public') !== -1;
-                        var pubCb2  = document.getElementById('agent-social-public');
-                        var opts2   = document.getElementById('agent-social-opts');
+                        var pubCb2 = document.getElementById('agent-social-public');
+                        var opts2 = document.getElementById('agent-social-opts');
                         if (pubCb2) pubCb2.checked = isPublic;
-                        if (opts2)  opts2.style.display = isPublic ? '' : 'none';
+                        if (opts2) opts2.style.display = isPublic ? '' : 'none';
                     });
                 }
             }
         });
     }
 
-    // Visibility save button
-    const socialSaveBtn = document.getElementById('agent-social-save-btn');
-    if (socialSaveBtn) {
-        socialSaveBtn.addEventListener('click', async function () {
-            const agentId = document.getElementById('agent-id').value;
-            const scope   = (document.querySelector('input[name="agent-scope"]:checked') || {}).value || 'private';
-            if (!agentId) return;
-            const isPublic = document.getElementById('agent-social-public').checked;
-            const category = (document.getElementById('agent-social-category') || {}).value || 'Other';
-            const depRadio = document.querySelector('input[name="agent-trial-deps"]:checked');
-            const trialDeps = depRadio ? depRadio.value : 'warn';
-            socialSaveBtn.disabled = true;
-            try {
-                await api.put('/api/agents/' + encodeURIComponent(scope) + '/' + encodeURIComponent(agentId) + '/visibility', {
-                    is_public: isPublic,
-                    category: category,
-                    trial_missing_deps: trialDeps,
-                });
-                toast(t('social.visibility.saved'), 'success');
-                if (window._loadAll) _loadAll();
-            } catch (err) { toast(err.message, 'error'); }
-            finally { socialSaveBtn.disabled = false; }
-        });
-    }
+    // Visibility save button — removed, visibility is now derived from labels
 
     document.getElementById('agent-form').addEventListener('submit', async e => {
         e.preventDefault();
@@ -384,11 +336,12 @@ function _bindAgentModal() {
         btn.disabled = true; btn.textContent = t('agents.modal.saving');
         const useMemory = document.getElementById('agent-use-memory').checked;
         const memFile = document.getElementById('agent-memory-file').value || null;
-        const scopeChecked = document.querySelector('input[name="agent-scope"]:checked');
         const agentType = (document.getElementById('agent-type') || {}).value || 'generic';
-
-        const effortEl  = document.getElementById('agent-effort-level');
+        const effortEl = document.getElementById('agent-effort-level');
         const timeoutEl = document.getElementById('agent-timeout');
+
+        const isPublic = _agentLabels.indexOf('public') !== -1;
+        const scope = isPublic ? 'public' : 'private';
         const payload = {
             id: document.getElementById('agent-id').value || undefined,
             name: document.getElementById('agent-name').value.trim(),
@@ -404,23 +357,17 @@ function _bindAgentModal() {
             use_memory: useMemory,
             memory_file: useMemory ? memFile : null,
             routines: agentType === 'claude' ? _getRoutines() : [],
-            scope: scopeChecked ? scopeChecked.value : 'private',
+            scope,
             labels: _agentLabels.slice(),
             ..._buildPlatformPayload(agentType),
         };
         try {
             const saved = await api.post('/api/agents', payload);
-            // Auto-sync public visibility when label is public
-            if (_agentLabels.indexOf('public') !== -1 && saved && saved.id) {
-                const catEl = document.getElementById('agent-social-category');
-                const category = (catEl && catEl.value) || 'Other';
-                await api.put('/api/agents/' + encodeURIComponent(payload.scope || 'private') + '/' + encodeURIComponent(saved.id) + '/visibility', {
-                    is_public: true, category: category, trial_missing_deps: 'warn',
-                }).catch(function () {});
-            } else if (_agentLabels.indexOf('private') !== -1 && saved && saved.id) {
-                await api.put('/api/agents/' + encodeURIComponent(payload.scope || 'private') + '/' + encodeURIComponent(saved.id) + '/visibility', {
-                    is_public: false, category: 'Other', trial_missing_deps: 'warn',
-                }).catch(function () {});
+            // Sincronizar visibilidad social según etiqueta public/private
+            if (saved && saved.id) {
+                await api.put('/api/agents/' + encodeURIComponent(scope) + '/' + encodeURIComponent(saved.id) + '/visibility', {
+                    is_public: isPublic, category: 'Other', trial_missing_deps: 'warn',
+                }).catch(function () { });
             }
             toast(t('agents.saved'), 'success');
             _closeAgentModal();

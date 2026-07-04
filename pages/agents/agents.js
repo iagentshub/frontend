@@ -31,6 +31,14 @@ function _initFolders() {
     folderCtrl.mount(panelEl);
     folderCtrl.load();
     window._folderAgents = folderCtrl;
+
+    if (window.FolderToggle) {
+        FolderToggle.init({
+            btn: 'btn-toggle-folders',
+            panels: ['af-folder-panel'],
+            key: 'gaia-folders-agents',
+        });
+    }
 }
 
 function _setupDragHandlers() {
@@ -96,9 +104,9 @@ function _bindActions() {
 
     document.getElementById('btn-new-agent').addEventListener('click', function () {
         ActionMenu.show(this, [
-            { icon: _SVG_GRID,   label: t('agents.page.new_from_catalog'),  sub: t('agents.page.new_from_catalog_sub'),  steps: 1, onClick: function () { AgentCatalog.open(); } },
-            { icon: _SVG_UPLOAD, label: t('agents.page.new_from_file'),     sub: t('agents.page.new_from_file_sub'),     steps: 2, onClick: function () { document.getElementById('agent-file-input').click(); } },
-            { icon: _SVG_PLUS,   label: t('agents.page.new_from_scratch'),  sub: t('agents.page.new_from_scratch_sub'),  steps: 1, onClick: function () { _openAgentModal(); } },
+            { icon: _SVG_GRID, label: t('agents.page.new_from_catalog'), sub: t('agents.page.new_from_catalog_sub'), steps: 1, onClick: function () { AgentCatalog.open(); } },
+            { icon: _SVG_UPLOAD, label: t('agents.page.new_from_file'), sub: t('agents.page.new_from_file_sub'), steps: 2, onClick: function () { document.getElementById('agent-file-input').click(); } },
+            { icon: _SVG_PLUS, label: t('agents.page.new_from_scratch'), sub: t('agents.page.new_from_scratch_sub'), steps: 1, onClick: function () { _openAgentModal(); } },
         ]);
     });
 

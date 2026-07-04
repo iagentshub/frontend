@@ -12,7 +12,7 @@ window.LABELS = (function () {
             defaultKey: 'private',
             labels: [
                 { key: 'private', color: '#64748b', i18nKey: 'labels.private' },
-                { key: 'public',  color: '#059669', i18nKey: 'labels.public'  },
+                { key: 'public', color: '#059669', i18nKey: 'labels.public' },
             ],
         },
         {
@@ -21,10 +21,10 @@ window.LABELS = (function () {
             required: false,
             i18nKey: 'labels.group.environment',
             labels: [
-                { key: 'production',  color: '#0891b2', i18nKey: 'labels.production'  },
-                { key: 'staging',     color: '#475569', i18nKey: 'labels.staging'     },
+                { key: 'production', color: '#0891b2', i18nKey: 'labels.production' },
+                { key: 'staging', color: '#475569', i18nKey: 'labels.staging' },
                 { key: 'development', color: '#d97706', i18nKey: 'labels.development' },
-                { key: 'test',        color: '#7c3aed', i18nKey: 'labels.test'        },
+                { key: 'test', color: '#7c3aed', i18nKey: 'labels.test' },
             ],
         },
         {
@@ -33,23 +33,23 @@ window.LABELS = (function () {
             required: false,
             i18nKey: 'labels.group.origin',
             labels: [
-                { key: 'fork',   color: '#6366f1', i18nKey: 'labels.fork'   },
+                { key: 'fork', color: '#6366f1', i18nKey: 'labels.fork' },
                 { key: 'linked', color: '#0ea5e9', i18nKey: 'labels.linked' },
             ],
         },
         {
             id: 'status',
-            exclusive: false,
+            exclusive: true,
             required: false,
             i18nKey: 'labels.group.status',
             labels: [
-                { key: 'favorite',    color: '#f59e0b', i18nKey: 'labels.favorite'    },
-                { key: 'draft',       color: '#8b5cf6', i18nKey: 'labels.draft'       },
-                { key: 'review',      color: '#f97316', i18nKey: 'labels.review'      },
-                { key: 'deprecated',  color: '#ca8a04', i18nKey: 'labels.deprecated'  },
-                { key: 'quarantine',  color: '#ef4444', i18nKey: 'labels.quarantine'  },
-                { key: 'archived',    color: '#94a3b8', i18nKey: 'labels.archived'    },
-                { key: 'delete',      color: '#dc2626', i18nKey: 'labels.delete'      },
+                { key: 'favorite', color: '#f59e0b', i18nKey: 'labels.favorite' },
+                { key: 'draft', color: '#8b5cf6', i18nKey: 'labels.draft' },
+                { key: 'review', color: '#f97316', i18nKey: 'labels.review' },
+                { key: 'deprecated', color: '#ca8a04', i18nKey: 'labels.deprecated' },
+                { key: 'quarantine', color: '#ef4444', i18nKey: 'labels.quarantine' },
+                { key: 'archived', color: '#94a3b8', i18nKey: 'labels.archived' },
+                { key: 'delete', color: '#dc2626', i18nKey: 'labels.delete' },
             ],
         },
     ];
@@ -130,67 +130,95 @@ window.LABELS = (function () {
             return hide.indexOf(k) === -1 && _byKey[k];
         }).map(function (key) {
             var color = getColor(key);
-            var text  = getLabel(key);
+            var text = getLabel(key);
             return '<span class="label-chip" style="--lc:' + color + '">' + _esc(text) + '</span>';
         }).join('');
     }
 
     // ── Renderizado del picker (en formularios) ───────────────────────────────
 
-    function renderPicker(current, pickerElId) {
+    function renderPicker(current, pickerElId, opts) {
+        var excludeGroups = (opts && opts.excludeGroups) || [];
         var html = '<div class="lbl-picker" id="' + pickerElId + '">';
         GROUPS.forEach(function (g) {
+            if (excludeGroups.indexOf(g.id) !== -1) return;
             html += '<div class="lbl-group">';
-            html += '<span class="lbl-group-title">' + _esc(_t(g.i18nKey)) + '</span>';
-            html += '<div class="lbl-group-btns">';
-            if (!g.required) {
-                var noneActive = !getActive(current, g.id);
-                html += '<button type="button" class="lbl-seg-btn lbl-seg-none' + (noneActive ? ' active' : '') + '"' +
-                    ' data-lpicker="' + pickerElId + '" data-lgroup="' + g.id + '" data-lkey="">' +
-                    _t('labels.none') + '</button>';
+            html += '<label class="lbl-group-title">' + _esc(_t(g.i18nKey)) + '</label>';
+            if (g.exclusive) {
+                var activeKey = getActive(current, g.id) || '';
+                var activeLabel = g.labels.find(function (l) { return l.key === activeKey; });
+                var lc = activeLabel ? activeLabel.color : 'transparent';
+                html += '<div class="lbl-select-wrap" style="--lc:' + lc + '" data-lpicker="' + pickerElId + '" data-lgroup="' + g.id + '">';
+                html += '<select class="lbl-select select" data-lpicker="' + pickerElId + '" data-lgroup="' + g.id + '">';
+                if (!g.required) {
+                    html += '<option value="">— ' + _esc(_t('labels.none') || 'Ninguno') + ' —</option>';
+                }
+                g.labels.forEach(function (l) {
+                    html += '<option value="' + _esc(l.key) + '"' + (l.key === activeKey ? ' selected' : '') + '>' +
+                        _esc(_t(l.i18nKey)) + '</option>';
+                });
+                html += '</select></div>';
+            } else {
+                html += '<div class="lbl-group-btns">';
+                if (!g.required) {
+                    var noneActive = !getActive(current, g.id);
+                    html += '<button type="button" class="lbl-seg-btn lbl-seg-none' + (noneActive ? ' active' : '') + '"' +
+                        ' data-lpicker="' + pickerElId + '" data-lgroup="' + g.id + '" data-lkey="">' +
+                        _t('labels.none') + '</button>';
+                }
+                g.labels.forEach(function (l) {
+                    var isActive = (current || []).indexOf(l.key) !== -1;
+                    html += '<button type="button" class="lbl-seg-btn' + (isActive ? ' active' : '') + '"' +
+                        ' style="--lc:' + l.color + '"' +
+                        ' data-lpicker="' + pickerElId + '" data-lgroup="' + g.id + '" data-lkey="' + l.key + '">' +
+                        _esc(_t(l.i18nKey)) + '</button>';
+                });
+                html += '</div>';
             }
-            g.labels.forEach(function (l) {
-                var isActive = (current || []).indexOf(l.key) !== -1 ||
-                    (g.required && getActive(current, g.id) === l.key);
-                html += '<button type="button" class="lbl-seg-btn' + (isActive ? ' active' : '') + '"' +
-                    ' style="--lc:' + l.color + '"' +
-                    ' data-lpicker="' + pickerElId + '" data-lgroup="' + g.id + '" data-lkey="' + l.key + '">' +
-                    _esc(_t(l.i18nKey)) + '</button>';
-            });
-            html += '</div></div>';
+            html += '</div>';
         });
         html += '</div>';
         return html;
     }
 
-    // Enlaza eventos al picker renderizado. Llama callback(newLabels) al cambiar.
     function bindPicker(pickerElId, current, callback) {
         var el = document.getElementById(pickerElId);
         if (!el) return;
+
+        // Selects (grupos exclusivos)
+        el.querySelectorAll('select[data-lpicker="' + pickerElId + '"]').forEach(function (sel) {
+            sel.addEventListener('change', function () {
+                var group = sel.dataset.lgroup;
+                var key = sel.value;
+                var next = (current || []).filter(function (k) { return getGroupId(k) !== group; });
+                if (key) next.push(key);
+                current = next;
+                var wrap = sel.closest('.lbl-select-wrap');
+                if (wrap) {
+                    var groupDef = GROUPS.find(function (g) { return g.id === group; });
+                    var lbl = groupDef && groupDef.labels.find(function (l) { return l.key === key; });
+                    wrap.style.setProperty('--lc', lbl ? lbl.color : 'transparent');
+                }
+                if (typeof callback === 'function') callback(current);
+            });
+        });
+
+        // Botones (grupos multi-selección)
         el.addEventListener('click', function (e) {
-            var btn = e.target.closest('[data-lpicker="' + pickerElId + '"]');
+            var btn = e.target.closest('button[data-lpicker="' + pickerElId + '"]');
             if (!btn) return;
-            var key    = btn.dataset.lkey;
-            var group  = btn.dataset.lgroup;
-            var groupDef = null;
-            for (var i = 0; i < GROUPS.length; i++) {
-                if (GROUPS[i].id === group) { groupDef = GROUPS[i]; break; }
-            }
+            var key = btn.dataset.lkey;
+            var group = btn.dataset.lgroup;
+            var groupDef = GROUPS.find(function (g) { return g.id === group; });
             if (!groupDef) return;
             var next;
             if (!key) {
-                // "Ninguno" — elimina todas las etiquetas del grupo
                 next = (current || []).filter(function (k) { return getGroupId(k) !== group; });
             } else if (groupDef.exclusive) {
                 next = apply(current, key);
             } else {
-                // multi-selección: toggle
-                if ((current || []).indexOf(key) !== -1) {
-                    next = remove(current, key);
-                } else {
-                    next = (current || []).slice();
-                    next.push(key);
-                }
+                if ((current || []).indexOf(key) !== -1) next = remove(current, key);
+                else { next = (current || []).slice(); next.push(key); }
             }
             current = next;
             _updatePickerUI(el, current);
@@ -199,19 +227,24 @@ window.LABELS = (function () {
     }
 
     function _updatePickerUI(pickerEl, current) {
-        pickerEl.querySelectorAll('[data-lpicker]').forEach(function (btn) {
-            var key   = btn.dataset.lkey;
-            var group = btn.dataset.lgroup;
-            var groupDef = null;
-            for (var i = 0; i < GROUPS.length; i++) {
-                if (GROUPS[i].id === group) { groupDef = GROUPS[i]; break; }
+        pickerEl.querySelectorAll('select[data-lgroup]').forEach(function (sel) {
+            var group = sel.dataset.lgroup;
+            var active = getActive(current, group) || '';
+            sel.value = active;
+            var wrap = sel.closest('.lbl-select-wrap');
+            if (wrap) {
+                var groupDef = GROUPS.find(function (g) { return g.id === group; });
+                var lbl = groupDef && groupDef.labels.find(function (l) { return l.key === active; });
+                wrap.style.setProperty('--lc', lbl ? lbl.color : 'transparent');
             }
+        });
+        pickerEl.querySelectorAll('button[data-lpicker]').forEach(function (btn) {
+            var key = btn.dataset.lkey;
+            var group = btn.dataset.lgroup;
+            var groupDef = GROUPS.find(function (g) { return g.id === group; });
             if (!groupDef) return;
             var active;
             if (!key) {
-                active = !getActive(current, group) && !groupDef.required;
-                if (groupDef.required) active = false;
-                // "Ninguno" activo si no hay ninguna etiqueta del grupo seleccionada
                 var hasAny = (current || []).some(function (k) { return getGroupId(k) === group; });
                 active = !hasAny && !groupDef.required;
             } else if (groupDef.exclusive) {
@@ -222,9 +255,10 @@ window.LABELS = (function () {
             btn.classList.toggle('active', !!active);
         });
     }
-
     return {
         GROUPS: GROUPS,
+        /** Devuelve el array completo de grupos (para el filtro de conexiones). */
+        groups: function () { return GROUPS; },
         getDef: getDef,
         getLabel: getLabel,
         getColor: getColor,

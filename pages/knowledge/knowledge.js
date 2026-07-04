@@ -6,33 +6,33 @@ var _activeTab = 'skills';
 var _skillsPage = 1;
 var _lastSkillsFiltered = [];
 var _fkSkills = null;
-var _fkUrls   = null;
-var _fkDocs   = null;
+var _fkUrls = null;
+var _fkDocs = null;
 var _fkMemory = null;
 
-var _folderSkills  = null;
-var _folderUrls    = null;
-var _folderDocs    = null;
-var _folderMemory  = null;
+var _folderSkills = null;
+var _folderUrls = null;
+var _folderDocs = null;
+var _folderMemory = null;
 
 var _viewMode = localStorage.getItem('kv-view') || 'grid';
 
 function _initFilters() {
     _fkSkills = FilterKnowledge.create({
-        mountEl:    document.getElementById('fk-mount-skills'),
+        mountEl: document.getElementById('fk-mount-skills'),
         showLabels: true,
-        onChange:   function () { _applySkillFilter(); },
+        onChange: function () { _applySkillFilter(); },
     });
     _fkUrls = FilterKnowledge.create({
-        mountEl:  document.getElementById('fk-mount-urls'),
+        mountEl: document.getElementById('fk-mount-urls'),
         onChange: function (f) { KnowledgeUrls.setQuery(f.query); },
     });
     _fkDocs = FilterKnowledge.create({
-        mountEl:  document.getElementById('fk-mount-docs'),
+        mountEl: document.getElementById('fk-mount-docs'),
         onChange: function (f) { KnowledgeDocs.setQuery(f.query); },
     });
     _fkMemory = FilterKnowledge.create({
-        mountEl:  document.getElementById('fk-mount-memory'),
+        mountEl: document.getElementById('fk-mount-memory'),
         onChange: function (f) { KnowledgeMemory.setQuery(f.query); },
     });
 }
@@ -104,15 +104,23 @@ function _initFolders() {
     _folderMemory.mount(document.getElementById('kf-panel-memory'));
 
     // Expose as globals so sub-modules can call updateStats
-    window._folderSkills  = _folderSkills;
-    window._folderUrls    = _folderUrls;
-    window._folderDocs    = _folderDocs;
-    window._folderMemory  = _folderMemory;
+    window._folderSkills = _folderSkills;
+    window._folderUrls = _folderUrls;
+    window._folderDocs = _folderDocs;
+    window._folderMemory = _folderMemory;
 
     _folderSkills.load();
     _folderUrls.load();
     _folderDocs.load();
     _folderMemory.load();
+
+    if (window.FolderToggle) {
+        FolderToggle.init({
+            btns: '.kf-toggle-btn',
+            panels: ['kf-panel-skill', 'kf-panel-url', 'kf-panel-document', 'kf-panel-memory'],
+            key: 'gaia-folders-knowledge',
+        });
+    }
 }
 
 function _bindTabs() {
@@ -134,14 +142,14 @@ function _switchTab(tab) {
     var panel = document.getElementById('tab-' + tab);
     if (panel) panel.style.display = '';
 
-    document.getElementById('skills-actions').style.display  = tab === 'skills'    ? '' : 'none';
-    document.getElementById('urls-actions').style.display    = tab === 'urls'       ? '' : 'none';
-    document.getElementById('docs-actions').style.display    = tab === 'documents'  ? '' : 'none';
-    document.getElementById('memory-actions').style.display  = tab === 'memory'     ? '' : 'none';
+    document.getElementById('skills-actions').style.display = tab === 'skills' ? '' : 'none';
+    document.getElementById('urls-actions').style.display = tab === 'urls' ? '' : 'none';
+    document.getElementById('docs-actions').style.display = tab === 'documents' ? '' : 'none';
+    document.getElementById('memory-actions').style.display = tab === 'memory' ? '' : 'none';
 
-    if (tab === 'urls')      KnowledgeUrls.load(_folderUrls    ? _folderUrls.getActive()   : null);
-    if (tab === 'documents') KnowledgeDocs.load(_folderDocs    ? _folderDocs.getActive()   : null);
-    if (tab === 'memory')    KnowledgeMemory.load(_folderMemory ? _folderMemory.getActive() : null);
+    if (tab === 'urls') KnowledgeUrls.load(_folderUrls ? _folderUrls.getActive() : null);
+    if (tab === 'documents') KnowledgeDocs.load(_folderDocs ? _folderDocs.getActive() : null);
+    if (tab === 'memory') KnowledgeMemory.load(_folderMemory ? _folderMemory.getActive() : null);
 }
 
 function _applyView() {
@@ -225,13 +233,13 @@ function _applySkillFilter() {
     _renderSkillsPage();
 }
 
-var _skillViewScope  = 'private';
-var _skillViewId     = '';
+var _skillViewScope = 'private';
+var _skillViewId = '';
 var _skillViewLabels = ['private'];
 
 async function viewSkill(scope, id) {
     _skillViewScope = scope;
-    _skillViewId    = id;
+    _skillViewId = id;
     try {
         var s = await api.get('/api/skills/' + scope + '/' + encodeURIComponent(id));
         document.getElementById('skill-view-title').textContent = s.name;
@@ -245,14 +253,14 @@ async function viewSkill(scope, id) {
                 _skillViewLabels = newLabels;
                 var isPublic = newLabels.indexOf('public') !== -1;
                 var pubCb2 = document.getElementById('skill-social-public');
-                var opts2  = document.getElementById('skill-social-opts');
+                var opts2 = document.getElementById('skill-social-opts');
                 if (pubCb2) pubCb2.checked = isPublic;
-                if (opts2)  opts2.style.display = isPublic ? '' : 'none';
+                if (opts2) opts2.style.display = isPublic ? '' : 'none';
             });
         }
         // Pre-fill visibility
         var pubCb = document.getElementById('skill-social-public');
-        var opts  = document.getElementById('skill-social-opts');
+        var opts = document.getElementById('skill-social-opts');
         if (pubCb) {
             pubCb.checked = _skillViewLabels.indexOf('public') !== -1;
             if (opts) opts.style.display = pubCb.checked ? '' : 'none';
@@ -263,7 +271,7 @@ async function viewSkill(scope, id) {
                 if (opts) opts.style.display = row.is_public ? '' : 'none';
                 var catEl = document.getElementById('skill-social-category');
                 if (catEl && row.category) catEl.value = row.category;
-            }).catch(function () {});
+            }).catch(function () { });
         }
         document.getElementById('skill-view-modal').style.display = 'flex';
     } catch (e) { toast(e.message, 'error'); }
@@ -294,15 +302,15 @@ function bindEvents() {
     document.getElementById('btn-new-skill').addEventListener('click', function () {
         var folderId = _folderSkills ? _folderSkills.getActive() : null;
         ActionMenu.show(this, [
-            { icon: _K_SVG_GRID,   label: t('skills.page.new_from_catalog'), sub: t('skills.page.new_from_catalog_sub'), steps: 1, onClick: function () { SkillCatalog.open(); } },
-            { icon: _K_SVG_UPLOAD, label: t('skills.page.new_from_file'),    sub: t('skills.page.new_from_file_sub'),    steps: 1, onClick: function () { document.getElementById('skill-file-input').click(); } },
-            { icon: _K_SVG_PLUS,   label: t('skills.page.new_from_scratch'), sub: t('skills.page.new_from_scratch_sub'), steps: 1, onClick: function () { DialogSkill.open(folderId ? { folder_id: folderId } : null, loadSkills); } },
+            { icon: _K_SVG_GRID, label: t('skills.page.new_from_catalog'), sub: t('skills.page.new_from_catalog_sub'), steps: 1, onClick: function () { SkillCatalog.open(); } },
+            { icon: _K_SVG_UPLOAD, label: t('skills.page.new_from_file'), sub: t('skills.page.new_from_file_sub'), steps: 1, onClick: function () { document.getElementById('skill-file-input').click(); } },
+            { icon: _K_SVG_PLUS, label: t('skills.page.new_from_scratch'), sub: t('skills.page.new_from_scratch_sub'), steps: 1, onClick: function () { DialogSkill.open(folderId ? { folder_id: folderId } : null, loadSkills); } },
         ]);
     });
 
     document.getElementById('btn-new-doc').addEventListener('click', function () {
         ActionMenu.show(this, [
-            { icon: _K_SVG_DOC,    label: t('skills.knowledge.upload_doc'),    sub: t('skills.knowledge.upload_doc_sub'),    steps: 1, onClick: function () { document.getElementById('doc-file-input').click(); } },
+            { icon: _K_SVG_DOC, label: t('skills.knowledge.upload_doc'), sub: t('skills.knowledge.upload_doc_sub'), steps: 1, onClick: function () { document.getElementById('doc-file-input').click(); } },
             { icon: _K_SVG_FOLDER, label: t('skills.knowledge.upload_folder'), sub: t('skills.knowledge.upload_folder_sub'), steps: 1, onClick: function () { document.getElementById('folder-file-input').click(); } },
         ]);
     });
@@ -340,7 +348,7 @@ function bindEvents() {
         skillVisSaveBtn.addEventListener('click', async function () {
             if (!_skillViewId) return;
             var isPublic = document.getElementById('skill-social-public').checked;
-            var catEl    = document.getElementById('skill-social-category');
+            var catEl = document.getElementById('skill-social-category');
             skillVisSaveBtn.disabled = true;
             try {
                 // Sincronizar label de visibilidad con el toggle
@@ -435,25 +443,25 @@ function bindEvents() {
     }
 }
 
-var _skillExportId    = null;
+var _skillExportId = null;
 var _skillExportScope = null;
 
 function _openSkillExport(scope, id) {
-    _skillExportId    = id;
+    _skillExportId = id;
     _skillExportScope = scope;
 
     document.getElementById('skill-export-options').innerHTML = [
         { fmt: 'claude', icon: '&#128992;', label: t('skills.export.claude_label'), sub: t('skills.export.claude_sub'), path: t('skills.export.claude_path') },
-        { fmt: 'github', icon: '&#9899;',   label: t('skills.export.github_label'), sub: t('skills.export.github_sub'), path: t('skills.export.github_path') },
+        { fmt: 'github', icon: '&#9899;', label: t('skills.export.github_label'), sub: t('skills.export.github_sub'), path: t('skills.export.github_path') },
         { fmt: 'openai', icon: '&#129001;', label: t('skills.export.openai_label'), sub: t('skills.export.openai_sub'), path: t('skills.export.openai_path') },
-        { fmt: 'md',     icon: '&#128196;', label: t('skills.export.md_label'),     sub: t('skills.export.md_sub'),     path: t('skills.export.md_path')     },
+        { fmt: 'md', icon: '&#128196;', label: t('skills.export.md_label'), sub: t('skills.export.md_sub'), path: t('skills.export.md_path') },
     ].map(function (o) {
         return '<div class="export-opt" data-fmt="' + o.fmt + '">' +
             '<span class="export-opt-icon">' + o.icon + '</span>' +
             '<div>' +
             '<div class="export-opt-label">' + o.label + '</div>' +
-            '<div class="export-opt-sub">'   + o.sub   + '</div>' +
-            '<div class="export-opt-path">'  + o.path  + '</div>' +
+            '<div class="export-opt-sub">' + o.sub + '</div>' +
+            '<div class="export-opt-path">' + o.path + '</div>' +
             '</div></div>';
     }).join('');
 
@@ -466,43 +474,43 @@ function _openSkillExport(scope, id) {
 
 async function _doSkillExport(scope, id, fmt) {
     try {
-        var skill   = await api.get('/api/skills/' + scope + '/' + encodeURIComponent(id));
-        var name    = skill.name || id;
-        var slug    = skill.id  || id;
-        var body    = skill.content || '';
-        var today   = new Date().toISOString().slice(0, 10);
+        var skill = await api.get('/api/skills/' + scope + '/' + encodeURIComponent(id));
+        var name = skill.name || id;
+        var slug = skill.id || id;
+        var body = skill.content || '';
+        var today = new Date().toISOString().slice(0, 10);
         var content, filename, mime;
 
         if (fmt === 'claude') {
             var lines = ['id: ' + slug, 'name: ' + name];
             if (skill.description) lines.push('description: ' + skill.description);
-            if (skill.icon)        lines.push('icon: ' + skill.icon);
-            if (skill.category)    lines.push('category: ' + skill.category);
+            if (skill.icon) lines.push('icon: ' + skill.icon);
+            if (skill.category) lines.push('category: ' + skill.category);
             lines.push('created_at: "' + (skill.created_at || today) + '"');
             lines.push('updated_at: "' + today + '"');
-            content  = '---\n' + lines.join('\n') + '\n---\n\n' + body;
+            content = '---\n' + lines.join('\n') + '\n---\n\n' + body;
             filename = slug + '.md';
-            mime     = 'text/markdown';
+            mime = 'text/markdown';
         } else if (fmt === 'github') {
             var header = '# ' + name;
             if (skill.description) header += '\n\n> ' + skill.description;
-            content  = header + '\n\n' + body;
+            content = header + '\n\n' + body;
             filename = slug + '.instructions.md';
-            mime     = 'text/markdown';
+            mime = 'text/markdown';
         } else if (fmt === 'openai') {
             var payload = { name: name, instructions: body };
             if (skill.description) payload.description = skill.description;
-            content  = JSON.stringify(payload, null, 2);
+            content = JSON.stringify(payload, null, 2);
             filename = slug + '.json';
-            mime     = 'application/json';
+            mime = 'application/json';
         } else { // md
-            content  = body;
+            content = body;
             filename = slug + '.md';
-            mime     = 'text/markdown';
+            mime = 'text/markdown';
         }
 
         var blob = new Blob([content], { type: mime });
-        var url  = URL.createObjectURL(blob);
+        var url = URL.createObjectURL(blob);
         Object.assign(document.createElement('a'), { href: url, download: filename }).click();
         URL.revokeObjectURL(url);
         toast(t('skills.export.exported', { name: filename }) || filename, 'success');

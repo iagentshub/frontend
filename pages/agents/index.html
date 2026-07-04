@@ -2,7 +2,7 @@
 <html lang="es">
 
 <head>
-    <script>(function(){var m={noir:"dark-red",marble:"light-red",ember:"dark-orange",ocean:"dark-blue",forest:"dark-red",dusk:"dark-purple",light:"light-red"};var t=localStorage.getItem("ga-theme")||"dark-red";t=m[t]||t;document.documentElement.setAttribute("data-theme",t);})();</script>
+    <script>(function () { var m = { noir: "dark-red", marble: "light-red", ember: "dark-orange", ocean: "dark-blue", forest: "dark-red", dusk: "dark-purple", light: "light-red" }; var t = localStorage.getItem("ga-theme") || "dark-red"; t = m[t] || t; document.documentElement.setAttribute("data-theme", t); })();</script>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>iAgents Hub · Agentes</title>
@@ -32,8 +32,10 @@
     <div id="agent-drop-overlay" class="agent-drop-overlay" aria-hidden="true">
         <div class="agent-drop-icon">
             <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
-                <path d="M12 16V4M8 8l4-4 4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M4 20v1a1 1 0 001 1h14a1 1 0 001-1v-1" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M12 16V4M8 8l4-4 4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round" />
+                <path d="M4 20v1a1 1 0 001 1h14a1 1 0 001-1v-1" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" />
             </svg>
         </div>
         <p class="agent-drop-title" data-i18n="agents.page.drop_title">Suelta para importar</p>
@@ -58,23 +60,35 @@
                         </svg>
                         <span data-i18n="agents.page.new_btn">Nuevo</span>
                         <svg width="10" height="10" viewBox="0 0 10 10" fill="none" style="margin-left:2px;opacity:.7">
-                            <path d="M2 3.5l3 3 3-3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M2 3.5l3 3 3-3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"
+                                stroke-linejoin="round" />
                         </svg>
                     </button>
                 </div>
                 <input type="file" id="agent-file-input" accept=".json,.md" style="display:none">
             </div>
             <div id="filter-agents-root"></div>
-            <div id="agents-delete-banner" style="display:none;margin:0 0 12px;padding:10px 14px;background:var(--color-danger-subtle,#fef2f2);border:1px solid var(--color-danger,#ef4444);border-radius:8px;display:flex;align-items:center;gap:10px">
-                <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 2a6 6 0 1 0 0 12A6 6 0 0 0 8 2zm0 3.5v3m0 2h.01" stroke="#ef4444" stroke-width="1.5" stroke-linecap="round"/></svg>
+            <div id="agents-delete-banner"
+                style="display:none;margin:0 0 12px;padding:10px 14px;background:var(--color-danger-subtle,#fef2f2);border:1px solid var(--color-danger,#ef4444);border-radius:8px;display:flex;align-items:center;gap:10px">
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                    <path d="M8 2a6 6 0 1 0 0 12A6 6 0 0 0 8 2zm0 3.5v3m0 2h.01" stroke="#ef4444" stroke-width="1.5"
+                        stroke-linecap="round" />
+                </svg>
                 <span id="agents-delete-count" style="font-size:.85rem;color:var(--color-danger,#ef4444);flex:1"></span>
-                <button id="agents-delete-all-btn" class="btn btn-danger btn-sm" style="font-size:.8rem;padding:4px 10px"></button>
-                <button id="agents-delete-dismiss-btn" class="btn btn-ghost btn-sm" style="font-size:.8rem;padding:4px 10px">✕</button>
+                <button id="agents-delete-all-btn" class="btn btn-danger btn-sm"
+                    style="font-size:.8rem;padding:4px 10px"></button>
+                <button id="agents-delete-dismiss-btn" class="btn btn-ghost btn-sm"
+                    style="font-size:.8rem;padding:4px 10px">✕</button>
             </div>
-            <div class="af-layout">
-                <div class="af-folder-panel" id="af-folder-panel"></div>
-                <div class="af-content">
-                    <div id="agents-grid" class="agents-grid"></div>
+            <div class="af-wrapper">
+                <div class="folder-toggle-row">
+                    <button id="btn-toggle-folders" class="folder-toggle-btn" title="Mostrar/ocultar carpetas"></button>
+                </div>
+                <div class="af-layout">
+                    <div class="af-folder-panel" id="af-folder-panel"></div>
+                    <div class="af-content">
+                        <div id="agents-grid" class="agents-grid"></div>
+                    </div>
                 </div>
             </div>
         </main>
@@ -96,10 +110,14 @@
 
                 <!-- ── TAB HEADER ── -->
                 <div class="agent-tabs">
-                    <button type="button" class="agent-tab active" data-step="1" data-i18n="agents.modal.tab_basic">Básico</button>
-                    <button type="button" class="agent-tab" data-step="2" data-i18n="agents.modal.tab_model">Modelo</button>
-                    <button type="button" class="agent-tab" data-step="3" data-i18n="agents.modal.tab_skills">Skills</button>
-                    <button type="button" class="agent-tab" data-step="4" data-i18n="agents.modal.tab_advanced">Avanzado</button>
+                    <button type="button" class="agent-tab active" data-step="1"
+                        data-i18n="agents.modal.tab_basic">Básico</button>
+                    <button type="button" class="agent-tab" data-step="2"
+                        data-i18n="agents.modal.tab_model">Modelo</button>
+                    <button type="button" class="agent-tab" data-step="3"
+                        data-i18n="agents.modal.tab_skills">Skills</button>
+                    <button type="button" class="agent-tab" data-step="4"
+                        data-i18n="agents.modal.tab_advanced">Avanzado</button>
                 </div>
 
                 <!-- ── PASO 1: Básico ── -->
@@ -126,19 +144,7 @@
                             placeholder="Describe el rol de este agente. Ej: 'Eres un experto en ventas B2B. Responde siempre en español. Sé directo y usa ejemplos concretos.'"
                             style="min-height:160px"></textarea>
                     </div>
-                    <div class="field" id="agent-scope-field">
-                        <label data-i18n="agents.modal.field_visibility">Visibilidad</label>
-                        <div class="scope-radio-group">
-                            <label class="scope-radio">
-                                <input type="radio" name="agent-scope" value="private" checked />
-                                <span data-i18n="agents.modal.scope_private">Privado</span>
-                            </label>
-                            <label class="scope-radio">
-                                <input type="radio" name="agent-scope" value="public" />
-                                <span data-i18n="agents.modal.scope_public">Público</span>
-                            </label>
-                        </div>
-                    </div>
+
                     <div class="field field-memory">
                         <div class="memory-toggle-row">
                             <label class="toggle-label">
@@ -164,7 +170,9 @@
                         </select>
                     </div>
                     <div class="field">
-                        <label data-i18n-title="agents.modal.field_temp_hint"><span data-i18n="agents.modal.field_temp">Temperatura</span> <span class="field-hint-icon">ⓘ</span></label>
+                        <label data-i18n-title="agents.modal.field_temp_hint"><span
+                                data-i18n="agents.modal.field_temp">Temperatura</span> <span
+                                class="field-hint-icon">ⓘ</span></label>
                         <div class="range-wrap">
                             <input id="agent-temp" type="range" min="0" max="1" step="0.05" value="0.7" />
                             <span class="range-val" id="agent-temp-val">0.70</span>
@@ -179,13 +187,16 @@
                         <div class="skill-picker" id="skill-picker">
                             <div class="skill-picker-chips" id="skill-selected-chips"></div>
                             <div class="skill-picker-tabs">
-                                <button type="button" class="spt-tab active" data-tab="search" data-i18n="agents.modal.tab_search">Buscar</button>
-                                <button type="button" class="spt-tab" data-tab="browse" data-i18n="agents.modal.tab_browse">Explorar</button>
+                                <button type="button" class="spt-tab active" data-tab="search"
+                                    data-i18n="agents.modal.tab_search">Buscar</button>
+                                <button type="button" class="spt-tab" data-tab="browse"
+                                    data-i18n="agents.modal.tab_browse">Explorar</button>
                             </div>
                             <div class="skill-picker-panel" id="skill-panel-search">
                                 <div class="skill-search-wrap">
                                     <input type="text" id="skill-search-input" class="skill-search-input"
-                                        autocomplete="off" data-i18n-placeholder="agents.modal.skill_search_placeholder" placeholder="Buscar skill..." />
+                                        autocomplete="off" data-i18n-placeholder="agents.modal.skill_search_placeholder"
+                                        placeholder="Buscar skill..." />
                                     <div id="skill-search-dropdown" class="skill-search-dropdown" hidden></div>
                                 </div>
                             </div>
@@ -207,7 +218,9 @@
 
                     <!-- Tipo de agente -->
                     <div class="field">
-                        <label data-i18n-title="agents.modal.agent_type_hint"><span data-i18n="agents.modal.field_agent_type">Tipo de agente</span> <span class="field-hint-icon">ⓘ</span></label>
+                        <label data-i18n-title="agents.modal.agent_type_hint"><span
+                                data-i18n="agents.modal.field_agent_type">Tipo de agente</span> <span
+                                class="field-hint-icon">ⓘ</span></label>
                         <select id="agent-type" class="select">
                             <option value="generic" data-i18n="agents.modal.type_generic">Genérico</option>
                             <option value="claude" data-i18n="agents.modal.type_claude">Claude</option>
@@ -218,16 +231,22 @@
 
                     <div class="agent-export-warning" id="agent-type-warning" style="display:none">
                         <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                            <path d="M8 1.5L1 14.5h14L8 1.5z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>
-                            <path d="M8 6v4M8 11.5v.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+                            <path d="M8 1.5L1 14.5h14L8 1.5z" stroke="currentColor" stroke-width="1.4"
+                                stroke-linejoin="round" />
+                            <path d="M8 6v4M8 11.5v.5" stroke="currentColor" stroke-width="1.4"
+                                stroke-linecap="round" />
                         </svg>
-                        <span data-i18n="agents.modal.export_warning">Al exportar un agente a una plataforma diferente a su tipo, la configuración específica (thinking, formato de respuesta, etc.) no se incluirá en el fichero exportado.</span>
+                        <span data-i18n="agents.modal.export_warning">Al exportar un agente a una plataforma diferente a
+                            su tipo, la configuración específica (thinking, formato de respuesta, etc.) no se incluirá
+                            en el fichero exportado.</span>
                     </div>
 
                     <!-- Config general avanzada -->
                     <div class="form-row-2">
                         <div class="field">
-                            <label data-i18n-title="agents.modal.field_effort_level_hint"><span data-i18n="agents.modal.field_effort_level">Nivel de esfuerzo</span> <span class="field-hint-icon">ⓘ</span></label>
+                            <label data-i18n-title="agents.modal.field_effort_level_hint"><span
+                                    data-i18n="agents.modal.field_effort_level">Nivel de esfuerzo</span> <span
+                                    class="field-hint-icon">ⓘ</span></label>
                             <select id="agent-effort-level" class="select">
                                 <option value="" data-i18n="agents.modal.effort_auto">Auto</option>
                                 <option value="low" data-i18n="agents.modal.effort_low">Bajo</option>
@@ -238,7 +257,8 @@
                         <div class="field">
                             <label><span data-i18n="agents.modal.field_timeout">Timeout del chat</span></label>
                             <select id="agent-timeout" class="select">
-                                <option value="" data-i18n="agents.modal.timeout_global">Usar preferencia global</option>
+                                <option value="" data-i18n="agents.modal.timeout_global">Usar preferencia global
+                                </option>
                                 <option value="0" data-i18n="profile.timeout_indefinido">Indefinido</option>
                                 <option value="60" data-i18n="profile.timeout_1">1 minuto</option>
                                 <option value="120" data-i18n="profile.timeout_2">2 minutos</option>
@@ -250,26 +270,33 @@
 
                     <!-- Opciones Claude (incluye rutinas) -->
                     <div class="platform-section" id="platform-claude" style="display:none">
-                        <div class="platform-section-title" data-i18n="agents.modal.claude_section_title">Opciones Claude</div>
+                        <div class="platform-section-title" data-i18n="agents.modal.claude_section_title">Opciones
+                            Claude</div>
                         <div class="form-row-2">
                             <div class="field">
-                                <label class="toggle-label" data-i18n-title="agents.modal.claude_extended_thinking_hint">
+                                <label class="toggle-label"
+                                    data-i18n-title="agents.modal.claude_extended_thinking_hint">
                                     <input type="checkbox" id="claude-extended-thinking" class="toggle-checkbox" />
                                     <span class="toggle-track"></span>
-                                    <span><span data-i18n="agents.modal.claude_extended_thinking">Extended thinking</span> <span class="field-hint-icon">ⓘ</span></span>
+                                    <span><span data-i18n="agents.modal.claude_extended_thinking">Extended
+                                            thinking</span> <span class="field-hint-icon">ⓘ</span></span>
                                 </label>
                             </div>
                             <div class="field">
                                 <label class="toggle-label" data-i18n-title="agents.modal.claude_prompt_cache_hint">
                                     <input type="checkbox" id="claude-cache-control" class="toggle-checkbox" />
                                     <span class="toggle-track"></span>
-                                    <span><span data-i18n="agents.modal.claude_prompt_cache">Prompt cache</span> <span class="field-hint-icon">ⓘ</span></span>
+                                    <span><span data-i18n="agents.modal.claude_prompt_cache">Prompt cache</span> <span
+                                            class="field-hint-icon">ⓘ</span></span>
                                 </label>
                             </div>
                         </div>
                         <div class="field" id="claude-thinking-budget-field" style="display:none">
-                            <label data-i18n-title="agents.modal.claude_thinking_budget_hint"><span data-i18n="agents.modal.claude_thinking_budget">Tokens para thinking</span> <span class="field-hint-icon">ⓘ</span></label>
-                            <input id="claude-thinking-budget" type="number" class="input" value="10000" min="1000" max="100000" step="1000" />
+                            <label data-i18n-title="agents.modal.claude_thinking_budget_hint"><span
+                                    data-i18n="agents.modal.claude_thinking_budget">Tokens para thinking</span> <span
+                                    class="field-hint-icon">ⓘ</span></label>
+                            <input id="claude-thinking-budget" type="number" class="input" value="10000" min="1000"
+                                max="100000" step="1000" />
                         </div>
                         <!-- Rutinas: solo Claude -->
                         <details class="advanced-section" id="agent-routines-section">
@@ -278,7 +305,8 @@
                                 <div id="routines-list"></div>
                                 <button type="button" class="btn btn-ghost" id="btn-add-routine" style="margin-top:6px">
                                     <svg width="11" height="11" viewBox="0 0 13 13" fill="none">
-                                        <path d="M6.5 1v11M1 6.5h11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                                        <path d="M6.5 1v11M1 6.5h11" stroke="currentColor" stroke-width="1.8"
+                                            stroke-linecap="round" />
                                     </svg>
                                     <span data-i18n="agents.modal.routine_add">Añadir rutina</span>
                                 </button>
@@ -288,98 +316,73 @@
 
                     <!-- Opciones OpenAI -->
                     <div class="platform-section" id="platform-openai" style="display:none">
-                        <div class="platform-section-title" data-i18n="agents.modal.openai_section_title">Opciones OpenAI</div>
+                        <div class="platform-section-title" data-i18n="agents.modal.openai_section_title">Opciones
+                            OpenAI</div>
                         <div class="form-row-2">
                             <div class="field">
-                                <label data-i18n-title="agents.modal.openai_response_format_hint"><span data-i18n="agents.modal.openai_response_format">Formato de respuesta</span> <span class="field-hint-icon">ⓘ</span></label>
+                                <label data-i18n-title="agents.modal.openai_response_format_hint"><span
+                                        data-i18n="agents.modal.openai_response_format">Formato de respuesta</span>
+                                    <span class="field-hint-icon">ⓘ</span></label>
                                 <select id="openai-response-format" class="select">
-                                    <option value="text" data-i18n="agents.modal.openai_response_text">Texto libre</option>
+                                    <option value="text" data-i18n="agents.modal.openai_response_text">Texto libre
+                                    </option>
                                     <option value="json_object">JSON</option>
                                 </select>
                             </div>
                             <div class="field">
-                                <label data-i18n-title="agents.modal.openai_tool_choice_hint"><span data-i18n="agents.modal.openai_tool_choice">Tool choice</span> <span class="field-hint-icon">ⓘ</span></label>
+                                <label data-i18n-title="agents.modal.openai_tool_choice_hint"><span
+                                        data-i18n="agents.modal.openai_tool_choice">Tool choice</span> <span
+                                        class="field-hint-icon">ⓘ</span></label>
                                 <select id="openai-tool-choice" class="select">
                                     <option value="auto">Auto</option>
                                     <option value="none" data-i18n="agents.modal.openai_tool_none">Ninguno</option>
-                                    <option value="required" data-i18n="agents.modal.openai_tool_required">Requerido</option>
+                                    <option value="required" data-i18n="agents.modal.openai_tool_required">Requerido
+                                    </option>
                                 </select>
                             </div>
                         </div>
                         <div class="form-row-2">
                             <div class="field">
-                                <label data-i18n-title="agents.modal.openai_freq_penalty_hint"><span data-i18n="agents.modal.openai_freq_penalty">Frequency penalty</span> <span class="field-hint-icon">ⓘ</span></label>
-                                <input id="openai-freq-penalty" type="number" class="input" value="0" min="-2" max="2" step="0.1" />
+                                <label data-i18n-title="agents.modal.openai_freq_penalty_hint"><span
+                                        data-i18n="agents.modal.openai_freq_penalty">Frequency penalty</span> <span
+                                        class="field-hint-icon">ⓘ</span></label>
+                                <input id="openai-freq-penalty" type="number" class="input" value="0" min="-2" max="2"
+                                    step="0.1" />
                             </div>
                             <div class="field">
-                                <label data-i18n-title="agents.modal.openai_pres_penalty_hint"><span data-i18n="agents.modal.openai_pres_penalty">Presence penalty</span> <span class="field-hint-icon">ⓘ</span></label>
-                                <input id="openai-pres-penalty" type="number" class="input" value="0" min="-2" max="2" step="0.1" />
+                                <label data-i18n-title="agents.modal.openai_pres_penalty_hint"><span
+                                        data-i18n="agents.modal.openai_pres_penalty">Presence penalty</span> <span
+                                        class="field-hint-icon">ⓘ</span></label>
+                                <input id="openai-pres-penalty" type="number" class="input" value="0" min="-2" max="2"
+                                    step="0.1" />
                             </div>
                         </div>
                     </div>
 
                     <!-- Opciones GitHub Copilot -->
                     <div class="platform-section" id="platform-github" style="display:none">
-                        <div class="platform-section-title" data-i18n="agents.modal.github_section_title">Opciones GitHub Copilot</div>
+                        <div class="platform-section-title" data-i18n="agents.modal.github_section_title">Opciones
+                            GitHub Copilot</div>
                         <div class="field">
-                            <label data-i18n-title="agents.modal.github_topic_hint"><span data-i18n="agents.modal.github_topic">Categoría (topic)</span> <span class="field-hint-icon">ⓘ</span></label>
-                            <input id="github-topic" class="input" data-i18n-placeholder="agents.modal.github_topic_placeholder" placeholder="Ej: testing, devops, frontend..." />
+                            <label data-i18n-title="agents.modal.github_topic_hint"><span
+                                    data-i18n="agents.modal.github_topic">Categoría (topic)</span> <span
+                                    class="field-hint-icon">ⓘ</span></label>
+                            <input id="github-topic" class="input"
+                                data-i18n-placeholder="agents.modal.github_topic_placeholder"
+                                placeholder="Ej: testing, devops, frontend..." />
                         </div>
                         <div class="field">
                             <label class="toggle-label" data-i18n-title="agents.modal.github_repo_context_hint">
                                 <input type="checkbox" id="github-repo-context" class="toggle-checkbox" />
                                 <span class="toggle-track"></span>
-                                <span><span data-i18n="agents.modal.github_repo_context">Incluir contexto del repositorio</span> <span class="field-hint-icon">ⓘ</span></span>
+                                <span><span data-i18n="agents.modal.github_repo_context">Incluir contexto del
+                                        repositorio</span> <span class="field-hint-icon">ⓘ</span></span>
                             </label>
                         </div>
                     </div>
                 </div>
 
-                    <!-- ── Visibilidad social ── -->
-                    <div class="platform-section" id="agent-visibility-section" style="display:none">
-                        <div class="platform-section-title" data-i18n="social.visibility.title">Visibilidad en iAgents Hub</div>
-                        <div class="field">
-                            <label class="toggle-label">
-                                <input type="checkbox" id="agent-social-public" class="toggle-checkbox" />
-                                <span class="toggle-track"></span>
-                                <span data-i18n="social.visibility.make_public">Hacer público en el explorador</span>
-                            </label>
-                        </div>
-                        <div id="agent-social-opts" style="display:none">
-                            <div class="field">
-                                <label data-i18n="social.visibility.category">Categoría</label>
-                                <select id="agent-social-category" class="select">
-                                    <option value="Coding">Coding</option>
-                                    <option value="Writing">Writing</option>
-                                    <option value="Research">Research</option>
-                                    <option value="Data">Data</option>
-                                    <option value="DevOps">DevOps</option>
-                                    <option value="Support">Support</option>
-                                    <option value="Education">Education</option>
-                                    <option value="Productivity">Productivity</option>
-                                    <option value="Marketing">Marketing</option>
-                                    <option value="Finance">Finance</option>
-                                    <option value="Other" selected>Other</option>
-                                </select>
-                            </div>
-                            <div class="field">
-                                <label data-i18n="social.visibility.private_skills">Si el agente usa skills privadas, los usuarios que lo prueben:</label>
-                                <div class="radio-group">
-                                    <label class="radio-label">
-                                        <input type="radio" name="agent-trial-deps" value="warn" checked />
-                                        <span data-i18n="social.visibility.deps_warn">Reciben un aviso de que falta la skill</span>
-                                    </label>
-                                    <label class="radio-label">
-                                        <input type="radio" name="agent-trial-deps" value="silent" />
-                                        <span data-i18n="social.visibility.deps_silent">No reciben aviso (falla en silencio)</span>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                        <button type="button" id="agent-social-save-btn" class="btn btn-ghost" style="margin-top:4px">
-                            <span data-i18n="social.visibility.save_btn">Guardar visibilidad</span>
-                        </button>
-                    </div>
+
 
                 <!-- ── FOOTER ── -->
                 <div class="modal-footer">
@@ -452,7 +455,8 @@
                 <span class="modal-title" data-i18n="agents.blueprint.title">Estructura del agente</span>
                 <button class="modal-close" id="abp-close" type="button">
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                        <path d="M2 2l12 12M14 2L2 14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+                        <path d="M2 2l12 12M14 2L2 14" stroke="currentColor" stroke-width="1.8"
+                            stroke-linecap="round" />
                     </svg>
                 </button>
             </div>
@@ -507,6 +511,7 @@
     <script src="/knowledge/knowledge-folders.js"></script>
     <script src="/agents/agents-state.js"></script>
     <script src="/agents/agents-skill-picker.js"></script>
+    <script src="/assets/js/folder-toggle.js"></script>
     <script src="/agents/agents-modal.js"></script>
     <script src="/agents/agents-export.js"></script>
     <script src="/agents/agents-load.js"></script>

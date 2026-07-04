@@ -1,11 +1,32 @@
 // connections.js — inicialización y eventos de la página de conexiones
 'use strict';
 
+var _activeCategory = 'llm';
+
+function _switchCategory(cat) {
+    _activeCategory = cat;
+    document.querySelectorAll('.conn-cat-tab').forEach(function (btn) {
+        btn.classList.toggle('active', btn.dataset.cat === cat);
+    });
+    // Actualizar chips de filtro con sólo los providers de esta categoría
+    FilterConnections.setTypes(Providers.list(cat), '#filter-connections-root');
+    // Reconstruir el select de tipo sólo con los providers de esa categoría
+    buildProviderSelect(cat);
+    var firstType = Providers.first(cat);
+    var typeEl = document.getElementById('conn-type');
+    if (typeEl && firstType) {
+        typeEl.value = firstType;
+        buildDynamicFields(firstType, null);
+    }
+    // Aplicar filtro de lista
+    setCategoryFilter(cat);
+}
+
 async function init() {
     await window.requireAuth();
     renderNav('nav-root', 'connections');
 
-    // Workspace context — needed for scope selector and subtitle
+    // Workspace context
     try {
         var me = await api.get('/api/auth/me');
         var wsCtx = {
@@ -21,22 +42,37 @@ async function init() {
     } catch (err) { console.error('[connections] Error cargando contexto del workspace:', err); }
 
     await Providers.load();
-    buildProviderSelect();
+    buildProviderSelect(_activeCategory);
     FilterConnections.init({
         mountEl: '#filter-connections-root',
-        types: Providers.list(),
+        types: Providers.list(_activeCategory),
         onChange: _applyFilter,
     });
     await loadConnections();
+    if (window.FolderToggle) {
+        FolderToggle.init({
+            btn: 'btn-toggle-folders',
+            panels: ['conn-folder-panel'],
+            key: 'gaia-folders-connections',
+        });
+    }
     bindEvents();
 }
 
 function bindEvents() {
-    document.getElementById('btn-new-conn').addEventListener('click', function () { openModal(null, _wsCtx); });
+    // Pestañas de categoría
+    document.getElementById('conn-category-tabs').addEventListener('click', function (e) {
+        var tab = e.target.closest('.conn-cat-tab');
+        if (tab) _switchCategory(tab.dataset.cat);
+    });
+
+    document.getElementById('btn-new-conn').addEventListener('click', function () {
+        openModal(null, _wsCtx, _activeCategory);
+    });
     document.getElementById('conn-modal-close').addEventListener('click', closeModal);
     document.getElementById('conn-cancel').addEventListener('click', closeModal);
     document.getElementById('btn-test-all').addEventListener('click', function () {
-        testConnections(_connections.map(function (c) { return c.id; }));
+        testConnections(getVisibleConnectionIds());
     });
 
     document.getElementById('conn-type').addEventListener('change', function (e) {
@@ -65,7 +101,7 @@ function bindEvents() {
         } else if (action === 'edit') {
             try {
                 var c = await api.get('/api/connections/' + encodeURIComponent(id));
-                openModal(c, _wsCtx);
+                openModal(c, _wsCtx, Providers.category(c.type));
             } catch (e) { toast(e.message, 'error'); }
         } else if (action === 'delete') {
             if (!confirm(t('connections.confirm_delete'))) return;
@@ -99,7 +135,6 @@ function bindEvents() {
             await loadConnections();
         } catch (err) { toast(err.message, 'error'); }
     });
-
 }
 
 init();

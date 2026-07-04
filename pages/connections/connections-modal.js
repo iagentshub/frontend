@@ -11,7 +11,12 @@ function buildDynamicFields(type, conn) {
     var isEdit = !!(conn && conn.id);
 
     container.innerHTML = fields.map(function (f) {
-        // Saved value from backend (or empty for passwords, or default for new)
+        // checkbox: label lo renderiza el propio _buildInput, no necesita wrapper de label
+        if (f.type === 'checkbox') {
+            var savedVal = conn ? (conn[f.key] != null ? conn[f.key] : false) : false;
+            return '<div class="field">' + _buildInput(f, savedVal) + '</div>';
+        }
+
         var savedVal = conn ? (conn[f.key] != null ? String(conn[f.key]) : '') : '';
         var displayVal = f.type === 'password' ? '' : (savedVal || f.default || '');
         var hasOldPwd = f.type === 'password' && isEdit;
@@ -48,9 +53,25 @@ function _buildInput(f, val) {
         return '<select class="select" data-field-key="' + esc(f.key) + '">' + opts + '</select>';
     }
 
+    if (f.type === 'textarea') {
+        return '<textarea class="input" data-field-key="' + esc(f.key) + '"' +
+            (f.placeholder ? ' placeholder="' + esc(f.placeholder) + '"' : '') +
+            ' rows="4" style="font-family:monospace;font-size:0.78rem;resize:vertical">' +
+            esc(val) + '</textarea>';
+    }
+
+    if (f.type === 'checkbox') {
+        var checked = val === true || val === 'true' || val === '1';
+        return '<label class="toggle">' +
+            '<input type="checkbox" data-field-key="' + esc(f.key) + '"' + (checked ? ' checked' : '') + ' />' +
+            '<span class="toggle-track"></span>' +
+            '<span class="toggle-label">' + esc(f.label) + '</span>' +
+            '</label>';
+    }
+
     var inputType = f.type === 'password' ? 'password'
         : f.type === 'number' ? 'number'
-        : 'text';
+            : 'text';
 
     return '<input class="input" type="' + inputType + '"' +
         ' data-field-key="' + esc(f.key) + '"' +
@@ -98,7 +119,7 @@ function _updateScopeHint(scope, wsName) {
     hint.textContent = scope === 'personal'
         ? (t('connections.modal.scope_hint_personal') || 'Solo visible para ti, en cualquier workspace')
         : (t('connections.modal.scope_hint_workspace') || 'Visible para todos los miembros del workspace') +
-          (wsName ? ' "' + wsName + '"' : '');
+        (wsName ? ' "' + wsName + '"' : '');
 }
 
 function getModalScope() {
@@ -111,10 +132,13 @@ function getModalScope() {
 var _connLabels = ['private'];
 
 function _initConnLabelsPicker(currentLabels) {
+    // Las conexiones son siempre privadas → no mostrar selector de visibilidad
     _connLabels = currentLabels && currentLabels.length ? currentLabels.slice() : ['private'];
+    if (_connLabels.indexOf('private') === -1) { _connLabels = ['private'].concat(_connLabels); }
+    _connLabels = _connLabels.filter(function (l) { return l !== 'public'; });
     var wrap = document.getElementById('conn-labels-picker-wrap');
     if (!wrap || !window.LABELS) return;
-    wrap.innerHTML = LABELS.renderPicker(_connLabels, 'conn-labels-picker');
+    wrap.innerHTML = LABELS.renderPicker(_connLabels, 'conn-labels-picker', { excludeGroups: ['visibility', 'origin'] });
     LABELS.bindPicker('conn-labels-picker', _connLabels, function (newLabels) {
         _connLabels = newLabels;
     });
@@ -122,8 +146,10 @@ function _initConnLabelsPicker(currentLabels) {
 
 function getConnLabels() { return _connLabels.slice(); }
 
-function openModal(conn, wsCtx) {
-    var defaultType = conn && conn.type ? conn.type : Providers.first();
+function openModal(conn, wsCtx, category) {
+    var cat = category || (conn ? Providers.category(conn.type) : 'llm');
+    buildProviderSelect(cat);
+    var defaultType = conn && conn.type ? conn.type : Providers.first(cat);
     document.getElementById('conn-modal-title').textContent =
         conn ? t('connections.modal.title_edit') : t('connections.modal.title_new');
     document.getElementById('conn-id').value = conn && conn.id ? conn.id : '';
@@ -157,11 +183,10 @@ function closeModal() {
 
 // ── Provider select ───────────────────────────────────────────────────────────
 
-function buildProviderSelect() {
+function buildProviderSelect(category) {
     var select = document.getElementById('conn-type');
     if (!select) return;
-    select.innerHTML = Providers.list().map(function (p) {
+    select.innerHTML = Providers.list(category || 'all').map(function (p) {
         return '<option value="' + esc(p.id) + '">' + esc(p.label) + '</option>';
     }).join('');
 }
-

@@ -2,7 +2,7 @@
 <html lang="es">
 
 <head>
-    <script>(function(){var m={noir:"dark-red",marble:"light-red",ember:"dark-orange",ocean:"dark-blue",forest:"dark-red",dusk:"dark-purple",light:"light-red"};var t=localStorage.getItem("ga-theme")||"dark-red";t=m[t]||t;document.documentElement.setAttribute("data-theme",t);})();</script>
+    <script>(function () { var m = { noir: "dark-red", marble: "light-red", ember: "dark-orange", ocean: "dark-blue", forest: "dark-red", dusk: "dark-purple", light: "light-red" }; var t = localStorage.getItem("ga-theme") || "dark-red"; t = m[t] || t; document.documentElement.setAttribute("data-theme", t); })();</script>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>iAgents Hub · Conocimiento</title>
@@ -37,18 +37,21 @@
                 <div class="page-actions" id="skills-actions">
                     <button class="btn btn-primary" id="btn-new-skill">
                         <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
-                            <path d="M6.5 1v11M1 6.5h11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+                            <path d="M6.5 1v11M1 6.5h11" stroke="currentColor" stroke-width="1.8"
+                                stroke-linecap="round" />
                         </svg>
                         <span data-i18n="skills.page.new_btn">Nueva</span>
                         <svg width="10" height="10" viewBox="0 0 10 10" fill="none" style="margin-left:2px;opacity:.7">
-                            <path d="M2 3.5l3 3 3-3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M2 3.5l3 3 3-3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"
+                                stroke-linejoin="round" />
                         </svg>
                     </button>
                 </div>
                 <div class="page-actions" id="urls-actions" style="display:none">
                     <button class="btn btn-primary" id="btn-add-url">
                         <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
-                            <path d="M6.5 1v11M1 6.5h11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+                            <path d="M6.5 1v11M1 6.5h11" stroke="currentColor" stroke-width="1.8"
+                                stroke-linecap="round" />
                         </svg>
                         <span data-i18n="skills.knowledge.add_url_btn">Añadir URL</span>
                     </button>
@@ -56,12 +59,15 @@
                 <div class="page-actions" id="docs-actions" style="display:none">
                     <button class="btn btn-primary" id="btn-new-doc">
                         <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
-                            <path d="M6.5 8.5V1M3 4L6.5 1 10 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M1 10.5v1a.5.5 0 00.5.5h10a.5.5 0 00.5-.5v-1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                            <path d="M6.5 8.5V1M3 4L6.5 1 10 4" stroke="currentColor" stroke-width="1.8"
+                                stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M1 10.5v1a.5.5 0 00.5.5h10a.5.5 0 00.5-.5v-1" stroke="currentColor"
+                                stroke-width="1.8" stroke-linecap="round" />
                         </svg>
                         <span data-i18n="skills.knowledge.upload_btn">Subir</span>
                         <svg width="10" height="10" viewBox="0 0 10 10" fill="none" style="margin-left:2px;opacity:.7">
-                            <path d="M2 3.5l3 3 3-3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M2 3.5l3 3 3-3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"
+                                stroke-linejoin="round" />
                         </svg>
                     </button>
                     <input type="file" id="doc-file-input" accept=".txt,.md,.pdf" style="display:none">
@@ -70,11 +76,13 @@
                 <div class="page-actions" id="memory-actions" style="display:none">
                     <button class="btn btn-primary" id="btn-new-memory">
                         <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
-                            <path d="M6.5 1v11M1 6.5h11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+                            <path d="M6.5 1v11M1 6.5h11" stroke="currentColor" stroke-width="1.8"
+                                stroke-linecap="round" />
                         </svg>
                         <span data-i18n="memory.page.new_btn">Nueva</span>
                         <svg width="10" height="10" viewBox="0 0 10 10" fill="none" style="margin-left:2px;opacity:.7">
-                            <path d="M2 3.5l3 3 3-3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M2 3.5l3 3 3-3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"
+                                stroke-linejoin="round" />
                         </svg>
                     </button>
                     <input type="file" id="memory-file-input" accept=".md,.json" style="display:none">
@@ -90,10 +98,25 @@
                 <button class="ktab" data-tab="memory" data-i18n="memory.page.title">Memoria</button>
                 <div class="kv-view-controls" id="kv-view-controls">
                     <button class="kv-toggle kv-toggle--active" data-view="grid" title="Vista cuadrícula">
-                        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="1.5" y="1.5" width="5.5" height="5.5" rx="1" stroke="currentColor" stroke-width="1.4"/><rect x="9" y="1.5" width="5.5" height="5.5" rx="1" stroke="currentColor" stroke-width="1.4"/><rect x="1.5" y="9" width="5.5" height="5.5" rx="1" stroke="currentColor" stroke-width="1.4"/><rect x="9" y="9" width="5.5" height="5.5" rx="1" stroke="currentColor" stroke-width="1.4"/></svg>
+                        <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                            <rect x="1.5" y="1.5" width="5.5" height="5.5" rx="1" stroke="currentColor"
+                                stroke-width="1.4" />
+                            <rect x="9" y="1.5" width="5.5" height="5.5" rx="1" stroke="currentColor"
+                                stroke-width="1.4" />
+                            <rect x="1.5" y="9" width="5.5" height="5.5" rx="1" stroke="currentColor"
+                                stroke-width="1.4" />
+                            <rect x="9" y="9" width="5.5" height="5.5" rx="1" stroke="currentColor"
+                                stroke-width="1.4" />
+                        </svg>
                     </button>
                     <button class="kv-toggle" data-view="list" title="Vista lista">
-                        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M5.5 4h9M5.5 8h9M5.5 12h9" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><circle cx="2.5" cy="4" r="1" fill="currentColor"/><circle cx="2.5" cy="8" r="1" fill="currentColor"/><circle cx="2.5" cy="12" r="1" fill="currentColor"/></svg>
+                        <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                            <path d="M5.5 4h9M5.5 8h9M5.5 12h9" stroke="currentColor" stroke-width="1.4"
+                                stroke-linecap="round" />
+                            <circle cx="2.5" cy="4" r="1" fill="currentColor" />
+                            <circle cx="2.5" cy="8" r="1" fill="currentColor" />
+                            <circle cx="2.5" cy="12" r="1" fill="currentColor" />
+                        </svg>
                     </button>
                 </div>
             </div>
@@ -101,6 +124,7 @@
             <!-- Panel Skills -->
             <div id="tab-skills" class="tab-panel">
                 <div id="fk-mount-skills"></div>
+                <div class="folder-toggle-row"><button class="folder-toggle-btn kf-toggle-btn"></button></div>
                 <div class="knowledge-tab-layout">
                     <div class="kf-panel" id="kf-panel-skill" data-section="skill"></div>
                     <div class="knowledge-tab-content">
@@ -112,6 +136,7 @@
             <!-- Panel URLs -->
             <div id="tab-urls" class="tab-panel" style="display:none">
                 <div id="fk-mount-urls"></div>
+                <div class="folder-toggle-row"><button class="folder-toggle-btn kf-toggle-btn"></button></div>
                 <div class="knowledge-tab-layout">
                     <div class="kf-panel" id="kf-panel-url" data-section="url"></div>
                     <div class="knowledge-tab-content">
@@ -123,18 +148,22 @@
             <!-- Panel Documentos -->
             <div id="tab-documents" class="tab-panel" style="display:none">
                 <div id="fk-mount-docs"></div>
+                <div class="folder-toggle-row"><button class="folder-toggle-btn kf-toggle-btn"></button></div>
                 <div class="knowledge-tab-layout">
                     <div class="kf-panel" id="kf-panel-document" data-section="document"></div>
                     <div class="knowledge-tab-content">
                         <div id="docs-dropzone" class="knowledge-dropzone">
-                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4">
-                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                                <polyline points="14 2 14 8 20 8"/>
-                                <line x1="12" y1="18" x2="12" y2="12"/>
-                                <polyline points="9 15 12 12 15 15"/>
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="1.4">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                                <polyline points="14 2 14 8 20 8" />
+                                <line x1="12" y1="18" x2="12" y2="12" />
+                                <polyline points="9 15 12 12 15 15" />
                             </svg>
-                            <p data-i18n="skills.knowledge.drop_hint">Arrastra un fichero aquí o haz clic para seleccionarlo</p>
-                            <p class="knowledge-formats" data-i18n="skills.knowledge.formats_hint">.txt .md .pdf · Máx 10 MB</p>
+                            <p data-i18n="skills.knowledge.drop_hint">Arrastra un fichero aquí o haz clic para
+                                seleccionarlo</p>
+                            <p class="knowledge-formats" data-i18n="skills.knowledge.formats_hint">.txt .md .pdf · Máx
+                                10 MB</p>
                         </div>
                         <div id="docs-grid" class="knowledge-grid"></div>
                     </div>
@@ -144,6 +173,7 @@
             <!-- Panel Memoria -->
             <div id="tab-memory" class="tab-panel" style="display:none">
                 <div id="fk-mount-memory"></div>
+                <div class="folder-toggle-row"><button class="folder-toggle-btn kf-toggle-btn"></button></div>
                 <div class="knowledge-tab-layout">
                     <div class="kf-panel" id="kf-panel-memory" data-section="memory"></div>
                     <div class="knowledge-tab-content">
@@ -161,15 +191,18 @@
                 <span class="modal-title" id="skill-view-title"></span>
                 <button class="modal-close" id="skill-view-close" type="button">
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                        <path d="M2 2l12 12M14 2L2 14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+                        <path d="M2 2l12 12M14 2L2 14" stroke="currentColor" stroke-width="1.8"
+                            stroke-linecap="round" />
                     </svg>
                 </button>
             </div>
             <div class="modal-body">
                 <pre id="skill-view-content" class="skill-content-pre"></pre>
                 <!-- Visibilidad -->
-                <div class="skill-visibility-section" id="skill-visibility-section" style="margin-top:16px;border-top:1px solid var(--line);padding-top:14px">
-                    <div class="platform-section-title" data-i18n="social.visibility.title">Visibilidad en iAgents Hub</div>
+                <div class="skill-visibility-section" id="skill-visibility-section"
+                    style="margin-top:16px;border-top:1px solid var(--line);padding-top:14px">
+                    <div class="platform-section-title" data-i18n="social.visibility.title">Visibilidad en iAgents Hub
+                    </div>
                     <!-- Picker de etiquetas -->
                     <div id="skill-labels-picker-wrap" style="margin-bottom:12px"></div>
                     <label class="toggle-label" style="margin-bottom:8px">
@@ -179,15 +212,21 @@
                     </label>
                     <div id="skill-social-opts" style="display:none;margin-top:8px">
                         <select id="skill-social-category" class="select" style="max-width:200px">
-                            <option value="Coding">Coding</option><option value="Writing">Writing</option>
-                            <option value="Research">Research</option><option value="Data">Data</option>
-                            <option value="DevOps">DevOps</option><option value="Support">Support</option>
-                            <option value="Education">Education</option><option value="Productivity">Productivity</option>
-                            <option value="Marketing">Marketing</option><option value="Finance">Finance</option>
+                            <option value="Coding">Coding</option>
+                            <option value="Writing">Writing</option>
+                            <option value="Research">Research</option>
+                            <option value="Data">Data</option>
+                            <option value="DevOps">DevOps</option>
+                            <option value="Support">Support</option>
+                            <option value="Education">Education</option>
+                            <option value="Productivity">Productivity</option>
+                            <option value="Marketing">Marketing</option>
+                            <option value="Finance">Finance</option>
                             <option value="Other" selected>Other</option>
                         </select>
                     </div>
-                    <button type="button" id="skill-social-save-btn" class="btn btn-ghost" style="margin-top:10px" data-i18n="social.visibility.save_btn">Guardar visibilidad</button>
+                    <button type="button" id="skill-social-save-btn" class="btn btn-ghost" style="margin-top:10px"
+                        data-i18n="social.visibility.save_btn">Guardar visibilidad</button>
                 </div>
             </div>
         </div>
@@ -200,12 +239,14 @@
                 <span class="modal-title" data-i18n="skills.export.title">Exportar skill</span>
                 <button class="modal-close" id="skill-export-close" type="button">
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                        <path d="M2 2l12 12M14 2L2 14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+                        <path d="M2 2l12 12M14 2L2 14" stroke="currentColor" stroke-width="1.8"
+                            stroke-linecap="round" />
                     </svg>
                 </button>
             </div>
             <div class="modal-body">
-                <p style="font-size:13px;color:var(--ink-2);margin-bottom:4px" data-i18n="skills.export.choose_format">Elige el formato:</p>
+                <p style="font-size:13px;color:var(--ink-2);margin-bottom:4px" data-i18n="skills.export.choose_format">
+                    Elige el formato:</p>
                 <div id="skill-export-options" class="export-options"></div>
             </div>
         </div>
@@ -217,14 +258,17 @@
             <div class="sc-header">
                 <div class="sc-search-wrap">
                     <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                        <circle cx="6.5" cy="6.5" r="4" stroke="currentColor" stroke-width="1.6"/>
-                        <path d="M11 11l3 3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                        <circle cx="6.5" cy="6.5" r="4" stroke="currentColor" stroke-width="1.6" />
+                        <path d="M11 11l3 3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
                     </svg>
-                    <input id="sc-search" class="sc-search-input" data-i18n-placeholder="skills.catalog.search_placeholder" placeholder="Buscar skills…" autocomplete="off" />
+                    <input id="sc-search" class="sc-search-input"
+                        data-i18n-placeholder="skills.catalog.search_placeholder" placeholder="Buscar skills…"
+                        autocomplete="off" />
                 </div>
                 <button id="sc-close" class="modal-close" type="button">
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                        <path d="M2 2l12 12M14 2L2 14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+                        <path d="M2 2l12 12M14 2L2 14" stroke="currentColor" stroke-width="1.8"
+                            stroke-linecap="round" />
                     </svg>
                 </button>
             </div>
@@ -239,23 +283,28 @@
                 <span class="modal-title" data-i18n="skills.knowledge.add_url_btn">Añadir URL</span>
                 <button class="modal-close" id="url-modal-close" type="button">
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                        <path d="M2 2l12 12M14 2L2 14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+                        <path d="M2 2l12 12M14 2L2 14" stroke="currentColor" stroke-width="1.8"
+                            stroke-linecap="round" />
                     </svg>
                 </button>
             </div>
             <div class="modal-body">
                 <div class="field">
                     <label data-i18n="skills.knowledge.add_url_btn">URL</label>
-                    <input id="url-input" class="input" type="url" data-i18n-placeholder="skills.knowledge.url_placeholder" placeholder="https://ejemplo.com/pagina" autocomplete="off" />
+                    <input id="url-input" class="input" type="url"
+                        data-i18n-placeholder="skills.knowledge.url_placeholder"
+                        placeholder="https://ejemplo.com/pagina" autocomplete="off" />
                 </div>
                 <div class="field">
                     <label data-i18n="skills.knowledge.title_placeholder">Título (opcional)</label>
-                    <input id="url-title-input" class="input" data-i18n-placeholder="skills.knowledge.title_placeholder" placeholder="Título (opcional)" autocomplete="off" />
+                    <input id="url-title-input" class="input" data-i18n-placeholder="skills.knowledge.title_placeholder"
+                        placeholder="Título (opcional)" autocomplete="off" />
                 </div>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-ghost" id="url-modal-cancel" data-i18n="common.actions.cancel">Cancelar</button>
-                <button class="btn btn-primary" id="url-modal-save" data-i18n="skills.knowledge.add_url_btn">Añadir URL</button>
+                <button class="btn btn-primary" id="url-modal-save" data-i18n="skills.knowledge.add_url_btn">Añadir
+                    URL</button>
             </div>
         </div>
     </div>
@@ -264,10 +313,12 @@
     <div id="memory-modal" class="modal-bg" style="display:none">
         <div class="modal-box mem-modal-box">
             <div class="modal-header">
-                <span class="modal-title" id="memory-modal-title" data-i18n="memory.modal.title_new">Nueva memoria</span>
+                <span class="modal-title" id="memory-modal-title" data-i18n="memory.modal.title_new">Nueva
+                    memoria</span>
                 <button class="modal-close" id="memory-modal-close" type="button">
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                        <path d="M2 2l12 12M14 2L2 14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+                        <path d="M2 2l12 12M14 2L2 14" stroke="currentColor" stroke-width="1.8"
+                            stroke-linecap="round" />
                     </svg>
                 </button>
             </div>
@@ -286,8 +337,10 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-ghost" id="mem-cancel" data-i18n="common.actions.cancel">Cancelar</button>
-                <button type="button" class="btn btn-primary" id="mem-save-btn" data-i18n="memory.modal.save_btn">Guardar</button>
+                <button type="button" class="btn btn-ghost" id="mem-cancel"
+                    data-i18n="common.actions.cancel">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="mem-save-btn"
+                    data-i18n="memory.modal.save_btn">Guardar</button>
             </div>
         </div>
     </div>
@@ -319,6 +372,7 @@
     <script src="/knowledge/knowledge-urls.js"></script>
     <script src="/knowledge/knowledge-docs.js"></script>
     <script src="/knowledge/knowledge-memory.js"></script>
+    <script src="/assets/js/folder-toggle.js"></script>
     <script src="/knowledge/knowledge.js"></script>
 </body>
 

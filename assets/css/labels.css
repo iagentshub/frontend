@@ -14,12 +14,13 @@
     white-space: nowrap;
     line-height: 1.4;
 }
+
 .label-chip::before {
     content: '';
     width: 5px;
     height: 5px;
     border-radius: 50%;
-    background: rgba(255,255,255,.65);
+    background: rgba(255, 255, 255, .65);
     flex-shrink: 0;
 }
 
@@ -33,15 +34,15 @@
 /* ── Picker (formularios) ───────────────────────────────────────────────────── */
 
 .lbl-picker {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px 12px;
 }
 
 .lbl-group {
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: 4px;
 }
 
 .lbl-group-title {
@@ -56,6 +57,30 @@
     display: flex;
     flex-wrap: wrap;
     gap: 5px;
+}
+
+/* ── Select wrapper con punto de color ── */
+.lbl-select-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.lbl-select-wrap::before {
+    content: '';
+    position: absolute;
+    left: 10px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--lc, transparent);
+    pointer-events: none;
+    z-index: 1;
+    transition: background 0.15s;
+}
+
+.lbl-select {
+    padding-left: 26px !important;
 }
 
 /* Botón de segmento — grupos exclusivos y ninguno */
@@ -74,6 +99,7 @@
     transition: background .12s, color .12s, border-color .12s;
     line-height: 1.4;
 }
+
 .lbl-seg-btn::before {
     content: '';
     width: 7px;
@@ -84,20 +110,27 @@
     transition: opacity .12s;
     opacity: .45;
 }
-.lbl-seg-none::before { display: none; }
+
+.lbl-seg-none::before {
+    display: none;
+}
+
 .lbl-seg-btn:hover {
     border-color: var(--lc, var(--accent));
     color: var(--ink);
 }
+
 .lbl-seg-btn.active {
     background: var(--lc, var(--accent));
     border-color: var(--lc, var(--accent));
     color: #fff;
 }
+
 .lbl-seg-btn.active::before {
-    background: rgba(255,255,255,.75);
+    background: rgba(255, 255, 255, .75);
     opacity: 1;
 }
+
 .lbl-seg-none.active {
     background: var(--bg);
     border-color: var(--line-strong);
@@ -128,6 +161,7 @@
     transition: background .12s, color .12s, border-color .12s;
     white-space: nowrap;
 }
+
 .lbl-filter-chip::before {
     content: '';
     width: 6px;
@@ -136,17 +170,32 @@
     background: var(--lc, #94a3b8);
     flex-shrink: 0;
 }
-.lbl-filter-chip:hover { border-color: var(--lc, var(--accent)); color: var(--ink); }
+
+.lbl-filter-chip:hover {
+    border-color: var(--lc, var(--accent));
+    color: var(--ink);
+}
+
 .lbl-filter-chip.active {
     background: var(--lc, var(--accent));
     border-color: var(--lc, var(--accent));
     color: #fff;
 }
-.lbl-filter-chip.active::before { background: rgba(255,255,255,.75); }
-.lbl-filter-chip--all { background: var(--bg); }
+
+.lbl-filter-chip.active::before {
+    background: rgba(255, 255, 255, .75);
+}
+
+.lbl-filter-chip--all {
+    background: var(--bg);
+}
+
 .lbl-filter-chip--all.active {
     background: var(--ink);
     border-color: var(--ink);
     color: var(--bg);
 }
-.lbl-filter-chip--all::before { display: none; }
+
+.lbl-filter-chip--all::before {
+    display: none;
+}

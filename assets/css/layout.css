@@ -58,7 +58,9 @@
     flex-shrink: 0;
 }
 
-.topbar-spacer { flex: 1; }
+.topbar-spacer {
+    flex: 1;
+}
 
 .topbar-actions {
     display: flex;
@@ -104,6 +106,65 @@
     gap: 8px;
 }
 
+/* ── Folder panel toggle ── */
+.af-wrapper,
+.kf-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-top: -20px;
+    /* compensa el gap de page-content para pegar al filtro */
+}
+
+.folder-toggle-row {
+    width: 168px;
+    /* misma anchura que el panel */
+    display: flex;
+    align-items: center;
+}
+
+.folder-toggle-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    border: none;
+    border-radius: 5px;
+    background: none;
+    color: var(--ink-muted, #94a3b8);
+    /* gris cuando está oculto */
+    cursor: pointer;
+    padding: 0;
+    flex-shrink: 0;
+    transition: color .15s;
+}
+
+.folder-toggle-btn--on {
+    color: var(--danger, #ef4444);
+    /* rojo cuando está visible */
+}
+
+.folder-toggle-btn:hover {
+    color: var(--accent);
+}
+
+/* Panel colapsado */
+.af-folder-panel.folder-panel--collapsed,
+.kf-panel.folder-panel--collapsed {
+    width: 0 !important;
+    min-width: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    overflow: hidden !important;
+    opacity: 0;
+}
+
+.af-folder-panel,
+.kf-panel {
+    transition: width 0.2s ease, min-width 0.2s ease, padding 0.2s ease, opacity 0.2s ease;
+}
+
 /* ── Responsive ── */
 @media (max-width: 768px) {
     .page-content {
@@ -117,7 +178,9 @@
         gap: 10px;
     }
 
-    .page-title { font-size: 1.25rem; }
+    .page-title {
+        font-size: 1.25rem;
+    }
 
     .page-actions {
         width: 100%;
@@ -126,12 +189,31 @@
 }
 
 @media (max-width: 480px) {
-    .page-content    { padding: 54px 12px 20px; gap: 16px; }
-    .page-title      { font-size: 1.1rem; }
-    .page-actions    { gap: 6px; }
-    .topbar          { padding: 0 12px 0 52px; gap: 8px; }
-    .topbar-brand    { font-size: 14px; }
-    .empty-state     { padding: 48px 16px; }
+    .page-content {
+        padding: 54px 12px 20px;
+        gap: 16px;
+    }
+
+    .page-title {
+        font-size: 1.1rem;
+    }
+
+    .page-actions {
+        gap: 6px;
+    }
+
+    .topbar {
+        padding: 0 12px 0 52px;
+        gap: 8px;
+    }
+
+    .topbar-brand {
+        font-size: 14px;
+    }
+
+    .empty-state {
+        padding: 48px 16px;
+    }
 }
 
 /* ── Empty state ── */
@@ -146,7 +228,9 @@
     text-align: center;
 }
 
-.empty-state svg { opacity: 0.2; }
+.empty-state svg {
+    opacity: 0.2;
+}
 
 .empty-state p {
     font-size: 14px;

@@ -3,8 +3,16 @@
 
 var _connections = [];
 var _wsCtx = { personal: true, id: null, name: 'Personal' };
+var _categoryFilter = 'llm';
 
 function setWsCtx(ctx) { _wsCtx = ctx || { personal: true, id: null, name: 'Personal' }; }
+function setCategoryFilter(cat) { _categoryFilter = cat || 'llm'; _applyFilter(); }
+
+function getVisibleConnectionIds() {
+    return _connections
+        .filter(function (c) { return (Providers.category(c.type) === _categoryFilter); })
+        .map(function (c) { return c.id; });
+}
 
 async function loadConnections() {
     _connections = await api.get('/api/connections');
@@ -15,26 +23,34 @@ function _applyFilter() {
     var f = FilterConnections.getFilter();
     var q = f.query.toLowerCase();
     var types = f.types;
+    var labels = f.labels;
     var filtered = _connections.filter(function (c) {
+        var matchCat = Providers.category(c.type) === _categoryFilter;
         var matchQ = !q || c.name.toLowerCase().indexOf(q) !== -1;
         var matchT = !types.length || types.indexOf(c.type) !== -1;
-        return matchQ && matchT;
+        var matchL = !labels.length || (function () {
+            // AND entre grupos: cada etiqueta seleccionada debe estar en la conexión
+            return labels.every(function (lk) {
+                return (c.labels || []).indexOf(lk) !== -1;
+            });
+        }());
+        return matchCat && matchQ && matchT && matchL;
     });
-    renderGrouped(filtered);
+    renderGrouped(filtered, _categoryFilter);
 }
 
-function renderGrouped(conns) {
+function renderGrouped(conns, category) {
     var root = document.getElementById('connections-root');
     var list = conns !== undefined ? conns : _connections;
     if (!list.length) {
-        root.innerHTML = '<div class="conn-empty">' +
-            (conns && conns.length < _connections.length
-                ? t('connections.empty_filtered')
-                : t('connections.empty_none')) + '</div>';
+        var emptyMsg = conns && conns.length < _connections.length
+            ? t('connections.empty_filtered')
+            : t('connections.empty_none');
+        root.innerHTML = '<div class="conn-empty">' + emptyMsg + '</div>';
         return;
     }
 
-    var order = Providers.order();
+    var order = Providers.order(category || _categoryFilter);
     var groups = {};
     order.forEach(function (t) { groups[t] = []; });
     list.forEach(function (c) {
@@ -106,8 +122,8 @@ function renderCard(c) {
         '<button class="cca-btn" data-action="edit" data-id="' + esc(c.id) + '" title="' + t('connections.actions.edit') + '">' +
         '<svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M11 2l3 3-9 9H2v-3l9-9z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button>' +
         (!c._shared ? '<button class="cca-btn" data-action="share" data-id="' + esc(c.id) + '" data-name="' + esc(c.name) + '" title="' + (t('teams.teams.sharing.share_with') || 'Compartir') + '">' +
-        '<svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="12" cy="3" r="1.5" stroke="currentColor" stroke-width="1.4"/><circle cx="12" cy="13" r="1.5" stroke="currentColor" stroke-width="1.4"/><circle cx="4" cy="8" r="1.5" stroke="currentColor" stroke-width="1.4"/><path d="M10.5 3.8L5.5 7.2M10.5 12.2L5.5 8.8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>' +
-        '</button>' : '') +
+            '<svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="12" cy="3" r="1.5" stroke="currentColor" stroke-width="1.4"/><circle cx="12" cy="13" r="1.5" stroke="currentColor" stroke-width="1.4"/><circle cx="4" cy="8" r="1.5" stroke="currentColor" stroke-width="1.4"/><path d="M10.5 3.8L5.5 7.2M10.5 12.2L5.5 8.8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>' +
+            '</button>' : '') +
         '<button class="cca-btn cca-btn--delete" data-action="delete" data-id="' + esc(c.id) + '" title="' + t('connections.actions.delete') + '">' +
         '<svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M2 4h12M5 4V2h6v2M6 7v5M10 7v5M3 4l1 9h8l1-9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
         '</button></footer></article>';
