@@ -52,10 +52,16 @@
     flex-shrink: 0;
     line-height: 0;
 }
-.nav-close-btn:hover { color: var(--ink); }
+
+.nav-close-btn:hover {
+    color: var(--ink);
+}
 
 @media (max-width: 768px) {
-    .nav-close-btn { display: flex; align-items: center; }
+    .nav-close-btn {
+        display: flex;
+        align-items: center;
+    }
 }
 
 .nav-logo-mark {
@@ -99,7 +105,9 @@
     opacity: 0.45;
 }
 
-.nav-link.active .nav-link-icon { opacity: 1; }
+.nav-link.active .nav-link-icon {
+    opacity: 1;
+}
 
 .nav-link {
     display: flex;
@@ -132,9 +140,13 @@
     flex-shrink: 0;
 }
 
-.nav-link.active svg { opacity: 1; }
+.nav-link.active svg {
+    opacity: 1;
+}
 
-.nav-spacer { flex: 1; }
+.nav-spacer {
+    flex: 1;
+}
 
 .nav-admin-section {
     margin-top: 4px;
@@ -184,12 +196,14 @@
     text-align: left;
     overflow: hidden;
 }
+
 .nav-user #nav-username {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     min-width: 0;
 }
+
 .nav-user:hover {
     background: var(--surface-2);
     color: var(--ink);
@@ -211,6 +225,7 @@
     transition: background 0.12s, color 0.12s;
     padding: 0;
 }
+
 .nav-logout-btn:hover {
     background: color-mix(in srgb, var(--danger, #ef4444) 12%, transparent);
     color: var(--danger, #ef4444);
@@ -344,8 +359,16 @@
     color: var(--ink);
 }
 
-.nav-ws-icon { opacity: 0.5; flex-shrink: 0; }
-.nav-ws-chevron { margin-left: auto; opacity: 0.4; flex-shrink: 0; }
+.nav-ws-icon {
+    opacity: 0.5;
+    flex-shrink: 0;
+}
+
+.nav-ws-chevron {
+    margin-left: auto;
+    opacity: 0.4;
+    flex-shrink: 0;
+}
 
 .nav-ws-name {
     flex: 1;
@@ -391,7 +414,10 @@
     transition: background 0.1s, color 0.1s;
 }
 
-.nav-ws-item:hover { background: var(--surface-2); color: var(--ink); }
+.nav-ws-item:hover {
+    background: var(--surface-2);
+    color: var(--ink);
+}
 
 .nav-ws-item--active {
     color: var(--accent);
@@ -436,7 +462,10 @@
     transition: background 0.1s, color 0.1s;
 }
 
-.nav-ws-create-btn:hover { background: var(--surface-2); color: var(--ink); }
+.nav-ws-create-btn:hover {
+    background: var(--surface-2);
+    color: var(--ink);
+}
 
 /* ── Hamburger (solo móvil) ── */
 .nav-hamburger {
@@ -457,6 +486,7 @@
     justify-content: center;
     transition: background 0.13s, border-color 0.13s;
 }
+
 .nav-hamburger:hover {
     background: var(--surface-2);
     border-color: var(--accent);
@@ -473,7 +503,10 @@
     backdrop-filter: blur(2px);
     -webkit-backdrop-filter: blur(2px);
 }
-.nav-backdrop.visible { display: block; }
+
+.nav-backdrop.visible {
+    display: block;
+}
 
 /* ── Responsive ── */
 @media (max-width: 768px) {
