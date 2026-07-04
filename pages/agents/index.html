@@ -113,9 +113,9 @@
                     <button type="button" class="agent-tab active" data-step="1"
                         data-i18n="agents.modal.tab_basic">Básico</button>
                     <button type="button" class="agent-tab" data-step="2"
-                        data-i18n="agents.modal.tab_model">Modelo</button>
+                        data-i18n="agents.modal.tab_connections">Conexiones</button>
                     <button type="button" class="agent-tab" data-step="3"
-                        data-i18n="agents.modal.tab_skills">Skills</button>
+                        data-i18n="agents.modal.tab_knowledge">Conocimiento</button>
                     <button type="button" class="agent-tab" data-step="4"
                         data-i18n="agents.modal.tab_advanced">Avanzado</button>
                 </div>
@@ -144,7 +144,40 @@
                             placeholder="Describe el rol de este agente. Ej: 'Eres un experto en ventas B2B. Responde siempre en español. Sé directo y usa ejemplos concretos.'"
                             style="min-height:160px"></textarea>
                     </div>
+                </div>
 
+                <!-- ── PASO 2: Conexiones ── -->
+                <div id="agent-step-2" class="agent-step-panel modal-body" style="display:none">
+                    <!-- Conexión LLM -->
+                    <div class="field">
+                        <label data-i18n="agents.modal.field_connection">API LLM</label>
+                        <select id="agent-connection" class="select">
+                            <option value="" data-i18n="agents.modal.no_connection">-- Sin conexión --</option>
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label data-i18n-title="agents.modal.field_temp_hint"><span
+                                data-i18n="agents.modal.field_temp">Temperatura</span> <span
+                                class="field-hint-icon">ⓘ</span></label>
+                        <div class="range-wrap">
+                            <input id="agent-temp" type="range" min="0" max="1" step="0.05" value="0.7" />
+                            <span class="range-val" id="agent-temp-val">0.70</span>
+                        </div>
+                    </div>
+
+                    <!-- Accesos operacionales (SSH, BD…) -->
+                    <div class="field" style="margin-top:8px">
+                        <label>Accesos del agente</label>
+                        <span class="input-hint" style="display:block;margin-bottom:8px">Conexiones SSH, bases de datos
+                            y máquinas que el agente puede usar como herramienta.</span>
+                        <div id="agent-op-connections" class="agent-knowledge-list"></div>
+                    </div>
+                </div>
+
+                <!-- ── PASO 3: Conocimiento ── -->
+                <div id="agent-step-3" class="agent-step-panel modal-body" style="display:none">
+
+                    <!-- Memoria -->
                     <div class="field field-memory">
                         <div class="memory-toggle-row">
                             <label class="toggle-label">
@@ -159,31 +192,10 @@
                                 defecto o elige otro</span>
                         </div>
                     </div>
-                </div>
 
-                <!-- ── PASO 2: Modelo ── -->
-                <div id="agent-step-2" class="agent-step-panel modal-body" style="display:none">
-                    <div class="field">
-                        <label data-i18n="agents.modal.field_connection">Conexión IA</label>
-                        <select id="agent-connection" class="select">
-                            <option value="" data-i18n="agents.modal.no_connection">-- Sin conexión --</option>
-                        </select>
-                    </div>
-                    <div class="field">
-                        <label data-i18n-title="agents.modal.field_temp_hint"><span
-                                data-i18n="agents.modal.field_temp">Temperatura</span> <span
-                                class="field-hint-icon">ⓘ</span></label>
-                        <div class="range-wrap">
-                            <input id="agent-temp" type="range" min="0" max="1" step="0.05" value="0.7" />
-                            <span class="range-val" id="agent-temp-val">0.70</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- ── PASO 3: Skills ── -->
-                <div id="agent-step-3" class="agent-step-panel modal-body" style="display:none">
-                    <div class="field">
-                        <label data-i18n="agents.modal.field_skills">Skills y conocimiento</label>
+                    <!-- Skills -->
+                    <div class="field" style="margin-top:12px">
+                        <label data-i18n="agents.modal.field_skills">Skills</label>
                         <div class="skill-picker" id="skill-picker">
                             <div class="skill-picker-chips" id="skill-selected-chips"></div>
                             <div class="skill-picker-tabs">
@@ -211,6 +223,16 @@
                         </div>
                     </div>
                     <span class="input-hint" id="agent-knowledge-chars" style="display:none;margin-top:4px"></span>
+
+                    <!-- URLs / documentos de conocimiento -->
+                    <div class="field" style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border)">
+                        <label>Webs y documentos</label>
+                        <span class="input-hint" style="display:block;margin-bottom:8px">Items de conocimiento (URLs,
+                            documentos) que el agente puede consultar.</span>
+                        <div id="agent-knowledge-list" class="agent-knowledge-list"></div>
+                        <div id="agent-knowledge-chips" style="margin-top:6px;display:flex;flex-wrap:wrap;gap:4px">
+                        </div>
+                    </div>
                 </div>
 
                 <!-- ── PASO 4: Avanzado ── -->
@@ -512,6 +534,7 @@
     <script src="/agents/agents-state.js"></script>
     <script src="/agents/agents-skill-picker.js"></script>
     <script src="/assets/js/folder-toggle.js"></script>
+    <script src="/assets/js/providers.js"></script>
     <script src="/agents/agents-modal.js"></script>
     <script src="/agents/agents-export.js"></script>
     <script src="/agents/agents-load.js"></script>

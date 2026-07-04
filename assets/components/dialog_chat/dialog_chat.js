@@ -2,10 +2,10 @@
 'use strict';
 
 const _USER_AVATAR = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><circle cx="7" cy="5" r="2.5" stroke="currentColor" stroke-width="1.5"/><path d="M2 12.5c0-2.76 2.24-5 5-5s5 2.24 5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>';
-const _ARR_UP   = '<svg width="8" height="8" viewBox="0 0 8 8" fill="none" aria-hidden="true"><path d="M4 7V1M1.5 3.5L4 1l2.5 2.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const _ARR_UP = '<svg width="8" height="8" viewBox="0 0 8 8" fill="none" aria-hidden="true"><path d="M4 7V1M1.5 3.5L4 1l2.5 2.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 const _ARR_DOWN = '<svg width="8" height="8" viewBox="0 0 8 8" fill="none" aria-hidden="true"><path d="M4 1v6M1.5 4.5L4 7l2.5-2.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-const _ICON_X   = '<svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M1.5 1.5l7 7M8.5 1.5l-7 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>';
-const _COPY_ICON  = '<svg width="12" height="12" viewBox="0 0 14 15" fill="none" aria-hidden="true"><rect x="4.5" y="1" width="8.5" height="10.5" rx="1.5" stroke="currentColor" stroke-width="1.4"/><rect x="1" y="3.5" width="8.5" height="10.5" rx="1.5" stroke="currentColor" stroke-width="1.4"/></svg> Copy';
+const _ICON_X = '<svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M1.5 1.5l7 7M8.5 1.5l-7 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>';
+const _COPY_ICON = '<svg width="12" height="12" viewBox="0 0 14 15" fill="none" aria-hidden="true"><rect x="4.5" y="1" width="8.5" height="10.5" rx="1.5" stroke="currentColor" stroke-width="1.4"/><rect x="1" y="3.5" width="8.5" height="10.5" rx="1.5" stroke="currentColor" stroke-width="1.4"/></svg> Copy';
 const _CHECK_ICON = '<svg width="12" height="12" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2 7.5l3.5 3.5 6.5-7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg> Copied!';
 
 // ── Syntax highlighter ───────────────────────────────────────────────────────
@@ -13,66 +13,66 @@ const _CHECK_ICON = '<svg width="12" height="12" viewBox="0 0 14 14" fill="none"
 function _hlRules(lang) {
     var L = (lang || '').toLowerCase();
 
-    var STR_PY   = /"""[\s\S]*?"""|'''[\s\S]*?'''|"(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'/g;
-    var STR_JS   = /"(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'|`(?:[^`\\]|\\.)*`/g;
+    var STR_PY = /"""[\s\S]*?"""|'''[\s\S]*?'''|"(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'/g;
+    var STR_JS = /"(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'|`(?:[^`\\]|\\.)*`/g;
     var STR_DQSQ = /"(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'/g;
-    var CMT_HASH  = /#[^\n]*/g;
+    var CMT_HASH = /#[^\n]*/g;
     var CMT_SLASH = /\/\/[^\n]*|\/\*[\s\S]*?\*\//g;
-    var CMT_SQL   = /--[^\n]*|\/\*[\s\S]*?\*\//g;
-    var CMT_HTML  = /<!--[\s\S]*?-->/g;
+    var CMT_SQL = /--[^\n]*|\/\*[\s\S]*?\*\//g;
+    var CMT_HTML = /<!--[\s\S]*?-->/g;
     var NUM_BASIC = /\b\d+(?:\.\d+)?\b/g;
-    var NUM_HEX   = /\b0x[\da-fA-F]+|\b\d+(?:\.\d+)?(?:[eE][+-]?\d+)?\b/g;
+    var NUM_HEX = /\b0x[\da-fA-F]+|\b\d+(?:\.\d+)?(?:[eE][+-]?\d+)?\b/g;
 
     if (L === 'python' || L === 'py') return [
         ['hl-cmt', CMT_HASH],
         ['hl-str', STR_PY],
-        ['hl-kw',  /\b(False|None|True|and|as|assert|async|await|break|class|continue|def|del|elif|else|except|finally|for|from|global|if|import|in|is|lambda|nonlocal|not|or|pass|raise|return|try|while|with|yield)\b/g],
-        ['hl-fn',  /\b([A-Za-z_]\w*)\s*(?=\()/g],
+        ['hl-kw', /\b(False|None|True|and|as|assert|async|await|break|class|continue|def|del|elif|else|except|finally|for|from|global|if|import|in|is|lambda|nonlocal|not|or|pass|raise|return|try|while|with|yield)\b/g],
+        ['hl-fn', /\b([A-Za-z_]\w*)\s*(?=\()/g],
         ['hl-num', NUM_HEX],
     ];
     if (L === 'javascript' || L === 'js' || L === 'jsx') return [
         ['hl-cmt', CMT_SLASH],
         ['hl-str', STR_JS],
-        ['hl-kw',  /\b(async|await|break|case|catch|class|const|continue|debugger|default|delete|do|else|export|extends|finally|for|from|function|if|import|in|instanceof|let|new|null|of|return|static|super|switch|this|throw|true|false|try|typeof|undefined|var|void|while|with|yield)\b/g],
-        ['hl-fn',  /\b([A-Za-z_$][\w$]*)\s*(?=\()/g],
+        ['hl-kw', /\b(async|await|break|case|catch|class|const|continue|debugger|default|delete|do|else|export|extends|finally|for|from|function|if|import|in|instanceof|let|new|null|of|return|static|super|switch|this|throw|true|false|try|typeof|undefined|var|void|while|with|yield)\b/g],
+        ['hl-fn', /\b([A-Za-z_$][\w$]*)\s*(?=\()/g],
         ['hl-num', NUM_HEX],
     ];
     if (L === 'typescript' || L === 'ts' || L === 'tsx') return [
         ['hl-cmt', CMT_SLASH],
         ['hl-str', STR_JS],
-        ['hl-kw',  /\b(abstract|any|as|async|await|boolean|break|case|catch|class|const|continue|declare|default|delete|do|else|enum|export|extends|false|finally|for|from|function|if|implements|import|in|instanceof|interface|keyof|let|namespace|never|new|null|number|of|override|private|protected|public|readonly|return|static|string|super|switch|symbol|this|throw|true|try|type|typeof|undefined|unknown|var|void|while|with|yield)\b/g],
-        ['hl-fn',  /\b([A-Za-z_$][\w$]*)\s*(?=\()/g],
+        ['hl-kw', /\b(abstract|any|as|async|await|boolean|break|case|catch|class|const|continue|declare|default|delete|do|else|enum|export|extends|false|finally|for|from|function|if|implements|import|in|instanceof|interface|keyof|let|namespace|never|new|null|number|of|override|private|protected|public|readonly|return|static|string|super|switch|symbol|this|throw|true|try|type|typeof|undefined|unknown|var|void|while|with|yield)\b/g],
+        ['hl-fn', /\b([A-Za-z_$][\w$]*)\s*(?=\()/g],
         ['hl-num', NUM_HEX],
     ];
     if (L === 'bash' || L === 'sh' || L === 'shell' || L === 'zsh') return [
         ['hl-cmt', CMT_HASH],
         ['hl-str', STR_DQSQ],
-        ['hl-kw',  /\b(case|do|done|elif|else|esac|fi|for|function|if|in|return|select|then|until|while)\b/g],
-        ['hl-fn',  /\$\{?[\w]+\}?/g],
+        ['hl-kw', /\b(case|do|done|elif|else|esac|fi|for|function|if|in|return|select|then|until|while)\b/g],
+        ['hl-fn', /\$\{?[\w]+\}?/g],
         ['hl-num', NUM_BASIC],
     ];
     if (L === 'json') return [
-        ['hl-fn',  /"(?:[^"\\]|\\.)*"(?=\s*:)/g],
+        ['hl-fn', /"(?:[^"\\]|\\.)*"(?=\s*:)/g],
         ['hl-str', STR_DQSQ],
-        ['hl-kw',  /\b(true|false|null)\b/g],
+        ['hl-kw', /\b(true|false|null)\b/g],
         ['hl-num', /-?\b\d+(?:\.\d+)?(?:[eE][+-]?\d+)?\b/g],
     ];
     if (L === 'html' || L === 'xml') return [
         ['hl-cmt', CMT_HTML],
-        ['hl-fn',  /<\/?[A-Za-z][\w:-]*/g],
+        ['hl-fn', /<\/?[A-Za-z][\w:-]*/g],
         ['hl-str', STR_DQSQ],
-        ['hl-kw',  />/g],
+        ['hl-kw', />/g],
     ];
     if (L === 'css' || L === 'scss' || L === 'less') return [
         ['hl-cmt', /\/\*[\s\S]*?\*\//g],
-        ['hl-fn',  /[.#][\w-]+|@[\w-]+/g],
+        ['hl-fn', /[.#][\w-]+|@[\w-]+/g],
         ['hl-str', STR_DQSQ],
-        ['hl-kw',  /\b[\w-]+(?=\s*:)/g],
+        ['hl-kw', /\b[\w-]+(?=\s*:)/g],
         ['hl-num', /#[\da-fA-F]{3,8}\b|\b\d+(?:\.\d+)?[\w]*/g],
     ];
     if (L === 'sql') return [
         ['hl-cmt', CMT_SQL],
-        ['hl-kw',  /\b(ADD|ALL|ALTER|AND|AS|ASC|BETWEEN|BY|CASE|COLUMN|COUNT|CREATE|CROSS|DATABASE|DEFAULT|DELETE|DESC|DISTINCT|DROP|ELSE|END|EXISTS|FOREIGN|FROM|FULL|GROUP|HAVING|IN|INDEX|INNER|INSERT|INTO|IS|JOIN|LEFT|LIKE|LIMIT|NOT|NULL|OF|OFFSET|ON|OR|ORDER|OUTER|PRIMARY|REFERENCES|RIGHT|SELECT|SET|TABLE|THEN|TOP|TRUNCATE|UNION|UNIQUE|UPDATE|VALUES|VIEW|WHEN|WHERE|WITH)\b/gi],
+        ['hl-kw', /\b(ADD|ALL|ALTER|AND|AS|ASC|BETWEEN|BY|CASE|COLUMN|COUNT|CREATE|CROSS|DATABASE|DEFAULT|DELETE|DESC|DISTINCT|DROP|ELSE|END|EXISTS|FOREIGN|FROM|FULL|GROUP|HAVING|IN|INDEX|INNER|INSERT|INTO|IS|JOIN|LEFT|LIKE|LIMIT|NOT|NULL|OF|OFFSET|ON|OR|ORDER|OUTER|PRIMARY|REFERENCES|RIGHT|SELECT|SET|TABLE|THEN|TOP|TRUNCATE|UNION|UNIQUE|UPDATE|VALUES|VIEW|WHEN|WHERE|WITH)\b/gi],
         ['hl-str', STR_DQSQ],
         ['hl-num', NUM_BASIC],
     ];
@@ -87,18 +87,18 @@ function _hl(code, lang) {
     var pos = 0;
 
     while (pos < code.length) {
-        var bestIdx   = code.length;
+        var bestIdx = code.length;
         var bestMatch = null;
-        var bestCls   = '';
+        var bestCls = '';
 
         for (var ri = 0; ri < rules.length; ri++) {
             var re = rules[ri][1];
             re.lastIndex = pos;
             var m = re.exec(code);
             if (m && m.index < bestIdx) {
-                bestIdx   = m.index;
+                bestIdx = m.index;
                 bestMatch = m;
-                bestCls   = rules[ri][0];
+                bestCls = rules[ri][0];
                 if (bestIdx === pos) break; // can't beat current position
             }
         }
@@ -141,17 +141,17 @@ function _md(text) {
             const codeLines = [];
             while (i < lines.length && !/^```/.test(lines[i])) { codeLines.push(lines[i]); i++; }
             if (i < lines.length) i++;
-            const codeText   = codeLines.join('\n');
-            const langLabel  = lang ? esc(lang) : '';
-            const codeHtml   = _hl(codeText, lang);
-            const langClass  = langLabel ? ' class="language-' + langLabel + '"' : '';
+            const codeText = codeLines.join('\n');
+            const langLabel = lang ? esc(lang) : '';
+            const codeHtml = _hl(codeText, lang);
+            const langClass = langLabel ? ' class="language-' + langLabel + '"' : '';
             html += '<div class="code-block">'
-                  + '<div class="code-block-hd">'
-                  + '<span class="code-block-lang">' + langLabel + '</span>'
-                  + '<button class="code-block-copy" type="button">' + _COPY_ICON + '</button>'
-                  + '</div>'
-                  + '<pre><code' + langClass + '>' + codeHtml + '</code></pre>'
-                  + '</div>';
+                + '<div class="code-block-hd">'
+                + '<span class="code-block-lang">' + langLabel + '</span>'
+                + '<button class="code-block-copy" type="button">' + _COPY_ICON + '</button>'
+                + '</div>'
+                + '<pre><code' + langClass + '>' + codeHtml + '</code></pre>'
+                + '</div>';
             continue;
         }
 
@@ -294,6 +294,9 @@ class AgentChatDialog {
             </div>
             <div class="chat-body" id="ga-chat-body">
                 <div class="chat-history-sidebar" id="ga-chat-history" style="display:none"></div>
+                <button class="chat-history-toggle" id="ga-history-toggle" title="Mostrar/ocultar conversaciones" style="display:none">
+                    <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M6 2L3 5l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
                 <div class="chat-messages" id="ga-chat-msgs"></div>
             </div>
             <div class="chat-input-bar">
@@ -344,9 +347,49 @@ class AgentChatDialog {
     _showSidebar() {
         const sidebar = document.getElementById('ga-chat-history');
         const box = document.getElementById('ga-chat-box');
+        const btn = document.getElementById('ga-history-toggle');
         if (!sidebar || !box) return;
-        sidebar.style.display = '';
-        box.classList.add('chat-box--with-history');
+        // Mostrar el botón de toggle
+        if (btn) btn.style.display = '';
+        // Respetar preferencia guardada (default: visible)
+        const hidden = localStorage.getItem('ga-history-hidden') === '1';
+        if (!hidden) {
+            sidebar.style.display = '';
+            box.classList.add('chat-box--with-history');
+            if (btn) btn.classList.add('chat-history-toggle--active');
+        }
+        this._bindHistoryToggle();
+    }
+
+    _bindHistoryToggle() {
+        const btn = document.getElementById('ga-history-toggle');
+        const sidebar = document.getElementById('ga-chat-history');
+        const box = document.getElementById('ga-chat-box');
+        if (!btn || !sidebar || !box) return;
+        if (btn.dataset.bound) return;
+        btn.dataset.bound = '1';
+
+        const _updateIcon = (visible) => {
+            // ◀ cuando sidebar visible (clic → ocultar), ▶ cuando oculto (clic → mostrar)
+            btn.innerHTML = visible
+                ? '<svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M6 2L3 5l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+                : '<svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M4 2l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+        };
+        _updateIcon(sidebar.style.display !== 'none');
+
+        btn.addEventListener('click', () => {
+            const visible = sidebar.style.display !== 'none';
+            if (visible) {
+                sidebar.style.display = 'none';
+                box.classList.remove('chat-box--with-history');
+                localStorage.setItem('ga-history-hidden', '1');
+            } else {
+                sidebar.style.display = '';
+                box.classList.add('chat-box--with-history');
+                localStorage.setItem('ga-history-hidden', '0');
+            }
+            _updateIcon(!visible);
+        });
     }
 
     async _newConversation() {
@@ -464,13 +507,13 @@ class AgentChatDialog {
                 setTimeout(() => { btn.innerHTML = orig; btn.classList.remove('code-block-copy--ok'); }, 1500);
             };
             if (navigator.clipboard && window.isSecureContext) {
-                navigator.clipboard.writeText(code).then(apply).catch(() => {});
+                navigator.clipboard.writeText(code).then(apply).catch(() => { });
             } else {
                 const ta = Object.assign(document.createElement('textarea'), { value: code });
                 ta.style.cssText = 'position:fixed;opacity:0';
                 document.body.appendChild(ta);
                 ta.select();
-                try { document.execCommand('copy'); apply(); } catch (_) {}
+                try { document.execCommand('copy'); apply(); } catch (_) { }
                 ta.remove();
             }
         });

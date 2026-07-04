@@ -48,6 +48,55 @@ async function _loadKnowledgeItems() {
         _allKnowledge = await api.get('/api/knowledge');
     } catch (e) {
         _allKnowledge = [];
+
+        // ── Operational connections picker ─────────────────────────────────────────────
+        var _allOpConnections = [];
+        var _selectedOpConnections = [];
+
+        async function _loadOpConnections() {
+            try {
+                var all = await api.get('/api/connections');
+                var opTypes = ['ssh', 'db-postgres', 'db-mysql', 'db-oracle'];
+                _allOpConnections = (all || []).filter(function (c) {
+                    return opTypes.indexOf(c.type) !== -1;
+                });
+            } catch (e) { _allOpConnections = []; }
+        }
+
+        function _initOpConnectionsPicker(selectedIds) {
+            _selectedOpConnections = Array.isArray(selectedIds) ? selectedIds.slice() : [];
+            _renderOpConnectionsPicker();
+        }
+
+        function _renderOpConnectionsPicker() {
+            var list = document.getElementById('agent-op-connections');
+            if (!list) return;
+            if (!_allOpConnections.length) {
+                list.innerHTML = '<span style="font-size:12px;color:var(--ink-3)">Sin conexiones SSH o de base de datos configuradas.</span>';
+                return;
+            }
+            var icons = { ssh: '🖥️', 'db-postgres': '🐘', 'db-mysql': '🐬', 'db-oracle': '🔴' };
+            list.innerHTML = _allOpConnections.map(function (c) {
+                var checked = _selectedOpConnections.includes(c.id) ? ' checked' : '';
+                var icon = icons[c.type] || '🔌';
+                var sub = c.host ? (c.username ? c.username + '@' + c.host : c.host) : (c.type || '');
+                return '<label class="knowledge-picker-item">' +
+                    '<input type="checkbox" class="op-conn-check" data-id="' + esc(c.id) + '"' + checked + '>' +
+                    '<span class="knowledge-picker-icon">' + icon + '</span>' +
+                    '<span class="knowledge-picker-title">' + esc(c.name) + '</span>' +
+                    '<span class="knowledge-picker-chars" style="color:var(--ink-3)">' + esc(sub) + '</span>' +
+                    '</label>';
+            }).join('');
+            list.querySelectorAll('.op-conn-check').forEach(function (cb) {
+                cb.addEventListener('change', function () {
+                    var id = cb.dataset.id;
+                    if (cb.checked) { if (!_selectedOpConnections.includes(id)) _selectedOpConnections.push(id); }
+                    else { _selectedOpConnections = _selectedOpConnections.filter(function (x) { return x !== id; }); }
+                });
+            });
+        }
+
+        function _getSelectedOpConnections() { return _selectedOpConnections.slice(); }
     }
 }
 
@@ -162,6 +211,9 @@ function _openAgentModal(agent) {
 
     _initSkillPicker(agent ? (agent.skills || []) : []);
     _initKnowledgePicker(agent ? (agent.knowledge || []) : []);
+    _initOpConnectionsPicker(agent ? (agent.op_connections || []) : []);
+    _renderKnowledgePicker();
+    _renderOpConnectionsPicker();
     _syncMemoryFields(agent);
     _syncRoutines(agent ? (agent.routines || []) : []);
 
@@ -272,12 +324,18 @@ function _bindAgentModal() {
     document.getElementById('agent-modal-close').addEventListener('click', _closeAgentModal);
     document.getElementById('agent-modal-cancel').addEventListener('click', _closeAgentModal);
 
-    // Tab navigation
+    // Tab navigation — cargar datos según tab
     document.querySelectorAll('.agent-tab').forEach(function (tab) {
         tab.addEventListener('click', function () {
-            _goToAgentStep(+tab.dataset.step);
+            var step = +tab.dataset.step;
+            _goToAgentStep(step);
+            if (step === 2) { _loadOpConnections().then(_renderOpConnectionsPicker); }
+            if (step === 3) { _loadKnowledgeItems().then(_renderKnowledgePicker); }
         });
     });
+    // Precargar al abrir
+    _loadKnowledgeItems();
+    _loadOpConnections();
     document.getElementById('agent-temp').addEventListener('input', e => {
         document.getElementById('agent-temp-val').textContent = parseFloat(e.target.value).toFixed(2);
     });
@@ -354,6 +412,7 @@ function _bindAgentModal() {
             timeout: timeoutEl && timeoutEl.value !== '' ? Number(timeoutEl.value) : null,
             skills: _getSelectedSkills(),
             knowledge: _getSelectedKnowledge(),
+            op_connections: _getSelectedOpConnections(),
             use_memory: useMemory,
             memory_file: useMemory ? memFile : null,
             routines: agentType === 'claude' ? _getRoutines() : [],
