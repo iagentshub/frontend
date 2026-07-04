@@ -45,7 +45,6 @@ function renderNav(mountId, activePage) {
             { href: '/knowledge', label: t('nav.knowledge'), page: 'knowledge' },
             { href: '/explore', label: t('nav.explore'), page: 'explore' },
             { href: '/connections', label: t('nav.connections'), page: 'connections' },
-            { href: '/profile', label: t('nav.profile'), page: 'profile' },
         ];
 
         mount.innerHTML =
@@ -99,11 +98,15 @@ function renderNav(mountId, activePage) {
             NAV_ICONS.about +
             '</a>' +
             '</div>' +
-            '<button class="nav-user" id="nav-logout-btn" title="' + t('nav.logout') + '">' +
+            '<div class="nav-user-row">' +
+            '<button class="nav-user" id="nav-profile-btn" title="' + t('nav.profile') + '">' +
             '<div class="nav-user-avatar" id="nav-avatar">?</div>' +
             '<span id="nav-username">…</span>' +
-            '<svg class="nav-logout-icon" width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M6 3H3a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h3M10 11l3-3-3-3M13 8H6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
             '</button>' +
+            '<button class="nav-logout-btn" id="nav-logout-btn" title="' + t('nav.logout') + '" aria-label="' + t('nav.logout') + '">' +
+            '<svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M6 3H3a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h3M10 11l3-3-3-3M13 8H6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+            '</button>' +
+            '</div>' +
             '</div>' +
             '</nav>';
 
@@ -226,7 +229,13 @@ function renderNav(mountId, activePage) {
             }
         });
 
+        document.getElementById('nav-profile-btn').addEventListener('click', function () {
+            window.location.href = '/profile';
+        });
+
         document.getElementById('nav-logout-btn').addEventListener('click', async function () {
+            var msg = t('nav.logout_confirm') || '¿Cerrar sesión?';
+            if (!confirm(msg)) return;
             await api.post('/api/auth/logout', {});
             window.location.replace('/login');
         });

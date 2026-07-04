@@ -48,57 +48,57 @@ async function _loadKnowledgeItems() {
         _allKnowledge = await api.get('/api/knowledge');
     } catch (e) {
         _allKnowledge = [];
-
-        // ── Operational connections picker ─────────────────────────────────────────────
-        var _allOpConnections = [];
-        var _selectedOpConnections = [];
-
-        async function _loadOpConnections() {
-            try {
-                var all = await api.get('/api/connections');
-                var opTypes = ['ssh', 'db-postgres', 'db-mysql', 'db-oracle'];
-                _allOpConnections = (all || []).filter(function (c) {
-                    return opTypes.indexOf(c.type) !== -1;
-                });
-            } catch (e) { _allOpConnections = []; }
-        }
-
-        function _initOpConnectionsPicker(selectedIds) {
-            _selectedOpConnections = Array.isArray(selectedIds) ? selectedIds.slice() : [];
-            _renderOpConnectionsPicker();
-        }
-
-        function _renderOpConnectionsPicker() {
-            var list = document.getElementById('agent-op-connections');
-            if (!list) return;
-            if (!_allOpConnections.length) {
-                list.innerHTML = '<span style="font-size:12px;color:var(--ink-3)">Sin conexiones SSH o de base de datos configuradas.</span>';
-                return;
-            }
-            var icons = { ssh: '🖥️', 'db-postgres': '🐘', 'db-mysql': '🐬', 'db-oracle': '🔴' };
-            list.innerHTML = _allOpConnections.map(function (c) {
-                var checked = _selectedOpConnections.includes(c.id) ? ' checked' : '';
-                var icon = icons[c.type] || '🔌';
-                var sub = c.host ? (c.username ? c.username + '@' + c.host : c.host) : (c.type || '');
-                return '<label class="knowledge-picker-item">' +
-                    '<input type="checkbox" class="op-conn-check" data-id="' + esc(c.id) + '"' + checked + '>' +
-                    '<span class="knowledge-picker-icon">' + icon + '</span>' +
-                    '<span class="knowledge-picker-title">' + esc(c.name) + '</span>' +
-                    '<span class="knowledge-picker-chars" style="color:var(--ink-3)">' + esc(sub) + '</span>' +
-                    '</label>';
-            }).join('');
-            list.querySelectorAll('.op-conn-check').forEach(function (cb) {
-                cb.addEventListener('change', function () {
-                    var id = cb.dataset.id;
-                    if (cb.checked) { if (!_selectedOpConnections.includes(id)) _selectedOpConnections.push(id); }
-                    else { _selectedOpConnections = _selectedOpConnections.filter(function (x) { return x !== id; }); }
-                });
-            });
-        }
-
-        function _getSelectedOpConnections() { return _selectedOpConnections.slice(); }
     }
 }
+
+// ── Operational connections picker ─────────────────────────────────────────────
+var _allOpConnections = [];
+var _selectedOpConnections = [];
+
+async function _loadOpConnections() {
+    try {
+        var all = await api.get('/api/connections');
+        var opTypes = ['ssh', 'db-postgres', 'db-mysql', 'db-oracle'];
+        _allOpConnections = (all || []).filter(function (c) {
+            return opTypes.indexOf(c.type) !== -1;
+        });
+    } catch (e) { _allOpConnections = []; }
+}
+
+function _initOpConnectionsPicker(selectedIds) {
+    _selectedOpConnections = Array.isArray(selectedIds) ? selectedIds.slice() : [];
+    _renderOpConnectionsPicker();
+}
+
+function _renderOpConnectionsPicker() {
+    var list = document.getElementById('agent-op-connections');
+    if (!list) return;
+    if (!_allOpConnections.length) {
+        list.innerHTML = '<span style="font-size:12px;color:var(--ink-3)">Sin conexiones SSH o de base de datos configuradas.</span>';
+        return;
+    }
+    var icons = { ssh: '🖥️', 'db-postgres': '🐘', 'db-mysql': '🐬', 'db-oracle': '🔴' };
+    list.innerHTML = _allOpConnections.map(function (c) {
+        var checked = _selectedOpConnections.includes(c.id) ? ' checked' : '';
+        var icon = icons[c.type] || '🔌';
+        var sub = c.host ? (c.username ? c.username + '@' + c.host : c.host) : (c.type || '');
+        return '<label class="knowledge-picker-item">' +
+            '<input type="checkbox" class="op-conn-check" data-id="' + esc(c.id) + '"' + checked + '>' +
+            '<span class="knowledge-picker-icon">' + icon + '</span>' +
+            '<span class="knowledge-picker-title">' + esc(c.name) + '</span>' +
+            '<span class="knowledge-picker-chars" style="color:var(--ink-3)">' + esc(sub) + '</span>' +
+            '</label>';
+    }).join('');
+    list.querySelectorAll('.op-conn-check').forEach(function (cb) {
+        cb.addEventListener('change', function () {
+            var id = cb.dataset.id;
+            if (cb.checked) { if (!_selectedOpConnections.includes(id)) _selectedOpConnections.push(id); }
+            else { _selectedOpConnections = _selectedOpConnections.filter(function (x) { return x !== id; }); }
+        });
+    });
+}
+
+function _getSelectedOpConnections() { return _selectedOpConnections.slice(); }
 
 function _initKnowledgePicker(selectedIds) {
     _selectedKnowledge = Array.isArray(selectedIds) ? selectedIds.slice() : [];

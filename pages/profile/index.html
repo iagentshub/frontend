@@ -338,18 +338,14 @@
                     <!-- Suscripción -->
                     <div id="section-billing" class="profile-section" hidden>
                         <div class="section-title">Suscripción</div>
+                        <p class="section-desc" id="billing-desc" style="margin-bottom:20px"></p>
 
-                        <div id="billing-free-block" hidden>
-                            <p class="section-desc">Actualmente estás en el plan Free.</p>
-                            <a class="btn btn-ghost" href="/pricing/">Ver planes</a>
-                        </div>
+                        <!-- Tarjetas de plan -->
+                        <div id="billing-plans-grid" class="billing-plans-grid"></div>
 
-                        <div id="billing-active-block" hidden>
+                        <!-- Info plan activo (renovación, estado) -->
+                        <div id="billing-active-info" style="display:none;margin-top:20px">
                             <div class="profile-info-block">
-                                <div class="profile-info-row">
-                                    <span class="profile-info-label">Plan</span>
-                                    <span class="profile-info-value" id="billing-tier">—</span>
-                                </div>
                                 <div class="profile-info-row">
                                     <span class="profile-info-label">Estado</span>
                                     <span class="profile-info-value" id="billing-status">—</span>
@@ -359,22 +355,29 @@
                                     <span class="profile-info-value" id="billing-renewal">—</span>
                                 </div>
                             </div>
+                        </div>
 
-                            <div id="billing-seats-block" style="margin-top:20px" hidden>
-                                <div class="section-subtitle">Asientos (Business)</div>
-                                <div style="display:flex;gap:8px;align-items:center;margin-top:8px">
-                                    <input type="number" id="billing-seats-input" min="2" max="100" style="width:90px"
-                                        class="pr-modal-input" />
-                                    <button class="btn btn-ghost btn-sm" id="btn-change-seats">Actualizar
-                                        asientos</button>
-                                </div>
-                            </div>
+                        <!-- Botón actualizar plan (aparece al seleccionar otro) -->
+                        <div id="billing-upgrade-row" style="display:none;margin-top:20px">
+                            <a id="btn-upgrade-plan" class="btn btn-primary" href="/pricing/">Actualizar plan</a>
+                            <button class="btn btn-ghost btn-sm" id="btn-billing-cancel-sel"
+                                style="margin-left:8px">Cancelar</button>
+                        </div>
 
-                            <div style="margin-top:24px;display:flex;gap:10px">
-                                <button class="btn btn-ghost" id="btn-cancel-sub" hidden>Cancelar suscripción</button>
-                                <button class="btn btn-ghost" id="btn-reactivate-sub" hidden>Reactivar
-                                    suscripción</button>
+                        <!-- Asientos (Business) -->
+                        <div id="billing-seats-block" style="display:none;margin-top:24px">
+                            <div class="section-subtitle">Asientos del equipo</div>
+                            <div style="display:flex;gap:8px;align-items:center;margin-top:8px">
+                                <input type="number" id="billing-seats-input" min="2" max="100" style="width:90px"
+                                    class="input" />
+                                <button class="btn btn-ghost btn-sm" id="btn-change-seats">Actualizar asientos</button>
                             </div>
+                        </div>
+
+                        <!-- Cancelar / Reactivar -->
+                        <div style="margin-top:24px;display:flex;gap:10px">
+                            <button class="btn btn-ghost" id="btn-cancel-sub" style="display:none">Cancelar suscripción</button>
+                            <button class="btn btn-ghost" id="btn-reactivate-sub" style="display:none">Reactivar suscripción</button>
                         </div>
                     </div>
 
