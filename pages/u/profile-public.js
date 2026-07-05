@@ -28,8 +28,14 @@
             .replace(/\*(.+?)\*/g, '<em>$1</em>')
             // Inline code
             .replace(/`(.+?)`/g, '<code>$1</code>')
-            // Links
-            .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>')
+            // Links — sanitizar URL para prevenir XSS vía inyección de atributos y javascript:
+            .replace(/\[([^\]]+)\]\(([^)]+)\)/g, function (_, text, url) {
+                var safeUrl = url.replace(/"/g, '%22').replace(/'/g, '%27');
+                if (/^javascript:/i.test(safeUrl.trim()) || /^data:/i.test(safeUrl.trim())) {
+                    safeUrl = '#enlace-no-permitido';
+                }
+                return '<a href="' + safeUrl + '" target="_blank" rel="noopener noreferrer">' + text + '</a>';
+            })
             // Unordered lists
             .replace(/^\s*[-*] (.+)$/gm, '<li>$1</li>')
             .replace(/(<li>[\s\S]*?<\/li>)/g, '<ul>$1</ul>')
@@ -89,14 +95,14 @@
         if (contact) {
             var links = [];
             if (data.email_public) {
-                links.push('<a href="mailto:' + data.email_public + '" class="pub-contact-link">' +
+                links.push('<a href="mailto:' + _esc(data.email_public) + '" class="pub-contact-link">' +
                     '<svg width="13" height="13" viewBox="0 0 16 16" fill="none"><rect x="2" y="4" width="12" height="9" rx="1.5" stroke="currentColor" stroke-width="1.4"/><path d="M2 5l6 4.5L14 5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>' +
-                    data.email_public + '</a>');
+                    _esc(data.email_public) + '</a>');
             }
             if (data.github) {
                 links.push('<a href="https://github.com/' + encodeURIComponent(data.github) + '" target="_blank" rel="noopener" class="pub-contact-link">' +
                     '<svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M8 1.5a6.5 6.5 0 0 0-2.055 12.664c.325.06.444-.141.444-.313v-1.096c-1.806.393-2.187-.872-2.187-.872-.295-.75-.72-.95-.72-.95-.588-.402.044-.394.044-.394.65.046.993.668.993.668.578.99 1.517.704 1.887.538.059-.419.226-.704.41-.866-1.441-.164-2.957-.72-2.957-3.205 0-.708.253-1.287.668-1.74-.067-.164-.29-.822.063-1.714 0 0 .545-.175 1.784.664A6.213 6.213 0 0 1 8 5.34c.551.003 1.106.074 1.624.218 1.238-.839 1.782-.664 1.782-.664.355.892.132 1.55.065 1.714.417.453.667 1.032.667 1.74 0 2.492-1.518 3.04-2.963 3.2.233.201.44.598.44 1.205v1.787c0 .174.117.376.447.312A6.5 6.5 0 0 0 8 1.5z" fill="currentColor"/></svg>' +
-                    data.github + '</a>');
+                    _esc(data.github) + '</a>');
             }
             if (links.length) { contact.innerHTML = links.join(''); contact.hidden = false; }
         }
