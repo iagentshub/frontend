@@ -21,6 +21,12 @@
         return '€' + (r % 1 === 0 ? r.toFixed(0) : r.toFixed(2).replace('.', ','));
     }
 
+    function esc(s) {
+        return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+            return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c];
+        });
+    }
+
     function fmtDate(iso) {
         if (!iso) return '—';
         return new Date(iso).toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
@@ -77,8 +83,13 @@
     var seatsBlock    = document.getElementById('billing-seats-block');
     var seatsInput    = document.getElementById('billing-seats-input');
     var changeSeatsBtn = document.getElementById('btn-change-seats');
+    var licensesBlock = document.getElementById('billing-licenses-block');
+    var licensesDesc  = document.getElementById('billing-licenses-desc');
+    var licensesTable = document.getElementById('billing-licenses-table');
+    var licenseSearch = document.getElementById('billing-license-search');
     var cancelBtn     = document.getElementById('btn-cancel-sub');
     var reactivateBtn = document.getElementById('btn-reactivate-sub');
+    var _licenseState = null;
 
     // ── Render tarjetas ────────────────────────────────────────────────────
     function renderPlans() {
@@ -201,6 +212,88 @@
     }
 
     // ── Cancelar / Reactivar ───────────────────────────────────────────────
+    function renderLicenses() {
+        if (!licensesBlock || !licensesTable) return;
+        if (!_licenseState || _currentTier !== 'business') {
+            licensesBlock.style.display = 'none';
+            return;
+        }
+        licensesBlock.style.display = '';
+        var users = _licenseState.users || [];
+        var q = ((licenseSearch && licenseSearch.value) || '').toLowerCase();
+        var filtered = users.filter(function (u) {
+            var text = ((u.email || '') + ' ' + (u.username || '')).toLowerCase();
+            return !q || text.indexOf(q) !== -1;
+        });
+        if (licensesDesc) {
+            licensesDesc.textContent = _licenseState.used + ' de ' + _licenseState.seats +
+                ' licencias en uso. Disponibles: ' + _licenseState.available + '.';
+        }
+        if (!filtered.length) {
+            licensesTable.innerHTML = '<div class="admin-empty">No hay usuarios que coincidan.</div>';
+            return;
+        }
+        licensesTable.innerHTML =
+            '<table class="admin-table">' +
+            '<thead><tr><th>Usuario</th><th>Estado</th><th></th></tr></thead>' +
+            '<tbody>' + filtered.map(function (u) {
+                var licensed = !!u.licensed;
+                var badge = licensed
+                    ? '<span class="badge badge--ok">Con licencia</span>'
+                    : '<span class="badge badge--warn">Sin licencia</span>';
+                var isOwner = u.username === _licenseState.owner;
+                var action = isOwner
+                    ? '<span class="badge badge--std">Comprador</span>'
+                    : licensed
+                    ? '<button class="btn btn-ghost btn-sm billing-license-action" data-action="revoke" data-username="' + esc(u.username) + '">Quitar</button>'
+                    : '<button class="btn btn-primary btn-sm billing-license-action" data-action="assign" data-username="' + esc(u.username) + '"' + (_licenseState.available <= 0 ? ' disabled' : '') + '>Asignar</button>';
+                return '<tr><td class="td-email"><div class="user-avatar-cell"><div class="user-avatar-sm">' +
+                    esc((u.email || u.username || '?').charAt(0).toUpperCase()) +
+                    '</div><span>' + esc(u.email || u.username) + '</span></div></td>' +
+                    '<td>' + badge + '</td><td class="td-actions">' + action + '</td></tr>';
+            }).join('') + '</tbody></table>';
+
+        licensesTable.querySelectorAll('.billing-license-action').forEach(function (btn) {
+            btn.onclick = async function () {
+                var username = btn.dataset.username;
+                var action = btn.dataset.action;
+                btn.disabled = true;
+                try {
+                    if (action === 'assign') {
+                        _licenseState = await window.api.post('/api/billing/licenses/' + encodeURIComponent(username), {});
+                        window.toast && window.toast('Licencia asignada', 'success');
+                    } else {
+                        if (!confirm('Quitar licencia a ' + username + '?')) return;
+                        _licenseState = await window.api.del('/api/billing/licenses/' + encodeURIComponent(username));
+                        window.toast && window.toast('Licencia retirada', 'success');
+                    }
+                    renderLicenses();
+                } catch (e) {
+                    window.toast && window.toast(e.message || 'Error al actualizar licencia', 'error');
+                } finally {
+                    btn.disabled = false;
+                }
+            };
+        });
+    }
+
+    if (licenseSearch) licenseSearch.addEventListener('input', renderLicenses);
+
+    async function loadLicenses() {
+        if (!licensesBlock) return;
+        if (_currentTier !== 'business') {
+            _licenseState = null;
+            licensesBlock.style.display = 'none';
+            return;
+        }
+        try {
+            _licenseState = await window.api.get('/api/billing/licenses');
+        } catch (_) {
+            _licenseState = null;
+        }
+        renderLicenses();
+    }
+
     var STATUS_LABELS = {
         active: 'Activa', trialing: 'En prueba', past_due: 'Pago pendiente',
         incomplete: 'Incompleta', canceled: 'Cancelada',
@@ -257,12 +350,14 @@
             upgradeRow.style.display    = 'none';
             seatsBlock.style.display    = _currentTier === 'business' ? '' : 'none';
             if (_currentTier === 'business' && seatsInput) seatsInput.value = _seats;
+            await loadLicenses();
         } catch (_) {
             _currentTier = 'free';
             if (descEl) descEl.textContent = 'Selecciona un plan para contratar el servicio gestionado.';
             activeInfo.style.display = 'none';
             upgradeRow.style.display = 'none';
             seatsBlock.style.display = 'none';
+            if (licensesBlock) licensesBlock.style.display = 'none';
         }
         renderPlans();
     }
