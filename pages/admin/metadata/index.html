@@ -24,17 +24,17 @@
         <main class="page-content">
             <div class="page-header">
                 <div>
-                    <h1 class="page-title">Sistema</h1>
-                    <p class="page-subtitle">Estado de la base de datos y actividad del sistema</p>
+                    <h1 class="page-title" data-i18n="admin.metadata.page_title">Sistema</h1>
+                    <p class="page-subtitle" data-i18n="admin.metadata.page_subtitle">Estado de la base de datos y actividad del sistema</p>
                 </div>
             </div>
 
             <!-- Tabs principales -->
             <div class="admin-tabs" style="margin-bottom:24px">
                 <button class="admin-tab active" data-meta-tab="logs"
-                    onclick="window._metaSwitchTab('logs')">Logs</button>
+                    onclick="window._metaSwitchTab('logs')" data-i18n="admin.metadata.tab_logs">Logs</button>
                 <button class="admin-tab" data-meta-tab="tables"
-                    onclick="window._metaSwitchTab('tables')">Tablas</button>
+                    onclick="window._metaSwitchTab('tables')" data-i18n="admin.metadata.tab_tables">Tablas</button>
             </div>
 
             <!-- ── Tab: Logs ── -->
@@ -46,7 +46,9 @@
             <div id="meta-panel-tables" style="display:none">
                 <!-- Buscador + contador -->
                 <div style="display:flex;gap:8px;align-items:center;margin-bottom:16px;flex-wrap:wrap">
-                    <input type="search" id="meta-table-search" class="input" placeholder="Buscar tabla…"
+                    <input type="search" id="meta-table-search" class="input"
+                        data-i18n="[placeholder]admin.metadata.search_table"
+                        placeholder="Buscar tabla…"
                         style="max-width:280px;height:32px" oninput="window._metaFilterTables()" />
                     <span id="meta-table-count" style="font-size:0.8rem;color:var(--text-2)"></span>
                 </div>
@@ -57,16 +59,16 @@
                             <tr style="background:var(--surface-2,var(--surface))">
                                 <th id="th-name"
                                     style="text-align:left;padding:9px 14px;border-bottom:1px solid var(--border);font-weight:600;color:var(--text-2);cursor:pointer;user-select:none;white-space:nowrap">
-                                    Tabla <span id="th-name-arrow" style="opacity:0.4">↕</span></th>
+                                    <span data-i18n="admin.metadata.col_table">Tabla</span> <span id="th-name-arrow" style="opacity:0.4">↕</span></th>
                                 <th id="th-rows"
                                     style="text-align:right;padding:9px 14px;border-bottom:1px solid var(--border);font-weight:600;color:var(--text-2);cursor:pointer;user-select:none;white-space:nowrap">
-                                    Filas <span id="th-rows-arrow" style="opacity:0.4">↕</span></th>
+                                    <span data-i18n="admin.metadata.col_rows">Filas</span> <span id="th-rows-arrow" style="opacity:0.4">↕</span></th>
                                 <th id="th-cols"
                                     style="text-align:right;padding:9px 14px;border-bottom:1px solid var(--border);font-weight:600;color:var(--text-2);cursor:pointer;user-select:none;white-space:nowrap">
-                                    Columnas <span id="th-cols-arrow" style="opacity:0.4">↕</span></th>
+                                    <span data-i18n="admin.metadata.col_cols">Columnas</span> <span id="th-cols-arrow" style="opacity:0.4">↕</span></th>
                                 <th id="th-size"
                                     style="text-align:right;padding:9px 14px;border-bottom:1px solid var(--border);font-weight:600;color:var(--text-2);cursor:pointer;user-select:none;white-space:nowrap">
-                                    Peso <span id="th-size-arrow" style="opacity:0.4">↕</span></th>
+                                    <span data-i18n="admin.metadata.col_size">Peso</span> <span id="th-size-arrow" style="opacity:0.4">↕</span></th>
                             </tr>
                         </thead>
                         <tbody id="meta-tables-tbody"></tbody>
@@ -91,8 +93,10 @@
                     style="font-weight:700;font-size:0.95rem;font-family:monospace;flex:1"></span>
                 <input id="meta-table-search-data" type="search" class="input"
                     style="height:30px;font-size:0.78rem;width:220px"
+                    data-i18n="[placeholder]admin.metadata.dialog_search"
                     placeholder="Buscar en todos los campos… (Enter)" />
-                <button class="btn btn-primary btn-sm" id="meta-table-search-btn">Buscar</button>
+                <button class="btn btn-primary btn-sm" id="meta-table-search-btn"
+                    data-i18n="admin.metadata.dialog_search_btn">Buscar</button>
                 <button id="meta-table-dialog-close" class="modal-close" type="button">
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                         <path d="M2 2l12 12M14 2L2 14" stroke="currentColor" stroke-width="1.8"
@@ -101,7 +105,7 @@
                 </button>
             </div>
             <div id="meta-table-data-wrap" style="flex:1;overflow:auto;padding:0">
-                <p style="text-align:center;padding:28px;color:var(--text-2)">Cargando…</p>
+                <p style="text-align:center;padding:28px;color:var(--text-2)" data-i18n="admin.metadata.loading">Cargando…</p>
             </div>
         </div>
     </div>
@@ -116,14 +120,14 @@
             <div
                 style="display:flex;align-items:center;gap:10px;padding:12px 18px 10px;border-bottom:1px solid var(--border);flex-shrink:0">
                 <span id="logs-modal-title" style="font-weight:700;font-size:0.95rem;flex:1"></span>
-                <button id="btn-logs-refresh" class="btn btn-ghost btn-sm" title="Actualizar">
+                <button id="btn-logs-refresh" class="btn btn-ghost btn-sm">
                     <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
                         <path d="M2 8a6 6 0 0 1 6-6 6 6 0 0 1 4.24 1.76M14 8a6 6 0 0 1-6 6 6 6 0 0 1-4.24-1.76"
                             stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
                         <path d="M12 2.5V6h-3.5M4 13.5V10h3.5" stroke="currentColor" stroke-width="1.6"
                             stroke-linecap="round" stroke-linejoin="round" />
                     </svg>
-                    Actualizar
+                    <span data-i18n="admin.metadata.refresh_btn">Actualizar</span>
                 </button>
                 <a id="btn-logs-download" class="btn btn-ghost btn-sm" download style="display:none">⬇ CSV</a>
                 <button id="btn-logs-modal-close" class="modal-close" type="button">
@@ -139,7 +143,7 @@
                 style="display:flex;align-items:center;gap:6px;padding:8px 18px 10px;border-bottom:1px solid var(--border);background:var(--surface-2,var(--surface));flex-shrink:0;overflow-x:auto">
                 <select id="logs-level-select" class="select"
                     style="height:32px;padding:0 34px 0 10px;font-size:0.8rem;width:155px;flex:0 0 155px">
-                    <option value="">Nivel</option>
+                    <option value="" data-i18n="admin.metadata.log_filter_level">Nivel</option>
                     <option value="DEBUG">DEBUG</option>
                     <option value="INFO">INFO</option>
                     <option value="OK">OK</option>
@@ -148,21 +152,25 @@
                 </select>
                 <select id="logs-service-select" class="select"
                     style="height:32px;padding:0 34px 0 10px;font-size:0.8rem;width:135px;flex:0 0 135px">
-                    <option value="">Fuente</option>
+                    <option value="" data-i18n="admin.metadata.log_filter_source">Fuente</option>
                     <option value="BE">Backend</option>
                     <option value="FE">Frontend</option>
                 </select>
                 <input id="logs-ip-filter" type="text" class="input"
-                    style="height:32px;padding:0 10px;font-size:0.8rem;width:130px;flex:0 0 130px" placeholder="IP…"
-                    title="Haz clic en una IP de la tabla para rellenar" />
+                    style="height:32px;padding:0 10px;font-size:0.8rem;width:130px;flex:0 0 130px"
+                    data-i18n="[placeholder]admin.metadata.log_filter_ip"
+                    placeholder="IP…" />
                 <input id="logs-user-filter" type="text" class="input"
                     style="height:32px;padding:0 10px;font-size:0.8rem;width:130px;flex:0 0 130px"
-                    placeholder="Usuario…" title="Haz clic en un usuario de la tabla para rellenar" />
+                    data-i18n="[placeholder]admin.metadata.log_filter_user"
+                    placeholder="Usuario…" />
                 <input id="logs-search" type="search" class="input"
                     style="height:32px;padding:0 10px;font-size:0.8rem;flex:1;min-width:160px"
+                    data-i18n="[placeholder]admin.metadata.log_filter_search"
                     placeholder="Buscar en acción…" />
                 <button class="btn btn-ghost btn-sm" id="logs-clear-filters"
-                    style="height:32px;white-space:nowrap;flex-shrink:0">Limpiar</button>
+                    style="height:32px;white-space:nowrap;flex-shrink:0"
+                    data-i18n="admin.metadata.log_clear">Limpiar</button>
             </div>
 
             <!-- Tabla de logs -->
@@ -170,14 +178,13 @@
                 <table class="logs-table" style="width:100%">
                     <thead>
                         <tr>
-                            <th class="logs-th sortable" data-col="date">Fecha</th>
-                            <th class="logs-th sortable" data-col="ts">Hora</th>
-                            <th class="logs-th sortable" data-col="level">Nivel</th>
-                            <th class="logs-th sortable" data-col="ip" title="Clic para filtrar por esta IP">IP</th>
-                            <th class="logs-th sortable" data-col="username" title="Clic para filtrar por este usuario">
-                                Usuario</th>
-                            <th class="logs-th sortable" data-col="source">Fuente</th>
-                            <th class="logs-th">Mensaje</th>
+                            <th class="logs-th sortable" data-col="date" data-i18n="admin.metadata.log_col_date">Fecha</th>
+                            <th class="logs-th sortable" data-col="ts" data-i18n="admin.metadata.log_col_time">Hora</th>
+                            <th class="logs-th sortable" data-col="level" data-i18n="admin.metadata.log_col_level">Nivel</th>
+                            <th class="logs-th sortable" data-col="ip" data-i18n="admin.metadata.log_col_ip">IP</th>
+                            <th class="logs-th sortable" data-col="username" data-i18n="admin.metadata.log_col_user">Usuario</th>
+                            <th class="logs-th sortable" data-col="source" data-i18n="admin.metadata.log_col_source">Fuente</th>
+                            <th class="logs-th" data-i18n="admin.metadata.log_col_msg">Mensaje</th>
                         </tr>
                     </thead>
                     <tbody id="logs-tbody"></tbody>
@@ -188,9 +195,11 @@
             <div
                 style="padding:8px 18px;border-top:1px solid var(--border);display:flex;align-items:center;gap:8px;flex-shrink:0">
                 <span id="logs-count" style="font-size:0.78rem;color:var(--text-2);flex:1"></span>
-                <button class="btn btn-ghost btn-sm" id="logs-pag-prev" disabled>← Anterior</button>
+                <button class="btn btn-ghost btn-sm" id="logs-pag-prev" disabled
+                    data-i18n="admin.metadata.prev">← Anterior</button>
                 <span id="logs-pag-label" style="font-size:0.78rem;color:var(--text-2);white-space:nowrap"></span>
-                <button class="btn btn-ghost btn-sm" id="logs-pag-next" disabled>Siguiente →</button>
+                <button class="btn btn-ghost btn-sm" id="logs-pag-next" disabled
+                    data-i18n="admin.metadata.next">Siguiente →</button>
             </div>
         </div>
     </div>

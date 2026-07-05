@@ -113,7 +113,7 @@
         list.querySelectorAll('[data-action="delete"]').forEach(function (btn) {
             btn.addEventListener('click', async function () {
                 var wsId = this.dataset.wsId;
-                if (!confirm(t('profile.privacy.confirm_delete_ws') || '¿Eliminar este workspace y todos sus datos?')) return;
+                if (!confirm(t('profile.privacy.confirm_delete_ws') || '¿Eliminar este grupo? Los recursos originales de sus dueños no se eliminan.')) return;
                 try {
                     await api.delete('/api/workspaces/' + wsId);
                     _pendingWorkspaces = _pendingWorkspaces.filter(function (w) { return w.id !== wsId; });
@@ -124,7 +124,7 @@
                         _openResolveWsModal();
                     }
                 } catch (err) {
-                    toast(err.message || 'Error al eliminar workspace', 'error');
+                    toast(err.message || 'Error al eliminar grupo', 'error');
                 }
             });
         });

@@ -241,3 +241,64 @@ function applyUserFilters() {
         }
     });
 }());
+
+// ── Modal: Crear usuario (modo registro cerrado) ───────────────────────────────
+
+(function _bindCreateModal() {
+    var modal     = document.getElementById('modal-create-user');
+    var btnClose  = document.getElementById('btn-create-user-close');
+    var btnCancel = document.getElementById('btn-create-user-cancel');
+    var btnSave   = document.getElementById('btn-create-user-save');
+    var btnNew    = document.getElementById('btn-new-user');
+
+    if (!modal) return;
+
+    function _open() {
+        document.getElementById('create-user-email').value       = '';
+        document.getElementById('create-user-displayname').value = '';
+        document.getElementById('create-user-password').value    = '';
+        document.getElementById('create-user-role').value        = 'standard';
+        modal.style.display = '';
+        document.getElementById('create-user-email').focus();
+    }
+
+    function _close() { modal.style.display = 'none'; }
+
+    if (btnNew)    btnNew.addEventListener('click', _open);
+    btnClose.addEventListener('click', _close);
+    btnCancel.addEventListener('click', _close);
+    modal.addEventListener('click', function (e) { if (e.target === modal) _close(); });
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && modal.style.display !== 'none') _close();
+    });
+
+    btnSave.addEventListener('click', async function () {
+        var email       = (document.getElementById('create-user-email').value || '').trim();
+        var displayName = (document.getElementById('create-user-displayname').value || '').trim();
+        var password    = (document.getElementById('create-user-password').value || '').trim();
+        var role        = document.getElementById('create-user-role').value;
+
+        if (!email) { toast('El email es obligatorio', 'error'); return; }
+        if (!password) { toast('La contraseña es obligatoria', 'error'); return; }
+        if (password.length < 4) { toast('La contraseña debe tener al menos 4 caracteres', 'error'); return; }
+
+        btnSave.disabled = true;
+        btnSave.textContent = 'Creando…';
+        try {
+            await api.post('/api/admin/users', {
+                email: email,
+                display_name: displayName || undefined,
+                password: password,
+                role: role,
+            });
+            toast('Usuario creado correctamente', 'success');
+            _close();
+            await _reloadUsers();
+        } catch (err) {
+            toast(err.message || 'Error al crear el usuario', 'error');
+        } finally {
+            btnSave.disabled = false;
+            btnSave.textContent = 'Crear usuario';
+        }
+    });
+}());

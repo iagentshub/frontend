@@ -8,6 +8,7 @@ var _SECTIONS = [
     { id: 'connections',      key: 'connections' },
     { id: 'skills',           key: 'skills' },
     { id: 'teams',            key: 'teams' },
+    { id: 'folders',          key: 'folders' },
     { id: 'memory-knowledge', key: 'memory_knowledge' },
     { id: 'best-practices',   key: 'best_practices' },
 ];
@@ -136,11 +137,17 @@ function _buildSection(s) {
             _item(t('docs.skills.activate_title'), t('docs.skills.activate_body'));
     } else if (k === 'teams') {
         body = '<p class="docs-intro">' + t('docs.teams.intro') + '</p>' +
-            _item(t('docs.teams.create_title'),  t('docs.teams.create_body')) +
-            _item(t('docs.teams.invite_title'),  t('docs.teams.invite_body')) +
-            _item(t('docs.teams.share_title'),   t('docs.teams.share_body')) +
-            _item(t('docs.teams.badge_title'),   t('docs.teams.badge_body')) +
-            _item(t('docs.teams.guests_title'),  t('docs.teams.guests_body'));
+            _item(t('docs.teams.create_title'),   t('docs.teams.create_body')) +
+            _item(t('docs.teams.invite_title'),   t('docs.teams.invite_body')) +
+            _item(t('docs.teams.share_title'),    t('docs.teams.share_body')) +
+            _item(t('docs.teams.unshare_title'),  t('docs.teams.unshare_body')) +
+            _item(t('docs.teams.badge_title'),    t('docs.teams.badge_body')) +
+            _item(t('docs.teams.guests_title'),   t('docs.teams.guests_body'));
+    } else if (k === 'folders') {
+        body = '<p class="docs-intro">' + t('docs.folders.intro') + '</p>' +
+            _item(t('docs.folders.create_title'), t('docs.folders.create_body')) +
+            _item(t('docs.folders.filter_title'), t('docs.folders.filter_body')) +
+            _item(t('docs.folders.rename_title'), t('docs.folders.rename_body'));
     } else if (k === 'memory_knowledge') {
         body = '<p class="docs-intro">' + t('docs.memory_knowledge.intro') + '</p>' +
             _item(t('docs.memory_knowledge.memory_title'),    t('docs.memory_knowledge.memory_body')) +

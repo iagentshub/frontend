@@ -43,12 +43,16 @@
     "badge_public": "PÚBLICO"
   },
   "card": {
-    "no_description": "Sin descripcion",
+    "no_description": "Sin descripción",
     "no_ai": "Sin IA",
     "use_your_ai": "USA TU IA",
     "chat": "Chat",
     "chat_no_conn": "Configura una conexión para este agente",
-    "chat_conn_error": "La conexión no está disponible"
+    "chat_conn_error": "La conexión no está disponible",
+    "badge_mine": "Tuyo",
+    "set_connection": "Asignar conexión",
+    "set_connection_hint": "Selecciona la conexión para probar este acceso directo.",
+    "remove_link": "Eliminar acceso directo"
   },
   "filter": {
     "search_placeholder": "Buscar por nombre o descripción...",
@@ -73,12 +77,12 @@
     "title_new": "Nuevo agente",
     "title_edit": "Editar agente",
     "field_name": "Nombre",
-    "field_connection": "Conexion IA",
-    "no_connection": "-- Sin conexion --",
+    "field_connection": "Conexión IA",
+    "no_connection": "-- Sin conexión --",
     "field_visibility": "Visibilidad",
     "scope_private": "Privado",
     "scope_public": "Público",
-    "field_description": "Descripcion",
+    "field_description": "Descripción",
     "field_labels": "Etiquetas",
     "field_prompt": "System prompt",
     "field_temp": "Temperatura",
@@ -214,7 +218,8 @@
     "search_placeholder": "Buscar agentes…",
     "empty": "No hay agentes públicos disponibles",
     "empty_search": "Ningún agente coincide con la búsqueda",
-    "fork_btn": "Personalizar"
+    "fork_btn": "Personalizar",
+    "use_btn": "Usar"
   },
   "blueprint": {
     "title": "Estructura del agente",
@@ -222,7 +227,7 @@
     "skills": "Habilidades",
     "knowledge": "Conocimiento",
     "memory": "Memoria",
-    "config": "Configuracion",
+    "config": "Configuración",
     "routines": "Rutinas",
     "none": "Ninguno",
     "status": "Estado",
@@ -237,7 +242,7 @@
     "tool_choice": "Tool choice",
     "trigger_manual": "Manual",
     "trigger_webhook": "Webhook",
-    "no_description": "Sin descripcion"
+    "no_description": "Sin descripción"
   },
   "preview": {
     "title": "Vista previa de importación",

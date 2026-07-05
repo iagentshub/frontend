@@ -42,9 +42,9 @@ function renderNav(mountId, activePage) {
         var gen = ++_buildGen;
         var links = [
             { href: '/dashboard', label: t('nav.dashboard'), page: 'dashboard' },
+            { href: '/explore', label: t('nav.explore'), page: 'explore' },
             { href: '/agents', label: t('nav.agents'), page: 'agents' },
             { href: '/knowledge', label: t('nav.knowledge'), page: 'knowledge' },
-            { href: '/explore', label: t('nav.explore'), page: 'explore' },
             { href: '/connections', label: t('nav.connections'), page: 'connections' },
         ];
 
@@ -59,19 +59,6 @@ function renderNav(mountId, activePage) {
             '<button class="nav-close-btn" id="nav-close-btn" aria-label="Cerrar menú">' +
             '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 2l12 12M14 2L2 14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>' +
             '</button>' +
-            '</div>' +
-            '<div class="nav-workspace-bar">' +
-            '<button class="nav-ws-btn" id="nav-ws-btn" aria-label="Cambiar workspace">' +
-            '<svg class="nav-ws-icon" width="11" height="11" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="5" height="5" rx="1.2" stroke="currentColor" stroke-width="1.5"/><rect x="9" y="2" width="5" height="5" rx="1.2" stroke="currentColor" stroke-width="1.5"/><rect x="2" y="9" width="5" height="5" rx="1.2" stroke="currentColor" stroke-width="1.5"/><rect x="9" y="9" width="5" height="5" rx="1.2" stroke="currentColor" stroke-width="1.5"/></svg>' +
-            '<span class="nav-ws-name" id="nav-ws-name">Personal</span>' +
-            '<svg class="nav-ws-chevron" width="10" height="10" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
-            '</button>' +
-            '<div class="nav-ws-dropdown" id="nav-ws-dropdown" hidden>' +
-            '<div class="nav-ws-list" id="nav-ws-list"></div>' +
-            '<div class="nav-ws-footer">' +
-            '<button class="nav-ws-create-btn" id="nav-ws-create-btn">+ Nuevo workspace</button>' +
-            '</div>' +
-            '</div>' +
             '</div>' +
             '<div class="nav-section">' +
             links.map(function (l) {
@@ -120,15 +107,6 @@ function renderNav(mountId, activePage) {
             if (el) el.textContent = u;
             if (av) av.textContent = u.charAt(0).toUpperCase();
 
-            // Workspace name in nav bar
-            var wsNameEl = document.getElementById('nav-ws-name');
-            if (wsNameEl && d.workspace_name) {
-                wsNameEl.textContent = d.workspace_name;
-            }
-
-            // Load workspace list
-            _loadWorkspaces(d.workspace_id || u);
-
             if (d.role === 'admin') {
                 var adminSection = document.createElement('div');
                 adminSection.className = 'nav-section nav-admin-section';
@@ -168,82 +146,6 @@ function renderNav(mountId, activePage) {
                 if (pricingSpacer) pricingSpacer.before(pricingSection);
             }
         }).catch(function () { });
-
-        // ── Workspace switcher logic ──────────────────────────────────────
-        function _loadWorkspaces(activeWsId) {
-            api.get('/api/workspaces').then(function (list) {
-                var listEl = document.getElementById('nav-ws-list');
-                if (!listEl) return;
-                listEl.innerHTML = list.map(function (ws) {
-                    var isCurrent = ws.active;
-                    return '<button class="nav-ws-item' + (isCurrent ? ' nav-ws-item--active' : '') + '" data-ws-id="' + esc(ws.id) + '" data-ws-name="' + esc(ws.name) + '">' +
-                        '<span class="nav-ws-item-name">' + esc(ws.name) + '</span>' +
-                        (ws.type === 'personal' ? '<span class="nav-ws-badge">Personal</span>' : '') +
-                        (isCurrent ? '<svg width="10" height="10" viewBox="0 0 16 16" fill="none"><path d="M3 8l4 4 6-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>' : '') +
-                        '</button>';
-                }).join('');
-
-                listEl.querySelectorAll('.nav-ws-item').forEach(function (btn) {
-                    btn.addEventListener('click', function () {
-                        var wsId = btn.getAttribute('data-ws-id');
-                        var wsName = btn.getAttribute('data-ws-name');
-                        if (btn.classList.contains('nav-ws-item--active')) {
-                            _closeWsDropdown();
-                            return;
-                        }
-                        api.post('/api/workspaces/switch/' + encodeURIComponent(wsId), {})
-                            .then(function () { window.location.reload(); })
-                            .catch(function () { });
-                    });
-                });
-            }).catch(function () { });
-        }
-
-        function _openWsDropdown() {
-            var dd = document.getElementById('nav-ws-dropdown');
-            if (dd) dd.removeAttribute('hidden');
-        }
-        function _closeWsDropdown() {
-            var dd = document.getElementById('nav-ws-dropdown');
-            if (dd) dd.setAttribute('hidden', '');
-        }
-        function _toggleWsDropdown() {
-            var dd = document.getElementById('nav-ws-dropdown');
-            if (!dd) return;
-            if (dd.hasAttribute('hidden')) { _openWsDropdown(); } else { _closeWsDropdown(); }
-        }
-
-        var wsBtn = document.getElementById('nav-ws-btn');
-        if (wsBtn) {
-            wsBtn.addEventListener('click', function (e) {
-                e.stopPropagation();
-                _toggleWsDropdown();
-            });
-        }
-
-        var wsCreateBtn = document.getElementById('nav-ws-create-btn');
-        if (wsCreateBtn) {
-            wsCreateBtn.addEventListener('click', function () {
-                _closeWsDropdown();
-                var name = window.prompt('Nombre del nuevo workspace:');
-                if (!name || !name.trim()) return;
-                api.post('/api/workspaces', { name: name.trim() })
-                    .then(function (ws) {
-                        if (ws.id) {
-                            return api.post('/api/workspaces/switch/' + encodeURIComponent(ws.id), {});
-                        }
-                    }).then(function () { window.location.reload(); })
-                    .catch(function () { });
-            });
-        }
-
-        document.addEventListener('click', function (e) {
-            var dd = document.getElementById('nav-ws-dropdown');
-            var btn = document.getElementById('nav-ws-btn');
-            if (dd && !dd.hasAttribute('hidden') && btn && !btn.contains(e.target) && !dd.contains(e.target)) {
-                _closeWsDropdown();
-            }
-        });
 
         document.getElementById('nav-profile-btn').addEventListener('click', function () {
             window.location.href = '/profile';

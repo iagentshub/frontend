@@ -1,28 +1,4 @@
-/* ── Folder sidebar layout ── */
-.af-layout {
-    display: flex;
-    gap: 0;
-    align-items: flex-start;
-}
-
-.af-folder-panel {
-    width: 168px;
-    flex-shrink: 0;
-    border-right: 1px solid var(--line);
-    padding-right: 12px;
-}
-
-.af-content {
-    flex: 1;
-    min-width: 0;
-    padding-left: 20px;
-}
-
 @media (max-width: 768px) {
-    /* Layout: column — panel arriba, grid debajo */
-    .af-layout { flex-direction: column; }
-
-    /* Panel → tira horizontal de chips */
     .af-folder-panel {
         width: 100%;
         border-right: none;

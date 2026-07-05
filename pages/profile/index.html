@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="/assets/css/modals.css" />
     <link rel="stylesheet" href="/assets/css/animations.css" />
     <link rel="stylesheet" href="/assets/components/main_nav/main_nav.css" />
+    <link rel="stylesheet" href="/assets/components/workspace-create-wizard/workspace-create-wizard.css" />
     <link rel="stylesheet" href="/profile/profile.css" />
     <link rel="stylesheet" href="/admin/admin.css" />
     <link rel="stylesheet" href="/manager/manager.css" />
@@ -109,7 +110,7 @@
                                 <path d="M5 2v2M11 2v2" stroke="currentColor" stroke-width="1.4"
                                     stroke-linecap="round" />
                             </svg>
-                            <span>Workspaces</span>
+                            <span>Grupos</span>
                         </button>
                         <button class="profile-nav-item" data-section="section-privacy">
                             <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
@@ -240,12 +241,12 @@
                         <div id="accounts-list" class="accounts-list"></div>
                     </div>
 
-                    <!-- Workspaces -->
+                    <!-- Grupos de trabajo -->
                     <div id="section-workspaces" class="profile-section" hidden>
-                        <div class="section-title">Workspaces</div>
+                        <div class="section-title">Grupos de trabajo</div>
 
                         <div class="teams-tabs">
-                            <button class="teams-tab active" data-ws-tab="mine">Mis workspaces</button>
+                            <button class="teams-tab active" data-ws-tab="mine">Mis grupos</button>
                             <button class="teams-tab" data-ws-tab="invitations">Invitaciones <span id="ws-inv-badge"
                                     style="display:none;margin-left:4px;background:var(--accent);color:var(--surface);font-size:0.65rem;font-weight:700;padding:1px 5px;border-radius:10px;vertical-align:middle"></span></button>
                         </div>
@@ -624,22 +625,17 @@
         </div>
     </div>
 
-    <!-- Modal gestión de workspace (miembros + grupos) -->
+    <!-- Modal gestión de grupo (miembros) -->
     <div id="modal-ws-members" class="modal-bg" style="display:none">
         <div class="modal-box" style="max-width:580px">
             <div class="modal-header">
-                <h3 class="modal-title" id="ws-members-modal-title">Workspace</h3>
+                <h3 class="modal-title" id="ws-members-modal-title">Grupo</h3>
                 <button class="modal-close" id="btn-ws-members-close">
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                         <path d="M2 2l12 12M14 2L2 14" stroke="currentColor" stroke-width="1.8"
                             stroke-linecap="round" />
                     </svg>
                 </button>
-            </div>
-            <!-- Modal tabs -->
-            <div class="teams-tabs" style="margin:0 0 0;border-bottom:1px solid var(--line);padding:0 20px">
-                <button class="teams-tab active" id="ws-modal-tab-members">Miembros</button>
-                <button class="teams-tab" id="ws-modal-tab-groups">Grupos</button>
             </div>
             <!-- Panel: Miembros -->
             <div id="ws-modal-panel-members" class="modal-body" style="display:flex;flex-direction:column;gap:18px">
@@ -659,27 +655,55 @@
                     <div class="section-subtitle" style="margin-bottom:8px">Invitaciones pendientes</div>
                     <div id="ws-pending-list"></div>
                 </div>
-            </div>
-            <!-- Panel: Grupos -->
-            <div id="ws-modal-panel-groups" class="modal-body" style="display:none;flex-direction:column;gap:16px">
-                <div id="ws-groups-list"></div>
-                <div id="ws-new-group-row">
-                    <div class="section-subtitle" style="margin-bottom:8px">Nuevo grupo</div>
-                    <div style="display:flex;gap:8px;align-items:center">
-                        <input class="input" id="ws-new-group-name" placeholder="Nombre del grupo"
-                            style="flex:1;min-width:0" />
-                        <button class="btn btn-primary btn-sm" id="btn-ws-new-group">Crear</button>
+                <div id="ws-danger-zone" style="display:none;border-top:1px solid var(--line);padding-top:16px">
+                    <div class="section-subtitle" style="color:var(--danger,#e55);margin-bottom:8px">Zona de peligro</div>
+                    <p class="section-desc" style="margin-bottom:12px">Solo el propietario puede desactivar, eliminar
+                        o transferir este grupo.</p>
+                    <div style="display:flex;gap:8px;flex-wrap:wrap">
+                        <button class="btn btn-ghost" id="btn-ws-toggle-status">Desactivar grupo</button>
+                        <button class="btn btn-ghost" id="btn-ws-leave-owner">Abandonar grupo</button>
+                        <button class="btn btn-danger" id="btn-ws-delete">Eliminar grupo</button>
                     </div>
+                </div>
+                <div id="ws-leave-zone" style="display:none;border-top:1px solid var(--line);padding-top:16px">
+                    <div class="section-subtitle" style="margin-bottom:8px">Abandonar grupo</div>
+                    <p class="section-desc" style="margin-bottom:12px">Dejarás de tener acceso a este grupo y a su
+                        contenido compartido.</p>
+                    <button class="btn btn-ghost" id="btn-ws-leave">Abandonar grupo</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Modal: workspaces a resolver antes de borrar cuenta -->
+    <!-- Modal: transferir propiedad para poder abandonar el grupo -->
+    <div id="modal-ws-leave-owner" class="modal-bg" style="display:none">
+        <div class="modal-box" style="max-width:420px">
+            <div class="modal-header">
+                <h3 class="modal-title">Transferir propiedad y abandonar grupo</h3>
+                <button class="modal-close" id="btn-ws-leave-owner-close">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M2 2l12 12M14 2L2 14" stroke="currentColor" stroke-width="1.8"
+                            stroke-linecap="round" />
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p class="section-desc" style="margin-bottom:12px">Eres el propietario de este grupo. Para
+                    poder abandonarlo, elige primero quién será el nuevo propietario.</p>
+                <select class="select" id="ws-leave-owner-select" style="width:100%"></select>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-ghost" id="btn-ws-leave-owner-cancel">Cancelar</button>
+                <button class="btn btn-danger" id="btn-ws-leave-owner-confirm">Transferir y abandonar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: grupos a resolver antes de borrar cuenta -->
     <div id="modal-resolve-ws" class="modal-bg" style="display:none">
         <div class="modal-box" style="max-width:500px">
             <div class="modal-header">
-                <h3 class="modal-title" data-i18n="profile.privacy.resolve_ws_title">Resuelve tus workspaces</h3>
+                <h3 class="modal-title" data-i18n="profile.privacy.resolve_ws_title">Resuelve tus grupos</h3>
                 <button class="modal-close" id="btn-resolve-ws-close">
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                         <path d="M2 2l12 12M14 2L2 14" stroke="currentColor" stroke-width="1.8"
@@ -689,7 +713,7 @@
             </div>
             <div class="modal-body">
                 <p class="section-desc" style="margin-bottom:16px" data-i18n="profile.privacy.resolve_ws_desc">Eres
-                    propietario de los siguientes workspaces. Transfiere la propiedad a otro miembro o elimínalos antes
+                    propietario de los siguientes grupos. Transfiere la propiedad a otro miembro o elimínalos antes
                     de continuar.</p>
                 <div id="resolve-ws-list"></div>
             </div>
@@ -700,11 +724,11 @@
         </div>
     </div>
 
-    <!-- Modal: transferir workspace -->
+    <!-- Modal: transferir grupo -->
     <div id="modal-transfer-ws" class="modal-bg" style="display:none">
         <div class="modal-box" style="max-width:420px">
             <div class="modal-header">
-                <h3 class="modal-title" data-i18n="profile.privacy.transfer_ws_title">Transferir workspace</h3>
+                <h3 class="modal-title" data-i18n="profile.privacy.transfer_ws_title">Transferir grupo</h3>
                 <button class="modal-close" id="btn-transfer-ws-close">
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                         <path d="M2 2l12 12M14 2L2 14" stroke="currentColor" stroke-width="1.8"
@@ -714,7 +738,7 @@
             </div>
             <div class="modal-body">
                 <p class="section-desc" style="margin-bottom:12px" data-i18n="profile.privacy.transfer_ws_desc">
-                    Introduce el nombre de usuario del nuevo propietario (debe ser miembro del workspace).</p>
+                    Introduce el nombre de usuario del nuevo propietario (debe ser miembro del grupo).</p>
                 <input class="input" id="transfer-ws-username" placeholder="usuario@ejemplo.com" />
                 <input type="hidden" id="transfer-ws-id" />
             </div>
@@ -737,10 +761,10 @@
     <script src="/assets/js/utils.js"></script>
     <script src="/assets/js/providers.js"></script>
     <script src="/assets/components/main_nav/main_nav.js"></script>
+    <script src="/assets/components/workspace-create-wizard/workspace-create-wizard.js"></script>
     <script src="/connections/connections-modal.js"></script>
     <script src="/profile/profile.js"></script>
     <script src="/profile/profile-accounts.js"></script>
-    <script src="/assets/js/share-teams.js"></script>
     <script src="/manager/manager-team.js"></script>
     <script src="/profile/profile-teams.js"></script>
     <script src="/profile/profile-workspaces.js"></script>

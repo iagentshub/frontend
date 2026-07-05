@@ -149,8 +149,44 @@
     color: var(--accent);
 }
 
+/* ── Paneles laterales (carpetas y grupos) — base compartida ── */
+.af-layout {
+    display: flex;
+    gap: 0;
+    align-items: flex-start;
+}
+
+.af-folder-panel,
+.af-groups-panel {
+    width: 168px;
+    flex-shrink: 0;
+    border-right: 1px solid var(--line);
+    padding-right: 12px;
+    transition: width 0.2s ease, min-width 0.2s ease, padding 0.2s ease, opacity 0.2s ease;
+}
+
+.af-content {
+    flex: 1;
+    min-width: 0;
+    padding-left: 20px;
+}
+
+@media (max-width: 768px) {
+    .af-layout { flex-direction: column; }
+    .af-groups-panel {
+        width: 100%;
+        border-right: none;
+        padding-right: 0;
+        border-bottom: 1px solid var(--line);
+        padding-bottom: 10px;
+        margin-bottom: 16px;
+    }
+    .af-content { padding-left: 0; }
+}
+
 /* Panel colapsado */
 .af-folder-panel.folder-panel--collapsed,
+.af-groups-panel.folder-panel--collapsed,
 .kf-panel.folder-panel--collapsed {
     width: 0 !important;
     min-width: 0 !important;
@@ -161,8 +197,14 @@
 }
 
 .af-folder-panel,
+.af-groups-panel,
 .kf-panel {
     transition: width 0.2s ease, min-width 0.2s ease, padding 0.2s ease, opacity 0.2s ease;
+}
+
+/* Fila de toggles — puede tener más de un botón */
+.folder-toggle-row {
+    gap: 4px;
 }
 
 /* ── Responsive ── */

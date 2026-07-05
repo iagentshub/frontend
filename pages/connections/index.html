@@ -16,6 +16,8 @@
     <link rel="stylesheet" href="/assets/css/animations.css" />
     <!-- Componentes -->
     <link rel="stylesheet" href="/assets/components/main_nav/main_nav.css" />
+    <link rel="stylesheet" href="/assets/components/workspace-create-wizard/workspace-create-wizard.css" />
+    <link rel="stylesheet" href="/assets/components/group-share-dialog/group-share-dialog.css" />
     <link rel="stylesheet" href="/assets/components/filter_connections/filter_connections.css" />
     <link rel="stylesheet" href="/assets/components/conn-card/conn-card.css" />
     <!-- Página -->
@@ -80,13 +82,20 @@
             <!-- Filtro -->
             <div id="filter-connections-root"></div>
 
-            <!-- Layout: toggle + (panel | contenido) -->
+            <!-- Layout: toggle grupos + (panel | contenido) -->
             <div class="af-wrapper">
                 <div class="folder-toggle-row">
-                    <button id="btn-toggle-folders" class="folder-toggle-btn" title="Mostrar/ocultar carpetas"></button>
+                    <button id="btn-toggle-groups" class="folder-toggle-btn" title="Grupos de trabajo">
+                        <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                            <circle cx="5" cy="5" r="2" stroke="currentColor" stroke-width="1.4"/>
+                            <circle cx="11" cy="5" r="2" stroke="currentColor" stroke-width="1.4"/>
+                            <path d="M1.5 13v-.5A3.5 3.5 0 0 1 5 9a3.5 3.5 0 0 1 3.5 3.5V13" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+                            <path d="M9 9.2A3.5 3.5 0 0 1 14.5 12.5V13" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+                        </svg>
+                    </button>
                 </div>
                 <div class="af-layout">
-                    <div class="af-folder-panel" id="conn-folder-panel"></div>
+                    <div class="af-groups-panel folder-panel--collapsed" id="conn-groups-panel"></div>
                     <div class="af-content">
                         <div id="connections-root"></div>
                     </div>
@@ -125,7 +134,7 @@
                     <div class="field" id="conn-scope-row" style="display:none">
                         <label data-i18n="connections.modal.field_scope">Guardar como</label>
                         <select id="conn-scope" class="select">
-                            <option value="workspace" data-i18n="connections.modal.scope_workspace">Clave del workspace
+                            <option value="workspace" data-i18n="connections.modal.scope_workspace">Clave compartida
                             </option>
                             <option value="personal" data-i18n="connections.modal.scope_personal">Clave personal
                             </option>
@@ -161,8 +170,10 @@
     <script src="/assets/js/labels.js"></script>
     <!-- Componentes -->
     <script src="/assets/components/main_nav/main_nav.js"></script>
+    <script src="/assets/components/workspace-create-wizard/workspace-create-wizard.js"></script>
+    <script src="/assets/components/group-share-dialog/group-share-dialog.js"></script>
+    <script src="/assets/components/group-panel/group-panel.js"></script>
     <script src="/assets/components/filter_connections/filter_connections.js"></script>
-    <script src="/assets/js/share-teams.js"></script>
     <!-- Página -->
     <script src="/connections/connections-state.js"></script>
     <script src="/connections/connections-modal.js"></script>

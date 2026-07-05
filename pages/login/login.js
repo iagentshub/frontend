@@ -68,9 +68,10 @@ fetch('/api/auth/me').then(r => {
     if (r.ok) window.location.replace(_redirectTarget());
 });
 
-// Aplicar configuración de plataforma (invitado / facturación)
+// Aplicar configuración de plataforma (invitado / registro / facturación)
 fetch('/api/settings/platform/public').then(r => r.ok ? r.json() : null).then(function (cfg) {
     if (!cfg) return;
+
     // Acceso como invitado
     if (cfg.guest_enabled === false) {
         var guestBtn = document.getElementById('btn-guest');
@@ -78,18 +79,28 @@ fetch('/api/settings/platform/public').then(r => r.ok ? r.json() : null).then(fu
         if (guestBtn) guestBtn.style.display = 'none';
         if (divider) divider.style.display = 'none';
     }
-    // Link de precios
+
+    // Link "¿No tienes cuenta? Crear cuenta"
+    // Solo visible cuando el registro es abierto Y la facturación está desactivada.
+    // Con registro cerrado el admin crea las cuentas; con billing activo el registro
+    // lleva a planes de pago y se gestiona por otra vía.
+    var showRegister = cfg.registration === 'open' && cfg.billing_enabled === false;
+    var registerLink = document.querySelector('.login-register-link');
+    if (registerLink) registerLink.style.display = showRegister ? '' : 'none';
+
+    // Link de precios (solo visible con billing activado)
     if (cfg.billing_enabled === false) {
         document.querySelectorAll('a[href="/pricing/"]').forEach(function (a) {
             a.style.display = 'none';
         });
-        // Ocultar también el separador adyacente si queda vacío
-        document.querySelectorAll('.login-explore-sep').forEach(function (sep) {
-            var prev = sep.previousElementSibling;
-            var next = sep.nextElementSibling;
-            if ((prev && prev.style.display === 'none') || (next && next.style.display === 'none')) {
-                sep.style.display = 'none';
-            }
-        });
     }
+
+    // Limpiar separadores vacíos en el footer de links
+    document.querySelectorAll('.login-explore-sep').forEach(function (sep) {
+        var prev = sep.previousElementSibling;
+        var next = sep.nextElementSibling;
+        if ((prev && prev.style.display === 'none') || (next && next.style.display === 'none')) {
+            sep.style.display = 'none';
+        }
+    });
 }).catch(function () { });

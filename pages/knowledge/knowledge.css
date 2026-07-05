@@ -141,6 +141,65 @@
     background: color-mix(in srgb, var(--danger) 10%, transparent);
 }
 
+/* ── Sección de grupos de trabajo ─────────────────────────────────────────── */
+.kf-section-header--groups {
+    margin-top: 18px;
+    padding-top: 14px;
+    border-top: 1px solid var(--line);
+}
+
+.kf-item--group {
+    flex-direction: row;
+    align-items: center;
+    gap: 7px;
+    padding: 6px 8px;
+}
+
+.kf-group-icon {
+    color: var(--ink-3);
+    flex-shrink: 0;
+    opacity: 0.7;
+}
+
+.kf-item--group.kf-item--active .kf-group-icon {
+    color: var(--accent);
+    opacity: 1;
+}
+
+/* ── Indicador de filtro activo (chip en cabecera de página) ─────────────── */
+.group-filter-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--accent-dim);
+    border: 1px solid var(--accent-shadow, rgba(255,255,255,0.15));
+    border-radius: 20px;
+    padding: 3px 10px 3px 10px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--accent);
+    font-family: var(--font);
+}
+
+.group-filter-chip-close {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--accent);
+    padding: 0;
+    display: flex;
+    align-items: center;
+    opacity: 0.7;
+    transition: opacity 0.1s;
+    font-family: var(--font);
+    font-size: 14px;
+    line-height: 1;
+}
+
+.group-filter-chip-close:hover {
+    opacity: 1;
+}
+
 /* Move-to-folder inline button inside card meta */
 .kf-move-inline {
     background: none;

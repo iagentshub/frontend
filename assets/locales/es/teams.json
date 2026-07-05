@@ -48,11 +48,22 @@
       "col_shared_by": "Compartido por",
       "col_date": "Fecha"
     },
+    "groups": {
+      "title": "Grupos de trabajo",
+      "empty": "No perteneces a ningún grupo todavía.",
+      "all": "Todos",
+      "badge_mine": "Tuyo"
+    },
     "sharing": {
-      "share_with": "Compartir con",
+      "share_with": "Compartir con grupo",
       "modal_title": "Compartir — {{name}}",
       "no_teams": "No perteneces a ningún equipo.",
-      "shared_badge": "Compartida",
+      "no_groups": "No tienes grupos de trabajo.",
+      "select_groups": "Selecciona los grupos con acceso",
+      "shared_badge": "Compartido",
+      "confirm": "Guardar",
+      "cancel": "Cancelar",
+      "saved": "Acceso actualizado",
       "save": "Guardar",
       "col_group": "Grupo",
       "col_role": "Rol",

@@ -8,7 +8,7 @@
   },
   "description": {
     "title": "¿Qué es iAgents Hub?",
-    "body": "iAgents Hub es una plataforma self-hosted de agentes de inteligencia artificial. Permite configurar, gestionar y probar agentes de IA conectados a múltiples proveedores desde una interfaz unificada. Define tu agente una sola vez y ponlo a trabajar con el modelo que prefieras."
+    "body": "iAgents Hub es una plataforma self-hosted para crear, gestionar y colaborar con agentes de IA. Conecta cualquier proveedor —Anthropic, OpenAI, Google, Ollama y otros— con tu propia API key, organiza tus agentes en carpetas, compártelos con grupos de trabajo con un simple arrastre y exporta al formato nativo de Claude Code, GitHub Copilot u OpenAI Assistants con un clic. Todo desde una interfaz unificada, sin datos en la nube."
   },
   "stack": {
     "title": "Stack tecnológico",

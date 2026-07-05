@@ -3,6 +3,7 @@
 
 var _activeCategory = 'llm';
 
+
 function _switchCategory(cat) {
     _activeCategory = cat;
     document.querySelectorAll('.conn-cat-tab').forEach(function (btn) {
@@ -26,21 +27,6 @@ async function init() {
     await window.requireAuth();
     renderNav('nav-root', 'connections');
 
-    // Workspace context
-    try {
-        var me = await api.get('/api/auth/me');
-        var wsCtx = {
-            personal: me.workspace_personal !== false,
-            id: me.workspace_id || me.username,
-            name: me.workspace_name || (me.workspace_personal !== false ? 'Personal' : me.workspace_id),
-        };
-        setWsCtx(wsCtx);
-        if (!wsCtx.personal) {
-            var subtitle = document.querySelector('.page-subtitle');
-            if (subtitle) subtitle.textContent = wsCtx.name;
-        }
-    } catch (err) { console.error('[connections] Error cargando contexto del workspace:', err); }
-
     await Providers.load();
     buildProviderSelect(_activeCategory);
     FilterConnections.init({
@@ -49,14 +35,38 @@ async function init() {
         onChange: _applyFilter,
     });
     await loadConnections();
-    if (window.FolderToggle) {
-        FolderToggle.init({
-            btn: 'btn-toggle-folders',
-            panels: ['conn-folder-panel'],
-            key: 'gaia-folders-connections',
+    _initPanels();
+    bindEvents();
+}
+
+function _initPanels() {
+    var btnGroups   = document.getElementById('btn-toggle-groups');
+    var groupsPanel = document.getElementById('conn-groups-panel');
+    var _groupsVisible = false;
+
+    if (groupsPanel && window.GroupPanel) {
+        var groupCtrl = GroupPanel('connection', function (groupId) {
+            window._connGroupMode = !!groupId;
+            if (groupId) {
+                loadConnections(groupId);
+            } else {
+                window._connGroupMode = false;
+                loadConnections();
+            }
+        });
+        groupCtrl.mount(groupsPanel);
+        groupCtrl.load();
+        window._groupPanelConn = groupCtrl;
+    }
+
+    if (btnGroups && groupsPanel) {
+        btnGroups.addEventListener('click', function () {
+            _groupsVisible = !_groupsVisible;
+            groupsPanel.classList.toggle('folder-panel--collapsed', !_groupsVisible);
+            btnGroups.classList.toggle('folder-toggle-btn--on', _groupsVisible);
+            btnGroups.title = _groupsVisible ? 'Ocultar grupos' : 'Grupos de trabajo';
         });
     }
-    bindEvents();
 }
 
 function bindEvents() {
@@ -94,7 +104,9 @@ function bindEvents() {
         var id = btn.dataset.id;
 
         if (action === 'share') {
-            if (window.shareTeams) shareTeams.open('connection', id, btn.dataset.name || id);
+            if (window.GroupShareDialog) {
+                GroupShareDialog.open('connection', id, btn.dataset.name || id, loadConnections);
+            }
             return;
         } else if (action === 'test') {
             testConnections([id]);

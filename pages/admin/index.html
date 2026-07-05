@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="/assets/css/layout.css" />
     <link rel="stylesheet" href="/assets/css/animations.css" />
     <link rel="stylesheet" href="/assets/components/main_nav/main_nav.css" />
+    <link rel="stylesheet" href="/assets/components/workspace-create-wizard/workspace-create-wizard.css" />
     <link rel="stylesheet" href="/admin/admin.css" />
     <link rel="stylesheet" href="/assets/css/modals.css" />
 </head>
@@ -37,8 +38,7 @@
             <div class="admin-tabs">
                 <button class="admin-tab active" data-tab="general">General</button>
                 <button class="admin-tab" data-tab="users">Usuarios</button>
-                <button class="admin-tab" data-tab="workspaces">Workspaces</button>
-                <button class="admin-tab" data-tab="teams">Grupos</button>
+                <button class="admin-tab" data-tab="workspaces">Grupos</button>
                 <button class="admin-tab" data-tab="agents">Agentes</button>
                 <button class="admin-tab" data-tab="connections">Conexiones</button>
                 <button class="admin-tab" data-tab="knowledge">Conocimiento</button>
@@ -80,6 +80,11 @@
                         <option value="true">Verificados</option>
                         <option value="false">Sin verificar</option>
                     </select>
+                    <button id="btn-new-user" class="btn btn-primary btn-sm" style="display:none;margin-left:auto">
+                        <svg width="13" height="13" viewBox="0 0 16 16" fill="none" style="margin-right:5px">
+                            <path d="M8 2v12M2 8h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>Nuevo usuario
+                    </button>
                 </div>
                 <div id="users-table-wrap">
                     <table class="admin-table">
@@ -98,7 +103,7 @@
                 </div>
             </div>
 
-            <!-- Workspaces tab -->
+            <!-- Grupos tab -->
             <div id="tab-workspaces" class="admin-tab-panel" style="display:none">
                 <div class="admin-toolbar">
                     <div class="admin-search-wrap">
@@ -121,35 +126,6 @@
                             </tr>
                             <tr class="skeleton-row">
                                 <td colspan="9"></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- Teams tab -->
-            <div id="tab-teams" class="admin-tab-panel" style="display:none">
-                <div class="admin-toolbar">
-                    <div class="admin-search-wrap">
-                        <span class="search-icon"><svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                                <circle cx="6.5" cy="6.5" r="4" stroke="currentColor" stroke-width="1.6" />
-                                <path d="M11 11l3 3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
-                            </svg></span>
-                        <input id="team-search" type="search" class="admin-search"
-                            placeholder="Buscar por nombre o creador…">
-                    </div>
-                </div>
-                <div id="teams-table-wrap">
-                    <table class="admin-table">
-                        <tbody>
-                            <tr class="skeleton-row">
-                                <td colspan="5"></td>
-                            </tr>
-                            <tr class="skeleton-row">
-                                <td colspan="5"></td>
-                            </tr>
-                            <tr class="skeleton-row">
-                                <td colspan="5"></td>
                             </tr>
                         </tbody>
                     </table>
@@ -260,7 +236,6 @@
                                 <span class="admin-config-label">Modo</span>
                                 <select id="cfg-registration" class="select admin-config-select">
                                     <option value="open">Abierto</option>
-                                    <option value="invite">Solo invitación</option>
                                     <option value="closed">Cerrado</option>
                                 </select>
                             </div>
@@ -389,6 +364,52 @@
         </div>
     </div>
 
+    <!-- Modal crear usuario (solo en modo Cerrado) -->
+    <div id="modal-create-user" class="modal-bg" style="display:none">
+        <div class="modal-box" style="max-width:440px">
+            <div class="modal-header">
+                <h3 class="modal-title">Nuevo usuario</h3>
+                <button class="modal-close" id="btn-create-user-close">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="field">
+                    <label>Email <span style="color:var(--danger)">*</span></label>
+                    <input type="email" id="create-user-email" class="input" placeholder="usuario@empresa.com" autocomplete="off">
+                </div>
+                <div class="field">
+                    <label>Nombre para mostrar <span class="input-hint">(opcional)</span></label>
+                    <input type="text" id="create-user-displayname" class="input" placeholder="Nombre Apellido" autocomplete="off">
+                </div>
+                <div class="field">
+                    <label>Contraseña <span style="color:var(--danger)">*</span></label>
+                    <input type="password" id="create-user-password" class="input" autocomplete="new-password">
+                    <span class="input-hint">Mínimo 4 caracteres</span>
+                </div>
+                <div class="field">
+                    <label>Rol</label>
+                    <select id="create-user-role" class="select">
+                        <option value="standard">Estándar</option>
+                        <option value="admin">Administrador</option>
+                    </select>
+                </div>
+                <div class="field" style="background:var(--surface-2);border-radius:8px;padding:10px 12px;margin-top:4px">
+                    <span style="font-size:12px;color:var(--ink-3)">
+                        <svg width="12" height="12" viewBox="0 0 16 16" fill="none" style="vertical-align:-2px;margin-right:4px">
+                            <circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.5"/>
+                            <circle cx="8" cy="5.5" r="0.8" fill="currentColor"/>
+                            <path d="M8 7.5v4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+                        </svg>
+                        La cuenta se crea verificada y activa. No se envía ningún email.
+                    </span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-ghost" id="btn-create-user-cancel">Cancelar</button>
+                <button class="btn btn-primary" id="btn-create-user-save">Crear usuario</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Modal editar usuario -->
     <div id="modal-edit-user" class="modal-bg" style="display:none">
         <div class="modal-box" style="max-width:420px">
@@ -437,10 +458,10 @@
     <script src="/assets/js/api.js"></script>
     <script src="/assets/js/utils.js"></script>
     <script src="/assets/components/main_nav/main_nav.js"></script>
+    <script src="/assets/components/workspace-create-wizard/workspace-create-wizard.js"></script>
     <script src="/admin/admin-stats.js"></script>
     <script src="/admin/admin-users.js"></script>
     <script src="/admin/admin-workspaces.js"></script>
-    <script src="/admin/admin-teams.js"></script>
     <script src="/admin/admin-agents.js"></script>
     <script src="/admin/admin-connections.js"></script>
     <script src="/admin/admin-knowledge.js"></script>

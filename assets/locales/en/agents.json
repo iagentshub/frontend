@@ -48,7 +48,11 @@
     "use_your_ai": "USE YOUR AI",
     "chat": "Chat",
     "chat_no_conn": "Set up a connection for this agent",
-    "chat_conn_error": "Connection is not available"
+    "chat_conn_error": "Connection is not available",
+    "badge_mine": "Yours",
+    "set_connection": "Set connection",
+    "set_connection_hint": "Select the connection to test this shortcut.",
+    "remove_link": "Remove shortcut"
   },
   "filter": {
     "search_placeholder": "Search by name or description...",
@@ -214,7 +218,8 @@
     "search_placeholder": "Search agents…",
     "empty": "No public agents available",
     "empty_search": "No agents match your search",
-    "fork_btn": "Customize"
+    "fork_btn": "Customize",
+    "use_btn": "Use"
   },
   "blueprint": {
     "title": "Agent structure",

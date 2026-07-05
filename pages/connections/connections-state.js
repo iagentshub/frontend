@@ -14,8 +14,10 @@ function getVisibleConnectionIds() {
         .map(function (c) { return c.id; });
 }
 
-async function loadConnections() {
-    _connections = await api.get('/api/connections');
+async function loadConnections(groupId) {
+    var url = '/api/connections';
+    if (groupId) url += '?group_id=' + encodeURIComponent(groupId);
+    _connections = await api.get(url);
     _applyFilter();
 }
 
@@ -24,19 +26,20 @@ function _applyFilter() {
     var q = f.query.toLowerCase();
     var types = f.types;
     var labels = f.labels;
+    // En modo grupo no filtramos por categoría — mostramos todas las conexiones del grupo
+    var groupMode = !!window._connGroupMode;
     var filtered = _connections.filter(function (c) {
-        var matchCat = Providers.category(c.type) === _categoryFilter;
+        var matchCat = groupMode || Providers.category(c.type) === _categoryFilter;
         var matchQ = !q || c.name.toLowerCase().indexOf(q) !== -1;
         var matchT = !types.length || types.indexOf(c.type) !== -1;
         var matchL = !labels.length || (function () {
-            // AND entre grupos: cada etiqueta seleccionada debe estar en la conexión
             return labels.every(function (lk) {
                 return (c.labels || []).indexOf(lk) !== -1;
             });
         }());
         return matchCat && matchQ && matchT && matchL;
     });
-    renderGrouped(filtered, _categoryFilter);
+    renderGrouped(filtered, groupMode ? null : _categoryFilter);
 }
 
 function renderGrouped(conns, category) {
@@ -50,11 +53,16 @@ function renderGrouped(conns, category) {
         return;
     }
 
-    var order = Providers.order(category || _categoryFilter);
+    // category === null → modo grupo: mostrar todos los tipos presentes
+    var order = category ? Providers.order(category) : (function () {
+        var seen = [], types = [];
+        list.forEach(function (c) { if (c.type && seen.indexOf(c.type) === -1) { seen.push(c.type); types.push(c.type); } });
+        return types;
+    }());
     var groups = {};
     order.forEach(function (t) { groups[t] = []; });
     list.forEach(function (c) {
-        var t = c.type || order[0] || '';
+        var t = c.type || (order[0] || '');
         if (!groups[t]) groups[t] = [];
         groups[t].push(c);
     });
@@ -101,19 +109,38 @@ function renderCard(c) {
     var urlBadge = _isCustomUrl(c)
         ? '<span class="conn-url-badge" title="' + esc(c.url) + '">' + t('connections.card.custom_url') + '</span>'
         : '';
-    var sharedBadge = c._shared
-        ? '<span class="conn-token-badge" style="background:var(--surface-3)">' + (t('teams.teams.sharing.shared_badge') || 'Compartido') + '</span>'
+
+    // Badge de propiedad: solo en modo grupo
+    var ownerBadge = '';
+    if (window._connGroupMode) {
+        if (c._shared) {
+            var ownerLabel = c.owner_id ? '@' + c.owner_id : (t('teams.sharing.shared_badge') || 'Compartido');
+            ownerBadge = '<span class="res-badge res-badge--shared">' + esc(ownerLabel) + '</span>';
+        } else {
+            ownerBadge = '<span class="res-badge res-badge--mine">' + (t('agents.card.badge_mine') || 'Tuyo') + '</span>';
+        }
+    }
+
+    // Label chips: todos los grupos incluido privado
+    var labelChips = (window.LABELS && c.labels && c.labels.length)
+        ? LABELS.renderChips(c.labels, { hide: [] })
         : '';
+    var labelsRow = labelChips
+        ? '<div class="label-chips-row conn-label-chips">' + labelChips + '</div>'
+        : '';
+
     var personalBadge = c._personal_key
         ? '<span class="conn-scope-badge">' + (t('connections.card.scope_personal') || 'Personal') + '</span>'
         : '';
+
     return '<article class="conn-card" data-conn-id="' + esc(c.id) + '">' +
         '<div class="conn-card-body">' +
         '<div class="conn-card-name-row">' +
         '<div class="conn-card-name">' + esc(c.name) + '</div>' +
-        tokenBadge + sharedBadge + personalBadge +
+        tokenBadge + ownerBadge + personalBadge +
         '</div>' +
         (sub ? '<div class="conn-card-sub">' + esc(sub) + (urlBadge ? ' ' + urlBadge : '') + '</div>' : (!urlBadge ? '' : '<div class="conn-card-sub">' + urlBadge + '</div>')) +
+        labelsRow +
         '<div class="conn-card-status"></div>' +
         '</div>' +
         '<footer class="conn-card-footer">' +
@@ -121,12 +148,13 @@ function renderCard(c) {
         '<svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M4 2.5l9 5.5-9 5.5V2.5z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button>' +
         '<button class="cca-btn" data-action="edit" data-id="' + esc(c.id) + '" title="' + t('connections.actions.edit') + '">' +
         '<svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M11 2l3 3-9 9H2v-3l9-9z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button>' +
-        (!c._shared ? '<button class="cca-btn" data-action="share" data-id="' + esc(c.id) + '" data-name="' + esc(c.name) + '" title="' + (t('teams.teams.sharing.share_with') || 'Compartir') + '">' +
+        (!c._shared ? '<button class="cca-btn" data-action="share" data-id="' + esc(c.id) + '" data-name="' + esc(c.name) + '" title="' + (t('teams.sharing.share_with') || 'Compartir con grupo') + '">' +
             '<svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="12" cy="3" r="1.5" stroke="currentColor" stroke-width="1.4"/><circle cx="12" cy="13" r="1.5" stroke="currentColor" stroke-width="1.4"/><circle cx="4" cy="8" r="1.5" stroke="currentColor" stroke-width="1.4"/><path d="M10.5 3.8L5.5 7.2M10.5 12.2L5.5 8.8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>' +
             '</button>' : '') +
-        '<button class="cca-btn cca-btn--delete" data-action="delete" data-id="' + esc(c.id) + '" title="' + t('connections.actions.delete') + '">' +
+        (!c._shared ? '<button class="cca-btn cca-btn--delete" data-action="delete" data-id="' + esc(c.id) + '" title="' + t('connections.actions.delete') + '">' +
         '<svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M2 4h12M5 4V2h6v2M6 7v5M10 7v5M3 4l1 9h8l1-9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
-        '</button></footer></article>';
+        '</button>' : '') +
+        '</footer></article>';
 }
 
 function setStatus(id, state, msg, detail) {

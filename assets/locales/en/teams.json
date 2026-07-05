@@ -48,11 +48,22 @@
       "col_shared_by": "Shared by",
       "col_date": "Date"
     },
+    "groups": {
+      "title": "Work groups",
+      "empty": "You don't belong to any group yet.",
+      "all": "All",
+      "badge_mine": "Yours"
+    },
     "sharing": {
-      "share_with": "Share with",
+      "share_with": "Share with group",
       "modal_title": "Share — {{name}}",
       "no_teams": "You don't belong to any team.",
+      "no_groups": "You don't have any work groups.",
+      "select_groups": "Select the groups with access",
       "shared_badge": "Shared",
+      "confirm": "Save",
+      "cancel": "Cancel",
+      "saved": "Access updated",
       "save": "Save",
       "col_group": "Group",
       "col_role": "Role",

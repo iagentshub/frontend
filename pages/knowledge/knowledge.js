@@ -40,6 +40,11 @@ function _initFilters() {
 async function init() {
     await window.requireAuth();
     renderNav('nav-root', 'knowledge');
+    try {
+        var me = await api.get('/api/auth/me');
+        window.__ME__ = me.username || null;
+        window.__WS_IS_TEAM__ = false; // siempre personal tras eliminar workspace switching
+    } catch (e) { /* deja los botones fork/link-a-personal ocultos si falla */ }
     _initCatalog();
     _initFolders();
     _bindTabs();
@@ -84,29 +89,38 @@ function _initCatalog() {
     });
 }
 
+var _SVG_FOLDER_KN = '<svg width="14" height="14" viewBox="0 0 16 16" fill="none">' +
+    '<path d="M1.5 4.5A1 1 0 012.5 3.5h3.27l1.46 1.5H13.5A1 1 0 0114.5 6v6a1 1 0 01-1 1h-11a1 1 0 01-1-1V4.5z"' +
+    ' stroke="currentColor" stroke-width="1.4" fill="none"/></svg>';
+
+var _activeGroupKnId = null;
+var _groupPanelInstances = [];
+
+function _onKnGroupSelect(groupId) {
+    _activeGroupKnId = groupId || null;
+    // Sincronizar selección en todos los paneles de grupos sin relanzar callbacks
+    _groupPanelInstances.forEach(function (gp) { gp.syncActive(_activeGroupKnId); });
+    // Recargar pestaña activa con el grupo
+    if (_activeTab === 'skills') loadSkills(null, _activeGroupKnId);
+    else if (_activeTab === 'urls') KnowledgeUrls.load(null, _activeGroupKnId);
+    else if (_activeTab === 'documents') KnowledgeDocs.load(null, _activeGroupKnId);
+    else if (_activeTab === 'memory') KnowledgeMemory.load(null, _activeGroupKnId);
+}
+
 function _initFolders() {
-    _folderSkills = KnowledgeFolders('skill', function (folderId) {
-        loadSkills(folderId);
-    });
-    _folderUrls = KnowledgeFolders('url', function (folderId) {
-        KnowledgeUrls.load(folderId);
-    });
-    _folderDocs = KnowledgeFolders('document', function (folderId) {
-        KnowledgeDocs.load(folderId);
-    });
-    _folderMemory = KnowledgeFolders('memory', function (folderId) {
-        KnowledgeMemory.load(folderId);
-    });
+    _folderSkills = KnowledgeFolders('skill', function (folderId) { loadSkills(folderId); });
+    _folderUrls   = KnowledgeFolders('url', function (folderId) { KnowledgeUrls.load(folderId); });
+    _folderDocs   = KnowledgeFolders('document', function (folderId) { KnowledgeDocs.load(folderId); });
+    _folderMemory = KnowledgeFolders('memory', function (folderId) { KnowledgeMemory.load(folderId); });
 
     _folderSkills.mount(document.getElementById('kf-panel-skill'));
     _folderUrls.mount(document.getElementById('kf-panel-url'));
     _folderDocs.mount(document.getElementById('kf-panel-document'));
     _folderMemory.mount(document.getElementById('kf-panel-memory'));
 
-    // Expose as globals so sub-modules can call updateStats
     window._folderSkills = _folderSkills;
-    window._folderUrls = _folderUrls;
-    window._folderDocs = _folderDocs;
+    window._folderUrls   = _folderUrls;
+    window._folderDocs   = _folderDocs;
     window._folderMemory = _folderMemory;
 
     _folderSkills.load();
@@ -114,13 +128,62 @@ function _initFolders() {
     _folderDocs.load();
     _folderMemory.load();
 
-    if (window.FolderToggle) {
-        FolderToggle.init({
-            btns: '.kf-toggle-btn',
-            panels: ['kf-panel-skill', 'kf-panel-url', 'kf-panel-document', 'kf-panel-memory'],
-            key: 'gaia-folders-knowledge',
+    // ── Paneles de grupos (uno por tab) ─────────────────────────────────────
+    var _kgSections = ['skill', 'url', 'document', 'memory'];
+    _kgSections.forEach(function (sec) {
+        var panelEl = document.getElementById('kg-panel-' + sec);
+        if (!panelEl || !window.GroupPanel) return;
+        var gp = GroupPanel(sec, _onKnGroupSelect);
+        gp.mount(panelEl);
+        gp.load();
+        _groupPanelInstances.push(gp);
+    });
+
+    // ── Toggles para folders (inyectar icono + exclusión mutua) ─────────────
+    var _folderVisible = localStorage.getItem('gaia-folders-knowledge') !== 'false';
+    var _groupsVisible = false;
+
+    function _applyKnPanels() {
+        var kfPanels = ['kf-panel-skill', 'kf-panel-url', 'kf-panel-document', 'kf-panel-memory'];
+        var kgPanels = ['kg-panel-skill', 'kg-panel-url', 'kg-panel-document', 'kg-panel-memory'];
+        kfPanels.forEach(function (id) {
+            var el = document.getElementById(id);
+            if (el) el.classList.toggle('folder-panel--collapsed', !_folderVisible);
+        });
+        kgPanels.forEach(function (id) {
+            var el = document.getElementById(id);
+            if (el) el.classList.toggle('folder-panel--collapsed', !_groupsVisible);
+        });
+        document.querySelectorAll('.kf-toggle-btn').forEach(function (btn) {
+            btn.innerHTML = _SVG_FOLDER_KN;
+            btn.classList.toggle('folder-toggle-btn--on', _folderVisible);
+            btn.title = _folderVisible ? 'Ocultar carpetas' : 'Mostrar carpetas';
+        });
+        document.querySelectorAll('.kg-toggle-btn').forEach(function (btn) {
+            btn.classList.toggle('folder-toggle-btn--on', _groupsVisible);
+            btn.title = _groupsVisible ? 'Ocultar grupos' : 'Grupos de trabajo';
         });
     }
+
+    document.querySelectorAll('.kf-toggle-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            _folderVisible = !_folderVisible;
+            if (_folderVisible) _groupsVisible = false;
+            localStorage.setItem('gaia-folders-knowledge', String(_folderVisible));
+            _applyKnPanels();
+        });
+    });
+
+    document.querySelectorAll('.kg-toggle-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            _groupsVisible = !_groupsVisible;
+            if (_groupsVisible) _folderVisible = false;
+            localStorage.setItem('gaia-folders-knowledge', String(_folderVisible));
+            _applyKnPanels();
+        });
+    });
+
+    _applyKnPanels();
 }
 
 function _bindTabs() {
@@ -181,11 +244,12 @@ function _initViewToggle() {
     });
 }
 
-async function loadSkills(folderId) {
+async function loadSkills(folderId, groupId) {
     _activeFolderIdSkill = folderId || null;
+    var groupParam = groupId ? '&group_id=' + encodeURIComponent(groupId) : '';
     var results = await Promise.all([
-        api.get('/api/skills?scope=private'),
-        api.get('/api/skills?scope=public'),
+        api.get('/api/skills?scope=private' + groupParam),
+        groupId ? Promise.resolve([]) : api.get('/api/skills?scope=public'),
     ]);
     _privateSkills = results[0];
     // Merge social data (stars, verified) into private skills
@@ -202,9 +266,9 @@ async function loadSkills(folderId) {
             }) : s;
         });
     } catch (err) { console.error('[knowledge] Error cargando datos sociales de skills:', err); }
-    SkillCatalog.setSkills(results[1]);
+    SkillCatalog.setSkills(results[1].concat(_privateSkills.filter(function (s) { return s._shared; })));
     _applySkillFilter();
-    if (_folderSkills) _folderSkills.updateStats(_privateSkills);
+    if (_folderSkills) _folderSkills.updateStats(_privateSkills.filter(function (s) { return !s._shared; }));
 }
 
 function _renderSkillsPage() {
@@ -222,6 +286,7 @@ function _applySkillFilter() {
     var f = _fkSkills ? _fkSkills.getFilter() : { query: '', labels: [] };
     var q = (f.query || '').toLowerCase();
     _lastSkillsFiltered = _privateSkills.filter(function (s) {
+        if (s._shared) return false;
         if (_activeFolderIdSkill !== null && s.folder_id !== _activeFolderIdSkill) return false;
         if (f.labels.length && !f.labels.some(function (lbl) {
             return (s.labels || ['private']).indexOf(lbl) !== -1;
@@ -400,13 +465,13 @@ function bindEvents() {
                 await loadSkills(_folderSkills ? _folderSkills.getActive() : null);
             } catch (e) { toast(e.message, 'error'); }
         } else if (action === 'share-skill') {
-            if (window.shareTeams) shareTeams.open('skill', id, btn.dataset.name || id);
+            if (window.GroupShareDialog) GroupShareDialog.open('skill', id, btn.dataset.name || id);
         } else if (action === 'export-skill') {
             _openSkillExport(scope, id);
         } else if (action === 'fork-skill') {
             btn.disabled = true;
             try {
-                var forkRes = await api.post('/api/skills/private/' + encodeURIComponent(id) + '/fork');
+                var forkRes = await api.post('/api/skills/private/' + encodeURIComponent(id) + '/fork', {});
                 toast((window.t ? t('labels.actions.fork_success') : 'Copiado') + ': ' + forkRes.name, 'success');
             } catch (err) {
                 toast(window.t ? t('labels.actions.fork_error') : err.message, 'error');
@@ -415,7 +480,7 @@ function bindEvents() {
         } else if (action === 'link-skill') {
             btn.disabled = true;
             try {
-                var linkRes = await api.post('/api/skills/private/' + encodeURIComponent(id) + '/link');
+                var linkRes = await api.post('/api/skills/private/' + encodeURIComponent(id) + '/link', {});
                 toast((window.t ? t('labels.actions.link_success') : 'Enlazado') + ': ' + linkRes.name, 'success');
                 await loadSkills(_folderSkills ? _folderSkills.getActive() : null);
             } catch (err) {

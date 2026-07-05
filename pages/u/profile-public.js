@@ -200,7 +200,7 @@
             var forkBtn = isForkable
                 ? '<button class="pub-resource-fork' + (forked ? ' forked' : '') + '" data-action="pub-fork"' +
                   ' data-type="' + _esc(r.resource_type) + '" data-id="' + _esc(r.resource_id) + '"' +
-                  ' data-key="' + _esc(key) + '" title="' + (forked ? 'Ya copiado' : 'Copiar a mi workspace') + '"' +
+                  ' data-key="' + _esc(key) + '" title="' + (forked ? 'Ya copiado' : 'Copiar') + '"' +
                   (forked ? ' disabled' : '') + '>' + _SVG_FORK + '</button>'
                 : '';
             var labelChips = (window.LABELS && r.labels && r.labels.length)
@@ -235,7 +235,7 @@
             _forked[key] = true;
             btn.classList.add('forked');
             btn.title = 'Ya copiado';
-            if (window.toast) toast((type === 'skill' ? 'Skill' : 'Agente') + ' copiado a tu workspace', 'success');
+            if (window.toast) toast((type === 'skill' ? 'Skill copiada' : 'Agente copiado'), 'success');
         } catch (_) {
             btn.disabled = false;
         }

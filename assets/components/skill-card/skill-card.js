@@ -50,18 +50,15 @@
                 ? '<span style="font-size:1.1rem;line-height:1">' + esc(skill.icon) + '</span>'
                 : FALLBACK_ICON;
 
-            // Scope badge — only shown when noteworthy (not private default)
-            var scopeBadge = '';
-            if (isPrivate && isShared) {
-                scopeBadge = '<span class="skill-scope-badge skill-scope-badge--shared">' +
-                    (window.t ? window.t('skills.scope.badge_shared') : 'compartida') + '</span>';
-            } else if (!isPrivate) {
-                scopeBadge = '<span class="skill-scope-badge skill-scope-badge--public">' +
-                    (window.t ? window.t('skills.scope.badge_public') : 'pública') + '</span>';
-            } else {
-                // private — show a subtle badge so user knows it's theirs
-                scopeBadge = '<span class="skill-scope-badge skill-scope-badge--private">' +
-                    (window.t ? window.t('skills.scope.badge_private') : 'privada') + '</span>';
+            // Badge de propiedad: solo en modo grupo
+            var ownerBadge = '';
+            if (window._activeGroupKnId) {
+                if (isShared) {
+                    var ownerLabel = skill.owner_id ? '@' + skill.owner_id : (window.t ? window.t('teams.sharing.shared_badge') : 'Compartido');
+                    ownerBadge = '<span class="res-badge res-badge--shared">' + esc(ownerLabel) + '</span>';
+                } else {
+                    ownerBadge = '<span class="res-badge res-badge--mine">' + (window.t ? window.t('agents.card.badge_mine') : 'Tuyo') + '</span>';
+                }
             }
 
             var catKey = skill.category;
@@ -89,7 +86,7 @@
                 ? '<button class="skill-action-icon" data-action="edit-skill" data-id="' + esc(skill.id) + '" data-scope="' + resolvedScope + '" title="' + (window.t ? window.t('skills.actions.edit') : 'Editar') + '">' + EDIT_SVG + '</button>'
                 : '';
             var shareBtn = canEdit
-                ? '<button class="skill-action-icon skill-action-icon--share" data-action="share-skill" data-id="' + esc(skill.id) + '" data-name="' + esc(skill.name) + '" title="' + (window.t ? window.t('skills.actions.share') : 'Compartir') + '">' + SHARE_SVG + '</button>'
+                ? '<button class="skill-action-icon skill-action-icon--share" data-action="share-skill" data-id="' + esc(skill.id) + '" data-name="' + esc(skill.name) + '" title="' + (window.t ? window.t('teams.sharing.share_with') : 'Compartir con grupo') + '">' + SHARE_SVG + '</button>'
                 : '';
             var moveBtn = (opts && opts.showMove && canEdit)
                 ? '<button class="skill-action-icon" data-move-id="' + esc(skill.id) + '" title="Mover a carpeta">' + FOLDER_SVG + '</button>'
@@ -123,14 +120,14 @@
                 '<div class="skill-card-meta">' +
                 '<div class="skill-card-name-row">' +
                 '<span class="skill-card-name" title="' + esc(skill.name) + '">' + esc(skill.name) + '</span>' +
-                scopeBadge + starsBadge + verifiedBadge +
+                ownerBadge + starsBadge + verifiedBadge +
                 '</div>' +
                 (categoryBadge ? '<div class="skill-card-sub">' + categoryBadge + '</div>' : '') +
                 '</div>' +
                 '</div>' +
                 descHtml +
                 (window.LABELS && skill.labels && skill.labels.length
-                    ? '<div class="label-chips-row" style="margin-top:5px;padding:0 1px">' + LABELS.renderChips(skill.labels) + '</div>'
+                    ? '<div class="label-chips-row" style="margin-top:5px;padding:0 1px">' + LABELS.renderChips(skill.labels, { hide: [] }) + '</div>'
                     : '') +
                 '</div>' +
                 '<footer class="skill-card-footer">' +

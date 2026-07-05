@@ -4,17 +4,18 @@
 var AgentCatalog = (function () {
     var _agents = [];
     var _onFork = null;
+    var _onUse = null;
     var _query = '';
 
     var _SVG_SEARCH = '<svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="6.5" cy="6.5" r="4" stroke="currentColor" stroke-width="1.6"/><path d="M11 11l3 3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>';
 
-    function _publicAgents() {
-        return _agents.filter(function (a) { return (a.scope || 'private') === 'public'; });
+    function _directoryAgents() {
+        return _agents.filter(function (a) { return (a.scope || 'private') === 'public' || a._shared; });
     }
 
     function _filtered() {
         var q = _query.toLowerCase().trim();
-        var pub = _publicAgents();
+        var pub = _directoryAgents();
         if (!q) return pub;
         return pub.filter(function (a) {
             return a.name.toLowerCase().indexOf(q) !== -1 ||
@@ -23,15 +24,22 @@ var AgentCatalog = (function () {
     }
 
     function _renderCard(a) {
+        var badge = a._shared
+            ? '<span class="ac-card-badge ac-card-badge--shared">' +
+              (t('teams.teams.sharing.shared_badge') || 'Compartido') + '</span>'
+            : '';
+        var actionBtn = a._shared
+            ? '<button class="ac-fork-btn" data-action="use" data-id="' + esc(a.id) + '">' +
+              (t('agents.catalog.use_btn') || 'Usar') + '</button>'
+            : '<button class="ac-fork-btn" data-action="fork" data-id="' + esc(a.id) + '">' +
+              t('agents.catalog.fork_btn') + '</button>';
         return '<div class="ac-card">' +
             '<div class="ac-card-body">' +
-            '<div class="ac-card-name">' + esc(a.name) + '</div>' +
+            '<div class="ac-card-name">' + esc(a.name) + badge + '</div>' +
             '<div class="ac-card-desc">' + esc(a.description || t('agents.card.no_description')) + '</div>' +
             '</div>' +
             '<div class="ac-card-footer">' +
-            '<button class="ac-fork-btn" data-id="' + esc(a.id) + '">' +
-            t('agents.catalog.fork_btn') +
-            '</button>' +
+            actionBtn +
             '</div>' +
             '</div>';
     }
@@ -50,7 +58,10 @@ var AgentCatalog = (function () {
         grid.querySelectorAll('.ac-fork-btn').forEach(function (btn) {
             btn.addEventListener('click', function () {
                 var agent = _agents.find(function (a) { return a.id === btn.dataset.id; });
-                if (agent && typeof _onFork === 'function') {
+                if (!agent) return;
+                if (btn.dataset.action === 'use') {
+                    if (typeof _onUse === 'function') { _close(); _onUse(agent); }
+                } else if (typeof _onFork === 'function') {
                     _close();
                     _onFork(agent);
                 }
@@ -76,6 +87,7 @@ var AgentCatalog = (function () {
     return {
         init: function (opts) {
             _onFork = opts.onFork || null;
+            _onUse = opts.onUse || null;
 
             var mountEl = typeof opts.mountEl === 'string'
                 ? document.querySelector(opts.mountEl)

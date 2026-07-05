@@ -22,7 +22,8 @@ Scripts are loaded with `<script>` tags in a specific order. Global utilities mu
 | `assets/js/api.js` | `fetch` wrapper — exposes `window.api.get/post/del`; errors include `.status` for programmatic handling |
 | `assets/js/utils.js` | Shared helpers (`esc`, etc.) |
 | `assets/js/providers.js` | Provider singleton — loads `/api/connections/providers` once and exposes `Providers.list/meta/fields/order/first` |
-| `assets/js/share-teams.js` | Resource sharing modal — letter avatars with deterministic colors; invoked via `shareTeams.open(type, id, name)` |
+| `assets/components/workspace-share-dialog/workspace-share-dialog.js` | Modal to share a resource with an ENTIRE workspace (no groups, no moving/copying the resource); invoked via `WorkspaceShareDialog.open(type, id, name)` |
+| `assets/components/workspace-create-wizard/workspace-create-wizard.js` | Workspace creation wizard (name → add existing content? → link agents/skills/knowledge or share connections); invoked via `WorkspaceCreateWizard.open()` |
 
 ---
 
@@ -37,8 +38,8 @@ Scripts are loaded with `<script>` tags in a specific order. Global utilities mu
 | Connections | `connections/connections-state.js`, `connections/connections-modal.js`, `connections/connections.js` — providers loaded dynamically via `Providers` |
 | Memory | `memory/memory-render.js`, `memory/memory-modal.js`, `memory/memory-load.js`, `memory/memory.js` |
 | Knowledge | `knowledge/skills-load.js`, `knowledge/knowledge.js`, `knowledge/knowledge-urls.js`, `knowledge/knowledge-docs.js` |
-| Profile | `profile/profile.js`, `profile/profile-workspaces.js` (group management within the workspace modal), `profile/profile-accounts.js` |
-| Admin | `admin/admin-stats.js`, `admin/admin-users.js`, `admin/admin-teams.js`, `admin/admin-agents.js`, `admin/admin-connections.js`, `admin/admin-knowledge.js`, `admin/admin-logs.js`, `admin/admin-workspaces.js` |
+| Profile | `profile/profile.js`, `profile/profile-workspaces.js` (member and invitation management), `profile/profile-accounts.js` |
+| Admin | `admin/admin-stats.js`, `admin/admin-users.js`, `admin/admin-agents.js`, `admin/admin-connections.js`, `admin/admin-knowledge.js`, `admin/admin-logs.js`, `admin/admin-workspaces.js` |
 
 ---
 

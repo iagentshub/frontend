@@ -29,10 +29,10 @@
     "placeholder_host": "http://localhost:11434",
     "placeholder_model": "gpt-4o / claude-sonnet-4-5 / llama3.2",
     "field_scope": "Save as",
-    "scope_workspace": "Workspace key",
+    "scope_workspace": "Shared key",
     "scope_personal": "Personal key",
-    "scope_hint_workspace": "Visible to all workspace members",
-    "scope_hint_personal": "Only visible to you, in any workspace"
+    "scope_hint_workspace": "Shareable with group members",
+    "scope_hint_personal": "Only visible to you"
   },
   "ollama": {
     "enter_host": "Enter the host first",

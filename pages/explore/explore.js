@@ -210,7 +210,7 @@
             btn.classList.add('forked');
             btn.title = 'Ya copiado';
             var labels = { agent: 'Agente copiado', skill: 'Skill copiada', knowledge: 'Knowledge copiado' };
-            if (window.toast) toast((labels[type] || 'Copiado') + ' a tu workspace', 'success');
+            if (window.toast) toast(labels[type] || 'Copiado', 'success');
         } catch (_) {
             btn.disabled = false;
         }
@@ -320,7 +320,7 @@
 
     async function _inviteUser(username) {
         if (!_wsId) {
-            if (window.toast) toast(window.t ? t('explore.users.invite_no_ws') : 'Sin workspace activo', 'error');
+            if (window.toast) toast(window.t ? t('explore.users.invite_no_ws') : 'Selecciona un grupo primero', 'error');
             return;
         }
         try {

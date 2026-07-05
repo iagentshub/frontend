@@ -9,13 +9,13 @@ var SkillCatalog = (function () {
     var _SVG_SEARCH = '<svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="6.5" cy="6.5" r="4" stroke="currentColor" stroke-width="1.6"/><path d="M11 11l3 3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>';
     var _SVG_FALLBACK = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>';
 
-    function _publicSkills() {
-        return _skills.filter(function (s) { return (s.scope || 'public') === 'public'; });
+    function _directorySkills() {
+        return _skills.filter(function (s) { return (s.scope || 'public') === 'public' || s._shared; });
     }
 
     function _filtered() {
         var q = _query.toLowerCase().trim();
-        var pub = _publicSkills();
+        var pub = _directorySkills();
         if (!q) return pub;
         return pub.filter(function (s) {
             return s.name.toLowerCase().indexOf(q) !== -1 ||
@@ -30,14 +30,21 @@ var SkillCatalog = (function () {
         var catLabel = s.category
             ? '<span class="sc-card-category">' + esc(s.category) + '</span>'
             : '';
+        var badge = s._shared
+            ? '<span class="sc-card-badge sc-card-badge--shared">' +
+              (t('teams.teams.sharing.shared_badge') || 'Compartido') + '</span>'
+            : '';
+        var footer = s._shared
+            ? ''
+            : '<div class="sc-card-footer">' +
+              '<button class="sc-import-btn" data-id="' + esc(s.id) + '">' + esc(t('skills.catalog.import_btn')) + '</button>' +
+              '</div>';
         return '<div class="sc-card">' +
             '<div class="sc-card-body">' +
-            '<div class="sc-card-head">' + iconHtml + '<span class="sc-card-name">' + esc(s.name) + '</span>' + catLabel + '</div>' +
+            '<div class="sc-card-head">' + iconHtml + '<span class="sc-card-name">' + esc(s.name) + '</span>' + catLabel + badge + '</div>' +
             '<div class="sc-card-desc">' + esc(s.description || '') + '</div>' +
             '</div>' +
-            '<div class="sc-card-footer">' +
-            '<button class="sc-import-btn" data-id="' + esc(s.id) + '">' + esc(t('skills.catalog.import_btn')) + '</button>' +
-            '</div>' +
+            footer +
             '</div>';
     }
 

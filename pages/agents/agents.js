@@ -22,23 +22,76 @@ async function init() {
     _setupDragHandlers();
 }
 
-function _initFolders() {
-    var panelEl = document.getElementById('af-folder-panel');
-    if (!panelEl) return;
-    var folderCtrl = KnowledgeFolders('agents', function (folderId) {
-        _setActiveFolder(folderId);
-    });
-    folderCtrl.mount(panelEl);
-    folderCtrl.load();
-    window._folderAgents = folderCtrl;
+var _SVG_FOLDER = '<svg width="14" height="14" viewBox="0 0 16 16" fill="none">' +
+    '<path d="M1.5 4.5A1 1 0 012.5 3.5h3.27l1.46 1.5H13.5A1 1 0 0114.5 6v6a1 1 0 01-1 1h-11a1 1 0 01-1-1V4.5z"' +
+    ' stroke="currentColor" stroke-width="1.4" fill="none"/></svg>';
 
-    if (window.FolderToggle) {
-        FolderToggle.init({
-            btn: 'btn-toggle-folders',
-            panels: ['af-folder-panel'],
-            key: 'gaia-folders-agents',
+function _initFolders() {
+    var folderPanel = document.getElementById('af-folder-panel');
+    var groupsPanel = document.getElementById('af-groups-panel');
+    var btnFolders  = document.getElementById('btn-toggle-folders');
+    var btnGroups   = document.getElementById('btn-toggle-groups');
+
+    var _folderVisible = localStorage.getItem('gaia-folders-agents') !== 'false';
+    var _groupsVisible = false;
+
+    function _applyPanels() {
+        if (folderPanel) folderPanel.classList.toggle('folder-panel--collapsed', !_folderVisible);
+        if (groupsPanel) groupsPanel.classList.toggle('folder-panel--collapsed', !_groupsVisible);
+        if (btnFolders) {
+            btnFolders.innerHTML = _SVG_FOLDER;
+            btnFolders.classList.toggle('folder-toggle-btn--on', _folderVisible);
+            btnFolders.title = _folderVisible ? 'Ocultar carpetas' : 'Mostrar carpetas';
+        }
+        if (btnGroups) {
+            btnGroups.classList.toggle('folder-toggle-btn--on', _groupsVisible);
+            btnGroups.title = _groupsVisible ? 'Ocultar grupos' : 'Grupos de trabajo';
+        }
+    }
+
+    // ── Panel de carpetas ────────────────────────────────────────────────────
+    if (folderPanel) {
+        var folderCtrl = KnowledgeFolders('agents', function (folderId) {
+            _setActiveFolder(folderId);
+            if (window._groupPanelAgents) window._groupPanelAgents.clearSelection();
+        });
+        folderCtrl.mount(folderPanel);
+        folderCtrl.load();
+        window._folderAgents = folderCtrl;
+    }
+
+    // ── Panel de grupos ──────────────────────────────────────────────────────
+    if (groupsPanel && window.GroupPanel) {
+        var groupCtrl = GroupPanel('agents', function (groupId) {
+            _setActiveGroup(groupId);
+            if (!groupId && window._folderAgents) {
+                // al limpiar grupo, volver a vista normal
+            }
+        });
+        groupCtrl.mount(groupsPanel);
+        groupCtrl.load();
+        window._groupPanelAgents = groupCtrl;
+    }
+
+    // ── Toggles con exclusión mutua ──────────────────────────────────────────
+    if (btnFolders) {
+        btnFolders.addEventListener('click', function () {
+            _folderVisible = !_folderVisible;
+            if (_folderVisible) _groupsVisible = false;
+            localStorage.setItem('gaia-folders-agents', String(_folderVisible));
+            _applyPanels();
         });
     }
+    if (btnGroups) {
+        btnGroups.addEventListener('click', function () {
+            _groupsVisible = !_groupsVisible;
+            if (_groupsVisible) _folderVisible = false;
+            localStorage.setItem('gaia-folders-agents', String(_folderVisible));
+            _applyPanels();
+        });
+    }
+
+    _applyPanels();
 }
 
 function _setupDragHandlers() {
@@ -71,6 +124,9 @@ function _initCatalog() {
                 memory_file: agent.memory_file,
                 connection_id: agent.connection_id,
             });
+        },
+        onUse: function (agent) {
+            if (typeof openChat === 'function') openChat(agent);
         },
     });
 }
@@ -206,8 +262,10 @@ function _bindActions() {
             } catch (e) { toast(e.message, 'error'); }
         } else if (action === 'export') {
             _openExportModal(id);
+        } else if (action === 'set-conn') {
+            _openSetConnModal(id, btn.dataset.connId || '');
         } else if (action === 'share') {
-            if (window.shareTeams) shareTeams.open('agent', id, btn.dataset.name || id);
+            if (window.GroupShareDialog) GroupShareDialog.open('agent', id, btn.dataset.name || id, _loadAll);
         } else if (action === 'move-folder') {
             const currentFolder = btn.dataset.folderId || null;
             FolderMoveDialog.open('agents', id, currentFolder, function () { _loadAll(); });
@@ -226,7 +284,7 @@ function _bindActions() {
         } else if (action === 'fork') {
             btn.disabled = true;
             try {
-                const r = await api.post(`/api/agents/private/${encodeURIComponent(id)}/fork`);
+                const r = await api.post(`/api/agents/private/${encodeURIComponent(id)}/fork`, {});
                 toast((window.t ? t('labels.actions.fork_success') : 'Copiado') + ': ' + r.name, 'success');
             } catch (e) {
                 toast(window.t ? t('labels.actions.fork_error') : e.message, 'error');
@@ -235,7 +293,7 @@ function _bindActions() {
         } else if (action === 'link') {
             btn.disabled = true;
             try {
-                const r = await api.post(`/api/agents/private/${encodeURIComponent(id)}/link`);
+                const r = await api.post(`/api/agents/private/${encodeURIComponent(id)}/link`, {});
                 toast((window.t ? t('labels.actions.link_success') : 'Enlazado') + ': ' + r.name, 'success');
                 await _loadAll();
             } catch (e) {
@@ -402,6 +460,46 @@ function _openBlueprintModal(agent) {
         + '<div class="abp-section"><div class="abp-section-label">' + t('agents.blueprint.routines') + '</div>' + routinesHtml + '</div>';
 
     document.getElementById('agent-blueprint-modal').style.display = 'flex';
+}
+
+function _openSetConnModal(agentId, currentConnId) {
+    var existing = document.getElementById('set-conn-modal');
+    if (existing) existing.remove();
+    var conns = (window._connections || []).filter(function (c) { return !c._shared; });
+    var opts = '<option value="">' + (t('agents.card.no_connection') || '— Sin conexión —') + '</option>' +
+        conns.map(function (c) {
+            return '<option value="' + esc(c.id) + '"' + (c.id === currentConnId ? ' selected' : '') + '>' + esc(c.name) + '</option>';
+        }).join('');
+    var modal = document.createElement('div');
+    modal.id = 'set-conn-modal';
+    modal.className = 'modal-bg';
+    modal.innerHTML =
+        '<div class="modal-box" style="max-width:340px">' +
+        '<div class="modal-header">' +
+        '<h2 class="modal-title">' + (t('agents.card.set_connection') || 'Asignar conexión') + '</h2>' +
+        '<button class="modal-close" id="set-conn-close"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 1l12 12M13 1L1 13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>' +
+        '</div>' +
+        '<div class="modal-body">' +
+        '<p style="font-size:13px;color:var(--ink-2);margin:0 0 12px">' + (t('agents.card.set_connection_hint') || 'Selecciona la conexión para probar este acceso directo.') + '</p>' +
+        '<select class="select" id="set-conn-select">' + opts + '</select>' +
+        '</div>' +
+        '<div class="modal-footer">' +
+        '<button class="btn btn-ghost" id="set-conn-cancel">' + (t('common.cancel') || 'Cancelar') + '</button>' +
+        '<button class="btn btn-primary" id="set-conn-save">' + (t('common.save') || 'Guardar') + '</button>' +
+        '</div>' +
+        '</div>';
+    document.body.appendChild(modal);
+    modal.querySelector('#set-conn-close').addEventListener('click', function () { modal.remove(); });
+    modal.querySelector('#set-conn-cancel').addEventListener('click', function () { modal.remove(); });
+    modal.addEventListener('click', function (e) { if (e.target === modal) modal.remove(); });
+    modal.querySelector('#set-conn-save').addEventListener('click', async function () {
+        var connId = modal.querySelector('#set-conn-select').value;
+        try {
+            await api.put('/api/agents/' + encodeURIComponent(agentId), { connection_id: connId || null });
+            modal.remove();
+            await _loadAll();
+        } catch (e) { toast(e.message || 'Error', 'error'); }
+    });
 }
 
 init();

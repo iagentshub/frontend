@@ -6,9 +6,8 @@
     var _currentWs     = null;
     var _currentMembers = [];
     var _currentPending = [];
-    var _currentGroups  = [];
     var _canManage     = false;
-    var _modalTab      = 'members'; // 'members' | 'groups'
+    var _me            = null;
 
     // ── Helpers ────────────────────────────────────────────────────────────────
 
@@ -58,7 +57,7 @@
         if (!wrap) return;
         var teams = _workspaces.filter(function (w) { return w.type === 'team'; });
         if (!teams.length) {
-            wrap.innerHTML = '<p class="profile-empty-msg">No perteneces a ningún workspace de equipo.</p>';
+            wrap.innerHTML = '<p class="profile-empty-msg">No perteneces a ningún grupo de trabajo.</p>';
             return;
         }
         wrap.innerHTML = teams.map(function (ws) {
@@ -68,9 +67,8 @@
                 '<span class="profile-ws-name">' + esc(ws.name) + '</span>' +
                 '<span class="profile-ws-role">' + esc(_roleLabel(ws.role)) + '</span>' +
                 '</div>' +
-                (canManage
-                    ? '<button class="btn btn-ghost btn-sm" data-ws-manage="' + esc(ws.id) + '">Gestionar</button>'
-                    : '') +
+                '<button class="btn btn-ghost btn-sm" data-ws-manage="' + esc(ws.id) + '">' +
+                (canManage ? 'Gestionar' : 'Ver') + '</button>' +
                 '</div>';
         }).join('');
 
@@ -86,25 +84,36 @@
         _currentWs = _workspaces.find(function (w) { return w.id === wsId; }) || null;
         if (!_currentWs) return;
         _canManage = _currentWs.role === 'owner' || _currentWs.role === 'admin';
-        _modalTab  = 'members';
+        var isOwner = _currentWs.role === 'owner';
 
         document.getElementById('ws-members-modal-title').textContent = _currentWs.name;
         document.getElementById('ws-invite-section').style.display = _canManage ? '' : 'none';
         document.getElementById('ws-pending-section').style.display = _canManage ? '' : 'none';
         document.getElementById('ws-invite-username').value = '';
 
-        // Show modal tabs
-        var tabMembersBtn = document.getElementById('ws-modal-tab-members');
-        var tabGroupsBtn  = document.getElementById('ws-modal-tab-groups');
-        if (tabMembersBtn) tabMembersBtn.classList.add('active');
-        if (tabGroupsBtn)  tabGroupsBtn.classList.remove('active');
-        var panelMembers = document.getElementById('ws-modal-panel-members');
-        var panelGroups  = document.getElementById('ws-modal-panel-groups');
-        if (panelMembers) panelMembers.style.display = '';
-        if (panelGroups)  panelGroups.style.display  = 'none';
+        var dangerZone = document.getElementById('ws-danger-zone');
+        if (dangerZone) dangerZone.style.display = isOwner ? '' : 'none';
+        var leaveZone = document.getElementById('ws-leave-zone');
+        if (leaveZone) leaveZone.style.display = isOwner ? 'none' : '';
+        _renderDangerZone();
 
-        _reloadModalData();
+        _ensureMe().then(_reloadModalData);
         document.getElementById('modal-ws-members').style.display = '';
+    }
+
+    function _ensureMe() {
+        if (_me) return Promise.resolve(_me);
+        return api.get('/api/auth/me').then(function (d) {
+            _me = d.username;
+            return _me;
+        }).catch(function () { return null; });
+    }
+
+    function _renderDangerZone() {
+        var toggleBtn = document.getElementById('btn-ws-toggle-status');
+        if (!toggleBtn || !_currentWs) return;
+        var isDisabled = _currentWs.status === 'disabled';
+        toggleBtn.textContent = isDisabled ? 'Reactivar grupo' : 'Desactivar grupo';
     }
 
     function _reloadModalData() {
@@ -115,14 +124,11 @@
             _canManage
                 ? api.get('/api/workspaces/' + wsId + '/invitations').catch(function () { return []; })
                 : Promise.resolve([]),
-            api.get('/api/workspaces/' + wsId + '/groups').catch(function () { return []; }),
         ]).then(function (results) {
             _currentMembers = results[0] || [];
             _currentPending = results[1] || [];
-            _currentGroups  = results[2] || [];
             _renderModalMembers();
             _renderModalPending();
-            _renderModalGroups();
         });
     }
 
@@ -158,8 +164,8 @@
             var btn = e.target.closest('[data-remove-member]');
             if (!btn || !_currentWs) return;
             var uname = btn.getAttribute('data-remove-member');
-            if (!confirm('Quitar a ' + uname + ' del workspace?')) return;
-            api.delete('/api/workspaces/' + _currentWs.id + '/members/' + encodeURIComponent(uname))
+            if (!confirm('¿Quitar a ' + uname + ' del grupo?')) return;
+            api.del('/api/workspaces/' + _currentWs.id + '/members/' + encodeURIComponent(uname))
                 .then(function () {
                     toast('Miembro eliminado', 'success');
                     _reloadModalData();
@@ -186,7 +192,7 @@
             var btn = e.target.closest('[data-cancel-inv]');
             if (!btn || !_currentWs) return;
             var invId = btn.getAttribute('data-cancel-inv');
-            api.delete('/api/workspaces/' + _currentWs.id + '/invitations/' + invId)
+            api.del('/api/workspaces/' + _currentWs.id + '/invitations/' + invId)
                 .then(function () {
                     toast('Invitacion cancelada', 'success');
                     _reloadModalData();
@@ -195,154 +201,6 @@
         });
     }
 
-    // ── Groups panel inside modal ──────────────────────────────────────────────
-
-    function _renderModalGroups() {
-        var el = document.getElementById('ws-groups-list');
-        if (!el) return;
-        var newGroupBtn = document.getElementById('ws-new-group-row');
-
-        if (!_canManage && !_currentGroups.length) {
-            el.innerHTML = '<p class="profile-empty-msg">Sin grupos.</p>';
-            return;
-        }
-
-        var rows = _currentGroups.map(function (g) {
-            var memberCount = g.member_count != null ? g.member_count + ' miembros' : '';
-            return '<div class="ws-group-row" data-group-id="' + esc(g.id) + '" data-group-name="' + esc(g.name) + '">' +
-                '<div class="ws-group-info">' +
-                '<span class="ws-group-name">' + esc(g.name) + '</span>' +
-                '<span class="ws-group-count">' + esc(memberCount) + '</span>' +
-                '</div>' +
-                '<div class="ws-group-actions">' +
-                '<button class="btn btn-ghost btn-sm" data-group-members="' + esc(g.id) + '">Miembros</button>' +
-                (_canManage
-                    ? '<button class="btn btn-ghost btn-sm btn-danger-hover" data-group-delete="' + esc(g.id) + '">Eliminar</button>'
-                    : '') +
-                '</div>' +
-                '</div>';
-        }).join('');
-
-        el.innerHTML = rows || '<p class="profile-empty-msg">Sin grupos todavia.</p>';
-
-        el.addEventListener('click', function (e) {
-            var membersBtn = e.target.closest('[data-group-members]');
-            var deleteBtn  = e.target.closest('[data-group-delete]');
-            if (membersBtn) { _openGroupMembersPanel(membersBtn.getAttribute('data-group-members')); }
-            if (deleteBtn && _currentWs) {
-                var gid = deleteBtn.getAttribute('data-group-delete');
-                var row = deleteBtn.closest('.ws-group-row');
-                var gname = row ? row.getAttribute('data-group-name') : gid;
-                if (!confirm('Eliminar grupo "' + gname + '"?')) return;
-                api.delete('/api/workspaces/' + _currentWs.id + '/groups/' + gid)
-                    .then(function () {
-                        toast('Grupo eliminado', 'success');
-                        _reloadModalData();
-                    })
-                    .catch(function (err) { toast(err.detail || 'Error', 'error'); });
-            }
-        });
-
-        if (newGroupBtn) newGroupBtn.style.display = _canManage ? '' : 'none';
-    }
-
-    function _openGroupMembersPanel(groupId) {
-        if (!_currentWs) return;
-        var group = _currentGroups.find(function (g) { return g.id === groupId; });
-        if (!group) return;
-
-        var wsMembers = _currentMembers.map(function (m) { return m.username; });
-
-        api.get('/api/workspaces/' + _currentWs.id + '/groups/' + groupId + '/members')
-            .then(function (members) {
-                var memberSet = new Set(members.map(function (m) { return m.username; }));
-                var html = '<div style="margin-bottom:10px"><strong>' + esc(group.name) + '</strong> — miembros del grupo</div>';
-
-                if (_canManage) {
-                    // Show all workspace members with add/remove toggle
-                    html += _currentMembers.map(function (wm) {
-                        var inGroup = memberSet.has(wm.username);
-                        return '<div style="display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--line)">' +
-                            '<span>' + esc(wm.display_name || wm.username) + '</span>' +
-                            (inGroup
-                                ? '<button class="btn btn-ghost btn-sm btn-danger-hover" data-grp-remove="' + esc(groupId) + '" data-grp-user="' + esc(wm.username) + '">Quitar</button>'
-                                : '<button class="btn btn-ghost btn-sm" data-grp-add="' + esc(groupId) + '" data-grp-user="' + esc(wm.username) + '">Agregar</button>') +
-                            '</div>';
-                    }).join('');
-                } else {
-                    html += members.map(function (m) {
-                        return '<div style="padding:6px 0;border-bottom:1px solid var(--line)">' + esc(m.display_name || m.username) + '</div>';
-                    }).join('') || '<p class="profile-empty-msg">Sin miembros en este grupo.</p>';
-                }
-
-                // Replace groups list content temporarily
-                var el = document.getElementById('ws-groups-list');
-                if (!el) return;
-                el.innerHTML = '<button class="btn btn-ghost btn-sm" id="btn-back-groups" style="margin-bottom:12px">← Volver</button>' + html;
-
-                document.getElementById('btn-back-groups').addEventListener('click', function () {
-                    _renderModalGroups();
-                });
-
-                el.addEventListener('click', function (e) {
-                    var addBtn = e.target.closest('[data-grp-add]');
-                    var remBtn = e.target.closest('[data-grp-remove]');
-                    if (addBtn && _currentWs) {
-                        var uname = addBtn.getAttribute('data-grp-user');
-                        var gid   = addBtn.getAttribute('data-grp-add');
-                        api.post('/api/workspaces/' + _currentWs.id + '/groups/' + gid + '/members', { username: uname })
-                            .then(function () { _openGroupMembersPanel(gid); })
-                            .catch(function (err) { toast(err.detail || 'Error', 'error'); });
-                    }
-                    if (remBtn && _currentWs) {
-                        var uname = remBtn.getAttribute('data-grp-user');
-                        var gid   = remBtn.getAttribute('data-grp-remove');
-                        api.delete('/api/workspaces/' + _currentWs.id + '/groups/' + gid + '/members/' + encodeURIComponent(uname))
-                            .then(function () { _openGroupMembersPanel(gid); })
-                            .catch(function (err) { toast(err.detail || 'Error', 'error'); });
-                    }
-                });
-            })
-            .catch(function (err) { toast(err.detail || 'Error', 'error'); });
-    }
-
-    function _bindNewGroupBtn() {
-        var btn   = document.getElementById('btn-ws-new-group');
-        var input = document.getElementById('ws-new-group-name');
-        if (!btn || !input) return;
-        btn.addEventListener('click', function () {
-            var name = (input.value || '').trim();
-            if (!name || !_currentWs) return;
-            btn.disabled = true;
-            api.post('/api/workspaces/' + _currentWs.id + '/groups', { name: name })
-                .then(function () {
-                    input.value = '';
-                    toast('Grupo creado', 'success');
-                    _reloadModalData();
-                })
-                .catch(function (err) { toast(err.detail || 'Error al crear grupo', 'error'); })
-                .finally(function () { btn.disabled = false; });
-        });
-        input.addEventListener('keydown', function (e) { if (e.key === 'Enter') btn.click(); });
-    }
-
-    function _bindModalTabs() {
-        var tabM = document.getElementById('ws-modal-tab-members');
-        var tabG = document.getElementById('ws-modal-tab-groups');
-        var panM = document.getElementById('ws-modal-panel-members');
-        var panG = document.getElementById('ws-modal-panel-groups');
-        if (!tabM || !tabG) return;
-        tabM.addEventListener('click', function () {
-            tabM.classList.add('active');    tabG.classList.remove('active');
-            if (panM) panM.style.display = ''; if (panG) panG.style.display = 'none';
-            _modalTab = 'members';
-        });
-        tabG.addEventListener('click', function () {
-            tabG.classList.add('active');    tabM.classList.remove('active');
-            if (panG) panG.style.display = ''; if (panM) panM.style.display = 'none';
-            _modalTab = 'groups';
-        });
-    }
 
     function _bindInviteBtn() {
         var btn = document.getElementById('btn-ws-invite');
@@ -409,7 +267,7 @@
                             _workspaces = ws;
                             _renderMine();
                         });
-                        toast('Te has unido al workspace', 'success');
+                        toast('Te has unido al grupo', 'success');
                     })
                     .catch(function (err) { toast(err.detail || 'Error', 'error'); });
             }
@@ -428,11 +286,129 @@
 
     // ── Init ───────────────────────────────────────────────────────────────────
 
+    function _bindDangerZone() {
+        var toggleBtn = document.getElementById('btn-ws-toggle-status');
+        var deleteBtn = document.getElementById('btn-ws-delete');
+
+        if (toggleBtn) {
+            toggleBtn.addEventListener('click', function () {
+                if (!_currentWs) return;
+                var isDisabled = _currentWs.status === 'disabled';
+                var newStatus = isDisabled ? 'active' : 'disabled';
+                if (!isDisabled && !confirm('¿Desactivar "' + _currentWs.name + '"? Sus miembros no podrán acceder al contenido compartido con este grupo hasta que lo reactives.')) return;
+                toggleBtn.disabled = true;
+                api.post('/api/workspaces/' + _currentWs.id + '/status', { status: newStatus })
+                    .then(function () {
+                        _currentWs.status = newStatus;
+                        toast(isDisabled ? 'Grupo reactivado' : 'Grupo desactivado', 'success');
+                        _renderDangerZone();
+                        load();
+                    })
+                    .catch(function (err) { toast(err.detail || err.message || 'Error', 'error'); })
+                    .finally(function () { toggleBtn.disabled = false; });
+            });
+        }
+
+        if (deleteBtn) {
+            deleteBtn.addEventListener('click', function () {
+                if (!_currentWs) return;
+                if (!confirm('¿Eliminar "' + _currentWs.name + '"? Se borrará todo su contenido (agentes, skills, conocimiento, conexiones) — los recursos originales de otros dueños que hayan sido enlazados aquí no se ven afectados. Esta acción no se puede deshacer.')) return;
+                deleteBtn.disabled = true;
+                api.del('/api/workspaces/' + _currentWs.id)
+                    .then(function () {
+                        toast('Grupo eliminado', 'success');
+                        _closeModal();
+                        load();
+                    })
+                    .catch(function (err) { toast(err.detail || err.message || 'Error', 'error'); })
+                    .finally(function () { deleteBtn.disabled = false; });
+            });
+        }
+    }
+
+    // ── Abandonar workspace ──────────────────────────────────────────────────────
+
+    function _leaveDirectly() {
+        if (!_currentWs || !_me) return;
+        if (!confirm('¿Abandonar "' + _currentWs.name + '"? Dejarás de tener acceso a su contenido.')) return;
+        api.del('/api/workspaces/' + _currentWs.id + '/members/' + encodeURIComponent(_me))
+            .then(function () {
+                toast('Has abandonado el grupo', 'success');
+                _closeModal();
+                load();
+            })
+            .catch(function (err) { toast(err.detail || err.message || 'Error', 'error'); });
+    }
+
+    function _openLeaveOwnerModal() {
+        if (!_currentWs || !_me) return;
+        var others = _currentMembers.filter(function (m) { return m.username !== _me; });
+
+        if (!others.length) {
+            if (!confirm('Eres el único miembro de "' + _currentWs.name + '". Al abandonarlo, el grupo se eliminará. Los recursos originales de cada dueño no se ven afectados. ¿Continuar?')) return;
+            api.del('/api/workspaces/' + _currentWs.id)
+                .then(function () {
+                    toast('Grupo eliminado', 'success');
+                    _closeModal();
+                    load();
+                })
+                .catch(function (err) { toast(err.detail || err.message || 'Error', 'error'); });
+            return;
+        }
+
+        var select = document.getElementById('ws-leave-owner-select');
+        if (select) {
+            select.innerHTML = others.map(function (m) {
+                return '<option value="' + esc(m.username) + '">' + esc(m.display_name || m.username) + '</option>';
+            }).join('');
+        }
+        document.getElementById('modal-ws-leave-owner').style.display = '';
+    }
+
+    function _bindLeaveZone() {
+        var leaveBtn = document.getElementById('btn-ws-leave');
+        if (leaveBtn) leaveBtn.addEventListener('click', _leaveDirectly);
+
+        var leaveOwnerBtn = document.getElementById('btn-ws-leave-owner');
+        if (leaveOwnerBtn) leaveOwnerBtn.addEventListener('click', _openLeaveOwnerModal);
+
+        var modal = document.getElementById('modal-ws-leave-owner');
+        var closeIt = function () { if (modal) modal.style.display = 'none'; };
+        var closeBtn = document.getElementById('btn-ws-leave-owner-close');
+        var cancelBtn = document.getElementById('btn-ws-leave-owner-cancel');
+        if (closeBtn) closeBtn.addEventListener('click', closeIt);
+        if (cancelBtn) cancelBtn.addEventListener('click', closeIt);
+        if (modal) modal.addEventListener('click', function (e) { if (e.target === modal) closeIt(); });
+
+        var confirmBtn = document.getElementById('btn-ws-leave-owner-confirm');
+        if (confirmBtn) {
+            confirmBtn.addEventListener('click', function () {
+                if (!_currentWs || !_me) return;
+                var select = document.getElementById('ws-leave-owner-select');
+                var newOwner = select ? select.value : '';
+                if (!newOwner) return;
+                confirmBtn.disabled = true;
+                api.post('/api/workspaces/' + _currentWs.id + '/transfer-ownership', { username: newOwner })
+                    .then(function () {
+                        return api.del('/api/workspaces/' + _currentWs.id + '/members/' + encodeURIComponent(_me));
+                    })
+                    .then(function () {
+                        toast('Propiedad transferida — has abandonado el grupo', 'success');
+                        closeIt();
+                        _closeModal();
+                        load();
+                    })
+                    .catch(function (err) { toast(err.detail || err.message || 'Error', 'error'); })
+                    .finally(function () { confirmBtn.disabled = false; });
+            });
+        }
+    }
+
     function init() {
         _bindTabs();
         _bindInviteBtn();
-        _bindNewGroupBtn();
-        _bindModalTabs();
+        _bindDangerZone();
+        _bindLeaveZone();
 
         var closeBtn = document.getElementById('btn-ws-members-close');
         if (closeBtn) { closeBtn.addEventListener('click', _closeModal); }

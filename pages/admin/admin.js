@@ -7,7 +7,6 @@ var _countTimer = null;
 var _connections = [];
 var _allAgents = [];
 var _allKnowledge = [];
-var _allTeams = [];
 var _allWorkspaces = [];
 
 async function reloadData() {
@@ -24,8 +23,6 @@ async function reloadData() {
             .then(function (d) { _connections = d; applyConnFilters(); }),
         api.get('/api/admin/knowledge')
             .then(function (d) { _allKnowledge = d; applyKnowledgeFilters(); }),
-        api.get('/api/admin/groups')
-            .then(function (d) { _allTeams = d; applyTeamFilters(); }),
     ];
     try {
         await Promise.all(promises);
@@ -49,7 +46,7 @@ function _startPolling() {
     _refreshTimer = setInterval(reloadData, 30000);
 }
 
-var _TAB_IDS = ['general', 'users', 'workspaces', 'teams', 'agents', 'connections', 'knowledge', 'config'];
+var _TAB_IDS = ['general', 'users', 'workspaces', 'agents', 'connections', 'knowledge', 'config'];
 
 function _bindTabs() {
     document.querySelectorAll('.admin-tab').forEach(function (btn) {
@@ -75,8 +72,6 @@ function _bindFilters() {
     });
     var wsSearchEl = document.getElementById('ws-search');
     if (wsSearchEl) wsSearchEl.addEventListener('input', applyWorkspaceFilters);
-    var teamSearchEl = document.getElementById('team-search');
-    if (teamSearchEl) teamSearchEl.addEventListener('input', applyTeamFilters);
     ['agent-search'].forEach(function (id) {
         var el = document.getElementById(id);
         if (el) el.addEventListener('input', applyAgentFilters);
@@ -99,6 +94,9 @@ async function init() {
     renderNav('nav-root', 'admin-users');
     _bindTabs();
     _bindFilters();
+    // Cargar config al arrancar para sincronizar el botón "Nuevo usuario"
+    // aunque el usuario nunca abra la pestaña Configuración
+    if (window.adminConfig) adminConfig.load();
     await dataPromise;
     _startPolling();
 }

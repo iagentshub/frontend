@@ -117,9 +117,8 @@ function _updateScopeHint(scope, wsName) {
     var hint = document.getElementById('conn-scope-hint');
     if (!hint) return;
     hint.textContent = scope === 'personal'
-        ? (t('connections.modal.scope_hint_personal') || 'Solo visible para ti, en cualquier workspace')
-        : (t('connections.modal.scope_hint_workspace') || 'Visible para todos los miembros del workspace') +
-        (wsName ? ' "' + wsName + '"' : '');
+        ? (t('connections.modal.scope_hint_personal') || 'Solo visible para ti')
+        : (t('connections.modal.scope_hint_workspace') || 'Compartible con los miembros de un grupo');
 }
 
 function getModalScope() {

@@ -18,7 +18,7 @@ function _fmtTokensWs(n) {
 function renderWorkspaces(workspaces) {
     var wrap = document.getElementById('workspaces-table-wrap');
     if (!workspaces.length) {
-        wrap.innerHTML = '<div class="admin-empty">No hay workspaces de equipo.</div>';
+        wrap.innerHTML = '<div class="admin-empty">No hay grupos de trabajo.</div>';
         return;
     }
 
@@ -27,8 +27,13 @@ function renderWorkspaces(workspaces) {
             ? new Date(ws.created_at).toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: '2-digit' })
             : '—';
         var tokens = (ws.tokens_in || 0) + (ws.tokens_out || 0);
+        var isDisabled = ws.status === 'disabled';
+        var statusBadge = isDisabled
+            ? '<span class="badge badge--danger">Desactivado</span>'
+            : '<span class="badge badge--ok">Activo</span>';
         return '<tr>' +
             '<td><strong>' + esc(ws.name) + '</strong></td>' +
+            '<td>' + statusBadge + '</td>' +
             '<td>' + esc(ws.created_by || '—') + '</td>' +
             '<td class="td-tokens">' + (ws.member_count || 0) + '</td>' +
             '<td class="td-tokens">' + (ws.connections_count || 0) + '</td>' +
@@ -37,6 +42,9 @@ function renderWorkspaces(workspaces) {
             '<td class="td-tokens">' + _fmtTokensWs(tokens) + '</td>' +
             '<td class="td-date">' + date + '</td>' +
             '<td class="td-actions">' +
+            '<button class="btn btn-ghost btn-sm ws-toggle-btn" ' +
+            'data-ws-id="' + esc(ws.id) + '" data-ws-name="' + esc(ws.name) + '" data-ws-status="' + esc(ws.status || 'active') + '">' +
+            (isDisabled ? 'Reactivar' : 'Desactivar') + '</button> ' +
             '<button class="btn btn-ghost btn-sm ws-del-btn" ' +
             'data-ws-id="' + esc(ws.id) + '" data-ws-name="' + esc(ws.name) + '">Eliminar</button>' +
             '</td>' +
@@ -47,6 +55,7 @@ function renderWorkspaces(workspaces) {
         '<table class="admin-table">' +
         '<thead><tr>' +
         _thW('Nombre', 'name') +
+        '<th>Estado</th>' +
         _thW('Creador', 'created_by') +
         '<th>Miembros</th>' +
         '<th>Conexiones</th>' +
@@ -72,14 +81,32 @@ function renderWorkspaces(workspaces) {
         btn.addEventListener('click', async function () {
             var wsId = btn.dataset.wsId;
             var wsName = btn.dataset.wsName;
-            if (!confirm('¿Eliminar el workspace "' + wsName + '"? Esta acción no se puede deshacer.')) return;
+            if (!confirm('¿Eliminar el grupo "' + wsName + '"? Se borrará todo su contenido compartido — los recursos originales de sus dueños no se ven afectados. Esta acción no se puede deshacer.')) return;
             try {
                 await api.del('/api/admin/workspaces/' + encodeURIComponent(wsId));
-                toast('Workspace eliminado', 'success');
+                toast('Grupo eliminado', 'success');
                 _allWorkspaces = await api.get('/api/admin/workspaces');
                 applyWorkspaceFilters();
             } catch (err) {
                 toast(err.message || 'Error al eliminar', 'error');
+            }
+        });
+    });
+
+    wrap.querySelectorAll('.ws-toggle-btn').forEach(function (btn) {
+        btn.addEventListener('click', async function () {
+            var wsId = btn.dataset.wsId;
+            var wsName = btn.dataset.wsName;
+            var isDisabled = btn.dataset.wsStatus === 'disabled';
+            var newStatus = isDisabled ? 'active' : 'disabled';
+            if (!isDisabled && !confirm('¿Desactivar el grupo "' + wsName + '"? Sus miembros no podrán acceder a los recursos compartidos hasta que se reactive.')) return;
+            try {
+                await api.post('/api/admin/workspaces/' + encodeURIComponent(wsId) + '/status', { status: newStatus });
+                toast(isDisabled ? 'Grupo reactivado' : 'Grupo desactivado', 'success');
+                _allWorkspaces = await api.get('/api/admin/workspaces');
+                applyWorkspaceFilters();
+            } catch (err) {
+                toast(err.message || 'Error al cambiar el estado', 'error');
             }
         });
     });

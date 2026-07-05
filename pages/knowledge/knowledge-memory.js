@@ -88,9 +88,10 @@ var KnowledgeMemory = (function () {
         }
     }
 
-    async function load(folderId) {
+    async function load(folderId, groupId) {
         if (folderId !== undefined) { _activeFolderId = folderId; _page = 1; }
-        _memories = await api.get('/api/memory').catch(function () { return []; });
+        var url = groupId ? '/api/memory?group_id=' + encodeURIComponent(groupId) : '/api/memory';
+        _memories = await api.get(url).catch(function () { return []; });
         _page = 1;
         _render();
         if (window._folderMemory) window._folderMemory.updateStats(_memories);

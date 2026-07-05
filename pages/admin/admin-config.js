@@ -11,16 +11,28 @@ window.adminConfig = (function () {
         else el.value = val;
     }
 
+    // Muestra u oculta el botón "Nuevo usuario" según el modo de registro.
+    // En modo "closed" el admin es quien crea las cuentas manualmente.
+    function _syncNewUserButton(mode) {
+        var btn = document.getElementById('btn-new-user');
+        if (!btn) return;
+        btn.style.display = mode === 'closed' ? '' : 'none';
+    }
+
     async function load() {
         try {
             _cfg = await api.get('/api/settings/platform');
-            _set('cfg-registration', _cfg.registration || 'open');
+            var mode = _cfg.registration || 'open';
+            // Si la BD tiene un valor antiguo "invite", lo normalizamos a "closed"
+            if (mode === 'invite') mode = 'closed';
+            _set('cfg-registration', mode);
             _set('cfg-max-users', _cfg.max_users ?? 0);
             _set('cfg-max-sessions', _cfg.max_concurrent_sessions ?? 0);
             _set('cfg-email-verify', _cfg.email_verify ?? false);
             _set('cfg-guest-enabled', _cfg.guest_enabled ?? true);
             _set('cfg-billing', _cfg.billing_enabled ?? false);
             _set('cfg-log-retention', _cfg.log_retention_days ?? 30);
+            _syncNewUserButton(mode);
         } catch (e) {
             console.error('[admin-config] Error cargando configuración:', e);
         }
@@ -34,8 +46,9 @@ window.adminConfig = (function () {
         btn.textContent = 'Guardando…';
         if (msg) msg.textContent = '';
         try {
+            var mode = document.getElementById('cfg-registration')?.value || 'open';
             var payload = {
-                registration: document.getElementById('cfg-registration')?.value,
+                registration: mode,
                 max_users: parseInt(document.getElementById('cfg-max-users')?.value || '0', 10),
                 max_concurrent_sessions: parseInt(document.getElementById('cfg-max-sessions')?.value || '0', 10),
                 email_verify: document.getElementById('cfg-email-verify')?.checked,
@@ -44,6 +57,7 @@ window.adminConfig = (function () {
                 log_retention_days: parseInt(document.getElementById('cfg-log-retention')?.value || '30', 10),
             };
             _cfg = await api.put('/api/settings/platform', payload);
+            _syncNewUserButton(mode);
             if (msg) {
                 msg.textContent = '✓ Configuración guardada';
                 setTimeout(function () { msg.textContent = ''; }, 3000);
@@ -61,6 +75,14 @@ window.adminConfig = (function () {
         load();
         var form = document.getElementById('config-form');
         if (form) form.addEventListener('submit', save);
+
+        // Actualizar visibilidad del botón en tiempo real al cambiar el select
+        var sel = document.getElementById('cfg-registration');
+        if (sel) {
+            sel.addEventListener('change', function () {
+                _syncNewUserButton(sel.value);
+            });
+        }
     }
 
     return { init: init, load: load };

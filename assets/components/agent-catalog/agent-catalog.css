@@ -94,6 +94,22 @@
     text-overflow: ellipsis;
 }
 
+.ac-card-badge {
+    display: inline-block;
+    margin-left: 6px;
+    padding: 1px 7px;
+    border-radius: 999px;
+    font-size: 10px;
+    font-weight: 600;
+    white-space: nowrap;
+    vertical-align: middle;
+}
+
+.ac-card-badge--shared {
+    background: var(--accent-dim);
+    color: var(--accent);
+}
+
 .ac-card-desc {
     font-size: 12px;
     color: var(--ink-2);

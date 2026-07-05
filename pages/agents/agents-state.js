@@ -8,18 +8,30 @@ let _memories = [];
 let _knowledge = [];
 let _connStatus = {}; // { connId: true | false } — undefined = aún sin testar
 let _activeFolderId = null; // null = todos
+let _activeGroupId = null;  // null = sin filtro de grupo
+let _groupAgents = [];      // agentes cargados al filtrar por grupo
 let _agentPage = 1;
 let _filteredAgents = [];
 
 async function _loadAll() {
     _connStatus = {};
-    [_agents, _connections, _skills, _memories, _knowledge] = await Promise.all([
+    const [me, agentsRes, connsRes, skillsRes, memoriesRes, knowledgeRes] = await Promise.all([
+        api.get('/api/auth/me').catch(() => ({})),
         api.get('/api/agents'),
         api.get('/api/connections'),
         api.get('/api/skills'),
         api.get('/api/memory').catch(() => []),
         api.get('/api/knowledge').catch(() => []),
     ]);
+    window.__ME__ = me.username || null;
+    window.__WS_IS_TEAM__ = false; // workspace switching eliminado
+    [_agents, _connections, _skills, _memories, _knowledge] = [agentsRes, connsRes, skillsRes, memoriesRes, knowledgeRes];
+    // Refrescar agentes del grupo activo si hay uno seleccionado
+    if (_activeGroupId) {
+        try {
+            _groupAgents = await api.get('/api/agents?group_id=' + encodeURIComponent(_activeGroupId));
+        } catch (_) { _groupAgents = []; }
+    }
     // Merge social visibility flags into agent objects
     try {
         const social = await api.get('/api/social/me/resources?type=agent');
@@ -31,7 +43,7 @@ async function _loadAll() {
         });
     } catch (err) { console.error('[agents-state] Error cargando datos sociales:', err); }
     FilterAgents.setData(_skills, _connections, _knowledge);
-    AgentCatalog.setAgents(_agents.filter(a => (a.scope || 'private') === 'public'));
+    AgentCatalog.setAgents(_agents.filter(a => (a.scope || 'private') === 'public' || a._shared));
     _applyFilter();
     _syncConnectionSelect();
     _testUsedConnections();
@@ -49,8 +61,17 @@ async function _testUsedConnections() {
 }
 
 function _applyFilter() {
+    // Modo grupo: muestra solo los agentes del grupo seleccionado
+    if (_activeGroupId) {
+        _filteredAgents = _groupAgents;
+        _agentPage = 1;
+        _renderAgentPage();
+        _updateDeleteBanner();
+        return;
+    }
+
     const f = FilterAgents.getFilter();
-    let list = _agents;
+    let list = _agents.filter(a => !a._shared);
 
     if (f.query) {
         const q = f.query.toLowerCase();
@@ -91,7 +112,7 @@ function _applyFilter() {
     _updateDeleteBanner();
 
     if (window._folderAgents) {
-        window._folderAgents.updateStats(_agents.filter(a => (a.scope || 'private') === 'private'));
+        window._folderAgents.updateStats(_agents.filter(a => (a.scope || 'private') === 'private' && !a._shared));
     }
 }
 
@@ -134,5 +155,24 @@ function _renderAgentPage() {
 
 function _setActiveFolder(folderId) {
     _activeFolderId = folderId;
+    _activeGroupId = null;
+    _groupAgents = [];
     _applyFilter();
 }
+
+async function _setActiveGroup(groupId) {
+    _activeGroupId = groupId;
+    _activeFolderId = null;
+    // Limpiar inmediatamente para evitar race condition con _testUsedConnections:
+    // si _renderAgentPage() se llama entre el await y el final de esta función,
+    // mostraría datos del grupo anterior en vez del vacío correcto.
+    _groupAgents = [];
+    _applyFilter(); // mostrar vacío de inmediato
+    if (groupId) {
+        try {
+            _groupAgents = await api.get('/api/agents?group_id=' + encodeURIComponent(groupId));
+        } catch (_) { _groupAgents = []; }
+        _applyFilter(); // actualizar con los datos cargados
+    }
+}
+

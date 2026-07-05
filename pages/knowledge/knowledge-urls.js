@@ -18,7 +18,7 @@ var KnowledgeUrls = (function () {
         });
         document.getElementById('urls-grid').addEventListener('click', function (e) {
             var shareBtn = e.target.closest('[data-share-id]');
-            if (shareBtn) { window.shareTeams && shareTeams.open('knowledge', shareBtn.dataset.shareId, shareBtn.dataset.shareName || ''); return; }
+            if (shareBtn) { window.GroupShareDialog && GroupShareDialog.open('knowledge', shareBtn.dataset.shareId, shareBtn.dataset.shareName || ''); return; }
             var delBtn = e.target.closest('[data-del-id]');
             if (delBtn) { _deleteItem(delBtn.dataset.delId); return; }
             var moveBtn = e.target.closest('[data-move-id]');
@@ -30,10 +30,12 @@ var KnowledgeUrls = (function () {
         });
     }
 
-    async function load(folderId) {
+    async function load(folderId, groupId) {
         if (folderId !== undefined) { _activeFolderId = folderId; _page = 1; }
         try {
-            _items = await api.get('/api/knowledge?type=url');
+            var url = '/api/knowledge?type=url';
+            if (groupId) url += '&group_id=' + encodeURIComponent(groupId);
+            _items = await api.get(url);
             _loaded = true;
         } catch (e) {
             _items = [];
@@ -72,13 +74,23 @@ var KnowledgeUrls = (function () {
                 : '';
             var _SHARE_SVG = '<svg width="11" height="11" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="12" cy="3" r="1.5" stroke="currentColor" stroke-width="1.4"/><circle cx="12" cy="13" r="1.5" stroke="currentColor" stroke-width="1.4"/><circle cx="4" cy="8" r="1.5" stroke="currentColor" stroke-width="1.4"/><path d="M10.5 3.8L5.5 7.2M10.5 12.2L5.5 8.8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>';
             var shareBtn = !item._shared
-                ? '<button class="knowledge-action-btn knowledge-action-btn--share" data-share-id="' + esc(item.id) + '" data-share-name="' + esc(item.title) + '" title="' + esc(t('teams.teams.sharing.share_with') || 'Compartir') + '">' + _SHARE_SVG + '</button>'
-                : '<span class="knowledge-shared-badge">' + esc(t('teams.teams.sharing.shared_badge') || 'Compartida') + '</span>';
+                ? '<button class="knowledge-action-btn knowledge-action-btn--share" data-share-id="' + esc(item.id) + '" data-share-name="' + esc(item.title) + '" title="' + esc(t('teams.sharing.share_with') || 'Compartir con grupo') + '">' + _SHARE_SVG + '</button>'
+                : '';
+            // Badge de propiedad: solo en modo grupo
+            var ownerBadge = '';
+            if (window._activeGroupKnId) {
+                if (item._shared) {
+                    var ol = item.owner_id ? '@' + item.owner_id : (t('teams.sharing.shared_badge') || 'Compartido');
+                    ownerBadge = '<span class="res-badge res-badge--shared">' + esc(ol) + '</span>';
+                } else {
+                    ownerBadge = '<span class="res-badge res-badge--mine">' + (t('agents.card.badge_mine') || 'Tuyo') + '</span>';
+                }
+            }
             return '<div class="knowledge-card" draggable="true" data-drag-id="' + esc(item.id) + '" data-drag-section="url">' +
                 '<div class="knowledge-card-header">' +
                 '<span class="knowledge-card-icon">🔗</span>' +
                 '<span class="knowledge-card-title">' + esc(item.title) + '</span>' +
-                warn +
+                warn + ownerBadge +
                 shareBtn +
                 '<button class="knowledge-action-btn knowledge-action-btn--danger" data-del-id="' + esc(item.id) + '" title="' + esc(t('common.actions.delete') || 'Eliminar') + '"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M2 4h12M5 4V2h6v2M6 7v5M10 7v5M3 4l1 9h8l1-9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>' +
                 '</div>' +
