@@ -2,7 +2,7 @@
     'use strict';
 
     var _AVATAR_COLORS = ['#4f46e5', '#0891b2', '#059669', '#d97706', '#7c3aed', '#db2777', '#0f766e'];
-    var _TYPE_LABELS = { agent: 'Agente', skill: 'Skill', knowledge: 'Knowledge' };
+    var _TYPE_LABELS = { agent: 'Agente', skill: 'Skill', knowledge: 'Knowledge', user: 'Usuario' };
 
     var _offset = 0;
     var _limit = 40;
@@ -62,6 +62,37 @@
         params.push('limit=' + (_limit + 1));
         params.push('offset=' + offset);
         return '/api/explore' + (params.length ? '?' + params.join('&') : '');
+    }
+
+    // Versión de user card con el mismo layout que las resource cards,
+    // para usarla cuando el tipo es 'all' y todos van en la misma cuadrícula.
+    function _renderUserCardAsResource(u) {
+        var initial = (u.username || '?').charAt(0).toUpperCase();
+        var color = _avatarColor(u.username);
+        var followersLabel = window.t ? t('social.follow.followers') : 'seguidores';
+        var resourcesLabel = window.t ? t('explore.users.resources') : 'recursos';
+        return '<div class="explore-card" data-type="user" data-owner="' + esc(u.username) + '">' +
+            '<div class="explore-card-top">' +
+            '<div class="explore-card-avatar" style="background:' + color + '">' + initial + '</div>' +
+            '<div class="explore-card-info">' +
+            '<div class="explore-card-name" title="' + esc(u.username) + '">@' + esc(u.username) + '</div>' +
+            '<div class="explore-card-meta">' +
+            '<span class="explore-card-type-badge">' + esc(_TYPE_LABELS.user) + '</span>' +
+            '</div>' +
+            '</div>' +
+            '</div>' +
+            '<p class="explore-card-desc">' +
+            '<strong>' + (u.followers_count || 0) + '</strong> ' + followersLabel + ' &nbsp;·&nbsp; ' +
+            '<strong>' + (u.public_resources_count || 0) + '</strong> ' + resourcesLabel +
+            '</p>' +
+            '<div class="explore-card-footer">' +
+            '<a href="/u/' + encodeURIComponent(u.username) + '" class="explore-card-author">@' + esc(u.username) + '</a>' +
+            '<div class="explore-card-actions">' +
+            '<a href="/u/' + encodeURIComponent(u.username) + '" class="btn btn-ghost btn-sm">' +
+            (window.t ? t('explore.users.view_profile') : 'Ver perfil') + '</a>' +
+            '</div>' +
+            '</div>' +
+            '</div>';
     }
 
     function _renderCard(r) {
@@ -520,6 +551,57 @@
         }
     }
 
+    // Carga combinada para el modo "Todo": recursos + usuarios en paralelo.
+    // Los usuarios se muestran con el mismo card style que los recursos para
+    // que el tipo quede claro visualmente mediante el badge "Usuario".
+    var _mixedUserOffset = 0;
+    var _mixedUserHasMore = false;
+
+    async function _loadAllMixed(reset) {
+        if (_loading) return;
+        if (reset) { _offset = 0; _mixedUserOffset = 0; }
+        _setLoading(true);
+        _setMessage('');
+        var filters = _getFilters();
+        var grid = document.getElementById('explore-grid');
+        var moreWrap = document.getElementById('explore-load-more');
+        try {
+            var userParams = ['limit=21', 'offset=' + _mixedUserOffset];
+            if (filters.q) userParams.push('q=' + encodeURIComponent(filters.q));
+
+            var resPromise = fetch(_buildUrl(filters, _offset), { credentials: 'include' })
+                .then(function (r) { return r.ok ? r.json() : []; });
+            var usrPromise = api.get('/api/users?' + userParams.join('&')).catch(function () { return []; });
+
+            var both = await Promise.all([resPromise, usrPromise]);
+            var resources = both[0];
+            var users = both[1];
+
+            _hasMore = resources.length > _limit;
+            if (_hasMore) resources = resources.slice(0, _limit);
+            _mixedUserHasMore = users.length > 20;
+            if (_mixedUserHasMore) users = users.slice(0, 20);
+
+            if (reset) grid.innerHTML = '';
+
+            var html = resources.map(_renderCard).join('') + users.map(_renderUserCardAsResource).join('');
+            var noResults = !html && _offset === 0 && _mixedUserOffset === 0;
+
+            if (noResults) {
+                grid.hidden = true;
+                _setMessage(window.t ? t('explore.empty') : 'No hay resultados que coincidan con tu búsqueda.');
+                if (moreWrap) moreWrap.hidden = true;
+            } else {
+                grid.hidden = false;
+                grid.innerHTML += html;
+                _offset += resources.length;
+                _mixedUserOffset += users.length;
+                if (moreWrap) moreWrap.hidden = !_hasMore;
+            }
+        } catch (err) { console.error('[explore] Error en carga mixta:', err); }
+        _setLoading(false);
+    }
+
     function _toggleCategoryBar(show) {
         var el = document.getElementById('explore-category');
         if (el) el.style.display = show ? '' : 'none';
@@ -527,9 +609,13 @@
 
     function _doSearch() {
         _searched = true;
-        if (_activeType() === 'users') {
+        var type = _activeType();
+        if (type === 'users') {
             _toggleCategoryBar(false);
             _loadUsers(true);
+        } else if (type === 'all') {
+            _toggleCategoryBar(false);
+            _loadAllMixed(true);
         } else {
             _toggleCategoryBar(true);
             _loadResources(true);
@@ -584,7 +670,9 @@
         var moreBtn = document.getElementById('explore-load-more-btn');
         if (moreBtn) {
             moreBtn.addEventListener('click', function () {
-                if (_activeType() === 'users') _loadUsers(false);
+                var type = _activeType();
+                if (type === 'users') _loadUsers(false);
+                else if (type === 'all') _loadAllMixed(false);
                 else _loadResources(false);
             });
         }
