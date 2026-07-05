@@ -315,7 +315,9 @@
         _bindResourceActions();
 
         var parts = window.location.pathname.split('/').filter(Boolean);
-        var username = parts[1] || '';
+        // decodeURIComponent evita doble-encoding cuando el username contiene
+        // caracteres especiales (p.ej. '@') que el browser mantiene codificados en pathname.
+        var username = decodeURIComponent(parts[1] || '');
         if (!username) { _showError('Usuario no especificado.'); return; }
         _profileUsername = username;
         _bindFollow(username);
