@@ -389,9 +389,18 @@
     });
 
     // ═══ INIT ════════════════════════════════════════════════════════════════
+    function _bindTabs() {
+        document.querySelectorAll('[data-meta-tab]').forEach(function (btn) {
+            btn.addEventListener('click', function () { _switchTab(btn.dataset.metaTab); });
+        });
+        var searchInput = document.getElementById('meta-table-search');
+        if (searchInput) searchInput.addEventListener('input', _renderTableRows);
+    }
+
     function init() {
         _bindLogModal();
         _bindTableDialog();
+        _bindTabs();
         _loadLogSummary();
         // Aplicar traducciones y sincronizar al cambiar de idioma
         if (window.i18n) {

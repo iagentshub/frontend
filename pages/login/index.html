@@ -88,18 +88,7 @@
   <script src="/assets/js/flog.js"></script>
   <script src="/assets/js/i18n.js"></script>
   <script src="/login/login.js"></script>
-  <script>
-    (function () {
-      var btn = document.getElementById('login-lang-btn');
-      function sync() { if (window.i18n) btn.textContent = window.i18n.getLang().toUpperCase(); }
-      btn.addEventListener('click', function () {
-        var next = (window.i18n ? window.i18n.getLang() : 'es') === 'es' ? 'en' : 'es';
-        if (window.i18n) window.i18n.setLang(next);
-        sync();
-      });
-      if (window.i18n) { window.i18n.ready(sync); window.i18n.onLangChange(sync); }
-    })();
-  </script>
+  <script src="/login/login-lang.js"></script>
 </body>
 
 </html>

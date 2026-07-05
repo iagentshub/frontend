@@ -97,13 +97,7 @@
     <script src="/assets/js/utils.js"></script>
     <script src="/assets/components/main_nav/main_nav.js"></script>
     <script src="/admin/admin-logs.js"></script>
-    <script>
-        (async function () {
-            await window.requireAuth();
-            renderNav('nav-root', 'admin-logs');
-            adminLogs.init();
-        }());
-    </script>
+    <script src="/admin/admin-logs-boot.js"></script>
 </body>
 
 </html>

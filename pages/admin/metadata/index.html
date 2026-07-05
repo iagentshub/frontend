@@ -32,9 +32,9 @@
             <!-- Tabs principales -->
             <div class="admin-tabs" style="margin-bottom:24px">
                 <button class="admin-tab active" data-meta-tab="logs"
-                    onclick="window._metaSwitchTab('logs')" data-i18n="admin.metadata.tab_logs">Logs</button>
+                    data-i18n="admin.metadata.tab_logs">Logs</button>
                 <button class="admin-tab" data-meta-tab="tables"
-                    onclick="window._metaSwitchTab('tables')" data-i18n="admin.metadata.tab_tables">Tablas</button>
+                    data-i18n="admin.metadata.tab_tables">Tablas</button>
             </div>
 
             <!-- ── Tab: Logs ── -->
@@ -49,7 +49,7 @@
                     <input type="search" id="meta-table-search" class="input"
                         data-i18n="[placeholder]admin.metadata.search_table"
                         placeholder="Buscar tabla…"
-                        style="max-width:280px;height:32px" oninput="window._metaFilterTables()" />
+                        style="max-width:280px;height:32px" />
                     <span id="meta-table-count" style="font-size:0.8rem;color:var(--text-2)"></span>
                 </div>
                 <!-- Tabla de metadatos -->
@@ -215,13 +215,7 @@
     <script src="/assets/components/main_nav/main_nav.js"></script>
     <script src="/admin/admin-logs.js"></script>
     <script src="/admin/admin-metadata.js"></script>
-    <script>
-        (async function () {
-            await window.requireAuth();
-            renderNav('nav-root', 'admin-metadata');
-            window.adminMetadata.init();
-        })();
-    </script>
+    <script src="/admin/admin-metadata-boot.js"></script>
 </body>
 
 </html>
