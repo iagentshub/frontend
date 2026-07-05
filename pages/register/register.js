@@ -1,9 +1,23 @@
 'use strict';
 
-function togglePw(id) {
-    const inp = document.getElementById(id);
-    if (inp) inp.type = inp.type === 'password' ? 'text' : 'password';
+const _EYE_OPEN = '<svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M1 9s3-5.5 8-5.5S17 9 17 9s-3 5.5-8 5.5S1 9 1 9z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><circle cx="9" cy="9" r="2.5" stroke="currentColor" stroke-width="1.5"/></svg>';
+const _EYE_CLOSED = '<svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M1 9s3-5.5 8-5.5S17 9 17 9s-3 5.5-8 5.5S1 9 1 9z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><circle cx="9" cy="9" r="2.5" stroke="currentColor" stroke-width="1.5"/><line x1="3" y1="3" x2="15" y2="15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>';
+
+function bindPasswordToggle(buttonId, inputId) {
+    const btn = document.getElementById(buttonId);
+    const inp = document.getElementById(inputId);
+    if (!btn || !inp) return;
+    btn.innerHTML = _EYE_OPEN;
+    btn.addEventListener('click', function () {
+        const showing = inp.type === 'text';
+        inp.type = showing ? 'password' : 'text';
+        btn.innerHTML = showing ? _EYE_OPEN : _EYE_CLOSED;
+        btn.setAttribute('aria-label', showing ? 'Mostrar contraseña' : 'Ocultar contraseña');
+    });
 }
+
+bindPasswordToggle('toggle-reg-pw', 'reg-pw');
+bindPasswordToggle('toggle-reg-pw2', 'reg-pw2');
 
 let _email = '', _password = '', _plan = '';
 
@@ -24,9 +38,10 @@ document.getElementById('reg-form-1').addEventListener('submit', function(e) {
     if (pw !== pw2) {
         errEl.textContent = 'Las contraseñas no coinciden'; errEl.style.display = ''; return;
     }
-    _email = email; _password = pw;
+    _email = email; _password = pw; _plan = 'free';
     document.getElementById('step-1').style.display = 'none';
-    document.getElementById('step-2').style.display = '';
+    document.getElementById('step-2').style.display = 'none';
+    document.getElementById('step-3').style.display = '';
     document.getElementById('step-num').textContent = '2';
 });
 

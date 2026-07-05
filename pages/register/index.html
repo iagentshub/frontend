@@ -18,7 +18,7 @@
     <div class="login-card login-card--wide">
       <div class="login-card-logo">iA</div>
       <h2>Crear cuenta</h2>
-      <p class="login-sub">Paso <span id="step-num">1</span> de 3</p>
+      <p class="login-sub">Paso <span id="step-num">1</span> de 2</p>
 
       <!-- Step 1 -->
       <div id="step-1">
@@ -31,14 +31,16 @@
             <label for="reg-pw">Contraseña *</label>
             <div class="field-pw">
               <input id="reg-pw" type="password" placeholder="Mínimo 8 caracteres" required>
-              <button type="button" class="pw-toggle" onclick="togglePw('reg-pw')">👁</button>
+              <button type="button" id="toggle-reg-pw" class="pw-toggle" tabindex="-1"
+                aria-label="Mostrar contraseña"></button>
             </div>
           </div>
           <div class="field">
             <label for="reg-pw2">Confirmar contraseña *</label>
             <div class="field-pw">
               <input id="reg-pw2" type="password" placeholder="Repite la contraseña" required>
-              <button type="button" class="pw-toggle" onclick="togglePw('reg-pw2')">👁</button>
+              <button type="button" id="toggle-reg-pw2" class="pw-toggle" tabindex="-1"
+                aria-label="Mostrar contraseña"></button>
             </div>
           </div>
           <div id="reg-error-1" class="form-error" style="display:none"></div>
