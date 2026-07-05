@@ -7,6 +7,7 @@ var WorkspaceCreateWizard = (function () {
     var _wsId = null;
     var _wsName = null;
     var _me = null;
+    var _onDone = null; // callback opcional tras crear el grupo
     var _selected = { agent: {}, skill: {}, knowledge: {}, connection: {} };
     var _personal = { agent: [], skill: [], knowledge: [], connection: [] };
     var _activeTab = 'agent';
@@ -230,22 +231,23 @@ var WorkspaceCreateWizard = (function () {
 
     async function _finish() {
         _close();
-        // Refrescar el panel de grupos si existe en la página actual
-        if (window._folderAgents && typeof window._folderAgents.loadGroups === 'function') {
-            window._folderAgents.loadGroups();
+        // Ejecutar callback del llamador (p.ej. GroupPanel.load o profile load)
+        if (typeof _onDone === 'function') {
+            try { _onDone(); } catch (e) { /* ignorar */ }
         }
-        if (window._folderSkills && typeof window._folderSkills.loadGroups === 'function') {
-            window._folderSkills.loadGroups();
-        }
+        // Refrescar también cualquier panel de grupos visible en la página
+        if (window._groupPanelAgents) window._groupPanelAgents.load();
+        if (window._groupPanelConn)   window._groupPanelConn.load();
     }
 
     // ── API pública ──────────────────────────────────────────────────────────
 
-    async function open() {
+    async function open(onDone) {
         _inject();
         _step = 1;
         _wsId = null;
         _wsName = null;
+        _onDone = typeof onDone === 'function' ? onDone : null;
         _selected = { agent: {}, skill: {}, knowledge: {}, connection: {} };
         _personal = { agent: [], skill: [], knowledge: [], connection: [] };
         _activeTab = 'agent';

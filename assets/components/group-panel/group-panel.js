@@ -54,8 +54,16 @@ function GroupPanel(section, onGroupSelect) {
     function _render() {
         if (!_panelEl) return;
 
+        var canCreate = window._navUserRole !== 'guest' && window.WorkspaceCreateWizard;
+        var addBtn = canCreate
+            ? '<button class="kf-add-btn gp-add-btn" title="Nuevo grupo">' +
+              '<svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>' +
+              '</button>'
+            : '';
+
         var html = '<div class="kf-section-header">' +
             '<span class="kf-section-label">Grupos</span>' +
+            addBtn +
             '</div>' +
             '<button class="kf-item' + (_activeId === null ? ' kf-item--active' : '') + '" data-gp-id="">' +
             '<span class="kf-item-name">Todos</span>' +
@@ -83,6 +91,14 @@ function GroupPanel(section, onGroupSelect) {
 
     function _bindEvents() {
         if (!_panelEl) return;
+
+        var addBtn = _panelEl.querySelector('.gp-add-btn');
+        if (addBtn) {
+            addBtn.addEventListener('click', function () {
+                WorkspaceCreateWizard.open(load);
+            });
+        }
+
         _panelEl.querySelectorAll('.kf-item[data-gp-id]').forEach(function (btn) {
             var gpId = btn.dataset.gpId || null;
 

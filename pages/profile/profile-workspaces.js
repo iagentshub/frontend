@@ -423,6 +423,13 @@
         if (navBtn) {
             navBtn.addEventListener('click', function () { load(); });
         }
+
+        var newWsBtn = document.getElementById('btn-new-workspace');
+        if (newWsBtn && window.WorkspaceCreateWizard) {
+            newWsBtn.addEventListener('click', function () {
+                WorkspaceCreateWizard.open(load);
+            });
+        }
     }
 
     document.addEventListener('DOMContentLoaded', init);

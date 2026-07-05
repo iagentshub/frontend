@@ -162,6 +162,20 @@
     display: none;
 }
 
+.section-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 0;
+}
+
+.section-title-row .section-title {
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
 .section-title {
     font-size: 15px;
     font-weight: 700;
