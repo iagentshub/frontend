@@ -4,8 +4,8 @@
 async function init() {
     await window.requireAuth();
     renderNav('nav-root', 'agents');
-    _initFolders();
     await _loadAll();
+    _initFolders();   // después de loadAll para que _applyFilter no renderice vacío
     _initFilters();
     _initCatalog();
     if (window.i18n) {
