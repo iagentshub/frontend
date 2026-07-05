@@ -49,7 +49,6 @@
     function _getFilters() {
         return {
             type: _activeType(),
-            category: (document.getElementById('explore-category') || {}).value || '',
             q: (document.getElementById('explore-search') || {}).value || '',
         };
     }
@@ -57,7 +56,6 @@
     function _buildUrl(filters, offset) {
         var params = [];
         if (filters.type && filters.type !== 'all') params.push('type=' + encodeURIComponent(filters.type));
-        if (filters.category) params.push('category=' + encodeURIComponent(filters.category));
         if (filters.q) params.push('q=' + encodeURIComponent(filters.q));
         params.push('limit=' + (_limit + 1));
         params.push('offset=' + offset);
@@ -602,30 +600,21 @@
         _setLoading(false);
     }
 
-    function _toggleCategoryBar(show) {
-        var el = document.getElementById('explore-category');
-        if (el) el.style.display = show ? '' : 'none';
-    }
-
     function _doSearch() {
         _searched = true;
         var type = _activeType();
         if (type === 'users') {
-            _toggleCategoryBar(false);
             _loadUsers(true);
         } else if (type === 'all') {
-            _toggleCategoryBar(false);
             _loadAllMixed(true);
         } else {
-            _toggleCategoryBar(true);
             _loadResources(true);
         }
     }
 
     function _bindFilters() {
-        // Type dropdown: only toggle category bar, don't auto-search
+        // Type dropdown: re-ejecuta la búsqueda si ya se había buscado antes
         document.getElementById('explore-type').addEventListener('change', function () {
-            _toggleCategoryBar(_activeType() !== 'users');
             if (_searched) _doSearch();
         });
 
