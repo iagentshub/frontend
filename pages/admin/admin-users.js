@@ -45,9 +45,19 @@ function renderUsers(users) {
                 : totalTokens.toString())
             : '<span style="opacity:.4">—</span>';
 
+        // Serializar datos del usuario en un atributo data-* de forma segura:
+        // JSON.stringify puede producir caracteres como <, >, " que romperían
+        // el atributo HTML si se usan sin escapar. _escAttr() los convierte a
+        // entidades HTML; dataset.user devuelve el JSON decodificado automáticamente.
+        var _userJson = JSON.stringify({email: u.email || '', role: u.role, is_active: isActive});
+        var _userAttr = _userJson
+            .replace(/&/g, '&amp;')
+            .replace(/"/g, '&quot;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;');
         var actions =
             '<div class="admin-actions-menu" data-username="' + esc(u.username) + '" ' +
-            'data-user=\'' + JSON.stringify({email: u.email || '', role: u.role, is_active: isActive}) + '\'>' +
+            'data-user="' + _userAttr + '">' +
             '<button class="btn-actions" data-username="' + esc(u.username) + '">⋮</button>' +
             '<div class="actions-dropdown" style="display:none">' +
             '<button class="action-item" data-action="edit" data-username="' + esc(u.username) + '"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M11 2l3 3-9 9H2v-3l9-9z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>Editar</button>' +

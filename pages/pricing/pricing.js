@@ -1,6 +1,20 @@
 (function () {
     'use strict';
 
+    // ── Guard: redirigir si billing_enabled === false ──────────────────
+    // La página es estática; comprobamos la config de plataforma antes de
+    // mostrar nada para evitar exponer la página de precios cuando está desactivada.
+    fetch('/api/settings/platform/public')
+        .then(function (r) { return r.ok ? r.json() : {}; })
+        .catch(function () { return {}; })
+        .then(function (cfg) {
+            if (!cfg.billing_enabled) {
+                window.location.replace('/');
+            } else {
+                document.body.style.visibility = '';
+            }
+        });
+
     // ── Constants ──────────────────────────────────────────────────────
     var DEV_PRICE     = 9;
     var BIZ_START     = 7.50;

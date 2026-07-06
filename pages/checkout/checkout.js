@@ -1,6 +1,18 @@
 'use strict';
 
 (function () {
+    // ── Guard: redirigir si billing_enabled === false ──────────────────
+    fetch('/api/settings/platform/public')
+        .then(function (r) { return r.ok ? r.json() : {}; })
+        .catch(function () { return {}; })
+        .then(function (cfg) {
+            if (!cfg.billing_enabled) {
+                window.location.replace('/');
+            } else {
+                document.body.style.visibility = '';
+            }
+        });
+
     var VALID_TIERS = { developer: 1, business: 1 };
 
     function qs(name) {

@@ -90,7 +90,7 @@ function _bindFilters() {
 
 async function init() {
     var dataPromise = reloadData();
-    await window.requireAuth();
+    await window.requireAuth({ role: 'admin' });
     renderNav('nav-root', 'admin-users');
     _bindTabs();
     _bindFilters();
