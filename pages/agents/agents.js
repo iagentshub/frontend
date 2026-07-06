@@ -262,6 +262,8 @@ function _bindActions() {
             } catch (e) { toast(e.message, 'error'); }
         } else if (action === 'export') {
             _openExportModal(id);
+        } else if (action === 'set-pref-conn') {
+            _openPreferenceConnModal(id, btn.dataset.connId || '');
         } else if (action === 'set-conn') {
             _openSetConnModal(id, btn.dataset.connId || '');
         } else if (action === 'share') {
@@ -460,6 +462,47 @@ function _openBlueprintModal(agent) {
         + '<div class="abp-section"><div class="abp-section-label">' + t('agents.blueprint.routines') + '</div>' + routinesHtml + '</div>';
 
     document.getElementById('agent-blueprint-modal').style.display = 'flex';
+}
+
+function _openPreferenceConnModal(agentId, currentConnId) {
+    var existing = document.getElementById('set-pref-conn-modal');
+    if (existing) existing.remove();
+    // Solo conexiones propias del usuario (no las compartidas del workspace)
+    var conns = (window._connections || []).filter(function (c) { return !c._shared; });
+    var opts = '<option value="">' + (t('agents.card.no_connection') || '— Sin conexión —') + '</option>' +
+        conns.map(function (c) {
+            return '<option value="' + esc(c.id) + '"' + (c.id === currentConnId ? ' selected' : '') + '>' + esc(c.name) + '</option>';
+        }).join('');
+    var modal = document.createElement('div');
+    modal.id = 'set-pref-conn-modal';
+    modal.className = 'modal-bg';
+    modal.innerHTML =
+        '<div class="modal-box" style="max-width:340px">' +
+        '<div class="modal-header">' +
+        '<h2 class="modal-title">' + (t('agents.card.set_my_connection') || 'Definir mi conexión') + '</h2>' +
+        '<button class="modal-close" id="set-pref-conn-close"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 1l12 12M13 1L1 13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>' +
+        '</div>' +
+        '<div class="modal-body">' +
+        '<p style="font-size:13px;color:var(--ink-2);margin:0 0 12px">' + (t('agents.card.set_my_connection_hint') || 'Elige tu propia conexión para chatear con este agente compartido.') + '</p>' +
+        '<select class="select" id="set-pref-conn-select">' + opts + '</select>' +
+        '</div>' +
+        '<div class="modal-footer">' +
+        '<button class="btn btn-ghost" id="set-pref-conn-cancel">' + (t('common.cancel') || 'Cancelar') + '</button>' +
+        '<button class="btn btn-primary" id="set-pref-conn-save">' + (t('common.save') || 'Guardar') + '</button>' +
+        '</div>' +
+        '</div>';
+    document.body.appendChild(modal);
+    modal.querySelector('#set-pref-conn-close').addEventListener('click', function () { modal.remove(); });
+    modal.querySelector('#set-pref-conn-cancel').addEventListener('click', function () { modal.remove(); });
+    modal.addEventListener('click', function (e) { if (e.target === modal) modal.remove(); });
+    modal.querySelector('#set-pref-conn-save').addEventListener('click', async function () {
+        var connId = modal.querySelector('#set-pref-conn-select').value;
+        try {
+            await api.put('/api/agents/' + encodeURIComponent(agentId) + '/preferences', { connection_id: connId || null });
+            modal.remove();
+            await _loadAll();
+        } catch (e) { toast(e.message || 'Error', 'error'); }
+    });
 }
 
 function _openSetConnModal(agentId, currentConnId) {

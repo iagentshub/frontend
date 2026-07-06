@@ -42,6 +42,22 @@ async function _loadAll() {
             return s ? Object.assign({}, a, { _social_public: !!s.is_public, _social_category: s.category, _social_stars: s.stars_count, _linked_broken: !!s.linked_broken, _linked_to_user: s.linked_to_user || null, _social_verified: !!(s.verified) }) : a;
         });
     } catch (err) { console.error('[agents-state] Error cargando datos sociales:', err); }
+
+    // Cargar preferencias de conexión personal para agentes linked (workspace compartido)
+    var linkedAgents = _agents.filter(function (a) { return a.origin_type === 'linked'; });
+    if (linkedAgents.length) {
+        var prefResults = await Promise.all(
+            linkedAgents.map(function (a) {
+                return api.get('/api/agents/' + encodeURIComponent(a.id) + '/preferences').catch(function () { return null; });
+            })
+        );
+        prefResults.forEach(function (pref, i) {
+            if (pref && pref.connection_id) {
+                linkedAgents[i]._pref_conn_id = pref.connection_id;
+            }
+        });
+    }
+
     FilterAgents.setData(_skills, _connections, _knowledge);
     AgentCatalog.setAgents(_agents.filter(a => (a.scope || 'private') === 'public' || a._shared));
     _applyFilter();
@@ -71,7 +87,8 @@ function _applyFilter() {
     }
 
     const f = FilterAgents.getFilter();
-    let list = _agents.filter(a => !a._shared);
+    // Incluir agentes propios y agentes linked del workspace (no los otros shared)
+    let list = _agents.filter(a => !a._shared || a.origin_type === 'linked');
 
     if (f.query) {
         const q = f.query.toLowerCase();
@@ -95,8 +112,9 @@ function _applyFilter() {
     }
     if (f.memory === true) list = list.filter(a => a.use_memory);
     if (f.memory === false) list = list.filter(a => !a.use_memory);
-    if (f.scope) list = list.filter(a => (a.scope || 'private') === f.scope);
-    else list = list.filter(a => (a.scope || 'private') === 'private');
+    // Los linked del workspace siempre son privados; se muestran junto a los agentes privados
+    if (f.scope) list = list.filter(a => (a.scope || 'private') === f.scope || a.origin_type === 'linked');
+    else list = list.filter(a => (a.scope || 'private') === 'private' || a.origin_type === 'linked');
 
     if (f.labels && f.labels.length) {
         list = list.filter(a => f.labels.some(lbl => (a.labels || ['private']).indexOf(lbl) !== -1));

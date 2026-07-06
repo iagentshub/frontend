@@ -217,8 +217,41 @@ function _openAgentModal(agent) {
     _syncMemoryFields(agent);
     _syncRoutines(agent ? (agent.routines || []) : []);
 
+    // ── Sección de origen (solo lectura) ────────────────────────────────────────
+    var originSection = document.getElementById('agent-origin-section');
+    var originBadgeWrap = document.getElementById('agent-origin-badge-wrap');
+    var nonOwnerBanner = document.getElementById('agent-non-owner-banner');
+    var isLinkedAgent = isEdit && agent.origin_type === 'linked';
+
+    if (originSection && originBadgeWrap) {
+        if (isEdit && agent.origin_type) {
+            var originType = agent.origin_type;
+            var originText = originType === 'owner'
+                ? (window.t ? t('agents.origin.owner') : 'Propietario')
+                : originType === 'linked'
+                    ? (window.t ? t('agents.origin.linked') : 'Enlazado')
+                    : originType === 'fork'
+                        ? (window.t ? t('agents.origin.fork') : 'Fork')
+                        : originType;
+            originBadgeWrap.innerHTML = '<span class="origin-badge origin-badge--' + esc(originType) + '">' + esc(originText) + '</span>';
+            originSection.style.display = '';
+        } else {
+            originSection.style.display = 'none';
+        }
+    }
+
+    if (nonOwnerBanner) {
+        nonOwnerBanner.style.display = isLinkedAgent ? '' : 'none';
+    }
+
+    // Para agentes linked: ocultar el botón guardar (solo lectura)
+    var saveBtn = document.getElementById('agent-save-btn');
+    if (saveBtn) {
+        saveBtn.style.display = isLinkedAgent ? 'none' : '';
+    }
+
     document.getElementById('agent-modal').style.display = 'flex';
-    setTimeout(() => document.getElementById('agent-name').focus(), 60);
+    if (!isLinkedAgent) setTimeout(() => document.getElementById('agent-name').focus(), 60);
 }
 
 function _closeAgentModal() {

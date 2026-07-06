@@ -135,6 +135,14 @@
                 <!-- ── PASO 1: Básico ── -->
                 <div id="agent-step-1" class="agent-step-panel modal-body">
                     <input type="hidden" id="agent-id" />
+                    <!-- Banner solo para agentes linked (no-propietario) -->
+                    <div id="agent-non-owner-banner" class="agent-non-owner-banner" style="display:none">
+                        <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                            <path d="M8 1.5L1 14.5h14L8 1.5z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>
+                            <path d="M8 6v4M8 11.5v.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+                        </svg>
+                        <span id="agent-non-owner-text" data-i18n="agents.card.non_owner_hint">Este agente pertenece a otro usuario. Solo puedes verlo o descargarlo.</span>
+                    </div>
                     <div class="field">
                         <label data-i18n="agents.modal.field_name">Nombre *</label>
                         <input id="agent-name" class="input" data-i18n-placeholder="agents.modal.placeholder_name"
@@ -148,6 +156,11 @@
                     <div class="field">
                         <label data-i18n="agents.modal.field_labels">Etiquetas</label>
                         <div id="agent-labels-picker-wrap"></div>
+                    </div>
+                    <!-- Sección de origen (solo lectura, visible al editar agentes con origin_type) -->
+                    <div id="agent-origin-section" class="field" style="display:none">
+                        <label data-i18n="agents.origin.label">Origen</label>
+                        <div id="agent-origin-badge-wrap" style="margin-top:4px"></div>
                     </div>
                     <div class="field">
                         <label data-i18n="agents.modal.field_prompt">Instrucciones</label>

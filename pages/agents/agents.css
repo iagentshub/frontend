@@ -1391,6 +1391,42 @@ details[open] > .advanced-summary::before {
     border-radius: 2px;
 }
 
+/* ── Origin badges (tarjetas y modal) ── */
+.origin-badge {
+    display: inline-flex;
+    align-items: center;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 2px 7px;
+    border-radius: 20px;
+    line-height: 1.4;
+    flex-shrink: 0;
+}
+.origin-badge--owner  { background: var(--green-dim, #dcfce7); color: var(--green, #16a34a); }
+.origin-badge--linked { background: var(--accent-dim);         color: var(--accent); }
+.origin-badge--fork   { background: #fff3e0;                   color: #e65100; }
+
+/* ── Non-owner banner en modal de edición ── */
+.agent-non-owner-banner {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 10px 12px;
+    background: var(--accent-dim);
+    border: 1px solid color-mix(in srgb, var(--accent) 20%, transparent);
+    border-radius: var(--radius);
+    font-size: 12.5px;
+    color: var(--accent);
+    line-height: 1.5;
+}
+.agent-non-owner-banner svg {
+    flex-shrink: 0;
+    margin-top: 1px;
+    opacity: 0.8;
+}
+
 /* ── Drop overlay ── */
 .agent-drop-overlay {
     display: none;

@@ -34,9 +34,25 @@ var AgentCard = {
         return String(n);
     },
 
+    _originBadge: function (originType) {
+        if (!originType || originType === 'owner') return '';
+        var text = originType === 'linked'
+            ? (window.t ? t('agents.origin.linked') : 'Enlazado')
+            : originType === 'fork'
+                ? (window.t ? t('agents.origin.fork') : 'Fork')
+                : '';
+        if (!text) return '';
+        return '<span class="origin-badge origin-badge--' + originType + '">' + esc(text) + '</span>';
+    },
+
     render: function (agent, connections, skills, connStatus) {
+        var isLinkedOrigin = agent.origin_type === 'linked';
         var isPublic = agent.scope === 'public';
-        var conn = connections.find(function (c) { return c.id === agent.connection_id; });
+        // Para agentes linked, usar la conexión personal del usuario (preferencia) si está configurada
+        var effectiveConnId = (isLinkedOrigin && agent._pref_conn_id)
+            ? agent._pref_conn_id
+            : agent.connection_id;
+        var conn = connections.find(function (c) { return c.id === effectiveConnId; });
         var typeKey = conn ? conn.type : null;
         var chatDisabled = !conn || (connStatus && connStatus[conn.id] === false);
         var chatTitle = !conn
@@ -66,6 +82,8 @@ var AgentCard = {
                 ownerBadge = '<span class="res-badge res-badge--mine">' + (t('agents.card.badge_mine') || 'Tuyo') + '</span>';
             }
         }
+
+        var originBadge = AgentCard._originBadge(agent.origin_type);
 
         var socialBadge = agent._social_public
             ? '<span class="agent-scope-badge agent-scope-badge--social" title="' + esc(agent._social_category || '') + '">' +
@@ -118,7 +136,7 @@ var AgentCard = {
             '<div class="agent-card-info">' +
             '<div class="agent-card-name-row">' +
             '<span class="agent-card-name" title="' + esc(agent.name) + '">' + esc(agent.name) + '</span>' +
-            ownerBadge + socialBadge + linkBadge + starsBadge + verifiedBadge +
+            ownerBadge + originBadge + socialBadge + linkBadge + starsBadge + verifiedBadge +
             '</div>' +
             '<div class="agent-card-meta">' +
             '<span class="agent-conn-pill ' + pillCls + '">' + esc(connLabel) + '</span>' +
@@ -139,8 +157,16 @@ var AgentCard = {
             '<button class="agent-action-icon" data-action="blueprint" data-id="' + esc(agent.id) + '" title="' + t('agents.blueprint.view_btn') + '">' +
             '<svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M1.5 8C1.5 8 4 3.5 8 3.5S14.5 8 14.5 8 12 12.5 8 12.5 1.5 8 1.5 8z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><circle cx="8" cy="8" r="2" stroke="currentColor" stroke-width="1.4"/></svg>' +
             '</button>' +
-            (agentLabels.indexOf('linked') !== -1 && !agent._shared ?
-                // Acceso directo: solo asignar conexión + eliminar
+            (isLinkedOrigin ?
+                // Agente enlazado vía workspace compartido: exportar + definir conexión personal
+                '<button class="agent-action-icon" data-action="export" data-id="' + esc(agent.id) + '" title="' + (window.t ? t('actions.export') : 'Exportar') + '">' +
+                '<svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 2v8M5 7l3 3 3-3M3 13h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>' +
+                '</button>' +
+                '<button class="agent-action-icon" data-action="set-pref-conn" data-id="' + esc(agent.id) + '" data-conn-id="' + esc(agent._pref_conn_id || '') + '" title="' + (window.t ? t('agents.card.set_my_connection') : 'Definir mi conexión') + '">' +
+                '<svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M4 8h8M10 5l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="2.5" cy="8" r="1.5" stroke="currentColor" stroke-width="1.3"/></svg>' +
+                '</button>'
+            : agentLabels.indexOf('linked') !== -1 && !agent._shared ?
+                // Acceso directo (sistema antiguo): solo asignar conexión + eliminar
                 '<button class="agent-action-icon" data-action="set-conn" data-id="' + esc(agent.id) + '" data-conn-id="' + esc(agent.connection_id || '') + '" title="' + (t('agents.card.set_connection') || 'Asignar conexión') + '">' +
                 '<svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M4 8h8M10 5l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="2.5" cy="8" r="1.5" stroke="currentColor" stroke-width="1.3"/></svg>' +
                 '</button>' +

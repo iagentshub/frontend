@@ -42,6 +42,12 @@
     "public": "Públicos",
     "badge_public": "PÚBLICO"
   },
+  "origin": {
+    "label": "Origen",
+    "owner": "Propietario",
+    "linked": "Enlazado",
+    "fork": "Fork"
+  },
   "card": {
     "no_description": "Sin descripción",
     "no_ai": "Sin IA",
@@ -52,7 +58,10 @@
     "badge_mine": "Tuyo",
     "set_connection": "Asignar conexión",
     "set_connection_hint": "Selecciona la conexión para probar este acceso directo.",
-    "remove_link": "Eliminar acceso directo"
+    "remove_link": "Eliminar acceso directo",
+    "set_my_connection": "Definir mi conexión",
+    "set_my_connection_hint": "Elige tu propia conexión para chatear con este agente compartido.",
+    "non_owner_hint": "Este agente pertenece a otro usuario. Solo puedes verlo o descargarlo."
   },
   "filter": {
     "search_placeholder": "Buscar por nombre o descripción...",

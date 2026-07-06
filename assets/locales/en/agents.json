@@ -42,6 +42,12 @@
     "public": "Public",
     "badge_public": "PUBLIC"
   },
+  "origin": {
+    "label": "Origin",
+    "owner": "Owner",
+    "linked": "Linked",
+    "fork": "Fork"
+  },
   "card": {
     "no_description": "No description",
     "no_ai": "No AI",
@@ -52,7 +58,10 @@
     "badge_mine": "Yours",
     "set_connection": "Set connection",
     "set_connection_hint": "Select the connection to test this shortcut.",
-    "remove_link": "Remove shortcut"
+    "remove_link": "Remove shortcut",
+    "set_my_connection": "Set my connection",
+    "set_my_connection_hint": "Choose your own connection to chat with this shared agent.",
+    "non_owner_hint": "This agent belongs to another user. You can only view or download it."
   },
   "filter": {
     "search_placeholder": "Search by name or description...",
