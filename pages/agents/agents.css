@@ -25,13 +25,6 @@
 .agent-card[draggable="true"] { cursor: grab; }
 .agent-card.kd-dragging { opacity: 0.35; cursor: grabbing; }
 
-/* ── Knowledge picker in agent modal ── */
-.agent-knowledge-picker {
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
-    overflow: hidden;
-}
-
 .agent-knowledge-list {
     max-height: 180px;
     overflow-y: auto;
@@ -79,50 +72,6 @@
     flex-shrink: 0;
 }
 
-/* ── Topbar user button ── */
-.topbar-user {
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    padding: 4px 10px 4px 4px;
-    border-radius: 20px;
-    background: none;
-    border: 1px solid transparent;
-    color: var(--ink-2);
-    font-size: 12px;
-    font-weight: 500;
-    cursor: pointer;
-    font-family: var(--font);
-    transition: background 0.13s, border-color 0.13s;
-}
-
-.topbar-user:hover {
-    background: var(--surface-2);
-    border-color: var(--line-strong);
-    color: var(--ink);
-}
-
-.topbar-avatar {
-    width: 26px;
-    height: 26px;
-    border-radius: 50%;
-    background: var(--accent-dim);
-    color: var(--accent);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 11px;
-    font-weight: 700;
-    flex-shrink: 0;
-}
-
-/* ── Page intro ── */
-.page-intro {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-}
-
 .page-title {
     font-size: 1.25rem;
     font-weight: 700;
@@ -149,22 +98,6 @@
     /* Modal blueprint: ancho completo en móvil */
     .abp-box           { width: 100%; }
 }
-
-/* ── Panel shared ── */
-.panel-divider {
-    height: 1px;
-    background: var(--line);
-    margin: 8px 0;
-}
-
-.panel-subtitle {
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--ink-2);
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-}
-
 
 /* ── Skill picker por categorías ──────────────────────────────── */
 .skill-picker {
@@ -502,39 +435,6 @@
     border-color: var(--line-strong);
 }
 
-/* ── Scope radio group ──────────────────────────────────────── */
-.scope-radio-group {
-    display: flex;
-    gap: 8px;
-}
-
-.scope-radio {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 5px 12px;
-    border-radius: var(--radius);
-    border: 1px solid var(--line-strong);
-    background: var(--surface-2);
-    cursor: pointer;
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--ink-2);
-    transition: border-color .12s, background .12s, color .12s;
-    user-select: none;
-}
-
-.scope-radio input {
-    display: none;
-}
-
-.scope-radio:has(input:checked) {
-    border-color: var(--accent);
-    background: var(--accent-dim);
-    color: var(--accent);
-    font-weight: 600;
-}
-
 /* ── Memoria toggle ─────────────────────────────────────────── */
 .field-memory {
     margin-top: 4px;
@@ -716,24 +616,6 @@ details[open] > .advanced-summary::before {
     max-width: 160px;
     overflow: hidden;
     text-overflow: ellipsis;
-}
-
-.routine-badge--manual {
-    background: var(--surface-2);
-    color: var(--ink-2);
-    border: 1px solid var(--line-strong);
-}
-
-.routine-badge--cron {
-    background: var(--accent-dim);
-    color: var(--accent);
-    border: 1px solid color-mix(in srgb, var(--accent) 20%, transparent);
-}
-
-.routine-badge--webhook {
-    background: rgba(16, 185, 129, 0.07);
-    color: var(--success);
-    border: 1px solid rgba(16, 185, 129, 0.2);
 }
 
 .routine-card-actions {
@@ -1162,13 +1044,6 @@ details[open] > .advanced-summary::before {
 .scan-badge--github  { background: rgba(110,64,201,0.12);  color: #6e40c9; }
 .scan-badge--native  { background: var(--accent-dim);       color: var(--accent); }
 .scan-badge--skill   { background: var(--surface-3);        color: var(--ink-2); border: 1px solid var(--line-strong); }
-
-.scan-empty {
-    padding: 36px 24px;
-    font-size: 13px;
-    color: var(--ink-3);
-    text-align: center;
-}
 
 .scan-agent-item {
     padding: 8px 0;

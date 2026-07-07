@@ -50,60 +50,6 @@
     color: var(--text-3);
 }
 
-.teams-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 12px 16px;
-    background: var(--surface-2);
-    border-radius: 8px;
-    margin-bottom: 8px;
-}
-
-.teams-item-info {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.teams-item-actions {
-    display: flex;
-    gap: 8px;
-}
-
-.teams-inv-list {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    margin-top: 8px;
-}
-
-.teams-inv-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px 14px;
-    background: var(--surface-2);
-    border-radius: 8px;
-    border-left: 3px solid var(--accent);
-}
-
-.teams-inv-info {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-}
-
-.teams-inv-by {
-    font-size: 12px;
-    color: var(--text-3);
-}
-
-.teams-inv-actions {
-    display: flex;
-    gap: 8px;
-}
-
 .perms-tab-panel {
     padding-top: 4px;
 }
@@ -139,50 +85,6 @@
 }
 
 .teams-tab-panel { }
-
-.teams-card {
-    background: var(--surface-2);
-    border-radius: 10px;
-    margin-bottom: 12px;
-    overflow: hidden;
-}
-
-.teams-card-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 12px 16px;
-    border-bottom: 1px solid var(--border);
-}
-
-.teams-card-name {
-    font-weight: 600;
-    font-size: 14px;
-    flex: 1;
-}
-
-.teams-card-members {
-    padding: 10px 16px 12px;
-}
-
-.teams-card-members-label {
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: .05em;
-    color: var(--text-3);
-    margin-bottom: 8px;
-}
-
-.teams-member-row {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 6px 0;
-    border-bottom: 1px solid var(--border);
-    font-size: 13px;
-}
-
-.teams-member-row:last-child { border-bottom: none; }
 
 .teams-member-row .user-avatar-cell {
     flex: 1;
@@ -222,23 +124,4 @@
 
 .perms-col-toggle .toggle {
     margin: 0 auto;
-}
-
-/* ── Share teams modal ────────────────────────────────────────────────────────── */
-
-.share-team-row {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 8px 4px;
-    border-bottom: 1px solid var(--border);
-    cursor: pointer;
-    font-size: 13px;
-}
-
-.share-team-row:last-child { border-bottom: none; }
-
-.share-team-name {
-    flex: 1;
-    font-weight: 500;
 }

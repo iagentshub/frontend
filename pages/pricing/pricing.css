@@ -292,18 +292,10 @@ html body.pricing-page {
     line-height: 1;
 }
 
-.pr-price--custom { font-size: 1.4rem; }
-
 .pr-price-period {
     font-size: 12px;
     color: var(--ink-3);
     line-height: 1.3;
-}
-
-.pr-accounts {
-    font-size: 11.5px;
-    color: var(--ink-3);
-    margin-top: 2px;
 }
 
 .pr-annual-note {
@@ -336,17 +328,6 @@ html body.pricing-page {
     cursor: pointer;
     text-align: center;
     flex-shrink: 0;
-}
-
-.pr-btn--ghost {
-    background: var(--surface-2);
-    border: 1px solid var(--line);
-    color: var(--ink);
-}
-
-.pr-btn--ghost:hover {
-    background: var(--surface-3);
-    border-color: var(--line-strong);
 }
 
 /* ── Service section ── */
@@ -442,187 +423,11 @@ html body.pricing-page {
     color: var(--accent);
 }
 
-/* ── Calculator ── */
-.pr-calc {
-    display: flex;
-    gap: 0;
-    background: var(--surface);
-    border: 1px solid var(--line);
-    border-radius: var(--radius-lg);
-    margin-bottom: 16px;
-    overflow: hidden;
-    scroll-margin-top: 72px;
-}
-
-.pr-calc-left {
-    flex: 1;
-    padding: 28px 32px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
-.pr-calc-right {
-    width: 240px;
-    flex-shrink: 0;
-    background: var(--surface-2);
-    border-left: 1px solid var(--line);
-    padding: 28px 28px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    justify-content: center;
-}
-
-.pr-calc-title {
-    font-size: 15px;
-    font-weight: 700;
-    color: var(--ink);
-}
-
-.pr-calc-subtitle {
-    font-size: 12px;
-    color: var(--ink-3);
-    line-height: 1.55;
-    margin-top: -12px;
-}
-
-/* Billing toggle inside calc */
-.pr-calc-billing-wrap {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    flex-wrap: wrap;
-}
-
-.pr-calc-billing-label {
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.07em;
-    text-transform: uppercase;
-    color: var(--ink-3);
-    flex-shrink: 0;
-}
-
-.pr-calc-billing-toggle {
-    display: inline-flex;
-    background: var(--surface-2);
-    border: 1px solid var(--line);
-    border-radius: 9px;
-    padding: 3px;
-    gap: 2px;
-}
-
-.pr-calc-tbtn {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 6px 14px;
-    border: none;
-    border-radius: 6px;
-    background: none;
-    color: var(--ink-2);
-    font-size: 12.5px;
-    font-weight: 500;
-    font-family: var(--font);
-    cursor: pointer;
-    transition: background 0.15s, color 0.15s;
-}
-
 .pr-calc-tbtn.active {
     background: var(--surface);
     color: var(--ink);
     box-shadow: var(--shadow);
     font-weight: 600;
-}
-
-/* Slider */
-.pr-calc-slider-wrap {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.pr-calc-slider-row {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-}
-
-.pr-calc-slider {
-    flex: 1;
-    -webkit-appearance: none;
-    appearance: none;
-    height: 4px;
-    border-radius: 2px;
-    background: var(--line-strong);
-    outline: none;
-    cursor: pointer;
-}
-
-.pr-calc-slider::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    width: 18px;
-    height: 18px;
-    border-radius: 50%;
-    background: var(--accent);
-    border: 2px solid var(--surface);
-    box-shadow: 0 0 0 1px var(--accent);
-    cursor: pointer;
-    transition: box-shadow 0.15s;
-}
-
-.pr-calc-slider::-webkit-slider-thumb:hover {
-    box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 20%, transparent);
-}
-
-.pr-calc-slider::-moz-range-thumb {
-    width: 18px;
-    height: 18px;
-    border-radius: 50%;
-    background: var(--accent);
-    border: 2px solid var(--surface);
-    cursor: pointer;
-}
-
-.pr-calc-count {
-    display: flex;
-    align-items: baseline;
-    gap: 5px;
-    min-width: 110px;
-    flex-shrink: 0;
-}
-
-.pr-calc-count span:first-child {
-    font-size: 1.5rem;
-    font-weight: 800;
-    letter-spacing: -0.04em;
-    color: var(--ink);
-    line-height: 1;
-}
-
-.pr-calc-count-label {
-    font-size: 12px;
-    color: var(--ink-3);
-}
-
-.pr-calc-range-labels {
-    display: flex;
-    justify-content: space-between;
-    font-size: 10px;
-    color: var(--ink-3);
-    padding: 0 2px;
-}
-
-/* Self-hosted checkbox */
-.pr-calc-selfhosted { display: flex; align-items: flex-start; }
-
-.pr-calc-check-label {
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    cursor: pointer;
-    user-select: none;
 }
 
 .pr-calc-check { display: none; }
@@ -661,117 +466,10 @@ html body.pricing-page {
     cursor: not-allowed;
 }
 
-.pr-calc-check-text {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    font-size: 13px;
-    color: var(--ink-2);
-    font-weight: 500;
-}
-
 .pr-calc-sh-note {
     font-size: 11px;
     color: var(--ink-3);
     font-weight: 400;
-}
-
-/* Enterprise note */
-.pr-calc-ent-note {
-    display: flex;
-    align-items: flex-start;
-    gap: 8px;
-    font-size: 12px;
-    color: var(--ink-3);
-    background: var(--surface-2);
-    border-radius: 8px;
-    padding: 10px 12px;
-    line-height: 1.5;
-}
-
-.pr-calc-ent-note svg { flex-shrink: 0; margin-top: 1px; }
-
-/* Right panel */
-.pr-calc-plan {
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--ink-3);
-    margin-bottom: 2px;
-}
-
-.pr-calc-ppl-wrap {
-    display: flex;
-    align-items: baseline;
-    gap: 5px;
-    flex-wrap: wrap;
-}
-
-.pr-calc-ppl {
-    font-size: 2rem;
-    font-weight: 800;
-    letter-spacing: -0.04em;
-    color: var(--ink);
-    line-height: 1;
-}
-
-.pr-calc-ppl-label {
-    font-size: 11px;
-    color: var(--ink-3);
-    line-height: 1.3;
-}
-
-.pr-calc-divider {
-    height: 1px;
-    background: var(--line);
-    margin: 4px 0;
-}
-
-.pr-calc-total-label {
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--ink-3);
-}
-
-.pr-calc-total-monthly,
-.pr-calc-total-annual {
-    display: flex;
-    align-items: baseline;
-    gap: 5px;
-    flex-wrap: wrap;
-}
-
-.pr-calc-total-num {
-    font-size: 1.4rem;
-    font-weight: 700;
-    color: var(--ink);
-    letter-spacing: -0.03em;
-}
-
-.pr-calc-total-annual-num {
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: var(--ink-2);
-}
-
-.pr-calc-total-period {
-    font-size: 12px;
-    color: var(--ink-3);
-}
-
-.pr-calc-savings {
-    font-size: 11px;
-    color: var(--success);
-    font-weight: 600;
-    width: 100%;
-}
-
-.pr-calc-cta {
-    margin-top: 8px;
-    width: 100%;
 }
 
 /* ── Consulting ── */
@@ -826,153 +524,9 @@ html body.pricing-page {
     line-height: 1.5;
 }
 
-.pr-extra-hint {
-    font-size: 11px;
-    color: var(--ink-3);
-    margin-top: 2px;
-}
-
 @media (max-width: 680px) {
     .pr-extras { flex-direction: column; }
     .pr-extra-sep { width: auto; height: 1px; }
-}
-
-/* ── Consulting ── */
-.pr-consulting {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    background: var(--surface);
-    border: 1px solid var(--line);
-    border-radius: var(--radius-lg);
-    padding: 20px 24px;
-    margin-bottom: 16px;
-}
-
-.pr-consulting-icon {
-    flex-shrink: 0;
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    background: var(--surface-2);
-    border: 1px solid var(--line);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--ink-2);
-}
-
-.pr-consulting-body { flex: 1; }
-
-.pr-consulting-name {
-    font-size: 14px;
-    font-weight: 700;
-    color: var(--ink);
-    margin-bottom: 3px;
-}
-
-.pr-consulting-desc {
-    font-size: 13px;
-    color: var(--ink-2);
-    line-height: 1.5;
-}
-
-.pr-consulting-cta {
-    flex-shrink: 0;
-    white-space: nowrap;
-}
-
-/* ── Self-Hosted add-on ── */
-.pr-addon {
-    border: 1px solid var(--line);
-    border-radius: var(--radius-lg);
-    background: var(--surface);
-    padding: 24px 28px;
-    margin-bottom: 16px;
-}
-
-.pr-addon-label {
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--ink-3);
-    margin-bottom: 14px;
-}
-
-.pr-addon-body {
-    display: flex;
-    gap: 32px;
-    align-items: flex-start;
-}
-
-.pr-addon-info { flex: 1; }
-
-.pr-addon-name {
-    font-size: 15px;
-    font-weight: 700;
-    color: var(--ink);
-    margin-bottom: 6px;
-}
-
-.pr-addon-desc {
-    font-size: 13px;
-    color: var(--ink-2);
-    line-height: 1.55;
-    margin-bottom: 10px;
-}
-
-.pr-addon-includes {
-    font-size: 12px;
-    color: var(--ink-3);
-    line-height: 1.5;
-}
-
-.pr-addon-right {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 8px;
-    flex-shrink: 0;
-    min-width: 180px;
-}
-
-.pr-addon-price-wrap {
-    display: flex;
-    align-items: baseline;
-    gap: 4px;
-}
-
-.pr-addon-price {
-    font-size: 1.8rem;
-    font-weight: 800;
-    letter-spacing: -0.04em;
-    color: var(--ink);
-    line-height: 1;
-}
-
-.pr-addon-period {
-    font-size: 12px;
-    color: var(--ink-3);
-}
-
-.pr-addon-billing {
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--ink-2);
-    text-align: right;
-}
-
-.pr-addon-note {
-    font-size: 11px;
-    color: var(--ink-3);
-    text-align: right;
-    line-height: 1.4;
-}
-
-.pr-addon-cta {
-    margin-top: 4px;
-    width: 100%;
 }
 
 /* ── BYOK note ── */
@@ -1613,17 +1167,6 @@ html body.pricing-page {
     .pm-right { background: none; }
 }
 
-/* ── Self-hosted info ── */
-.pr-calc-sh-info {
-    font-size: 11.5px;
-    color: var(--ink-3);
-    line-height: 1.55;
-    padding: 10px 12px;
-    background: var(--surface-2);
-    border-radius: 8px;
-    margin-top: 8px;
-}
-
 /* ── Contact modal ── */
 .pr-modal-overlay {
     position: fixed;
@@ -1757,18 +1300,11 @@ html body.pricing-page {
 }
 
 @media (max-width: 860px) {
-    .pr-calc { flex-direction: column; }
-    .pr-calc-right { width: auto; border-left: none; border-top: 1px solid var(--line); }
 }
 
 @media (max-width: 680px) {
-    .pr-addon-body { flex-direction: column; }
-    .pr-addon-right { align-items: flex-start; min-width: 0; width: 100%; }
-    .pr-addon-note, .pr-addon-billing { text-align: left; }
     .pr-oss { flex-wrap: wrap; }
     .pr-oss-cta { margin-top: 4px; }
-    .pr-consulting { flex-wrap: wrap; }
-    .pr-consulting-cta { width: 100%; justify-content: center; }
 }
 
 @media (max-width: 580px) {
