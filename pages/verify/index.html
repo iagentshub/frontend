@@ -6,9 +6,10 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>iAgents Hub — Verificar cuenta</title>
   <script src="/assets/js/theme-early.js"></script>
-  <link rel="stylesheet" href="/assets/css/variables.css" />
-  <link rel="stylesheet" href="/assets/themes/themes.css" />
-  <link rel="stylesheet" href="/assets/css/base.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" />
+  <link rel="stylesheet" href="/assets/dist/core.css" />
   <link rel="stylesheet" href="/login/login.css">
 </head>
 
@@ -33,7 +34,21 @@
       </div>
     </div>
   </div>
-  <script src="/verify/verify.js"></script>
+  <script src="/verify/verify.js" defer></script>
+    <script type="speculationrules">
+    {
+      "prefetch": [{
+        "source": "document",
+        "where": { "and": [
+          { "href_matches": "/*" },
+          { "not": { "href_matches": "/api/*" } },
+          { "not": { "selector_matches": "[target=_blank]" } },
+          { "not": { "selector_matches": "[rel~=nofollow]" } }
+        ]},
+        "eagerness": "moderate"
+      }]
+    }
+    </script>
 </body>
 
 </html>

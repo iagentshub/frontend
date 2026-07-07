@@ -7,9 +7,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>iAgents Hub · Agentes</title>
     <!-- CSS globales -->
-    <link rel="stylesheet" href="/assets/css/variables.css" />
-    <link rel="stylesheet" href="/assets/themes/themes.css" />
-    <link rel="stylesheet" href="/assets/css/base.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" />
+    <link rel="stylesheet" href="/assets/dist/core.css" />
     <link rel="stylesheet" href="/assets/css/components.css" />
     <link rel="stylesheet" href="/assets/css/layout.css" />
     <link rel="stylesheet" href="/assets/css/modals.css" />
@@ -536,39 +537,53 @@
     </div>
 
     <!-- JS globales -->
-    <script src="/assets/js/flog.js"></script>
-    <script src="/assets/js/i18n.js"></script>
-    <script src="/assets/js/config.js"></script>
-    <script src="/assets/js/theme.js"></script>
-    <script src="/assets/js/toast.js"></script>
-    <script src="/assets/js/auth.js"></script>
-    <script src="/assets/js/api.js"></script>
-    <script src="/assets/js/utils.js"></script>
-    <script src="/assets/js/labels.js"></script>
+    <script src="/assets/js/flog.js" defer></script>
+    <script src="/assets/js/i18n.js" defer></script>
+    <script src="/assets/js/config.js" defer></script>
+    <script src="/assets/js/theme.js" defer></script>
+    <script src="/assets/js/toast.js" defer></script>
+    <script src="/assets/js/auth.js" defer></script>
+    <script src="/assets/js/api.js" defer></script>
+    <script src="/assets/js/utils.js" defer></script>
+    <script src="/assets/js/labels.js" defer></script>
     <!-- Componentes -->
-    <script src="/assets/components/main_nav/main_nav.js"></script>
-    <script src="/assets/components/workspace-create-wizard/workspace-create-wizard.js"></script>
-    <script src="/assets/components/agent-card/agent-card.js"></script>
-    <script src="/assets/components/filter_agents/filter_agents.js"></script>
-    <script src="/assets/components/dialog_chat/dialog_chat.js"></script>
-    <script src="/assets/components/agent-catalog/agent-catalog.js"></script>
-    <script src="/assets/components/action-menu/action-menu.js"></script>
-    <script src="/assets/components/group-share-dialog/group-share-dialog.js"></script>
-    <script src="/assets/components/group-panel/group-panel.js"></script>
-    <script src="/assets/components/folder-move-dialog/folder-move-dialog.js"></script>
+    <script src="/assets/components/main_nav/main_nav.js" defer></script>
+    <script src="/assets/components/workspace-create-wizard/workspace-create-wizard.js" defer></script>
+    <script src="/assets/components/agent-card/agent-card.js" defer></script>
+    <script src="/assets/components/filter_agents/filter_agents.js" defer></script>
+    <script src="/assets/components/dialog_chat/dialog_chat.js" defer></script>
+    <script src="/assets/components/agent-catalog/agent-catalog.js" defer></script>
+    <script src="/assets/components/action-menu/action-menu.js" defer></script>
+    <script src="/assets/components/group-share-dialog/group-share-dialog.js" defer></script>
+    <script src="/assets/components/group-panel/group-panel.js" defer></script>
+    <script src="/assets/components/folder-move-dialog/folder-move-dialog.js" defer></script>
     <!-- Página (orden importante: state → skill-picker → modal → export → init) -->
-    <script src="/knowledge/knowledge-folders.js"></script>
-    <script src="/agents/agents-state.js"></script>
-    <script src="/agents/agents-skill-picker.js"></script>
-    <script src="/assets/js/folder-toggle.js"></script>
-    <script src="/assets/js/providers.js"></script>
-    <script src="/agents/agents-modal.js"></script>
-    <script src="/agents/agents-export.js"></script>
-    <script src="/agents/agents-load.js"></script>
-    <script src="/agents/agents-load-preview.js"></script>
-    <script src="/agents/agents-routines.js"></script>
-    <script src="/agents/agents-scan.js"></script>
-    <script src="/agents/agents.js"></script>
+    <script src="/knowledge/knowledge-folders.js" defer></script>
+    <script src="/agents/agents-state.js" defer></script>
+    <script src="/agents/agents-skill-picker.js" defer></script>
+    <script src="/assets/js/folder-toggle.js" defer></script>
+    <script src="/assets/js/providers.js" defer></script>
+    <script src="/agents/agents-modal.js" defer></script>
+    <script src="/agents/agents-export.js" defer></script>
+    <script src="/agents/agents-load.js" defer></script>
+    <script src="/agents/agents-load-preview.js" defer></script>
+    <script src="/agents/agents-routines.js" defer></script>
+    <script src="/agents/agents-scan.js" defer></script>
+    <script src="/agents/agents.js" defer></script>
+    <script type="speculationrules">
+    {
+      "prefetch": [{
+        "source": "document",
+        "where": { "and": [
+          { "href_matches": "/*" },
+          { "not": { "href_matches": "/api/*" } },
+          { "not": { "selector_matches": "[target=_blank]" } },
+          { "not": { "selector_matches": "[rel~=nofollow]" } }
+        ]},
+        "eagerness": "moderate"
+      }]
+    }
+    </script>
 </body>
 
 </html>

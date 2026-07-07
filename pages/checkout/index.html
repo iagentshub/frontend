@@ -5,12 +5,13 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>iAgents Hub · Checkout</title>
-    <link rel="stylesheet" href="/assets/css/variables.css" />
-    <link rel="stylesheet" href="/assets/themes/themes.css" />
-    <link rel="stylesheet" href="/assets/css/base.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" />
+    <link rel="stylesheet" href="/assets/dist/core.css" />
     <link rel="stylesheet" href="/pricing/pricing.css" />
     <link rel="stylesheet" href="/checkout/checkout.css" />
-    <script src="https://js.stripe.com/v3/"></script>
+    <script src="https://js.stripe.com/v3/" defer></script>
 </head>
 <body class="pricing-page" style="visibility:hidden">
 
@@ -51,9 +52,23 @@
         </div>
     </main>
 
-    <script src="/assets/js/flog.js"></script>
-    <script src="/assets/js/config.js"></script>
-    <script src="/assets/js/api.js"></script>
-    <script src="/checkout/checkout.js"></script>
+    <script src="/assets/js/flog.js" defer></script>
+    <script src="/assets/js/config.js" defer></script>
+    <script src="/assets/js/api.js" defer></script>
+    <script src="/checkout/checkout.js" defer></script>
+    <script type="speculationrules">
+    {
+      "prefetch": [{
+        "source": "document",
+        "where": { "and": [
+          { "href_matches": "/*" },
+          { "not": { "href_matches": "/api/*" } },
+          { "not": { "selector_matches": "[target=_blank]" } },
+          { "not": { "selector_matches": "[rel~=nofollow]" } }
+        ]},
+        "eagerness": "moderate"
+      }]
+    }
+    </script>
 </body>
 </html>

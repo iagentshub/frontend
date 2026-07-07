@@ -1,4 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+/* La fuente Inter se carga desde el <head> con preconnect (ver index.html de
+   cada página) para evitar el retardo del @import anidado. */
 
 /* ══════════════════════════════════════════════
    DEFAULTS — dark-red (Nothing aesthetic)

@@ -1,6 +1,11 @@
 /* ══════════════════════════════════════════════
    BASE — resets, body, tipografía, scrollbar
 ══════════════════════════════════════════════ */
+
+/* Transición suave entre páginas (View Transitions cross-document, MPA).
+   Degrada de forma elegante: navegadores sin soporte simplemente no animan. */
+@view-transition { navigation: auto; }
+
 * {
     box-sizing: border-box;
     margin: 0;

@@ -5,9 +5,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>iAgents Hub · Explorar</title>
-    <link rel="stylesheet" href="/assets/css/variables.css" />
-    <link rel="stylesheet" href="/assets/themes/themes.css" />
-    <link rel="stylesheet" href="/assets/css/base.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" />
+    <link rel="stylesheet" href="/assets/dist/core.css" />
     <link rel="stylesheet" href="/assets/css/components.css" />
     <link rel="stylesheet" href="/assets/css/layout.css" />
     <link rel="stylesheet" href="/assets/components/main_nav/main_nav.css" />
@@ -138,15 +139,29 @@
     </div>
 </div>
 
-<script src="/assets/js/i18n.js"></script>
-<script src="/assets/js/config.js"></script>
-<script src="/assets/js/utils.js"></script>
-<script src="/assets/js/api.js"></script>
-<script src="/assets/js/theme.js"></script>
-<script src="/assets/js/auth.js"></script>
-<script src="/assets/js/labels.js"></script>
-<script src="/assets/components/main_nav/main_nav.js"></script>
-<script src="/assets/components/workspace-create-wizard/workspace-create-wizard.js"></script>
-<script src="/explore/explore.js"></script>
+<script src="/assets/js/i18n.js" defer></script>
+<script src="/assets/js/config.js" defer></script>
+<script src="/assets/js/utils.js" defer></script>
+<script src="/assets/js/api.js" defer></script>
+<script src="/assets/js/theme.js" defer></script>
+<script src="/assets/js/auth.js" defer></script>
+<script src="/assets/js/labels.js" defer></script>
+<script src="/assets/components/main_nav/main_nav.js" defer></script>
+<script src="/assets/components/workspace-create-wizard/workspace-create-wizard.js" defer></script>
+<script src="/explore/explore.js" defer></script>
+    <script type="speculationrules">
+    {
+      "prefetch": [{
+        "source": "document",
+        "where": { "and": [
+          { "href_matches": "/*" },
+          { "not": { "href_matches": "/api/*" } },
+          { "not": { "selector_matches": "[target=_blank]" } },
+          { "not": { "selector_matches": "[rel~=nofollow]" } }
+        ]},
+        "eagerness": "moderate"
+      }]
+    }
+    </script>
 </body>
 </html>
