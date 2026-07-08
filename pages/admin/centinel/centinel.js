@@ -19,6 +19,8 @@ window.centinel = (function () {
         treeData: null,
         treeSearch: '',
         activeFile: null,      // archivo que se está ejecutando ahora mismo
+        logActive: false,      // ojo activo: muestra el log pane
+        logLines: [],          // líneas de texto plano acumuladas para descarga
     };
 
     // ── DOM refs ───────────────────────────────────────────────────────
@@ -44,9 +46,68 @@ window.centinel = (function () {
         _bindButtons();
         _bindFilters();
         _bindTreeSearch();
+        _initLog();
         _loadTree();
         _loadHistory();
         _checkExistingRun();
+    }
+
+    // ── Log pane ───────────────────────────────────────────────────────
+    function _initLog() {
+        var btnToggle = $$('btn-log-toggle');
+        var btnDownload = $$('btn-log-download');
+        if (btnToggle) btnToggle.addEventListener('click', _toggleLog);
+        if (btnDownload) btnDownload.addEventListener('click', _downloadLog);
+    }
+
+    function _toggleLog() {
+        _s.logActive = !_s.logActive;
+        var btnToggle = $$('btn-log-toggle');
+        var results = $$('ctn-results');
+        var log = $$('ctn-log');
+        if (!results || !log) return;
+        if (_s.logActive) {
+            results.style.display = 'none';
+            log.style.display = '';
+            log.scrollTop = log.scrollHeight;
+            if (btnToggle) btnToggle.classList.add('active');
+        } else {
+            results.style.display = '';
+            log.style.display = 'none';
+            if (btnToggle) btnToggle.classList.remove('active');
+        }
+    }
+
+    function _logAppend(text, cssClass) {
+        _s.logLines.push(text);
+        var log = $$('ctn-log');
+        if (!log) return;
+        var span = document.createElement('span');
+        if (cssClass) span.className = cssClass;
+        span.textContent = text + '\n';
+        log.appendChild(span);
+        if (_s.logActive) log.scrollTop = log.scrollHeight;
+    }
+
+    function _logClear() {
+        _s.logLines = [];
+        var log = $$('ctn-log');
+        if (log) log.textContent = '';
+        var btnDownload = $$('btn-log-download');
+        if (btnDownload) btnDownload.style.display = 'none';
+    }
+
+    function _downloadLog() {
+        var text = _s.logLines.join('\n');
+        var blob = new Blob([text], { type: 'text/plain' });
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement('a');
+        a.href = url;
+        a.download = 'centinel-' + (new Date().toISOString().slice(0, 19).replace(/[T:]/g, '-')) + '.log';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
     }
 
     async function _checkExistingRun() {
@@ -314,6 +375,7 @@ window.centinel = (function () {
         _s.fileOrder = [];
         _s.lastProgress = 0;
         _s.totalTests = 0;
+        _logClear();
         _clearResults();
         // Pre-poblar el panel con todos los archivos en estado "Pendiente"
         _prepopulateResults(_getTargetFiles(target, rerurFailed));
@@ -395,13 +457,31 @@ window.centinel = (function () {
     function _handleEvent(ev) {
         switch (ev.type) {
             case 'started':
+                _logClear();
+                _logAppend('=== Run iniciado: ' + ev.target + ' ===', 'ctn-log-line-sep');
                 $$('ctn-subtitle').textContent = 'Ejecutando: ' + ev.target;
                 break;
             case 'collecting':
                 _s.totalTests = ev.count;
+                _logAppend('collected ' + ev.count + ' items', 'ctn-log-line-info');
                 $$('ctn-subtitle').textContent = 'Descubriendo ' + ev.count + ' tests…';
                 break;
             case 'test':
+                // Log en tiempo real
+                (function () {
+                    var pct = String(ev.progress);
+                    var pad = pct.length < 3 ? Array(3 - pct.length + 1).join(' ') : '';
+                    var line = ev.file + '::' + ev.name + ' ' +
+                        (ev.status === 'passed' ? 'PASSED' : ev.status === 'failed' || ev.status === 'error' ? 'FAILED' : 'SKIPPED') +
+                        ' [' + pad + pct + '%]';
+                    var cls = ev.status === 'passed' ? 'ctn-log-line-passed' :
+                        (ev.status === 'failed' || ev.status === 'error') ? 'ctn-log-line-failed' :
+                            'ctn-log-line-skipped';
+                    _logAppend(line, cls);
+                    if (ev.traceback) {
+                        _logAppend(ev.traceback, 'ctn-log-line-tb');
+                    }
+                }());
                 _handleTestEvent(ev);
                 break;
             case 'summary':
@@ -413,6 +493,18 @@ window.centinel = (function () {
                 _finalizeActiveFile();
                 _setIdleUI(_s.results ? _buildLocalSummary() : {}, ev.failed_ids || []);
                 _renderSummaryBar(_buildLocalSummary());
+                (function () {
+                    var s = _buildLocalSummary();
+                    var parts = [];
+                    if (s.passed) parts.push(s.passed + ' passed');
+                    if (s.failed) parts.push(s.failed + ' failed');
+                    if (s.skipped) parts.push(s.skipped + ' skipped');
+                    _logAppend('\n' + (parts.join(', ') || 'done') + ' (exit ' + (ev.exit_code || 0) + ')',
+                        s.failed ? 'ctn-log-line-failed' : 'ctn-log-line-passed');
+                    _logAppend('='.repeat(60), 'ctn-log-line-sep');
+                    var btn = $$('btn-log-download');
+                    if (btn) btn.style.display = '';
+                }());
                 $$('ctn-subtitle').textContent = 'Test runner del backend';
                 _loadHistory();
                 break;
@@ -421,6 +513,7 @@ window.centinel = (function () {
                 _s.es = null;
                 _finalizeActiveFile();
                 _setIdleUI(_buildLocalSummary(), []);
+                _logAppend('--- Run abortado ---', 'ctn-log-line-skipped');
                 toast.show('Run abortado');
                 _loadHistory();
                 break;
@@ -428,6 +521,7 @@ window.centinel = (function () {
                 _s.es && _s.es.close();
                 _s.es = null;
                 _setIdleUI({}, []);
+                _logAppend('ERROR: ' + ev.message, 'ctn-log-line-failed');
                 toast.error('Error en el run: ' + ev.message);
                 break;
         }
