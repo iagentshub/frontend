@@ -77,9 +77,7 @@ fetch('/api/settings/platform/public').then(r => r.ok ? r.json() : null).then(fu
     // Acceso como invitado
     if (cfg.guest_enabled) {
         var guestBtn = document.getElementById('btn-guest');
-        var divider = document.querySelector('.login-divider');
         if (guestBtn) guestBtn.style.display = '';
-        if (divider) divider.style.display = '';
     }
 
     // Link "¿No tienes cuenta? Crear cuenta"
