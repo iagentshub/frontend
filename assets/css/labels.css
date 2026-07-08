@@ -24,6 +24,17 @@
     flex-shrink: 0;
 }
 
+/* Chip clicable (enlazado → perfil del propietario) */
+.label-chip--link {
+    text-decoration: none;
+    cursor: pointer;
+    transition: filter 0.15s;
+}
+
+.label-chip--link:hover {
+    filter: brightness(0.85);
+}
+
 .label-chips-row {
     display: flex;
     flex-wrap: wrap;

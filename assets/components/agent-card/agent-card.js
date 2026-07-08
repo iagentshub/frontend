@@ -73,33 +73,15 @@ var AgentCard = {
 
         // Badges de propiedad: solo aparecen en modo grupo
         var inGroupMode = !!(window._activeGroupId);
-        var ownerBadge = '';
-        if (inGroupMode) {
-            if (agent._shared) {
-                var ownerLabel = agent.owner_id ? '@' + agent.owner_id : (t('teams.sharing.shared_badge') || 'Compartido');
-                ownerBadge = '<a class="res-badge res-badge--shared res-badge--owner-icon" href="/u/' + esc(agent.owner_id) + '" title="' + esc(ownerLabel) + '" onclick="event.stopPropagation()" tabindex="-1">' +
-                    '<svg width="11" height="11" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5.5" r="2.8" stroke="currentColor" stroke-width="1.5"/><path d="M2 14c0-3.3 2.7-5.5 6-5.5s6 2.2 6 5.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>' +
-                    '</a>';
-            } else {
-                ownerBadge = '<span class="res-badge res-badge--mine">' + (t('agents.card.badge_mine') || 'Tuyo') + '</span>';
-            }
-        }
-
-        var originBadge = AgentCard._originBadge(agent.origin_type);
+        var ownerBadge = (inGroupMode && !agent._shared)
+            ? '<span class="res-badge res-badge--mine">' + (t('agents.card.badge_mine') || 'Tuyo') + '</span>'
+            : '';
 
         var socialBadge = agent._social_public
             ? '<span class="agent-scope-badge agent-scope-badge--social" title="' + esc(agent._social_category || '') + '">' +
             '<svg width="9" height="9" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.6"/><path d="M8 1.5C6 4 5 6 5 8s1 4 3 6.5M8 1.5C10 4 11 6 11 8s-1 4-3 6.5M1.5 8h13" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>' +
             '</span>'
             : '';
-        var linkBadge = '';
-        if (agentLabels.indexOf('linked') !== -1) {
-            if (agent._linked_broken) {
-                linkBadge = '<span class="agent-scope-badge agent-scope-badge--link-broken">Enlace roto</span>';
-            } else if (agent._linked_to_user) {
-                linkBadge = '<span class="agent-scope-badge agent-scope-badge--linked">Enlace · @' + esc(agent._linked_to_user) + '</span>';
-            }
-        }
         var starsBadge = (agent._social_stars > 0)
             ? '<span class="agent-scope-badge agent-scope-badge--stars" title="Estrellas">★ ' + agent._social_stars + '</span>'
             : '';
@@ -122,10 +104,21 @@ var AgentCard = {
         // Chip de origen (linked / fork) → va junto a los label-chips
         var originChip = '';
         if (agent.origin_type === 'linked') {
-            var _linkedText = window.t ? t('agents.origin.linked') : 'Enlazado';
-            var _linkedTip = agent.owner_id ? '@' + agent.owner_id : '';
-            originChip = '<span class="label-chip" style="--lc:#0891b2"' +
-                (_linkedTip ? ' title="' + esc(_linkedTip) + '"' : '') + '>' + esc(_linkedText) + '</span>';
+            var _isMine = window.__ME__ && agent.owner_id && window.__ME__ === agent.owner_id;
+            if (_isMine) {
+                // El agente es mío: etiqueta "Propietario" en verde
+                originChip = '<span class="label-chip" style="--lc:#059669">' +
+                    esc(window.t ? t('agents.origin.owner') : 'Propietario') + '</span>';
+            } else {
+                // De otro usuario: chip clicable que va al perfil
+                var _linkedText = window.t ? t('agents.origin.linked') : 'Enlazado';
+                var _ownerHref = agent.owner_id ? '/u/' + esc(agent.owner_id) : '#';
+                var _linkedTip = agent.owner_id ? '@' + agent.owner_id : '';
+                originChip = '<a class="label-chip label-chip--link" style="--lc:#0891b2" href="' + _ownerHref + '"' +
+                    (_linkedTip ? ' title="' + esc(_linkedTip) + '"' : '') +
+                    ' onclick="event.stopPropagation()">' +
+                    esc(_linkedText) + '</a>';
+            }
         } else if (agent.origin_type === 'fork') {
             originChip = '<span class="label-chip" style="--lc:#e65100">' +
                 esc(window.t ? t('agents.origin.fork') : 'Fork') + '</span>';
@@ -138,9 +131,11 @@ var AgentCard = {
                     esc(window.t ? t('agents.origin.linked_broken') : 'Enlace roto') + '</span>';
             } else {
                 var _linkTip = agent._linked_to_user ? '@' + agent._linked_to_user : '';
-                linkChip = '<span class="label-chip" style="--lc:#0891b2"' +
-                    (_linkTip ? ' title="' + esc(_linkTip) + '"' : '') + '>' +
-                    esc(window.t ? t('agents.origin.linked') : 'Enlazado') + '</span>';
+                var _linkHref = agent._linked_to_user ? '/u/' + esc(agent._linked_to_user) : '#';
+                linkChip = '<a class="label-chip label-chip--link" style="--lc:#0891b2" href="' + _linkHref + '"' +
+                    (_linkTip ? ' title="' + esc(_linkTip) + '"' : '') +
+                    ' onclick="event.stopPropagation()">' +
+                    esc(window.t ? t('agents.origin.linked') : 'Enlazado') + '</a>';
             }
         }
         // Label chips del sistema de etiquetas
