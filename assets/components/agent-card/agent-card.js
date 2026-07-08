@@ -119,12 +119,36 @@ var AgentCard = {
             chatTitle = window.LABELS ? LABELS.getLabel(blockingLabel) : blockingLabel;
         }
 
-        // Label chips: mostrar todos los grupos incluido privado/público
+        // Chip de origen (linked / fork) → va junto a los label-chips
+        var originChip = '';
+        if (agent.origin_type === 'linked') {
+            var _linkedText = window.t ? t('agents.origin.linked') : 'Enlazado';
+            var _linkedTip = agent.owner_id ? '@' + agent.owner_id : '';
+            originChip = '<span class="label-chip" style="--lc:#0891b2"' +
+                (_linkedTip ? ' title="' + esc(_linkedTip) + '"' : '') + '>' + esc(_linkedText) + '</span>';
+        } else if (agent.origin_type === 'fork') {
+            originChip = '<span class="label-chip" style="--lc:#e65100">' +
+                esc(window.t ? t('agents.origin.fork') : 'Fork') + '</span>';
+        }
+        // Chip para sistema antiguo de enlaces (agentLabels contiene 'linked')
+        var linkChip = '';
+        if (agentLabels.indexOf('linked') !== -1 && agent.origin_type !== 'linked') {
+            if (agent._linked_broken) {
+                linkChip = '<span class="label-chip" style="--lc:#dc2626">' +
+                    esc(window.t ? t('agents.origin.linked_broken') : 'Enlace roto') + '</span>';
+            } else {
+                var _linkTip = agent._linked_to_user ? '@' + agent._linked_to_user : '';
+                linkChip = '<span class="label-chip" style="--lc:#0891b2"' +
+                    (_linkTip ? ' title="' + esc(_linkTip) + '"' : '') + '>' +
+                    esc(window.t ? t('agents.origin.linked') : 'Enlazado') + '</span>';
+            }
+        }
+        // Label chips del sistema de etiquetas
         var labelChips = (window.LABELS && agentLabels.length)
             ? LABELS.renderChips(agentLabels, { hide: [] })
             : '';
-        var labelsRow = labelChips
-            ? '<div class="label-chips-row agent-label-chips">' + labelChips + '</div>'
+        var labelsRow = (originChip || linkChip || labelChips)
+            ? '<div class="label-chips-row agent-label-chips">' + originChip + linkChip + labelChips + '</div>'
             : '';
 
         var dragAttrs = (!isPublic && !agent._shared)
@@ -138,7 +162,7 @@ var AgentCard = {
             '<div class="agent-card-info">' +
             '<div class="agent-card-name-row">' +
             '<span class="agent-card-name" title="' + esc(agent.name) + '">' + esc(agent.name) + '</span>' +
-            ownerBadge + originBadge + socialBadge + linkBadge + starsBadge + verifiedBadge +
+            ownerBadge + socialBadge + starsBadge + verifiedBadge +
             '</div>' +
             '<div class="agent-card-meta">' +
             '<span class="agent-conn-pill ' + pillCls + '">' + esc(connLabel) + '</span>' +
