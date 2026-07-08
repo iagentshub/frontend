@@ -169,6 +169,36 @@ html body.about-page {
     margin-bottom: 16px;
 }
 
+/* ── Features grid ── */
+.about-features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+}
+
+.about-feature {
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 16px 18px;
+    transition: background 0.15s;
+}
+
+.about-feature:hover { background: var(--surface-3); }
+
+.about-feature-title {
+    font-weight: 700;
+    font-size: 14px;
+    margin-bottom: 6px;
+    color: var(--ink);
+}
+
+.about-feature-body {
+    color: var(--ink-2);
+    font-size: 13px;
+    line-height: 1.5;
+}
+
 /* ── Stack grid ── */
 .about-stack-grid {
     display: grid;
@@ -188,12 +218,6 @@ html body.about-page {
 }
 
 .about-stack-item:hover { background: var(--surface-3); }
-
-.about-stack-icon {
-    font-size: 18px;
-    line-height: 1;
-    margin-bottom: 4px;
-}
 
 .about-stack-name {
     font-size: 13px;

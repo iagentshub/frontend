@@ -4,12 +4,427 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta http-equiv="refresh" content="0;url=/login/" />
+    <script src="/assets/js/theme-early.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" />
+    <link rel="stylesheet" href="/assets/dist/core.css" />
+    <link rel="stylesheet" href="/assets/css/components.css" />
     <title>iAgents Hub</title>
+    <style>
+        /* Estilos propios de la landing, autocontenidos (no hay carpeta de página
+           dedicada: "/" se sirve directamente desde pages/index.html). */
+        .landing-page { display: none; }
+
+        .landing-header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 0 28px;
+            height: 56px;
+            max-width: 1100px;
+            margin: 0 auto;
+            background: var(--topbar-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        /* Logo de marca: "iAgents" + "Hub" en píldora — idéntico al de
+           /login/ (.login-logo) y al del nav principal (.nav-logo-hub). */
+        .landing-logo {
+            display: inline-flex;
+            align-items: center;
+            font-size: 1rem;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            color: var(--ink);
+            text-decoration: none;
+            flex-shrink: 0;
+        }
+
+        .landing-logo span {
+            color: #fff;
+            background: var(--accent);
+            border-radius: var(--radius-sm);
+            padding: 0.06em 0.3em 0.1em;
+            margin-left: 4px;
+            letter-spacing: -0.02em;
+        }
+
+        .landing-header-spacer {
+            flex: 1;
+        }
+
+        .landing-lang-btn {
+            background: var(--surface-2);
+            border: 1px solid var(--line);
+            color: var(--ink-2);
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            padding: 4px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.15s, color 0.15s;
+        }
+
+        .landing-lang-btn:hover {
+            background: var(--surface-3);
+            color: var(--ink);
+        }
+
+        .landing-hero {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 64px 32px 40px;
+            text-align: center;
+        }
+
+        .landing-hero-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 999px;
+            background: var(--accent-dim);
+            color: var(--accent);
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+            margin-bottom: 20px;
+        }
+
+        .landing-hero-title {
+            font-size: 42px;
+            font-weight: 800;
+            line-height: 1.15;
+            margin-bottom: 16px;
+        }
+
+        .landing-hero-body {
+            font-size: 17px;
+            color: var(--ink-2);
+            line-height: 1.6;
+            margin-bottom: 32px;
+        }
+
+        /* Estadísticas del hero (copiadas de /login/: .login-stats) */
+        .landing-hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 0;
+        }
+
+        .landing-hero-stat {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            padding: 0 28px;
+            border-right: 1px solid var(--line);
+        }
+
+        .landing-hero-stat:last-child {
+            border-right: none;
+        }
+
+        .landing-hero-stat-num {
+            font-size: 1.6rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            color: var(--ink);
+        }
+
+        .landing-hero-stat-accent {
+            color: var(--accent);
+        }
+
+        .landing-hero-stat-label {
+            font-size: 10.5px;
+            color: var(--ink-3);
+            text-transform: uppercase;
+            letter-spacing: 0.07em;
+            font-weight: 600;
+        }
+
+        .landing-section {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 24px 32px;
+        }
+
+        .landing-install {
+            background: var(--surface);
+            border: 1px solid var(--line);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            margin-top: 12px;
+        }
+
+        .landing-install-title {
+            font-weight: 700;
+            margin-bottom: 6px;
+            font-size: 14px;
+        }
+
+        .landing-install-toggles {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 14px;
+        }
+
+        /* Botón de ciclo: un único control por dimensión (no una barra con todas
+           las opciones a la vista) — hace clic para pasar al siguiente valor. */
+        .landing-toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--surface-2);
+            border: 1px solid var(--line);
+            color: var(--ink);
+            font-size: 12px;
+            font-weight: 600;
+            padding: 6px 14px;
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: background 0.15s, border-color 0.15s;
+        }
+
+        .landing-toggle:hover {
+            background: var(--surface-3);
+        }
+
+        .landing-toggle::after {
+            content: "⇄";
+            color: var(--ink-3);
+            font-size: 11px;
+        }
+
+        .landing-install-cmd {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--surface-2);
+            border-radius: var(--radius);
+            padding: 12px 14px;
+        }
+
+        .landing-install-code.is-undefined {
+            font-style: italic;
+            color: var(--ink-3);
+        }
+
+        .landing-install-code {
+            flex: 1;
+            font-family: var(--font-mono);
+            font-size: 13px;
+            color: var(--ink);
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        .landing-footer {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 32px 32px 48px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            color: var(--ink-2);
+            font-size: 13px;
+        }
+
+        .landing-footer a {
+            color: var(--ink-2);
+        }
+
+        .landing-footer a:hover {
+            color: var(--accent);
+        }
+    </style>
 </head>
 
 <body>
-    <p>Redirigiendo a <a href="/login/">login</a>…</p>
+    <div class="landing-page" id="landing-page">
+        <header class="landing-header">
+            <a class="landing-logo" href="/">iAgents<span>Hub</span></a>
+            <div class="landing-header-spacer"></div>
+            <a class="btn btn-ghost btn-sm" href="/login/" id="landing-header-login" data-i18n="about.header.login">Iniciar sesión</a>
+            <a class="btn btn-primary btn-sm" href="/register/" id="landing-header-register" data-i18n="landing.header.cta_register" style="display:none">Crear cuenta gratis</a>
+        </header>
+
+        <section class="landing-hero">
+            <span class="landing-hero-badge" data-i18n="landing.hero.badge">Open source · Self-hosted</span>
+            <h1 class="landing-hero-title" data-i18n="landing.hero.headline">Toda tu IA en un solo lugar</h1>
+            <p class="landing-hero-body" data-i18n="landing.hero.sub">Crea y comparte agentes de IA conectados a tus propios proveedores —Claude, OpenAI, Gemini, Grok, Ollama y más—, cada uno con su propio conocimiento, memoria y herramientas. Despliega en tu propio servidor y mantén el control total de tus datos.</p>
+            <div class="landing-hero-stats">
+                <div class="landing-hero-stat">
+                    <span class="landing-hero-stat-num">6<span class="landing-hero-stat-accent">+</span></span>
+                    <span class="landing-hero-stat-label" data-i18n="auth.stat_providers">Proveedores</span>
+                </div>
+                <div class="landing-hero-stat">
+                    <span class="landing-hero-stat-num"><span class="landing-hero-stat-accent">&#8734;</span></span>
+                    <span class="landing-hero-stat-label" data-i18n="auth.stat_agents">Agentes</span>
+                </div>
+                <div class="landing-hero-stat">
+                    <span class="landing-hero-stat-num">100<span class="landing-hero-stat-accent">%</span></span>
+                    <span class="landing-hero-stat-label" data-i18n="auth.stat_private">Privado</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="landing-section">
+            <div class="landing-install">
+                <div class="landing-install-title" data-i18n="landing.install.title">Instalación</div>
+                <div class="landing-install-toggles">
+                    <button class="landing-toggle" id="landing-install-mode-toggle" type="button" data-mode="docker"></button>
+                    <button class="landing-toggle" id="landing-install-os-toggle" type="button" data-os="linux"></button>
+                </div>
+                <div class="landing-install-cmd">
+                    <code class="landing-install-code" id="landing-install-cmd">curl -fsSL https://raw.githubusercontent.com/iagentshub/iagentshub/main/install.sh | bash</code>
+                    <button class="btn btn-ghost btn-sm" id="landing-copy-btn" type="button" data-i18n="landing.install.copy">Copiar</button>
+                </div>
+            </div>
+        </section>
+
+        <footer class="landing-footer">
+            <a href="/about" data-i18n="auth.about_link">¿Qué es esto?</a>
+            <a href="/docs" data-i18n="auth.docs_link">Documentación</a>
+            <a href="https://github.com/iagentshub/iagentshub" target="_blank" rel="noopener">GitHub</a>
+            <button class="landing-lang-btn" id="landing-lang-btn">ES</button>
+        </footer>
+    </div>
+
+    <script src="/assets/js/i18n.js"></script>
+    <script>
+        // "/" decide entre landing (SaaS público) o ir directo a /login/, y ajusta
+        // el header según config + sesión. Ambos fetches se combinan con
+        // Promise.all (en vez de dejarlos sueltos) para evitar una condición de
+        // carrera: si "sesión activa" resolviera después que "config", podría
+        // reaparecer "Crear cuenta gratis" para un usuario ya autenticado.
+        Promise.all([
+            fetch('/api/settings/platform/public').then(function (r) { return r.ok ? r.json() : null; }).catch(function () { return null; }),
+            fetch('/api/auth/me').then(function (r) { return r.ok ? r.json() : null; }).catch(function () { return null; })
+        ]).then(function (results) {
+            var cfg = results[0];
+            var user = results[1];
+
+            if (!cfg || !cfg.landing_enabled) { location.replace('/login/'); return; }
+            document.getElementById('landing-page').style.display = 'block';
+
+            var loginBtn = document.getElementById('landing-header-login');
+            var registerBtn = document.getElementById('landing-header-register');
+            var isAuthenticated = !!(user && user.username);
+
+            if (isAuthenticated) {
+                // Ya tiene cuenta: "Crear cuenta" no aplica, "Iniciar sesión" lleva al dashboard.
+                if (registerBtn) registerBtn.style.display = 'none';
+                if (loginBtn) {
+                    loginBtn.href = '/dashboard';
+                    loginBtn.removeAttribute('data-i18n');
+                    loginBtn.textContent = '→ Dashboard';
+                }
+            } else {
+                // "Crear cuenta gratis": mismo criterio que /login/ (login.js) —
+                // solo visible con registro abierto y facturación desactivada.
+                // Oculto por defecto en el HTML para que nunca parpadee.
+                var showRegister = cfg.registration === 'open' && cfg.billing_enabled === false;
+                if (registerBtn && showRegister) registerBtn.style.display = '';
+            }
+        }).catch(function () { location.replace('/login/'); });
+
+        // Copiar comando de instalación
+        document.getElementById('landing-copy-btn').addEventListener('click', function () {
+            var btn = this;
+            var text = document.getElementById('landing-install-cmd').textContent;
+            var copiedLabel = window.i18n ? window.i18n.t('landing.install.copied') : '¡Copiado!';
+            var normalLabel = window.i18n ? window.i18n.t('landing.install.copy') : 'Copiar';
+            (navigator.clipboard ? navigator.clipboard.writeText(text) : Promise.reject())
+                .then(function () {
+                    btn.textContent = copiedLabel;
+                    setTimeout(function () { btn.textContent = normalLabel; }, 1500);
+                })
+                .catch(function () { });
+        });
+
+        // Instalación: un botón de ciclo por dimensión (modo, plataforma) en vez
+        // de mostrar todas las opciones a la vez. Matriz honesta: 5 de las 6
+        // combinaciones tienen un script real y documentado en el README; la
+        // única que no existe (Docker en Windows nativo, sin WSL2) se marca
+        // "Sin definir" en vez de inventar o improvisar un comando.
+        var INSTALL_MATRIX = {
+            'docker|linux':     'curl -fsSL https://raw.githubusercontent.com/iagentshub/iagentshub/main/install.sh | bash',
+            'docker|mac':       'curl -fsSL https://raw.githubusercontent.com/iagentshub/iagentshub/main/install.sh | bash',
+            'docker|windows':   null,
+            'nodocker|linux':   'curl -fsSL https://raw.githubusercontent.com/iagentshub/iagentshub/main/install-local-linux.sh | bash',
+            'nodocker|mac':     'curl -fsSL https://raw.githubusercontent.com/iagentshub/iagentshub/main/install-local-mac.sh | bash',
+            'nodocker|windows': 'irm https://raw.githubusercontent.com/iagentshub/iagentshub/main/install-local-windows.ps1 | iex'
+        };
+        var MODES = ['docker', 'nodocker'];
+        var OSES = ['linux', 'mac', 'windows'];
+        var _installMode = 'docker';
+        var _installOs = 'linux';
+
+        function _t(key, fallback) { return window.i18n ? window.i18n.t(key) : fallback; }
+
+        function _renderInstall() {
+            var modeBtn = document.getElementById('landing-install-mode-toggle');
+            var osBtn = document.getElementById('landing-install-os-toggle');
+            modeBtn.textContent = _t('landing.install.mode_' + _installMode, _installMode);
+            osBtn.textContent = _t('landing.install.os_' + _installOs, _installOs);
+
+            var cmd = INSTALL_MATRIX[_installMode + '|' + _installOs];
+            var codeEl = document.getElementById('landing-install-cmd');
+            var copyBtn = document.getElementById('landing-copy-btn');
+            if (cmd) {
+                codeEl.textContent = cmd;
+                codeEl.classList.remove('is-undefined');
+                copyBtn.disabled = false;
+                copyBtn.style.display = '';
+            } else {
+                codeEl.textContent = _t('landing.install.undefined', 'Sin definir');
+                codeEl.classList.add('is-undefined');
+                copyBtn.disabled = true;
+                copyBtn.style.display = 'none';
+            }
+        }
+
+        document.getElementById('landing-install-mode-toggle').addEventListener('click', function () {
+            _installMode = MODES[(MODES.indexOf(_installMode) + 1) % MODES.length];
+            _renderInstall();
+        });
+        document.getElementById('landing-install-os-toggle').addEventListener('click', function () {
+            _installOs = OSES[(OSES.indexOf(_installOs) + 1) % OSES.length];
+            _renderInstall();
+        });
+        if (window.i18n) {
+            // Esperar a que i18n cargue (primera visita: aún sin caché en
+            // localStorage) para no pintar la clave cruda en vez del texto.
+            window.i18n.ready(_renderInstall);
+            window.i18n.onLangChange(_renderInstall);
+        } else {
+            _renderInstall();
+        }
+
+        // Selector de idioma
+        var langBtn = document.getElementById('landing-lang-btn');
+        function _syncLangBtn() {
+            if (langBtn && window.i18n) langBtn.textContent = window.i18n.getLang().toUpperCase();
+        }
+        if (langBtn) {
+            langBtn.addEventListener('click', function () {
+                if (!window.i18n) return;
+                var curr = window.i18n.getLang();
+                window.i18n.setLang(curr === 'es' ? 'en' : 'es');
+            });
+        }
+        if (window.i18n) {
+            window.i18n.ready(_syncLangBtn);
+            window.i18n.onLangChange(_syncLangBtn);
+        }
+    </script>
 </body>
 
 </html>

@@ -2,13 +2,13 @@
 'use strict';
 
 var _STACK = [
-    { key: 'python',     label: 'Python',            icon: '🐍' },
-    { key: 'fastapi',    label: 'FastAPI',            icon: '⚡' },
-    { key: 'sqlite',     label: 'SQLite',             icon: '🗄️' },
-    { key: 'postgresql', label: 'PostgreSQL',         icon: '🐘' },
-    { key: 'nginx',      label: 'Nginx',              icon: '🌐' },
-    { key: 'docker',     label: 'Docker',             icon: '🐳' },
-    { key: 'vanillajs',  label: 'Vanilla JS',         icon: '✦' },
+    { key: 'python',     label: 'Python' },
+    { key: 'fastapi',    label: 'FastAPI' },
+    { key: 'sqlite',     label: 'SQLite' },
+    { key: 'postgresql', label: 'PostgreSQL' },
+    { key: 'nginx',      label: 'Nginx' },
+    { key: 'docker',     label: 'Docker' },
+    { key: 'vanillajs',  label: 'Vanilla JS' },
 ];
 
 var _CREATORS = [
@@ -67,7 +67,6 @@ function _renderStack() {
     if (!el) return;
     el.innerHTML = _STACK.map(function (item) {
         return '<div class="about-stack-item">' +
-            '<span class="about-stack-icon">' + item.icon + '</span>' +
             '<strong class="about-stack-name">' + item.label + '</strong>' +
             '<span class="about-stack-desc">' + t('about.stack.' + item.key) + '</span>' +
             '</div>';

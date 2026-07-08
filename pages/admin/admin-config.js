@@ -30,6 +30,7 @@ window.adminConfig = (function () {
             _set('cfg-max-sessions', _cfg.max_concurrent_sessions ?? 0);
             _set('cfg-email-verify', _cfg.email_verify ?? false);
             _set('cfg-guest-enabled', _cfg.guest_enabled ?? true);
+            _set('cfg-landing-enabled', _cfg.landing_enabled ?? false);
             _set('cfg-billing', _cfg.billing_enabled ?? false);
             _set('cfg-log-retention', _cfg.log_retention_days ?? 30);
             _syncNewUserButton(mode);
@@ -53,6 +54,7 @@ window.adminConfig = (function () {
                 max_concurrent_sessions: parseInt(document.getElementById('cfg-max-sessions')?.value || '0', 10),
                 email_verify: document.getElementById('cfg-email-verify')?.checked,
                 guest_enabled: document.getElementById('cfg-guest-enabled')?.checked,
+                landing_enabled: document.getElementById('cfg-landing-enabled')?.checked,
                 billing_enabled: document.getElementById('cfg-billing')?.checked,
                 log_retention_days: parseInt(document.getElementById('cfg-log-retention')?.value || '30', 10),
             };
