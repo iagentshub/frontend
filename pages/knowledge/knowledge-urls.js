@@ -76,15 +76,16 @@ var KnowledgeUrls = (function () {
             var shareBtn = !item._shared
                 ? '<button class="knowledge-action-btn knowledge-action-btn--share" data-share-id="' + esc(item.id) + '" data-share-name="' + esc(item.title) + '" title="' + esc(t('teams.sharing.share_with') || 'Compartir con grupo') + '">' + _SHARE_SVG + '</button>'
                 : '';
-            // Badge de propiedad: solo en modo grupo
+            // Badge de propiedad: siempre visible cuando es del usuario
             var ownerBadge = '';
-            if (window._activeGroupKnId) {
-                if (item._shared) {
-                    var ol = item.owner_id ? '@' + item.owner_id : (t('teams.sharing.shared_badge') || 'Compartido');
-                    ownerBadge = '<span class="res-badge res-badge--shared">' + esc(ol) + '</span>';
-                } else {
-                    ownerBadge = '<span class="res-badge res-badge--mine">' + (t('agents.card.badge_mine') || 'Tuyo') + '</span>';
-                }
+            if (!item._shared) {
+                // Es mío (propietario)
+                ownerBadge = '<span class="label-chip" style="--lc:#059669">' +
+                    esc(t('agents.origin.owner') || 'Propietario') + '</span>';
+            } else if (window._activeGroupKnId) {
+                // Compartido en grupo: mostrar quién lo compartió
+                var ol = item.owner_id ? '@' + item.owner_id : (t('teams.sharing.shared_badge') || 'Compartido');
+                ownerBadge = '<span class="res-badge res-badge--shared">' + esc(ol) + '</span>';
             }
             return '<div class="knowledge-card" draggable="true" data-drag-id="' + esc(item.id) + '" data-drag-section="url">' +
                 '<div class="knowledge-card-header">' +
