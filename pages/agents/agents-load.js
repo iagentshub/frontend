@@ -78,6 +78,7 @@ function _parseAndLoadAgent(filename, text) {
                 system_prompt: _stripRoutinesGuide(parsed.body),
                 model: parsed.meta.model || '',
                 agent_type: 'claude',
+                use_memory: parsed.meta.use_memory === 'true' || parsed.meta.use_memory === true,
                 _source: 'claude_code',
             };
         }

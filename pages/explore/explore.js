@@ -84,7 +84,6 @@
             '<strong>' + (u.public_resources_count || 0) + '</strong> ' + resourcesLabel +
             '</p>' +
             '<div class="explore-card-footer">' +
-            '<a href="/u/' + encodeURIComponent(u.username) + '" class="explore-card-author">@' + esc(u.username) + '</a>' +
             '<div class="explore-card-actions">' +
             '<a href="/u/' + encodeURIComponent(u.username) + '" class="btn btn-ghost btn-sm">' +
             (window.t ? t('explore.users.view_profile') : 'Ver perfil') + '</a>' +
@@ -132,6 +131,9 @@
         var tryBtn = (!isOwn && r.resource_type === 'agent')
             ? '<button class="explore-card-try-btn" data-action="try" data-id="' + esc(r.resource_id) + '" data-owner="' + esc(r.owner) + '" title="Probar agente">Probar</button>'
             : '';
+        var ownerColor = _avatarColor(r.owner);
+        var ownerInitial = (r.owner || '?').charAt(0).toUpperCase();
+        var ownerAvatar = '<a href="/u/' + encodeURIComponent(r.owner) + '" class="explore-card-owner-avatar" style="background:' + ownerColor + '" title="@' + esc(r.owner) + '" onclick="event.stopPropagation()">' + ownerInitial + '</a>';
         return '<div class="explore-card" data-id="' + esc(r.resource_id) + '" data-type="' + esc(r.resource_type) + '" data-owner="' + esc(r.owner) + '">' +
             '<div class="explore-card-top">' +
             '<div class="explore-card-avatar" style="background:' + color + '">' + initial + '</div>' +
@@ -144,11 +146,11 @@
             verifiedBadge +
             '</div>' +
             '</div>' +
+            ownerAvatar +
             '</div>' +
             '<p class="explore-card-desc">' + esc(r.description || '') + '</p>' +
             labelChips +
             '<div class="explore-card-footer">' +
-            '<a href="/u/' + encodeURIComponent(r.owner) + '" class="explore-card-author">@' + esc(r.owner) + '</a>' +
             '<div class="explore-card-actions">' +
             '<button class="explore-card-eye-btn" data-action="preview" data-type="' + esc(r.resource_type) + '" data-id="' + esc(r.resource_id) + '" title="Vista previa">' +
             _SVG_EYE + '</button>' +

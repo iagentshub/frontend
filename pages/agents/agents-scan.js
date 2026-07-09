@@ -346,7 +346,7 @@ var AgentScanner = (function () {
             temperature:   p.temperature != null ? p.temperature : 0.7,
             skills:        skillIds,
             knowledge:     [],
-            use_memory:    false,
+            use_memory:    p.use_memory != null ? !!p.use_memory : false,
             routines:      p.routines || [],
             scope:         'private',
             model:         p.model    || '',
