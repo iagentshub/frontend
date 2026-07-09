@@ -67,7 +67,11 @@ var AgentCard = {
         var avatarColor = AgentCard._avatarColor(agent.name || '');
 
         var _BLOCKED_LABELS = ['draft', 'quarantine', 'archived', 'delete'];
-        var agentLabels = agent.labels || ['private'];
+        var agentLabels = agent.labels || [];
+        // Agregar la etiqueta 'public' si el scope es público y no está ya en las labels
+        if (isPublic && agentLabels.indexOf('public') === -1) {
+            agentLabels = ['public'].concat(agentLabels);
+        }
         var isBlocked = _BLOCKED_LABELS.some(function (bl) { return agentLabels.indexOf(bl) !== -1; });
         var blockingLabel = isBlocked ? agentLabels.find(function (l) { return _BLOCKED_LABELS.indexOf(l) !== -1; }) : null;
 

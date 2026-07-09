@@ -113,8 +113,8 @@ function _applyFilter() {
     if (f.memory === true) list = list.filter(a => a.use_memory);
     if (f.memory === false) list = list.filter(a => !a.use_memory);
     // Los linked del workspace siempre son privados; se muestran junto a los agentes privados
+    // Si hay filtro de scope: aplicarlo. Si no: mostrar todos (privados y públicos del usuario)
     if (f.scope) list = list.filter(a => (a.scope || 'private') === f.scope || a.origin_type === 'linked');
-    else list = list.filter(a => (a.scope || 'private') === 'private' || a.origin_type === 'linked');
 
     if (f.labels && f.labels.length) {
         list = list.filter(a => f.labels.some(lbl => (a.labels || ['private']).indexOf(lbl) !== -1));

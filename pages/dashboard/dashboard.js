@@ -30,9 +30,9 @@ async function init() {
     var _noopWidgetCfg = function () { return { config: {} }; };
 
     var results = await Promise.all([
-        api.get('/api/agents?scope=private').catch(_noop),
+        api.get('/api/agents').catch(_noop),
         api.get('/api/connections').catch(_noop),
-        api.get('/api/skills?scope=private').catch(_noop),
+        api.get('/api/skills').catch(_noop),
         api.get('/api/memory').catch(_noop),
         api.get('/api/knowledge').catch(_noop),
         api.get('/api/connections/tokens-daily?days=30').catch(_noop),
