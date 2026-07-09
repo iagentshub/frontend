@@ -61,7 +61,8 @@ function renderUsers(users) {
             '<button class="btn-actions" data-username="' + esc(u.username) + '">⋮</button>' +
             '<div class="actions-dropdown" style="display:none">' +
             '<button class="action-item" data-action="edit" data-username="' + esc(u.username) + '"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M11 2l3 3-9 9H2v-3l9-9z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>Editar</button>' +
-            '<button class="action-item" data-action="impersonate" data-username="' + esc(u.username) + '"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="5" r="3" stroke="currentColor" stroke-width="1.5"/><path d="M2 14c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>Impersonar</button>' +
+            // DESACTIVADO TEMPORALMENTE: Impersonación causa problemas de estado
+            // '<button class="action-item" data-action="impersonate" data-username="' + esc(u.username) + '"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="5" r="3" stroke="currentColor" stroke-width="1.5"/><path d="M2 14c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>Impersonar</button>' +
             (isActive
                 ? '<button class="action-item" data-action="block" data-username="' + esc(u.username) + '"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.5"/><path d="M4 4l8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>Bloquear</button>'
                 : '<button class="action-item" data-action="unblock" data-username="' + esc(u.username) + '"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8l4 4 6-7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Desbloquear</button>') +
@@ -147,12 +148,9 @@ async function _handleUserAction(action, username) {
         return;
     }
     try {
-        if (action === 'impersonate') {
-            if (!confirm('Vas a iniciar sesion como "' + username + '". Tu sesion de administrador se cerrara. Tendras que volver a iniciar sesion como admin cuando termines. ¿Continuar?')) return;
-            await api.post('/api/admin/impersonate/' + encodeURIComponent(username), {});
-            window.location.replace('/dashboard/');
-            return;
-        } else if (action === 'block') {
+        // DESACTIVADO TEMPORALMENTE: Impersonación
+        // if (action === 'impersonate') { ... }
+        if (action === 'block') {
             await api.patch('/api/admin/users/' + encodeURIComponent(username), { is_active: false });
             toast('Usuario bloqueado', 'success');
         } else if (action === 'unblock') {
